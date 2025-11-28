@@ -1,0 +1,12 @@
+[
+    {
+        "slug": "derivative-of-sin-x",
+        "formula": "sin(x)",
+        "h1": "Derivative of Sin(x)"
+    },
+    {
+        "slug": "derivative-of-ln-x",
+        "formula": "ln(x)",
+        "h1": "Derivative of Ln(x)"
+    }
+]

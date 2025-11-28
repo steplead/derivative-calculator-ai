@@ -6,12 +6,16 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "next lint",
+    "generate-sitemap": "node scripts/generate-sitemap.js"
   },
   "dependencies": {
+    "function-plot": "^1.25.1",
+    "katex": "^0.16.25",
     "next": "16.0.5",
     "react": "19.2.0",
-    "react-dom": "19.2.0"
+    "react-dom": "19.2.0",
+    "react-latex-next": "^3.0.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

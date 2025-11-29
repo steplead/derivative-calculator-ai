@@ -70,9 +70,7 @@ def derivative():
     except Exception as e:
         return jsonify({"error": f"Calculation error: {str(e)}"}), 500
 
-# Vercel requires this
-def handler(request):
-    return app(request)
+
 
 if __name__ == '__main__':
     app.run(port=5328)

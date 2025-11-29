@@ -18,15 +18,22 @@ export default function Calculator({ initialEquation = '' }: { initialEquation?:
 
         try {
             const res = await fetch(`/api/derivative?equation=${encodeURIComponent(input)}`);
-            const data = await res.json();
 
-            if (res.ok) {
-                setResult(data);
-            } else {
-                setError(data.error || 'Something went wrong');
+            if (!res.ok) {
+                const text = await res.text();
+                try {
+                    const json = JSON.parse(text);
+                    setError(json.error || `Server Error (${res.status})`);
+                } catch {
+                    setError(`Server Error (${res.status}): ${text.substring(0, 100)}...`);
+                }
+                return;
             }
+
+            const data = await res.json();
+            setResult(data);
         } catch (err) {
-            setError('Failed to fetch result');
+            setError(`Connection Error: ${err instanceof Error ? err.message : String(err)}`);
         } finally {
             setLoading(false);
         }

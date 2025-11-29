@@ -1,4 +1,6 @@
 import Calculator from '@/components/Calculator';
+import Link from 'next/link';
+import problems from '@/data/problems.json';
 
 export default function Home() {
   return (
@@ -44,6 +46,22 @@ export default function Home() {
                 <p className="text-sm text-gray-400 mt-1">d/dx f(g(x)) = f'(g(x))g'(x)</p>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* Popular Calculations Section */}
+        <div className="mt-20">
+          <h2 className="text-2xl font-bold text-white mb-8 text-center">Popular Calculations</h2>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {problems.slice(0, 20).map((problem) => (
+              <Link
+                key={problem.slug}
+                href={`/${problem.slug}`}
+                className="bg-slate-800 hover:bg-slate-700 p-3 rounded-lg text-sm text-blue-300 hover:text-blue-200 transition-colors text-center block no-underline"
+              >
+                Derivative of {problem.formula}
+              </Link>
+            ))}
           </div>
         </div>
       </div>

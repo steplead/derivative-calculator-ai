@@ -63,6 +63,11 @@ export default function Home() {
               </Link>
             ))}
           </div>
+          <div className="mt-8 text-center">
+            <Link href="/directory" className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-full transition-colors no-underline">
+              View All 50+ Derivatives &rarr;
+            </Link>
+          </div>
         </div>
       </div>
 

@@ -7,7 +7,8 @@ import problems from '@/data/problems.json';
 type Problem = {
     slug: string;
     formula: string;
-    h1: string;
+    title: string;
+    description?: string;
 };
 
 // Generate static params for all known problems
@@ -29,8 +30,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     }
 
     return {
-        title: `${problem.h1} - Derivative Calculator AI`,
-        description: `Step-by-step derivative solution for ${problem.formula}. Learn the differentiation rules used to solve this problem.`,
+        title: `${problem.title} - Derivative Calculator AI`,
+        description: problem.description || `Step-by-step derivative solution for ${problem.formula}. Learn the differentiation rules used to solve this problem.`,
     };
 }
 
@@ -46,7 +47,7 @@ export default async function ProblemPage({ params }: { params: Promise<{ slug: 
         <main className="min-h-screen bg-gray-50 dark:bg-slate-900 py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-4xl mx-auto text-center mb-12">
                 <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-4">
-                    {problem.h1}
+                    {problem.title}
                 </h1>
                 <p className="text-xl text-gray-600 dark:text-gray-400">
                     Instant step-by-step solution for <code className="bg-gray-200 dark:bg-slate-800 px-2 py-1 rounded">{problem.formula}</code>

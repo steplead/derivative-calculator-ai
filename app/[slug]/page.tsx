@@ -44,19 +44,19 @@ export default async function ProblemPage({ params }: { params: Promise<{ slug: 
     }
 
     return (
-        <main className="min-h-screen bg-gray-50 dark:bg-slate-900 py-12 px-4 sm:px-6 lg:px-8">
+        <main className="min-h-screen bg-slate-900 py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-4xl mx-auto text-center mb-12">
-                <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-4">
+                <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight mb-4">
                     {problem.title}
                 </h1>
-                <p className="text-xl text-gray-600 dark:text-gray-400">
-                    Instant step-by-step solution for <code className="bg-gray-200 dark:bg-slate-800 px-2 py-1 rounded">{problem.formula}</code>
+                <p className="text-xl text-gray-400">
+                    Instant step-by-step solution for <code className="bg-slate-800 px-2 py-1 rounded">{problem.formula}</code>
                 </p>
             </div>
 
             <Calculator initialEquation={problem.formula} />
 
-            <div className="max-w-2xl mx-auto mt-12 prose dark:prose-invert">
+            <div className="max-w-2xl mx-auto mt-12 prose prose-invert">
                 <h3>How to find the derivative of {problem.formula}</h3>
                 <p>
                     To find the derivative of <strong>{problem.formula}</strong>, we use standard differentiation rules.
@@ -64,7 +64,7 @@ export default async function ProblemPage({ params }: { params: Promise<{ slug: 
                 </p>
             </div>
 
-            <footer className="mt-20 text-center text-gray-500 dark:text-gray-500 text-sm">
+            <footer className="mt-20 text-center text-gray-500 text-sm">
                 <p>&copy; {new Date().getFullYear()} DerivativeCalculatorAI.com</p>
             </footer>
         </main>

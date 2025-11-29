@@ -1,12 +1,302 @@
 [
     {
+        "slug": "derivative-of-x-squared",
+        "formula": "x^2",
+        "title": "Derivative of x^2",
+        "description": "Calculate the derivative of x^2 using the power rule."
+    },
+    {
         "slug": "derivative-of-sin-x",
         "formula": "sin(x)",
-        "h1": "Derivative of Sin(x)"
+        "title": "Derivative of sin(x)",
+        "description": "Find the derivative of sin(x) step-by-step."
+    },
+    {
+        "slug": "derivative-of-cos-x",
+        "formula": "cos(x)",
+        "title": "Derivative of cos(x)",
+        "description": "Calculate the derivative of cos(x) with explanations."
+    },
+    {
+        "slug": "derivative-of-tan-x",
+        "formula": "tan(x)",
+        "title": "Derivative of tan(x)",
+        "description": "Find the derivative of tan(x) using quotient rule."
     },
     {
         "slug": "derivative-of-ln-x",
         "formula": "ln(x)",
-        "h1": "Derivative of Ln(x)"
+        "title": "Derivative of ln(x)",
+        "description": "Calculate the derivative of the natural logarithm ln(x)."
+    },
+    {
+        "slug": "derivative-of-e-to-the-x",
+        "formula": "e^x",
+        "title": "Derivative of e^x",
+        "description": "Find the derivative of the exponential function e^x."
+    },
+    {
+        "slug": "derivative-of-1-over-x",
+        "formula": "1/x",
+        "title": "Derivative of 1/x",
+        "description": "Calculate the derivative of 1/x using the power rule."
+    },
+    {
+        "slug": "derivative-of-sqrt-x",
+        "formula": "sqrt(x)",
+        "title": "Derivative of sqrt(x)",
+        "description": "Find the derivative of the square root of x."
+    },
+    {
+        "slug": "derivative-of-x-cubed",
+        "formula": "x^3",
+        "title": "Derivative of x^3",
+        "description": "Calculate the derivative of x^3 step-by-step."
+    },
+    {
+        "slug": "derivative-of-log-x",
+        "formula": "log(x)",
+        "title": "Derivative of log(x)",
+        "description": "Find the derivative of log(x) (base 10)."
+    },
+    {
+        "slug": "derivative-of-sec-x",
+        "formula": "sec(x)",
+        "title": "Derivative of sec(x)",
+        "description": "Calculate the derivative of sec(x)."
+    },
+    {
+        "slug": "derivative-of-csc-x",
+        "formula": "csc(x)",
+        "title": "Derivative of csc(x)",
+        "description": "Find the derivative of csc(x)."
+    },
+    {
+        "slug": "derivative-of-cot-x",
+        "formula": "cot(x)",
+        "title": "Derivative of cot(x)",
+        "description": "Calculate the derivative of cot(x)."
+    },
+    {
+        "slug": "derivative-of-arcsin-x",
+        "formula": "asin(x)",
+        "title": "Derivative of arcsin(x)",
+        "description": "Find the derivative of the inverse sine arcsin(x)."
+    },
+    {
+        "slug": "derivative-of-arccos-x",
+        "formula": "acos(x)",
+        "title": "Derivative of arccos(x)",
+        "description": "Calculate the derivative of the inverse cosine arccos(x)."
+    },
+    {
+        "slug": "derivative-of-arctan-x",
+        "formula": "atan(x)",
+        "title": "Derivative of arctan(x)",
+        "description": "Find the derivative of the inverse tangent arctan(x)."
+    },
+    {
+        "slug": "derivative-of-2x",
+        "formula": "2*x",
+        "title": "Derivative of 2x",
+        "description": "Calculate the derivative of 2x."
+    },
+    {
+        "slug": "derivative-of-3x-squared",
+        "formula": "3*x^2",
+        "title": "Derivative of 3x^2",
+        "description": "Find the derivative of 3x^2."
+    },
+    {
+        "slug": "derivative-of-e-to-the-2x",
+        "formula": "exp(2*x)",
+        "title": "Derivative of e^(2x)",
+        "description": "Calculate the derivative of e^(2x) using chain rule."
+    },
+    {
+        "slug": "derivative-of-sin-2x",
+        "formula": "sin(2*x)",
+        "title": "Derivative of sin(2x)",
+        "description": "Find the derivative of sin(2x) using chain rule."
+    },
+    {
+        "slug": "derivative-of-cos-2x",
+        "formula": "cos(2*x)",
+        "title": "Derivative of cos(2x)",
+        "description": "Calculate the derivative of cos(2x)."
+    },
+    {
+        "slug": "derivative-of-ln-2x",
+        "formula": "ln(2*x)",
+        "title": "Derivative of ln(2x)",
+        "description": "Find the derivative of ln(2x)."
+    },
+    {
+        "slug": "derivative-of-x-to-the-4",
+        "formula": "x^4",
+        "title": "Derivative of x^4",
+        "description": "Calculate the derivative of x^4."
+    },
+    {
+        "slug": "derivative-of-5x",
+        "formula": "5*x",
+        "title": "Derivative of 5x",
+        "description": "Find the derivative of 5x."
+    },
+    {
+        "slug": "derivative-of-minus-x",
+        "formula": "-x",
+        "title": "Derivative of -x",
+        "description": "Calculate the derivative of -x."
+    },
+    {
+        "slug": "derivative-of-1-minus-x",
+        "formula": "1-x",
+        "title": "Derivative of 1-x",
+        "description": "Find the derivative of 1-x."
+    },
+    {
+        "slug": "derivative-of-x-plus-1",
+        "formula": "x+1",
+        "title": "Derivative of x+1",
+        "description": "Calculate the derivative of x+1."
+    },
+    {
+        "slug": "derivative-of-x-squared-plus-1",
+        "formula": "x^2+1",
+        "title": "Derivative of x^2 + 1",
+        "description": "Find the derivative of x^2 + 1."
+    },
+    {
+        "slug": "derivative-of-x-squared-minus-1",
+        "formula": "x^2-1",
+        "title": "Derivative of x^2 - 1",
+        "description": "Calculate the derivative of x^2 - 1."
+    },
+    {
+        "slug": "derivative-of-1-over-x-squared",
+        "formula": "1/x^2",
+        "title": "Derivative of 1/x^2",
+        "description": "Find the derivative of 1/x^2."
+    },
+    {
+        "slug": "derivative-of-root-x",
+        "formula": "x^(1/2)",
+        "title": "Derivative of √x",
+        "description": "Calculate the derivative of square root of x."
+    },
+    {
+        "slug": "derivative-of-cbrt-x",
+        "formula": "x^(1/3)",
+        "title": "Derivative of ∛x",
+        "description": "Find the derivative of cube root of x."
+    },
+    {
+        "slug": "derivative-of-pi",
+        "formula": "pi",
+        "title": "Derivative of π (pi)",
+        "description": "Calculate the derivative of the constant pi."
+    },
+    {
+        "slug": "derivative-of-constant",
+        "formula": "5",
+        "title": "Derivative of a Constant",
+        "description": "Find the derivative of any constant number."
+    },
+    {
+        "slug": "derivative-of-x-sin-x",
+        "formula": "x*sin(x)",
+        "title": "Derivative of x*sin(x)",
+        "description": "Calculate the derivative of x*sin(x) using product rule."
+    },
+    {
+        "slug": "derivative-of-x-cos-x",
+        "formula": "x*cos(x)",
+        "title": "Derivative of x*cos(x)",
+        "description": "Find the derivative of x*cos(x) using product rule."
+    },
+    {
+        "slug": "derivative-of-x-e-to-the-x",
+        "formula": "x*e^x",
+        "title": "Derivative of x*e^x",
+        "description": "Calculate the derivative of x*e^x using product rule."
+    },
+    {
+        "slug": "derivative-of-x-ln-x",
+        "formula": "x*ln(x)",
+        "title": "Derivative of x*ln(x)",
+        "description": "Find the derivative of x*ln(x) using product rule."
+    },
+    {
+        "slug": "derivative-of-sin-squared-x",
+        "formula": "sin(x)^2",
+        "title": "Derivative of sin^2(x)",
+        "description": "Calculate the derivative of sin^2(x) using chain rule."
+    },
+    {
+        "slug": "derivative-of-cos-squared-x",
+        "formula": "cos(x)^2",
+        "title": "Derivative of cos^2(x)",
+        "description": "Find the derivative of cos^2(x) using chain rule."
+    },
+    {
+        "slug": "derivative-of-tan-squared-x",
+        "formula": "tan(x)^2",
+        "title": "Derivative of tan^2(x)",
+        "description": "Calculate the derivative of tan^2(x)."
+    },
+    {
+        "slug": "derivative-of-e-to-the-minus-x",
+        "formula": "exp(-x)",
+        "title": "Derivative of e^(-x)",
+        "description": "Find the derivative of e^(-x)."
+    },
+    {
+        "slug": "derivative-of-2-to-the-x",
+        "formula": "2^x",
+        "title": "Derivative of 2^x",
+        "description": "Calculate the derivative of 2^x."
+    },
+    {
+        "slug": "derivative-of-10-to-the-x",
+        "formula": "10^x",
+        "title": "Derivative of 10^x",
+        "description": "Find the derivative of 10^x."
+    },
+    {
+        "slug": "derivative-of-sinh-x",
+        "formula": "sinh(x)",
+        "title": "Derivative of sinh(x)",
+        "description": "Calculate the derivative of hyperbolic sine sinh(x)."
+    },
+    {
+        "slug": "derivative-of-cosh-x",
+        "formula": "cosh(x)",
+        "title": "Derivative of cosh(x)",
+        "description": "Find the derivative of hyperbolic cosine cosh(x)."
+    },
+    {
+        "slug": "derivative-of-tanh-x",
+        "formula": "tanh(x)",
+        "title": "Derivative of tanh(x)",
+        "description": "Calculate the derivative of hyperbolic tangent tanh(x)."
+    },
+    {
+        "slug": "derivative-of-abs-x",
+        "formula": "Abs(x)",
+        "title": "Derivative of |x|",
+        "description": "Find the derivative of the absolute value of x."
+    },
+    {
+        "slug": "derivative-of-sign-x",
+        "formula": "sign(x)",
+        "title": "Derivative of sign(x)",
+        "description": "Calculate the derivative of the signum function sign(x)."
+    },
+    {
+        "slug": "derivative-of-floor-x",
+        "formula": "floor(x)",
+        "title": "Derivative of floor(x)",
+        "description": "Find the derivative of the floor function."
     }
 ]

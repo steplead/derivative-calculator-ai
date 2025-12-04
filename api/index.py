@@ -158,7 +158,7 @@ def limit():
             The answer is: {limit_val}
             
             1. Explain the limit rule or technique used (e.g. direct substitution, L'Hopital's).
-            2. Provide a brief step-by-step evaluation (max 3 steps). Use LaTeX for all math expressions (e.g. $\lim_{x \to 0}$).
+            2. Provide a brief step-by-step evaluation (max 3 steps). Use LaTeX for all math expressions (e.g. $\lim_{{x \to 0}}$).
             
             Format output as JSON:
             {{

@@ -6,6 +6,8 @@ export const metadata = {
     description: "Free step-by-step integral calculator powered by AI. Solve indefinite and definite integrals with explanations.",
 };
 
+import { Suspense } from 'react';
+
 export default function IntegralPage() {
     return (
         <main className="min-h-screen bg-slate-900 py-12 px-4 sm:px-6 lg:px-8">
@@ -18,7 +20,9 @@ export default function IntegralPage() {
                 </p>
             </div>
 
-            <Calculator mode="integral" />
+            <Suspense fallback={<div className="text-white text-center">Loading Calculator...</div>}>
+                <Calculator mode="integral" />
+            </Suspense>
 
             <div className="max-w-4xl mx-auto mt-20 prose prose-invert">
                 <div className="grid md:grid-cols-2 gap-12">

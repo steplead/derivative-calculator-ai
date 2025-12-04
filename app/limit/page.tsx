@@ -6,6 +6,8 @@ export const metadata = {
     description: "Free step-by-step limit calculator powered by AI. Solve limits as x approaches any value.",
 };
 
+import { Suspense } from 'react';
+
 export default function LimitPage() {
     return (
         <main className="min-h-screen bg-slate-900 py-12 px-4 sm:px-6 lg:px-8">
@@ -14,11 +16,13 @@ export default function LimitPage() {
                     Limit Calculator <span className="text-green-500">AI</span>
                 </h1>
                 <p className="text-xl text-gray-600 dark:text-gray-400">
-                    Instant step-by-step limits powered by SymPy & Gemini.
+                    Instant step-by-step limit evaluation powered by SymPy & Gemini.
                 </p>
             </div>
 
-            <Calculator mode="limit" />
+            <Suspense fallback={<div className="text-white text-center">Loading Calculator...</div>}>
+                <Calculator mode="limit" />
+            </Suspense>
 
             <div className="max-w-4xl mx-auto mt-20 prose prose-invert">
                 <div className="grid md:grid-cols-2 gap-12">

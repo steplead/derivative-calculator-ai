@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import MathDisplay from './MathDisplay';
 import Graph from './Graph';
 import StepDisplay from './StepDisplay';
@@ -12,17 +13,26 @@ type CalculatorProps = {
 };
 
 export default function Calculator({ initialEquation = '', mode = 'derivative' }: CalculatorProps) {
-    const [input, setInput] = useState(initialEquation);
-    const [limitTo, setLimitTo] = useState('0'); // For limit mode
+    const searchParams = useSearchParams();
+    const equationParam = searchParams.get('equation');
+    const limitToParam = searchParams.get('to');
+
+    const [input, setInput] = useState(equationParam || initialEquation);
+    const [limitTo, setLimitTo] = useState(limitToParam || '0');
     const [result, setResult] = useState<any>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
     useEffect(() => {
-        if (initialEquation) {
-            handleCalculate(initialEquation);
+        const eq = equationParam || initialEquation;
+        const to = limitToParam || '0';
+
+        if (eq) {
+            setInput(eq);
+            if (mode === 'limit') setLimitTo(to);
+            handleCalculate(eq);
         }
-    }, [initialEquation, mode]); // Added mode to dependencies
+    }, [equationParam, limitToParam, initialEquation, mode]);
 
     const handleCalculate = async (equationToSolve = input) => {
         if (!equationToSolve) return;

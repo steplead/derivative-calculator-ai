@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import MathDisplay from './MathDisplay';
 import Graph from './Graph';
+import StepDisplay from './StepDisplay';
+import AdUnit from './AdUnit';
 
 type CalculatorProps = {
     initialEquation?: string;
@@ -30,47 +32,71 @@ export default function Calculator({ initialEquation = '', mode = 'derivative' }
         setResult(null);
 
         try {
-            let url = '';
+            let baseUrl = '';
             if (mode === 'derivative') {
-                url = `/api/derivative?equation=${encodeURIComponent(equationToSolve)}`;
+                baseUrl = `/api/derivative?equation=${encodeURIComponent(equationToSolve)}`;
             } else if (mode === 'integral') {
-                url = `/api/integral?equation=${encodeURIComponent(equationToSolve)}`;
+                baseUrl = `/api/integral?equation=${encodeURIComponent(equationToSolve)}`;
             } else if (mode === 'limit') {
-                url = `/api/limit?equation=${encodeURIComponent(equationToSolve)}&to=${encodeURIComponent(limitTo)}`;
+                baseUrl = `/api/limit?equation=${encodeURIComponent(equationToSolve)}&to=${encodeURIComponent(limitTo)}`;
             }
 
-            const res = await fetch(url);
-
-            if (!res.ok) {
-                const text = await res.text(); // Keep original error handling for robustness
+            // Step 1: Fast fetch (Math only)
+            const resFast = await fetch(`${baseUrl}&include_ai=false`);
+            if (!resFast.ok) {
+                const text = await resFast.text();
                 try {
                     const json = JSON.parse(text);
-                    setError(json.error || `Server Error (${res.status})`);
+                    throw new Error(json.error || `Server Error (${resFast.status})`);
                 } catch {
-                    setError(`Server Error (${res.status}): ${text.substring(0, 100)}...`);
+                    throw new Error(`Server Error (${resFast.status}): ${text.substring(0, 100)}...`);
                 }
-                return;
             }
+            const dataFast = await resFast.json();
 
-            const data = await res.json();
-            setResult(data);
+            // Show math result immediately
+            setResult(dataFast);
+            setLoading(false); // Stop main loading spinner
+
+            // Step 2: Slow fetch (AI Explanation)
+            // We keep the result but maybe show a loading indicator for the explanation part
+            try {
+                const resFull = await fetch(`${baseUrl}&include_ai=true`);
+                if (resFull.ok) {
+                    const dataFull = await resFull.json();
+                    setResult(dataFull); // Update with full data including AI
+                } else {
+                    const text = await resFull.text();
+                    try {
+                        const json = JSON.parse(text);
+                        console.error("AI fetch failed:", json.error || `Server Error (${resFull.status})`);
+                    } catch {
+                        console.error(`AI fetch failed: Server Error (${resFull.status}): ${text.substring(0, 100)}...`);
+                    }
+                }
+            } catch (aiErr) {
+                console.error("AI fetch failed", aiErr);
+                // Don't fail the whole request if AI fails, just keep the math result
+            }
 
             // Save to history
             try {
-                const historyItem = { equation: equationToSolve, timestamp: Date.now(), mode: mode }; // Added mode to history
+                const historyItem = {
+                    equation: equationToSolve,
+                    timestamp: Date.now(),
+                    mode: mode,
+                    limitTo: mode === 'limit' ? limitTo : undefined
+                };
                 const existing = localStorage.getItem('calc_history');
                 const history = existing ? JSON.parse(existing) : [];
-                // Add to beginning, limit to 50
                 const newHistory = [historyItem, ...history].slice(0, 50);
                 localStorage.setItem('calc_history', JSON.stringify(newHistory));
-                // Dispatch event to update sidebar
                 window.dispatchEvent(new Event('historyUpdated'));
             } catch (e) {
                 console.error('Failed to save history', e);
             }
         } catch (err) {
             setError(`Connection Error: ${err instanceof Error ? err.message : String(err)}`);
-        } finally {
             setLoading(false);
         }
     };
@@ -149,7 +175,11 @@ export default function Calculator({ initialEquation = '', mode = 'derivative' }
                                     AI Explanation
                                 </h3>
                                 <p className="text-gray-300 leading-relaxed">
-                                    {result.ai_explanation}
+                                    {result.ai_explanation.includes("unavailable") ? (
+                                        <span className="animate-pulse text-gray-500">Generating explanation...</span>
+                                    ) : (
+                                        result.ai_explanation
+                                    )}
                                 </p>
                             </div>
 
@@ -160,9 +190,7 @@ export default function Calculator({ initialEquation = '', mode = 'derivative' }
                                     </svg>
                                     Step-by-Step
                                 </h3>
-                                <div className="text-gray-300 whitespace-pre-wrap font-mono text-sm">
-                                    {result.steps}
-                                </div>
+                                <StepDisplay content={result.steps} />
                             </div>
                         </div>
 
@@ -170,12 +198,18 @@ export default function Calculator({ initialEquation = '', mode = 'derivative' }
                             <div className="bg-slate-900/50 p-6 rounded-xl border border-slate-700/50">
                                 <h3 className="text-sm uppercase tracking-wider text-green-400 mb-4 font-semibold">Graph</h3>
                                 <div className="h-64 w-full">
-                                    <Graph equation={input} derivative={result.solution} />
+                                    <Graph equation={input} derivative={result.solution_raw} />
                                 </div>
                             </div>
                         )}
                     </div>
                 )}
+
+                {/* Ad Unit */}
+                <div className="mt-8">
+                    {/* Use a placeholder slot ID for now */}
+                    <AdUnit slot="1234567890" />
+                </div>
             </div>
         </div>
     );

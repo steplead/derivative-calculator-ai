@@ -39,7 +39,9 @@ def derivative():
         ai_explanation = "AI explanation unavailable (Missing API Key)"
         steps_content = "Step-by-step solution unavailable."
         
-        if GENAI_API_KEY:
+        include_ai = request.args.get('include_ai', 'true').lower() == 'true'
+
+        if GENAI_API_KEY and include_ai:
             model = genai.GenerativeModel('gemini-2.0-flash')
             
             # We ask for two things: a simple explanation and step-by-step breakdown
@@ -48,7 +50,7 @@ def derivative():
             The answer is: {derivative_expr}
             
             1. Explain the derivative rule used in 1 simple sentence.
-            2. Provide a brief step-by-step derivation in plain text (max 3 steps).
+            2. Provide a brief step-by-step derivation (max 3 steps). Use LaTeX for all math expressions (e.g. $x^2$).
             
             Format output as JSON:
             {{
@@ -69,6 +71,7 @@ def derivative():
 
         return jsonify({
             "solution": solution_latex,
+            "solution_raw": str(derivative_expr),
             "steps": steps_content,
             "ai_explanation": ai_explanation
         })
@@ -92,14 +95,16 @@ def integral():
         ai_explanation = "AI explanation unavailable (Missing API Key)"
         steps_content = "Step-by-step solution unavailable."
         
-        if GENAI_API_KEY:
+        include_ai = request.args.get('include_ai', 'true').lower() == 'true'
+
+        if GENAI_API_KEY and include_ai:
             model = genai.GenerativeModel('gemini-2.0-flash')
             prompt = f"""
             For the math problem: indefinite integral of {expression}
             The answer is: {integral_expr} + C
             
             1. Explain the integration rule used in 1 simple sentence.
-            2. Provide a brief step-by-step integration in plain text (max 3 steps).
+            2. Provide a brief step-by-step integration (max 3 steps). Use LaTeX for all math expressions (e.g. $\int x dx$).
             
             Format output as JSON:
             {{
@@ -119,6 +124,7 @@ def integral():
 
         return jsonify({
             "solution": solution_latex,
+            "solution_raw": str(integral_expr),
             "steps": steps_content,
             "ai_explanation": ai_explanation
         })
@@ -143,14 +149,16 @@ def limit():
         ai_explanation = "AI explanation unavailable (Missing API Key)"
         steps_content = "Step-by-step solution unavailable."
         
-        if GENAI_API_KEY:
+        include_ai = request.args.get('include_ai', 'true').lower() == 'true'
+
+        if GENAI_API_KEY and include_ai:
             model = genai.GenerativeModel('gemini-2.0-flash')
             prompt = f"""
             For the math problem: limit of {expression} as x approaches {target}
             The answer is: {limit_val}
             
             1. Explain the limit rule or technique used (e.g. direct substitution, L'Hopital's).
-            2. Provide a brief step-by-step evaluation in plain text (max 3 steps).
+            2. Provide a brief step-by-step evaluation (max 3 steps). Use LaTeX for all math expressions (e.g. $\lim_{x \to 0}$).
             
             Format output as JSON:
             {{
@@ -170,6 +178,7 @@ def limit():
 
         return jsonify({
             "solution": solution_latex,
+            "solution_raw": str(limit_val),
             "steps": steps_content,
             "ai_explanation": ai_explanation
         })

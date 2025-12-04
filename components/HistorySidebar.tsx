@@ -6,6 +6,8 @@ import Link from 'next/link';
 type HistoryItem = {
     equation: string;
     timestamp: number;
+    mode?: 'derivative' | 'integral' | 'limit';
+    limitTo?: string;
 };
 
 export default function HistorySidebar() {
@@ -34,6 +36,18 @@ export default function HistorySidebar() {
         localStorage.removeItem('calc_history');
         setHistory([]);
         window.dispatchEvent(new Event('historyUpdated'));
+    };
+
+    const getLink = (item: HistoryItem) => {
+        const eq = encodeURIComponent(item.equation);
+        if (item.mode === 'integral') {
+            return `/integral?equation=${eq}`;
+        }
+        if (item.mode === 'limit') {
+            return `/limit?equation=${eq}&to=${encodeURIComponent(item.limitTo || '0')}`;
+        }
+        // Default to derivative (homepage)
+        return `/?equation=${eq}`;
     };
 
     return (
@@ -68,14 +82,15 @@ export default function HistorySidebar() {
                             history.map((item, index) => (
                                 <Link
                                     key={index}
-                                    href={`/?equation=${encodeURIComponent(item.equation)}`}
+                                    href={getLink(item)}
                                     onClick={() => setIsOpen(false)}
                                     className="block p-3 bg-slate-700/50 hover:bg-slate-700 rounded-lg transition-colors"
                                 >
-                                    <div className="text-blue-300 font-mono text-sm truncate">{item.equation}</div>
-                                    <div className="text-gray-500 text-xs mt-1">
-                                        {new Date(item.timestamp).toLocaleDateString()}
+                                    <div className="flex justify-between items-center mb-1">
+                                        <span className="text-xs font-bold text-slate-400 uppercase">{item.mode || 'Derivative'}</span>
+                                        <span className="text-gray-500 text-xs">{new Date(item.timestamp).toLocaleDateString()}</span>
                                     </div>
+                                    <div className="text-blue-300 font-mono text-sm truncate">{item.equation}</div>
                                 </Link>
                             ))
                         )}

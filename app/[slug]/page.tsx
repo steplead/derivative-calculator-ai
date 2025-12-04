@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Calculator from '@/components/Calculator';
 import problems from '@/data/problems.json';
+import { Suspense } from 'react';
 
 // Define the type for our problem data
 type Problem = {
@@ -45,6 +46,7 @@ export default async function ProblemPage({ params }: { params: Promise<{ slug: 
 
     return (
         <main className="min-h-screen bg-slate-900 py-12 px-4 sm:px-6 lg:px-8">
+
             <div className="max-w-4xl mx-auto text-center mb-12">
                 <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight mb-4">
                     {problem.title}
@@ -54,7 +56,9 @@ export default async function ProblemPage({ params }: { params: Promise<{ slug: 
                 </p>
             </div>
 
-            <Calculator initialEquation={problem.formula} />
+            <Suspense fallback={<div className="text-white text-center">Loading Calculator...</div>}>
+                <Calculator initialEquation={problem.formula} />
+            </Suspense>
 
             <div className="max-w-2xl mx-auto mt-12 prose prose-invert">
                 <h3>How to find the derivative of {problem.formula}</h3>

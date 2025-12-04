@@ -10,6 +10,7 @@
     "generate-sitemap": "node scripts/generate-sitemap.js"
   },
   "dependencies": {
+    "@next/third-parties": "^16.0.7",
     "function-plot": "^1.25.1",
     "katex": "^0.16.25",
     "next": "16.0.5",

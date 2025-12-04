@@ -2,12 +2,31 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
+import { GoogleAnalytics } from '@next/third-parties/google'
+import ThemeToggle from "@/components/ThemeToggle";
+import HistorySidebar from "@/components/HistorySidebar";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Derivative Calculator AI - Solve Calculus Problems Instantly",
   description: "Free step-by-step derivative calculator powered by AI. Get instant solutions and explanations for calculus problems.",
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Derivative Calculator AI",
+  "applicationCategory": "EducationalApplication",
+  "operatingSystem": "Web",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "description": "Free AI-powered derivative calculator with step-by-step explanations.",
+  "featureList": "Derivative Calculator, Step-by-step solutions, AI explanations, Graphing",
+  "softwareVersion": "1.0"
 };
 
 export default function RootLayout({
@@ -35,12 +54,19 @@ export default function RootLayout({
                 <a href="#" className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
                   About
                 </a>
+                <ThemeToggle />
               </div>
             </div>
           </div>
         </nav>
+        <HistorySidebar />
         {children}
       </body>
+      <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ""} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
     </html>
   );
 }

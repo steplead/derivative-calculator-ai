@@ -31,6 +31,12 @@ We have implemented a **Top-Tier SEO Architecture** designed for massive scale (
     *   **Canonical Tags:** auto-generated to prevent duplicate content.
     *   **Internal Linking:** "Practice More" section on every page creates a crawl mesh.
 
+## 📱 Mobile Responsiveness
+**100% Mobile-Ready:**
+*   **Responsive Navbar:** Collapsible "Hamburger Menu" for small screens.
+*   **Touch-Friendly:** Big buttons and optimized tap targets.
+*   **Clean Layout:** Graphs and equations scale perfectly from iPhone SE to 4K desktop.
+
 ## 🛠 Tech Stack
 *   **Frontend:** Next.js 15, React 19, Tailwind CSS v4.
 *   **Backend:** Python, Flask, SymPy (Math), Google Gemini (AI).

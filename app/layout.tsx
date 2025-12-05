@@ -4,10 +4,30 @@ import Link from "next/link";
 import "./globals.css";
 import { GoogleAnalytics } from '@next/third-parties/google'
 import Navbar from "@/components/Navbar";
+import HistorySidebar from "@/components/HistorySidebar";
 
-// ... (other imports)
+const inter = Inter({ subsets: ["latin"] });
 
-// ...
+export const metadata: Metadata = {
+  title: "Derivative Calculator AI - Solve Calculus Problems Instantly",
+  description: "Free step-by-step derivative calculator powered by AI. Get instant solutions and explanations for calculus problems.",
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Derivative Calculator AI",
+  "applicationCategory": "EducationalApplication",
+  "operatingSystem": "Web",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "description": "Free AI-powered derivative calculator with step-by-step explanations.",
+  "featureList": "Derivative Calculator, Step-by-step solutions, AI explanations, Graphing",
+  "softwareVersion": "1.0"
+};
 
 export default function RootLayout({
   children,
@@ -18,7 +38,6 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} bg-white dark:bg-slate-900 text-gray-900 dark:text-white antialiased transition-colors duration-200`}>
         <Navbar />
-        <HistorySidebar />
         <HistorySidebar />
         <div className="flex-grow">
           {children}

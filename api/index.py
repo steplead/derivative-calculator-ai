@@ -4,12 +4,13 @@ from flask_cors import CORS
 import sympy
 from sympy import symbols, diff, sympify, latex
 from sympy.parsing.sympy_parser import parse_expr, standard_transformations, implicit_multiplication_application, convert_xor
-try:
-    import google.generativeai as genai
-    HAS_GENAI = True
-except ImportError:
-    HAS_GENAI = False
-    print("Warning: google-generativeai not installed.")
+# try:
+#     import google.generativeai as genai
+#     HAS_GENAI = True
+# except ImportError:
+#     HAS_GENAI = False
+#     print("Warning: google-generativeai not installed.")
+HAS_GENAI = False
 
 app = Flask(__name__)
 CORS(app)

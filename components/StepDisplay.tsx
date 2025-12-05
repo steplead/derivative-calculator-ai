@@ -8,7 +8,7 @@ interface StepDisplayProps {
 
 export default function StepDisplay({ content }: StepDisplayProps) {
     return (
-        <div className="text-gray-300 leading-relaxed text-sm font-mono">
+        <div className="text-gray-600 dark:text-gray-300 leading-relaxed text-sm font-mono">
             <Latex>{content}</Latex>
         </div>
     );

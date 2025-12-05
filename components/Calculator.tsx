@@ -125,7 +125,7 @@ export default function Calculator({ initialEquation = '', mode = 'derivative' }
     };
 
     return (
-        <div className="max-w-4xl mx-auto bg-slate-800 rounded-2xl shadow-2xl overflow-hidden border border-slate-700">
+        <div className="max-w-4xl mx-auto bg-white dark:bg-slate-800 rounded-2xl shadow-xl overflow-hidden border border-gray-200 dark:border-slate-700 transition-colors duration-200">
             <div className="p-8">
                 <div className="flex flex-col md:flex-row gap-4">
                     <div className="flex-grow">
@@ -134,19 +134,19 @@ export default function Calculator({ initialEquation = '', mode = 'derivative' }
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                             placeholder={getPlaceholder()}
-                            className="w-full px-6 py-4 bg-slate-900 border border-slate-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg font-mono"
+                            className="w-full px-6 py-4 bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg font-mono transition-colors"
                             onKeyDown={(e) => e.key === 'Enter' && handleCalculate()}
                         />
                     </div>
 
                     {mode === 'limit' && (
-                        <div className="flex items-center gap-2 bg-slate-900 border border-slate-700 rounded-xl px-4">
+                        <div className="flex items-center gap-2 bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl px-4 transition-colors">
                             <span className="text-gray-400 whitespace-nowrap">x &rarr;</span>
                             <input
                                 type="text"
                                 value={limitTo}
                                 onChange={(e) => setLimitTo(e.target.value)}
-                                className="w-16 bg-transparent text-white focus:outline-none font-mono"
+                                className="w-16 bg-transparent text-gray-900 dark:text-white focus:outline-none font-mono"
                             />
                         </div>
                     )}
@@ -161,30 +161,30 @@ export default function Calculator({ initialEquation = '', mode = 'derivative' }
                 </div>
 
                 {error && (
-                    <div className="mt-6 p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400">
+                    <div className="mt-6 p-4 bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 rounded-xl text-red-600 dark:text-red-400">
                         {error}
                     </div>
                 )}
 
                 {result && (
                     <div className="mt-8 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                        <div className="bg-slate-900/50 p-6 rounded-xl border border-slate-700/50">
-                            <h3 className="text-sm uppercase tracking-wider text-gray-400 mb-4 font-semibold">Solution</h3>
-                            <div className="text-3xl text-white font-math">
+                        <div className="bg-gray-50 dark:bg-slate-900/50 p-6 rounded-xl border border-gray-200 dark:border-slate-700/50 transition-colors">
+                            <h3 className="text-sm uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-4 font-semibold">Solution</h3>
+                            <div className="text-3xl text-gray-900 dark:text-white font-math overflow-x-auto">
                                 <MathDisplay latex={result.solution} />
                             </div>
                         </div>
 
                         <div className="grid md:grid-cols-2 gap-8">
-                            <div className="bg-slate-900/50 p-6 rounded-xl border border-slate-700/50">
-                                <h3 className="text-sm uppercase tracking-wider text-blue-400 mb-4 font-semibold flex items-center gap-2">
+                            <div className="bg-gray-50 dark:bg-slate-900/50 p-6 rounded-xl border border-gray-200 dark:border-slate-700/50 transition-colors">
+                                <h3 className="text-sm uppercase tracking-wider text-blue-600 dark:text-blue-400 mb-4 font-semibold flex items-center gap-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
                                         <path d="M12 15a3 3 0 100-6 3 3 0 000 6z" />
                                         <path fillRule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 010-1.113zM17.25 12a5.25 5.25 0 11-10.5 0 5.25 5.25 0 0110.5 0z" clipRule="evenodd" />
                                     </svg>
                                     AI Explanation
                                 </h3>
-                                <p className="text-gray-300 leading-relaxed">
+                                <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
                                     {result.ai_explanation.includes("unavailable") ? (
                                         <span className="animate-pulse text-gray-500">Generating explanation...</span>
                                     ) : (
@@ -193,8 +193,8 @@ export default function Calculator({ initialEquation = '', mode = 'derivative' }
                                 </p>
                             </div>
 
-                            <div className="bg-slate-900/50 p-6 rounded-xl border border-slate-700/50">
-                                <h3 className="text-sm uppercase tracking-wider text-purple-400 mb-4 font-semibold flex items-center gap-2">
+                            <div className="bg-gray-50 dark:bg-slate-900/50 p-6 rounded-xl border border-gray-200 dark:border-slate-700/50 transition-colors">
+                                <h3 className="text-sm uppercase tracking-wider text-purple-600 dark:text-purple-400 mb-4 font-semibold flex items-center gap-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
                                         <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 01.67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 11-.671-1.34l.041-.022zM12 9a.75.75 0 100-1.5.75.75 0 000 1.5z" clipRule="evenodd" />
                                     </svg>
@@ -205,8 +205,8 @@ export default function Calculator({ initialEquation = '', mode = 'derivative' }
                         </div>
 
                         {mode === 'derivative' && (
-                            <div className="bg-slate-900/50 p-6 rounded-xl border border-slate-700/50">
-                                <h3 className="text-sm uppercase tracking-wider text-green-400 mb-4 font-semibold">Graph</h3>
+                            <div className="bg-gray-50 dark:bg-slate-900/50 p-6 rounded-xl border border-gray-200 dark:border-slate-700/50 transition-colors">
+                                <h3 className="text-sm uppercase tracking-wider text-green-600 dark:text-green-400 mb-4 font-semibold">Graph</h3>
                                 <div className="h-64 w-full">
                                     <Graph equation={input} derivative={result.solution_raw} />
                                 </div>

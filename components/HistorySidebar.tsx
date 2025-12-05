@@ -64,11 +64,11 @@ export default function HistorySidebar() {
             </button>
 
             {/* Sidebar */}
-            <div className={`fixed inset-y-0 left-0 w-64 bg-slate-800 border-r border-slate-700 shadow-2xl transform transition-transform duration-300 ease-in-out z-40 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+            <div className={`fixed inset-y-0 left-0 w-64 bg-white dark:bg-slate-800 border-r border-gray-200 dark:border-slate-700 shadow-2xl transform transition-transform duration-300 ease-in-out z-40 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
                 <div className="p-4 h-full flex flex-col">
                     <div className="flex justify-between items-center mb-6">
-                        <h2 className="text-xl font-bold text-white">History</h2>
-                        <button onClick={() => setIsOpen(false)} className="text-gray-400 hover:text-white">
+                        <h2 className="text-xl font-bold text-gray-900 dark:text-white">History</h2>
+                        <button onClick={() => setIsOpen(false)} className="text-gray-400 hover:text-gray-900 dark:hover:text-white">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                             </svg>
@@ -84,13 +84,13 @@ export default function HistorySidebar() {
                                     key={index}
                                     href={getLink(item)}
                                     onClick={() => setIsOpen(false)}
-                                    className="block p-3 bg-slate-700/50 hover:bg-slate-700 rounded-lg transition-colors"
+                                    className="block p-3 bg-gray-50 dark:bg-slate-700/50 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition-colors border border-gray-100 dark:border-transparent"
                                 >
                                     <div className="flex justify-between items-center mb-1">
-                                        <span className="text-xs font-bold text-slate-400 uppercase">{item.mode || 'Derivative'}</span>
-                                        <span className="text-gray-500 text-xs">{new Date(item.timestamp).toLocaleDateString()}</span>
+                                        <span className="text-xs font-bold text-gray-500 dark:text-slate-400 uppercase">{item.mode || 'Derivative'}</span>
+                                        <span className="text-gray-400 dark:text-gray-500 text-xs">{new Date(item.timestamp).toLocaleDateString()}</span>
                                     </div>
-                                    <div className="text-blue-300 font-mono text-sm truncate">{item.equation}</div>
+                                    <div className="text-blue-600 dark:text-blue-300 font-mono text-sm truncate">{item.equation}</div>
                                 </Link>
                             ))
                         )}
@@ -99,7 +99,7 @@ export default function HistorySidebar() {
                     {history.length > 0 && (
                         <button
                             onClick={clearHistory}
-                            className="mt-4 w-full py-2 text-sm text-red-400 hover:text-red-300 hover:bg-red-400/10 rounded-lg transition-colors"
+                            className="mt-4 w-full py-2 text-sm text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-400/10 rounded-lg transition-colors"
                         >
                             Clear History
                         </button>

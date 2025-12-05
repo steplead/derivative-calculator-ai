@@ -36,22 +36,22 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className={`${inter.className} bg-slate-900 text-white antialiased`}>
-        <nav className="bg-slate-900 border-b border-slate-800">
+      <body className={`${inter.className} bg-white dark:bg-slate-900 text-gray-900 dark:text-white antialiased transition-colors duration-200`}>
+        <nav className="bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-slate-800 transition-colors duration-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between h-16">
               <div className="flex">
                 <Link href="/" className="flex-shrink-0 flex items-center">
-                  <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">
+                  <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">
                     DerivativeCalculatorAI
                   </span>
                 </Link>
               </div>
               <div className="flex items-center space-x-4">
-                <Link href="/" className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
+                <Link href="/" className="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">
                   Home
                 </Link>
-                <a href="#" className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
+                <a href="#" className="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">
                   About
                 </a>
                 <ThemeToggle />

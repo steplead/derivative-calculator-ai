@@ -1,4 +1,3 @@
 sympy
-google-generativeai
 flask
 flask-cors

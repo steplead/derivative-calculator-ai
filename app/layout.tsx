@@ -49,11 +49,14 @@ export default function RootLayout({
               </div>
               <div className="flex items-center space-x-4">
                 <Link href="/" className="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">
-                  Home
+                  Derivative
                 </Link>
-                <a href="#" className="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">
-                  About
-                </a>
+                <Link href="/integral" className="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">
+                  Integral
+                </Link>
+                <Link href="/limit" className="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">
+                  Limit
+                </Link>
                 <ThemeToggle />
               </div>
             </div>

@@ -19,6 +19,18 @@ We have implemented an automated verification suite that runs against the produc
 *   `tests/verify_calculations.py`: Checks backend math accuracy against ground truth.
 *   `tests/verify_live_pages.py`: Checks HTTP 200 status of all generated SEO pages.
 
+## 🔍 Search Engine Optimization (SEO)
+We have implemented a **Top-Tier SEO Architecture** designed for massive scale (1000+ pages):
+
+*   **Programmatic SEO:** Static pages generated from `problems.json` (e.g., `/derivative-of-sin-x`).
+*   **Structured Data:** Full `HowTo` and `MathSolver` JSON-LD schema for Rich Results.
+*   **Crawl Highway:**
+    *   **Fat Footer:** 4-column layout linking to key categories and popular problems.
+    *   **Directory:** `/directory` page (linked from Header) acts as an HTML sitemap.
+*   **Technical SEO:**
+    *   **Canonical Tags:** auto-generated to prevent duplicate content.
+    *   **Internal Linking:** "Practice More" section on every page creates a crawl mesh.
+
 ## 🛠 Tech Stack
 *   **Frontend:** Next.js 15, React 19, Tailwind CSS v4.
 *   **Backend:** Python, Flask, SymPy (Math), Google Gemini (AI).

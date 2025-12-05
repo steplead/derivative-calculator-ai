@@ -4,15 +4,24 @@ from flask_cors import CORS
 import sympy
 from sympy import symbols, diff, sympify, latex
 from sympy.parsing.sympy_parser import parse_expr, standard_transformations, implicit_multiplication_application, convert_xor
-import google.generativeai as genai
+try:
+    import google.generativeai as genai
+    HAS_GENAI = True
+except ImportError:
+    HAS_GENAI = False
+    print("Warning: google-generativeai not installed.")
 
 app = Flask(__name__)
 CORS(app)
 
 # Configure Gemini
 GENAI_API_KEY = os.environ.get("GEMINI_API_KEY")
-if GENAI_API_KEY:
-    genai.configure(api_key=GENAI_API_KEY)
+if HAS_GENAI and GENAI_API_KEY:
+    try:
+        genai.configure(api_key=GENAI_API_KEY)
+    except Exception as e:
+        print(f"Failed to configure Gemini: {e}")
+        HAS_GENAI = False
 
 def parse_input(expression):
     transformations = (standard_transformations + (implicit_multiplication_application, convert_xor))
@@ -20,6 +29,14 @@ def parse_input(expression):
     if hasattr(expr, '__iter__'):
         raise ValueError("Please enter only one mathematical expression.")
     return expr
+
+@app.route('/api/health', methods=['GET'])
+def health():
+    return jsonify({
+        "status": "ok", 
+        "ai_enabled": HAS_GENAI,
+        "api_key_configured": bool(GENAI_API_KEY)
+    })
 
 @app.route('/api/derivative', methods=['GET'])
 def derivative():
@@ -29,7 +46,6 @@ def derivative():
     
     try:
         # 1. Calculate Derivative with SymPy (The Source of Truth)
-        x = symbols('x')
         x = symbols('x')
         # Use custom parser for implicit multiplication and ^ syntax
         expr = parse_input(expression) 
@@ -44,7 +60,7 @@ def derivative():
         
         include_ai = request.args.get('include_ai', 'true').lower() == 'true'
 
-        if GENAI_API_KEY and include_ai:
+        if HAS_GENAI and GENAI_API_KEY and include_ai:
             model = genai.GenerativeModel('gemini-2.0-flash')
             
             # We ask for two things: a simple explanation and step-by-step breakdown
@@ -100,7 +116,7 @@ def integral():
         
         include_ai = request.args.get('include_ai', 'true').lower() == 'true'
 
-        if GENAI_API_KEY and include_ai:
+        if HAS_GENAI and GENAI_API_KEY and include_ai:
             model = genai.GenerativeModel('gemini-2.0-flash')
             prompt = f"""
             For the math problem: indefinite integral of {expression}
@@ -154,7 +170,7 @@ def limit():
         
         include_ai = request.args.get('include_ai', 'true').lower() == 'true'
 
-        if GENAI_API_KEY and include_ai:
+        if HAS_GENAI and GENAI_API_KEY and include_ai:
             model = genai.GenerativeModel('gemini-2.0-flash')
             prompt = f"""
             For the math problem: limit of {expression} as x approaches {target}

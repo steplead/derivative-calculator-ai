@@ -5,5 +5,5 @@
             "destination": "/api/index.py"
         }
     ],
-    "installCommand": "npm install --legacy-peer-deps"
+    "installCommand": "npm install --legacy-peer-deps && pip install -r requirements.txt"
 }

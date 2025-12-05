@@ -53,7 +53,7 @@ def derivative():
             The answer is: {derivative_expr}
             
             1. Explain the derivative rule used in 1 simple sentence.
-            2. Provide a brief step-by-step derivation (max 3 steps). Use LaTeX for all math expressions (e.g. $x^2$).
+            2. Provide a brief step-by-step derivation (max 3 steps). Use LaTeX for all math expressions.
             
             Format output as JSON:
             {{
@@ -107,7 +107,7 @@ def integral():
             The answer is: {integral_expr} + C
             
             1. Explain the integration rule used in 1 simple sentence.
-            2. Provide a brief step-by-step integration (max 3 steps). Use LaTeX for all math expressions (e.g. $\int x dx$).
+            2. Provide a brief step-by-step integration (max 3 steps). Use LaTeX for all math expressions.
             
             Format output as JSON:
             {{
@@ -161,7 +161,7 @@ def limit():
             The answer is: {limit_val}
             
             1. Explain the limit rule or technique used (e.g. direct substitution, L'Hopital's).
-            2. Provide a brief step-by-step evaluation (max 3 steps). Use LaTeX for all math expressions (e.g. $\lim_{{x \to 0}}$).
+            2. Provide a brief step-by-step evaluation (max 3 steps). Use LaTeX for all math expressions.
             
             Format output as JSON:
             {{

@@ -16,7 +16,10 @@ if GENAI_API_KEY:
 
 def parse_input(expression):
     transformations = (standard_transformations + (implicit_multiplication_application, convert_xor))
-    return parse_expr(expression, transformations=transformations)
+    expr = parse_expr(expression, transformations=transformations)
+    if hasattr(expr, '__iter__'):
+        raise ValueError("Please enter only one mathematical expression.")
+    return expr
 
 @app.route('/api/derivative', methods=['GET'])
 def derivative():

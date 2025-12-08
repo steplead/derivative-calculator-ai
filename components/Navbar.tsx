@@ -3,36 +3,49 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import ThemeToggle from './ThemeToggle';
+import LanguageSwitcher from './LanguageSwitcher';
 
-export default function Navbar() {
+export default function Navbar({ dict }: { dict: any }) {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
-        <nav className="bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-slate-800 transition-colors duration-200">
+        <nav className="sticky top-0 z-50 bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-slate-800 transition-colors duration-200">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between h-16">
                     <div className="flex">
-                        <Link href="/" className="flex-shrink-0 flex items-center">
-                            <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">
-                                DerivativeCalculatorAI
-                            </span>
-                        </Link>
+                        <div className="flex-shrink-0 flex items-center">
+                            <Link href="/">
+                                {/* Light Mode Logo (Original) */}
+                                <img
+                                    src="/logo-light.png"
+                                    alt="Derivative Calculator AI"
+                                    className="h-12 w-auto dark:hidden"
+                                />
+                                {/* Dark Mode Logo (Blue Icon + White Text) */}
+                                <img
+                                    src="/logo-dark-v2.png"
+                                    alt="Derivative Calculator AI"
+                                    className="h-12 w-auto hidden dark:block"
+                                />
+                            </Link>
+                        </div>
                     </div>
 
                     {/* Desktop Menu */}
                     <div className="hidden md:flex items-center space-x-4">
                         <Link href="/" className="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">
-                            Derivative
+                            {dict.nav.derivative}
                         </Link>
                         <Link href="/integral" className="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">
-                            Integral
+                            {dict.nav.integral}
                         </Link>
                         <Link href="/limit" className="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">
-                            Limit
+                            {dict.nav.limit}
                         </Link>
                         <Link href="/directory" className="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">
-                            Directory
+                            {dict.nav.directory}
                         </Link>
+                        <LanguageSwitcher />
                         <ThemeToggle />
                     </div>
 
@@ -67,29 +80,35 @@ export default function Navbar() {
                             onClick={() => setIsOpen(false)}
                             className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 dark:text-gray-300 dark:hover:text-white dark:hover:bg-slate-800"
                         >
-                            Derivative Calculator
+                            {dict.nav.derivative}
                         </Link>
                         <Link
                             href="/integral"
                             onClick={() => setIsOpen(false)}
                             className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 dark:text-gray-300 dark:hover:text-white dark:hover:bg-slate-800"
                         >
-                            Integral Calculator
+                            {dict.nav.integral}
                         </Link>
                         <Link
                             href="/limit"
                             onClick={() => setIsOpen(false)}
                             className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 dark:text-gray-300 dark:hover:text-white dark:hover:bg-slate-800"
                         >
-                            Limit Calculator
+                            {dict.nav.limit}
                         </Link>
                         <Link
                             href="/directory"
                             onClick={() => setIsOpen(false)}
                             className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 dark:text-gray-300 dark:hover:text-white dark:hover:bg-slate-800"
                         >
-                            Directory
+                            {dict.nav.directory}
                         </Link>
+
+                        {/* Language Switcher in Mobile Menu */}
+                        <div className="px-3 py-2">
+                            <div className="mb-2 text-sm font-medium text-gray-500 dark:text-gray-400">Language / Idioma</div>
+                            <LanguageSwitcher />
+                        </div>
                     </div>
                 </div>
             )}

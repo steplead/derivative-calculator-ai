@@ -30,9 +30,28 @@ def generate_sitemap():
 
     # Dynamic Problem Pages
     for problem in problems:
+        # English
         url = f"{BASE_URL}/{problem['slug']}"
         xml_content += "  <url>\n"
         xml_content += f"    <loc>{url}</loc>\n"
+        xml_content += f"    <lastmod>{today}</lastmod>\n"
+        xml_content += "    <changefreq>weekly</changefreq>\n"
+        xml_content += "    <priority>0.8</priority>\n"
+        xml_content += "  </url>\n"
+
+        # Spanish
+        url_es = f"{BASE_URL}/es/{problem['slug']}"
+        xml_content += "  <url>\n"
+        xml_content += f"    <loc>{url_es}</loc>\n"
+        xml_content += f"    <lastmod>{today}</lastmod>\n"
+        xml_content += "    <changefreq>weekly</changefreq>\n"
+        xml_content += "    <priority>0.8</priority>\n"
+        xml_content += "  </url>\n"
+
+        # Portuguese
+        url_pt = f"{BASE_URL}/pt/{problem['slug']}"
+        xml_content += "  <url>\n"
+        xml_content += f"    <loc>{url_pt}</loc>\n"
         xml_content += f"    <lastmod>{today}</lastmod>\n"
         xml_content += "    <changefreq>weekly</changefreq>\n"
         xml_content += "    <priority>0.8</priority>\n"
@@ -46,7 +65,8 @@ def generate_sitemap():
     with open(SITEMAP_FILE, "w") as f:
         f.write(xml_content)
 
-    print(f"Generated sitemap.xml with {len(static_pages) + len(problems)} URLs.")
+    total_urls = len(static_pages) + (len(problems) * 3)
+    print(f"Generated sitemap.xml with {total_urls} URLs.")
 
 if __name__ == "__main__":
     generate_sitemap()

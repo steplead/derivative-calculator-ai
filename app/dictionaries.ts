@@ -1,0 +1,227 @@
+export type Locale = 'en' | 'es' | 'pt';
+
+export const dictionaries = {
+    en: {
+        title: "Derivative Calculator AI",
+        description: "Free AI-powered calculus solver. Instant step-by-step solutions.",
+        nav: {
+            derivative: "Derivative Calculator",
+            integral: "Integral Calculator",
+            limit: "Limit Calculator",
+            directory: "Problem Directory",
+        },
+        footer: {
+            about: "About Us",
+            privacy: "Privacy Policy",
+            resources: "Resources",
+            popular: "Popular Derivatives",
+        },
+        common: {
+            calculate: "Calculate",
+            loading: "Thinking...",
+            practice: "Practice More Problems",
+            stepByStep: "Step-by-Step Solution",
+            graph: "Interactive Graph",
+            aiExplanation: "AI Explanation",
+        },
+        home: {
+            h1: "Derivative Calculator",
+            subtitle: "Instant step-by-step solutions powered by SymPy & Gemini.",
+            howToTitle: "How to use this Derivative Calculator",
+            howToText: "This tool uses advanced AI to help you solve calculus problems. Simply enter your function into the box above and click \"Solve\".",
+            rulesTitle: "Common Derivative Rules",
+            popularTitle: "Popular Calculations",
+            viewAll: "View All 50+ Derivatives",
+            rules: {
+                power: { title: "Power Rule", text: "d/dx (x^n) = nx^(n-1)" },
+                product: { title: "Product Rule", text: "d/dx (uv) = u'v + uv'" },
+                chain: { title: "Chain Rule", text: "d/dx f(g(x)) = f'(g(x))g'(x)" },
+            }
+        },
+        calculator: {
+            placeholder: "e.g. x^2, sin(x), ln(x)",
+            solve: "Solve",
+            integrate: "Integrate",
+            limit: "Find Limit",
+            solving: "Solving...",
+            solution: "Solution",
+            steps: "Step-by-Step",
+            graph: "Graph",
+            ai: "AI Explanation",
+        },
+        directory: {
+            h1: "All Derivative Problems",
+            subtitle: "Browse our comprehensive library of calculus problems.",
+            back: "Back to Calculator",
+            derivativeOf: "Derivative of",
+        },
+        integral: {
+            h1: "Integral Calculator",
+            subtitle: "Instant step-by-step integration powered by SymPy & Gemini.",
+            howToTitle: "How to use this Integral Calculator",
+            howToText: "Enter your function to find the antiderivative (indefinite integral).",
+            bullet1: "Polynomials (e.g., x^2 + 3x)",
+            bullet2: "Trig functions (e.g., sin(x))",
+            bullet3: "Exponentials (e.g., e^x)",
+        },
+        limit: {
+            h1: "Limit Calculator",
+            subtitle: "Instant step-by-step limit evaluation powered by SymPy & Gemini.",
+            howToTitle: "How to use this Limit Calculator",
+            howToText: "Enter your function and the value x approaches to find the limit.",
+            bullet1: "Rational functions (e.g., (x^2-1)/(x-1))",
+            bullet2: "Trig limits (e.g., sin(x)/x)",
+            bullet3: "Limits at infinity",
+        }
+    },
+    es: {
+        title: "Calculadora de Derivadas IA",
+        description: "Solucionador de cálculo gratuito con IA. Soluciones paso a paso instantáneas.",
+        nav: {
+            derivative: "Calculadora de Derivadas",
+            integral: "Calculadora de Integrales",
+            limit: "Calculadora de Límites",
+            directory: "Directorio de Problemas",
+        },
+        footer: {
+            about: "Sobre Nosotros",
+            privacy: "Política de Privacidad",
+            resources: "Recursos",
+            popular: "Derivadas Populares",
+        },
+        common: {
+            calculate: "Calcular",
+            loading: "Pensando...",
+            practice: "Practicar Más Problemas",
+            stepByStep: "Solución Paso a Paso",
+            graph: "Gráfico Interactivo",
+            aiExplanation: "Explicación de IA",
+        },
+        home: {
+            h1: "Calculadora de Derivadas",
+            subtitle: "Soluciones paso a paso instantáneas con SymPy y Gemini.",
+            howToTitle: "Cómo usar esta Calculadora",
+            howToText: "Esta herramienta usa IA avanzada para resolver problemas de cálculo. Ingresa tu función arriba y haz clic en \"Resolver\".",
+            rulesTitle: "Reglas de Derivación Comunes",
+            popularTitle: "Cálculos Populares",
+            viewAll: "Ver las 50+ Derivadas",
+            rules: {
+                power: { title: "Regla de la Potencia", text: "d/dx (x^n) = nx^(n-1)" },
+                product: { title: "Regla del Producto", text: "d/dx (uv) = u'v + uv'" },
+                chain: { title: "Regla de la Cadena", text: "d/dx f(g(x)) = f'(g(x))g'(x)" },
+            }
+        },
+        calculator: {
+            placeholder: "ej. x^2, sin(x), ln(x)",
+            solve: "Resolver",
+            integrate: "Integrar",
+            limit: "Calcular Límite",
+            solving: "Resolviendo...",
+            solution: "Solución",
+            steps: "Paso a Paso",
+            graph: "Gráfico",
+            ai: "Explicación IA",
+        },
+        directory: {
+            h1: "Directorio de Problemas",
+            subtitle: "Explora nuestra biblioteca completa de problemas de cálculo.",
+            back: "Volver a la Calculadora",
+            derivativeOf: "Derivada de",
+        },
+        integral: {
+            h1: "Calculadora de Integrales",
+            subtitle: "Integración paso a paso instantánea con SymPy y Gemini.",
+            howToTitle: "Cómo usar esta Calculadora de Integrales",
+            howToText: "Ingresa tu función para encontrar la antiderivada (integral indefinida).",
+            bullet1: "Polinomios (ej: x^2 + 3x)",
+            bullet2: "Funciones Trigonométricas (ej: sin(x))",
+            bullet3: "Exponenciales (ej: e^x)",
+        },
+        limit: {
+            h1: "Calculadora de Límites",
+            subtitle: "Evaluación de límites paso a paso instantánea con SymPy y Gemini.",
+            howToTitle: "Cómo usar esta Calculadora de Límites",
+            howToText: "Ingresa tu función y el valor al que se aproxima x para encontrar el límite.",
+            bullet1: "Funciones Racionales (ej: (x^2-1)/(x-1))",
+            bullet2: "Límites Trigonométricos (ej: sin(x)/x)",
+            bullet3: "Límites en el infinito",
+        }
+    },
+    pt: {
+        title: "Calculadora de Derivadas IA",
+        description: "Resolvedor de cálculo gratuito com IA. Soluções passo a passo instantâneas.",
+        nav: {
+            derivative: "Calculadora de Derivadas",
+            integral: "Calculadora de Integrais",
+            limit: "Calculadora de Limites",
+            directory: "Diretório de Problemas",
+        },
+        footer: {
+            about: "Sobre Nós",
+            privacy: "Política de Privacidade",
+            resources: "Recursos",
+            popular: "Derivadas Populares",
+        },
+        common: {
+            calculate: "Calcular",
+            loading: "Pensando...",
+            practice: "Praticar Mais Problemas",
+            stepByStep: "Solução Passo a Passo",
+            graph: "Gráfico Interativo",
+            aiExplanation: "Explicação da IA",
+        },
+        home: {
+            h1: "Calculadora de Derivadas",
+            subtitle: "Soluções passo a passo instantâneas com SymPy e Gemini.",
+            howToTitle: "Como usar esta Calculadora",
+            howToText: "Esta ferramenta usa IA avançada para resolver problemas de cálculo. Digite sua função acima e clique em \"Resolver\".",
+            rulesTitle: "Regras de Derivação Comuns",
+            popularTitle: "Cálculos Populares",
+            viewAll: "Ver todas as 50+ Derivadas",
+            rules: {
+                power: { title: "Regra da Potência", text: "d/dx (x^n) = nx^(n-1)" },
+                product: { title: "Regra do Produto", text: "d/dx (uv) = u'v + uv'" },
+                chain: { title: "Regra da Cadeia", text: "d/dx f(g(x)) = f'(g(x))g'(x)" },
+            }
+        },
+        calculator: {
+            placeholder: "ex. x^2, sin(x), ln(x)",
+            solve: "Resolver",
+            integrate: "Integrar",
+            limit: "Calcular Limite",
+            solving: "Resolvendo...",
+            solution: "Solução",
+            steps: "Passo a Passo",
+            graph: "Gráfico",
+            ai: "Explicação IA",
+        },
+        directory: {
+            h1: "Diretório de Problemas",
+            subtitle: "Navegue por nossa biblioteca abrangente de problemas de cálculo.",
+            back: "Voltar para Calculadora",
+            derivativeOf: "Derivada de",
+        },
+        integral: {
+            h1: "Calculadora de Integrais",
+            subtitle: "Integração passo a passo instantânea com SymPy e Gemini.",
+            howToTitle: "Como usar esta Calculadora de Integrais",
+            howToText: "Digite sua função para encontrar a antiderivada (integral indefinida).",
+            bullet1: "Polinômios (ex: x^2 + 3x)",
+            bullet2: "Funções Trigonométricas (ex: sin(x))",
+            bullet3: "Exponenciais (ex: e^x)",
+        },
+        limit: {
+            h1: "Calculadora de Limites",
+            subtitle: "Avaliação de limites passo a passo instantânea com SymPy e Gemini.",
+            howToTitle: "Como usar esta Calculadora de Limites",
+            howToText: "Digite sua função e o valor que x se aproxima para encontrar o limite.",
+            bullet1: "Funções Racionais (ex: (x^2-1)/(x-1))",
+            bullet2: "Limites Trigonométricos (ex: sin(x)/x)",
+            bullet3: "Limites no infinito",
+        }
+    }
+};
+
+export const getDictionary = (locale: string) => {
+    return dictionaries[locale as Locale] || dictionaries.en;
+};

@@ -1,0 +1,20 @@
+import { MetadataRoute } from 'next'
+
+export default function manifest(): MetadataRoute.Manifest {
+    return {
+        name: 'Derivative Calculator AI',
+        short_name: 'DerivCalc AI',
+        description: 'Free AI-powered derivative calculator with step-by-step explanations.',
+        start_url: '/',
+        display: 'standalone',
+        background_color: '#ffffff',
+        theme_color: '#2563eb',
+        icons: [
+            {
+                src: '/favicon-sq.png',
+                sizes: 'any',
+                type: 'image/png',
+            },
+        ],
+    }
+}

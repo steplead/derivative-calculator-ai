@@ -1,31 +1,36 @@
 import Calculator from '@/components/Calculator';
 import Link from 'next/link';
 import problems from '@/data/problems.json';
-
 import { Suspense } from 'react';
+import { headers } from 'next/headers';
+import { getDictionary } from './dictionaries';
 
-export default function Home() {
+export default async function Home() {
+  const headersList = await headers();
+  const locale = headersList.get("x-next-locale") || "en";
+  const dict = getDictionary(locale);
+
   return (
     <main className="min-h-screen bg-white dark:bg-slate-900 py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-200">
       <div className="max-w-4xl mx-auto text-center mb-12 mt-10">
         <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-4">
-          Derivative Calculator <span className="text-blue-600 dark:text-blue-500">AI</span>
+          {dict.home.h1} <span className="text-blue-600 dark:text-blue-500">AI</span>
         </h1>
         <p className="text-xl text-gray-600 dark:text-gray-400">
-          Instant step-by-step solutions powered by SymPy & Gemini.
+          {dict.home.subtitle}
         </p>
       </div>
 
-      <Suspense fallback={<div className="text-gray-900 dark:text-white text-center">Loading Calculator...</div>}>
-        <Calculator />
+      <Suspense fallback={<div className="text-gray-900 dark:text-white text-center">{dict.common.loading}</div>}>
+        <Calculator dict={dict.calculator} />
       </Suspense>
 
       <div className="max-w-4xl mx-auto mt-20 prose prose-invert">
         <div className="grid md:grid-cols-2 gap-12">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">How to use this Derivative Calculator</h2>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">{dict.home.howToTitle}</h2>
             <p className="text-gray-600 dark:text-gray-400 mb-4">
-              This tool uses advanced AI to help you solve calculus problems. Simply enter your function into the box above and click "Solve".
+              {dict.home.howToText}
             </p>
             <ul className="list-disc pl-5 text-gray-600 dark:text-gray-400 space-y-2">
               <li>Supports polynomials (e.g., <code className="bg-gray-100 dark:bg-slate-800 px-1 rounded text-gray-800 dark:text-gray-200">x^2 + 3x</code>)</li>
@@ -35,19 +40,19 @@ export default function Home() {
           </div>
 
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Common Derivative Rules</h2>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">{dict.home.rulesTitle}</h2>
             <div className="space-y-4">
               <div className="bg-gray-100 dark:bg-slate-800 p-4 rounded-lg">
-                <h3 className="font-semibold text-blue-600 dark:text-blue-400">Power Rule</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">d/dx (x^n) = nx^(n-1)</p>
+                <h3 className="font-semibold text-blue-600 dark:text-blue-400">{dict.home.rules.power.title}</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{dict.home.rules.power.text}</p>
               </div>
               <div className="bg-gray-100 dark:bg-slate-800 p-4 rounded-lg">
-                <h3 className="font-semibold text-purple-600 dark:text-purple-400">Product Rule</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">d/dx (uv) = u'v + uv'</p>
+                <h3 className="font-semibold text-purple-600 dark:text-purple-400">{dict.home.rules.product.title}</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{dict.home.rules.product.text}</p>
               </div>
               <div className="bg-gray-100 dark:bg-slate-800 p-4 rounded-lg">
-                <h3 className="font-semibold text-green-600 dark:text-green-400">Chain Rule</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">d/dx f(g(x)) = f'(g(x))g'(x)</p>
+                <h3 className="font-semibold text-green-600 dark:text-green-400">{dict.home.rules.chain.title}</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{dict.home.rules.chain.text}</p>
               </div>
             </div>
           </div>
@@ -55,29 +60,30 @@ export default function Home() {
 
         {/* Popular Calculations Section */}
         <div className="mt-20">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-8 text-center">Popular Calculations</h2>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-8 text-center">{dict.home.popularTitle}</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {problems.slice(0, 20).map((problem) => (
               <Link
                 key={problem.slug}
-                href={`/${problem.slug}`}
+                href={`/${locale === 'en' ? '' : locale + '/'}${problem.slug}`}
                 className="bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 p-3 rounded-lg text-sm text-blue-600 dark:text-blue-300 hover:text-blue-800 dark:hover:text-blue-200 transition-colors text-center block no-underline"
               >
-                Derivative of {problem.formula}
+                {/* Note: In a real app, we would translate problem formulas too, but for now we keep them as is or use a helper */}
+                {locale === 'en' ? `Derivative of ${problem.formula}` :
+                  locale === 'es' ? `Derivada de ${problem.formula}` :
+                    `Derivada de ${problem.formula}`}
               </Link>
             ))}
           </div>
           <div className="mt-8 text-center">
             <Link href="/directory" className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-full transition-colors no-underline">
-              View All 50+ Derivatives &rarr;
+              {dict.home.viewAll} &rarr;
             </Link>
           </div>
         </div>
       </div>
 
-      <footer className="mt-20 text-center text-gray-500 dark:text-gray-500 text-sm">
-        <p>&copy; {new Date().getFullYear()} DerivativeCalculatorAI.com</p>
-      </footer>
+
     </main>
   );
 }

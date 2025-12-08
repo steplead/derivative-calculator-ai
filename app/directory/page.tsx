@@ -1,22 +1,37 @@
 import Link from 'next/link';
 import problems from '@/data/problems.json';
+import { headers } from 'next/headers';
+import { getDictionary } from '../dictionaries';
+
+// Helper to get formula title if needed (reuse from [slug]/page logic if possible, or simple mapping)
+function getProblemTitle(locale: string, formula: string, type: string = 'derivative') {
+    if (locale === 'en') return `Derivative of ${formula}`;
+    if (locale === 'es') return `Derivada de ${formula}`;
+    if (locale === 'pt') return `Derivada de ${formula}`; // Or "Derivada de"
+    return `Derivative of ${formula}`;
+}
+
+export const dynamic = 'force-dynamic';
 
 export const metadata = {
     title: 'All Derivative Problems - Derivative Calculator AI',
-    description: 'Browse our complete list of derivative problems and solutions. Find step-by-step explanations for polynomials, trigonometry, logarithms, and more.',
+    description: 'Browse our complete list of derivative problems and solutions.',
 };
 
-export default function DirectoryPage() {
+export default async function DirectoryPage() {
+    const headersList = await headers();
+    const locale = headersList.get("x-next-locale") || "en";
+    const dict = getDictionary(locale);
+
     return (
         <main className="min-h-screen bg-white dark:bg-slate-900 py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-200">
             <div className="max-w-7xl mx-auto">
                 <div className="text-center mb-12">
                     <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-                        All Derivative Problems
+                        {dict.directory.h1}
                     </h1>
                     <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-                        Browse our comprehensive library of {problems.length} calculus problems.
-                        Each page includes a step-by-step solution, AI explanation, and interactive graph.
+                        {dict.directory.subtitle.replace("{count}", problems.length.toString())}
                     </p>
                 </div>
 
@@ -24,11 +39,11 @@ export default function DirectoryPage() {
                     {problems.map((problem) => (
                         <Link
                             key={problem.slug}
-                            href={`/${problem.slug}`}
+                            href={`/${locale === 'en' ? '' : locale + '/'}${problem.slug}`}
                             className="bg-gray-50 hover:bg-white dark:bg-slate-800 dark:hover:bg-slate-700 p-4 rounded-lg border border-gray-200 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-400 hover:shadow-md transition-all group"
                         >
                             <h3 className="text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300 font-semibold mb-1 truncate">
-                                Derivative of {problem.formula}
+                                {dict.directory.derivativeOf} {problem.formula}
                             </h3>
                             <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
                                 {problem.title}
@@ -39,7 +54,7 @@ export default function DirectoryPage() {
 
                 <div className="mt-12 text-center pb-12">
                     <Link href="/" className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors">
-                        &larr; Back to Calculator
+                        &larr; {dict.directory.back}
                     </Link>
                 </div>
             </div>

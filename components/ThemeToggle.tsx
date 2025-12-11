@@ -3,15 +3,17 @@
 import { useState, useEffect } from 'react';
 
 export default function ThemeToggle() {
-    const [darkMode, setDarkMode] = useState(true);
+    const [darkMode, setDarkMode] = useState<boolean | undefined>(undefined);
+    const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
+        setMounted(true);
         // Check local storage or system preference
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            setDarkMode(true);
+        const isDark = localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        setDarkMode(isDark);
+        if (isDark) {
             document.documentElement.classList.add('dark');
         } else {
-            setDarkMode(false);
             document.documentElement.classList.remove('dark');
         }
     }, []);
@@ -27,6 +29,11 @@ export default function ThemeToggle() {
             setDarkMode(true);
         }
     };
+
+    // Don't render until mounted to avoid hydration mismatch
+    if (!mounted) {
+        return <div className="w-10 h-10" />; // Placeholder to maintain layout
+    }
 
     return (
         <button

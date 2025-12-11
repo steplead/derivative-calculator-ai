@@ -9,6 +9,12 @@ type AdUnitProps = {
 };
 
 export default function AdUnit({ slot, format = 'auto', className = '' }: AdUnitProps) {
+    // Feature Flag: Disable ads for SEO protection until traffic grows
+    // Set to true later when ready to monetize
+    const ENABLE_ADS = false;
+
+    if (!ENABLE_ADS) return null;
+
     useEffect(() => {
         try {
             // @ts-ignore

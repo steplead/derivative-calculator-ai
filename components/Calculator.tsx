@@ -233,7 +233,7 @@ export default function Calculator({ initialEquation = '', initialLimitTo = '0',
                 {/* Ad Unit */}
                 <div className="mt-8">
                     {/* Use a placeholder slot ID for now */}
-                    <AdUnit slot="1234567890" />
+                    <AdUnit slot="main-calc-result-1" />
                 </div>
             </div>
         </div>

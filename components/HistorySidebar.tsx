@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import AdUnit from './AdUnit';
 
 type HistoryItem = {
     equation: string;
@@ -104,8 +105,12 @@ export default function HistorySidebar() {
                             Clear History
                         </button>
                     )}
+
+                    <div className="mt-auto pt-4">
+                        <AdUnit slot="sidebar-1" format="rectangle" />
+                    </div>
                 </div>
-            </div>
+            </div >
         </>
     );
 }

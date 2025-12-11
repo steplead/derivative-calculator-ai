@@ -72,6 +72,20 @@ export const dictionaries = {
             bullet1: "Rational functions (e.g., (x^2-1)/(x-1))",
             bullet2: "Trig limits (e.g., sin(x)/x)",
             bullet3: "Limits at infinity",
+        },
+        matrix: {
+            h1: "Matrix Calculator",
+            subtitle: "Calculate determinants, inverses, eigenvalues, and more tailored for Linear Algebra.",
+            dimensions: "Dimensions:",
+            reset: "Reset",
+            ops: {
+                determinant: "Determinant",
+                inverse: "Inverse",
+                transpose: "Transpose",
+                rank: "Rank",
+                rref: "RREF",
+                eigenvals: "Eigenvalues",
+            }
         }
     },
     es: {
@@ -145,6 +159,20 @@ export const dictionaries = {
             bullet1: "Funciones Racionales (ej: (x^2-1)/(x-1))",
             bullet2: "Límites Trigonométricos (ej: sin(x)/x)",
             bullet3: "Límites en el infinito",
+        },
+        matrix: {
+            h1: "Calculadora de Matrices",
+            subtitle: "Calcula determinantes, inversas, valores propios y más, adaptado para Álgebra Lineal.",
+            dimensions: "Dimensiones:",
+            reset: "Reiniciar",
+            ops: {
+                determinant: "Determinante",
+                inverse: "Inversa",
+                transpose: "Transpuesta",
+                rank: "Rango",
+                rref: "F. Escalonada (RREF)",
+                eigenvals: "Valores Propios",
+            }
         }
     },
     pt: {
@@ -218,6 +246,20 @@ export const dictionaries = {
             bullet1: "Funções Racionais (ex: (x^2-1)/(x-1))",
             bullet2: "Limites Trigonométricos (ex: sin(x)/x)",
             bullet3: "Limites no infinito",
+        },
+        matrix: {
+            h1: "Calculadora de Matrizes",
+            subtitle: "Calcule determinantes, inversas, autovalores e muito mais, sob medida para Álgebra Linear.",
+            dimensions: "Dimensões:",
+            reset: "Redefinir",
+            ops: {
+                determinant: "Determinante",
+                inverse: "Inversa",
+                transpose: "Transposta",
+                rank: "Posto",
+                rref: "Escalonada (RREF)",
+                eigenvals: "Autovalores",
+            }
         }
     }
 };

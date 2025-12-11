@@ -42,6 +42,9 @@ export default function Navbar({ dict }: { dict: any }) {
                         <Link href="/limit" className="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">
                             {dict.nav.limit}
                         </Link>
+                        <Link href="/matrix" className="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">
+                            Matrix
+                        </Link>
                         <Link href="/directory" className="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">
                             {dict.nav.directory}
                         </Link>
@@ -95,6 +98,13 @@ export default function Navbar({ dict }: { dict: any }) {
                             className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 dark:text-gray-300 dark:hover:text-white dark:hover:bg-slate-800"
                         >
                             {dict.nav.limit}
+                        </Link>
+                        <Link
+                            href="/matrix"
+                            onClick={() => setIsOpen(false)}
+                            className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 dark:text-gray-300 dark:hover:text-white dark:hover:bg-slate-800"
+                        >
+                            Matrix
                         </Link>
                         <Link
                             href="/directory"

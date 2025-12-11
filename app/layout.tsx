@@ -20,11 +20,6 @@ export const metadata: Metadata = {
   },
   title: "Derivative Calculator AI - Solve Calculus Problems Instantly",
   description: "Free step-by-step derivative calculator powered by AI. Get instant solutions and explanations for calculus problems.",
-  icons: [
-    { rel: 'icon', url: '/favicon-sq.png?v=6', type: 'image/png' },
-    { rel: 'shortcut icon', url: '/favicon-sq.png?v=6' },
-    { rel: 'apple-touch-icon', url: '/favicon-sq.png?v=6' },
-  ],
 };
 
 const jsonLd = {

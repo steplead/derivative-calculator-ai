@@ -8,6 +8,7 @@ export const dictionaries = {
             derivative: "Derivative Calculator",
             integral: "Integral Calculator",
             limit: "Limit Calculator",
+            matrix: "Matrix Calculator",
             directory: "Problem Directory",
         },
         footer: {
@@ -95,6 +96,7 @@ export const dictionaries = {
             derivative: "Calculadora de Derivadas",
             integral: "Calculadora de Integrales",
             limit: "Calculadora de Límites",
+            matrix: "Calculadora de Matrices",
             directory: "Directorio de Problemas",
         },
         footer: {
@@ -182,6 +184,7 @@ export const dictionaries = {
             derivative: "Calculadora de Derivadas",
             integral: "Calculadora de Integrais",
             limit: "Calculadora de Limites",
+            matrix: "Calculadora de Matrizes",
             directory: "Diretório de Problemas",
         },
         footer: {

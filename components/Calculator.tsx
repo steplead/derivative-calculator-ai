@@ -2,9 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
-import MathDisplay from './MathDisplay';
-import Graph from './Graph';
-import StepDisplay from './StepDisplay';
+import dynamic from 'next/dynamic';
+
+const MathDisplay = dynamic(() => import('./MathDisplay'), { ssr: false });
+const Graph = dynamic(() => import('./Graph'), { ssr: false });
+const StepDisplay = dynamic(() => import('./StepDisplay'), { ssr: false });
 import AdUnit from './AdUnit';
 
 type CalculatorProps = {

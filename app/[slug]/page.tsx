@@ -126,7 +126,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     }
 
     const t = getLocalizedContent(locale, problem.formula, problem.type);
-    const url = `https://derivativecalculatorai.com/${locale === 'en' ? '' : locale + '/'}${slug}`;
+
+    // Use host-relative or dynamic canonical based on env
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://derivativecalculatorai.com';
+    const baseUrlWithLocale = locale === 'en' ? siteUrl : `${siteUrl}/${locale}`;
+    const url = `${baseUrlWithLocale}/${slug}`;
 
     return {
         title: `${t.title} - Derivative Calculator AI`,
@@ -134,9 +138,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         alternates: {
             canonical: url,
             languages: {
-                'en': `https://derivativecalculatorai.com/${slug}`,
-                'es': `https://derivativecalculatorai.com/es/${slug}`,
-                'pt': `https://derivativecalculatorai.com/pt/${slug}`,
+                'en': `${siteUrl}/${slug}`,
+                'es': `${siteUrl}/es/${slug}`,
+                'pt': `${siteUrl}/pt/${slug}`,
             }
         },
         openGraph: {

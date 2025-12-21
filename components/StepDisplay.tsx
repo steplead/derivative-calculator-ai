@@ -1,6 +1,8 @@
 'use client';
 import 'katex/dist/katex.min.css';
-import Latex from 'react-latex-next';
+import dynamic from 'next/dynamic';
+
+const Latex = dynamic(() => import('react-latex-next'), { ssr: false });
 
 interface StepDisplayProps {
     content: string;

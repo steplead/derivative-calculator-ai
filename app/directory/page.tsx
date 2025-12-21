@@ -3,6 +3,7 @@ import { headers } from 'next/headers';
 export const runtime = 'edge';
 
 import { getDictionary } from '../dictionaries';
+import { getBaseUrl } from '@/utils/robust-url';
 
 // Helper to get formula title if needed (reuse from [slug]/page logic if possible, or simple mapping)
 function getProblemTitle(locale: string, formula: string, type: string = 'derivative') {
@@ -29,13 +30,10 @@ export default async function DirectoryPage() {
     }
 
     // Fetch all problems from API
-    let baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
-    if (baseUrl.endsWith('/')) {
-        baseUrl = baseUrl.slice(0, -1);
-    }
+    const baseUrl = getBaseUrl();
 
     let problemsList = [];
-    if (baseUrl && baseUrl.startsWith('http')) {
+    if (baseUrl) {
         try {
             const res = await fetch(`${baseUrl}/api/problems`, {
                 cache: 'force-cache',

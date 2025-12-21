@@ -4,6 +4,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Calculator from '@/components/Calculator';
 import { Suspense } from 'react';
+import { getBaseUrl } from '@/utils/robust-url';
 
 // Define the type for our problem data
 type Problem = {
@@ -95,13 +96,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const { slug } = await params;
 
     // Fetch problem details from API
-    let baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
-    if (baseUrl.endsWith('/')) {
-        baseUrl = baseUrl.slice(0, -1);
-    }
+    // Fetch problem details from API
+    const baseUrl = getBaseUrl();
 
     let problem: Problem | null = null;
-    if (baseUrl && baseUrl.startsWith('http')) {
+    if (baseUrl) {
         try {
             const res = await fetch(`${baseUrl}/api/problem/${slug}`, {
                 cache: 'force-cache',
@@ -171,15 +170,13 @@ export default async function ProblemPage({ params }: { params: Promise<{ slug: 
     const { slug } = await params;
 
     // Fetch problem details and related problems from API
-    let baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
-    if (baseUrl.endsWith('/')) {
-        baseUrl = baseUrl.slice(0, -1);
-    }
+    // Fetch problem details and related problems from API
+    const baseUrl = getBaseUrl();
 
     let problem: Problem | null = null;
     let relatedProblems: Problem[] = [];
 
-    if (baseUrl && baseUrl.startsWith('http')) {
+    if (baseUrl) {
         try {
             const [probRes, allRes] = await Promise.all([
                 fetch(`${baseUrl}/api/problem/${slug}`, {

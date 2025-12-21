@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Suspense } from 'react';
 import { headers } from 'next/headers';
 import { getDictionary } from './dictionaries';
+import { getBaseUrl } from '@/utils/robust-url';
 
 export default async function Home() {
   const headersList = await headers();
@@ -15,15 +16,12 @@ export default async function Home() {
   }
 
   // Fetch popular problems from API instead of local JSON
-  let baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
-  if (baseUrl.endsWith('/')) {
-    baseUrl = baseUrl.slice(0, -1);
-  }
+  const baseUrl = getBaseUrl();
 
   let popularProblems = [];
 
   // SAFE FETCH: Verification before parsing JSON
-  if (baseUrl && baseUrl.startsWith('http')) {
+  if (baseUrl) {
     try {
       const res = await fetch(`${baseUrl}/api/problems?limit=20`, {
         cache: 'force-cache',

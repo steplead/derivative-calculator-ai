@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Suspense } from 'react';
 import { headers } from 'next/headers';
 import { getDictionary } from './dictionaries';
+import problemsData from '@/data/problems.json';
 
 export default async function Home() {
   const headersList = await headers();
@@ -22,6 +23,7 @@ export default async function Home() {
 
   let popularProblems = [];
 
+  // SAFE FETCH: Verification before parsing JSON
   if (baseUrl && baseUrl.startsWith('http')) {
     try {
       const res = await fetch(`${baseUrl}/api/problems?limit=20`, {
@@ -29,12 +31,21 @@ export default async function Home() {
         // @ts-ignore
         next: { revalidate: 3600 }
       });
-      if (res.ok) {
+
+      const contentType = res.headers.get("content-type");
+      if (res.ok && contentType && contentType.includes("application/json")) {
         popularProblems = await res.json();
+      } else {
+        console.warn("Backend returned non-JSON response, using local fallback.");
       }
     } catch (e) {
       console.error("Failed to fetch popular problems:", e);
     }
+  }
+
+  // FALLBACK: Use local data if API failed or returned HTML
+  if (!popularProblems || popularProblems.length === 0) {
+    popularProblems = (problemsData as any[]).slice(0, 20);
   }
 
   return (

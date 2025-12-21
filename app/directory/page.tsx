@@ -3,6 +3,7 @@ import { headers } from 'next/headers';
 export const runtime = 'edge';
 
 import { getDictionary } from '../dictionaries';
+import problemsData from '@/data/problems.json';
 
 // Helper to get formula title if needed (reuse from [slug]/page logic if possible, or simple mapping)
 function getProblemTitle(locale: string, formula: string, type: string = 'derivative') {
@@ -42,12 +43,21 @@ export default async function DirectoryPage() {
                 // @ts-ignore
                 next: { revalidate: 3600 }
             });
-            if (res.ok) {
+
+            const contentType = res.headers.get("content-type");
+            if (res.ok && contentType && contentType.includes("application/json")) {
                 problemsList = await res.json();
+            } else {
+                console.warn("Backend returned non-JSON, using local fallback for directory.");
             }
         } catch (e) {
             console.error("Failed to fetch problems for directory:", e);
         }
+    }
+
+    // FALLBACK: Use full local data if API failed
+    if (!problemsList || problemsList.length === 0) {
+        problemsList = problemsData as any[];
     }
 
     return (

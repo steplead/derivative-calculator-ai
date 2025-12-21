@@ -4,6 +4,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Calculator from '@/components/Calculator';
 import { Suspense } from 'react';
+import problemsData from '@/data/problems.json';
 
 // Define the type for our problem data
 type Problem = {
@@ -108,12 +109,19 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
                 // @ts-ignore
                 next: { revalidate: 3600 }
             });
-            if (res.ok) {
+
+            const contentType = res.headers.get("content-type");
+            if (res.ok && contentType && contentType.includes("application/json")) {
                 problem = await res.json();
             }
         } catch (e) {
             console.error("Failed to fetch problem for metadata:", e);
         }
+    }
+
+    // FALLBACK: Look up in local data if API failed or returned HTML
+    if (!problem) {
+        problem = (problemsData as Problem[]).find(p => p.slug === slug) || null;
     }
 
     const headersList = await headers();
@@ -179,8 +187,13 @@ export default async function ProblemPage({ params }: { params: Promise<{ slug: 
                 })
             ]);
 
-            if (probRes.ok) problem = await probRes.json();
-            if (allRes.ok) {
+            const probContentType = probRes.headers.get("content-type");
+            const allContentType = allRes.headers.get("content-type");
+
+            if (probRes.ok && probContentType && probContentType.includes("application/json")) {
+                problem = await probRes.json();
+            }
+            if (allRes.ok && allContentType && allContentType.includes("application/json")) {
                 const allProblems = await allRes.json();
                 relatedProblems = allProblems
                     .filter((p: any) => p.slug !== slug)
@@ -190,6 +203,18 @@ export default async function ProblemPage({ params }: { params: Promise<{ slug: 
         } catch (e) {
             console.error("Failed to fetch problem data:", e);
         }
+    }
+
+    // FALLBACK: Use local data if API failed
+    if (!problem) {
+        problem = (problemsData as Problem[]).find(p => p.slug === slug) || null;
+    }
+
+    if (relatedProblems.length === 0) {
+        relatedProblems = (problemsData as Problem[])
+            .filter(p => p.slug !== slug)
+            .sort(() => 0.5 - Math.random())
+            .slice(0, 4);
     }
 
     const headersList = await headers();

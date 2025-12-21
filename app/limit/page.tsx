@@ -16,9 +16,20 @@ import { getDictionary } from '../dictionaries';
 export const dynamic = 'force-dynamic';
 
 export default async function LimitPage() {
-    const headersList = await headers();
-    const locale = headersList.get("x-next-locale") || "en";
-    const dict = getDictionary(locale);
+    let locale = "en";
+    let dict = getDictionary("en");
+
+    try {
+        const headersList = await headers();
+        locale = headersList.get("x-next-locale") || "en";
+        dict = getDictionary(locale);
+    } catch (e) {
+        console.error("Limit page header error:", e);
+    }
+
+    if (!dict || !dict.limit) {
+        dict = getDictionary("en");
+    }
 
     return (
         <main className="min-h-screen bg-white dark:bg-slate-900 py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-200">

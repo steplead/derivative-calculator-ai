@@ -52,9 +52,21 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const headersList = await headers();
-  const locale = headersList.get("x-next-locale") || "en";
-  const dict = getDictionary(locale);
+  let locale = "en";
+  let dict = getDictionary("en");
+
+  try {
+    const headersList = await headers();
+    locale = headersList.get("x-next-locale") || "en";
+    dict = getDictionary(locale);
+  } catch (e) {
+    console.error("Layout error during initialization:", e);
+  }
+
+  // Ensure dict core keys exist to prevent JSX crashes
+  if (!dict || !dict.nav) {
+    dict = getDictionary("en");
+  }
 
   return (
     <html lang={locale} suppressHydrationWarning>

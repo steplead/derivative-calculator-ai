@@ -15,10 +15,14 @@ export default async function Home() {
   }
 
   // Fetch popular problems from API instead of local JSON
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
+  let baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
+  if (baseUrl.endsWith('/')) {
+    baseUrl = baseUrl.slice(0, -1);
+  }
+
   let popularProblems = [];
 
-  if (baseUrl) {
+  if (baseUrl && baseUrl.startsWith('http')) {
     try {
       const res = await fetch(`${baseUrl}/api/problems?limit=20`, {
         cache: 'force-cache',

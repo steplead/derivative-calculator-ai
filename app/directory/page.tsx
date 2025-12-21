@@ -29,9 +29,13 @@ export default async function DirectoryPage() {
     }
 
     // Fetch all problems from API
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
+    let baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
+    if (baseUrl.endsWith('/')) {
+        baseUrl = baseUrl.slice(0, -1);
+    }
+
     let problemsList = [];
-    if (baseUrl) {
+    if (baseUrl && baseUrl.startsWith('http')) {
         try {
             const res = await fetch(`${baseUrl}/api/problems`, {
                 cache: 'force-cache',

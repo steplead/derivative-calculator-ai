@@ -95,9 +95,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const { slug } = await params;
 
     // Fetch problem details from API
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
+    let baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
+    if (baseUrl.endsWith('/')) {
+        baseUrl = baseUrl.slice(0, -1);
+    }
+
     let problem: Problem | null = null;
-    if (baseUrl) {
+    if (baseUrl && baseUrl.startsWith('http')) {
         try {
             const res = await fetch(`${baseUrl}/api/problem/${slug}`, {
                 cache: 'force-cache',
@@ -148,11 +152,15 @@ export default async function ProblemPage({ params }: { params: Promise<{ slug: 
     const { slug } = await params;
 
     // Fetch problem details and related problems from API
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
+    let baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
+    if (baseUrl.endsWith('/')) {
+        baseUrl = baseUrl.slice(0, -1);
+    }
+
     let problem: Problem | null = null;
     let relatedProblems: Problem[] = [];
 
-    if (baseUrl) {
+    if (baseUrl && baseUrl.startsWith('http')) {
         try {
             const [probRes, allRes] = await Promise.all([
                 fetch(`${baseUrl}/api/problem/${slug}`, {

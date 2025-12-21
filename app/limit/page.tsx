@@ -9,6 +9,8 @@ export const metadata = {
 import { Suspense } from 'react';
 
 import { headers } from 'next/headers';
+export const runtime = 'edge';
+
 import { getDictionary } from '../dictionaries';
 
 export const dynamic = 'force-dynamic';

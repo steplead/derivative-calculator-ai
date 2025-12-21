@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import problems from '@/data/problems.json';
 import { headers } from 'next/headers';
+export const runtime = 'edge';
+
 import { getDictionary } from '../dictionaries';
 
 // Helper to get formula title if needed (reuse from [slug]/page logic if possible, or simple mapping)

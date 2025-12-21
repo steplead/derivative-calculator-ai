@@ -1,4 +1,5 @@
 import { headers } from 'next/headers';
+export const runtime = 'edge';
 import { getDictionary } from '@/app/dictionaries';
 import MatrixCalculator from '@/components/MatrixCalculator';
 

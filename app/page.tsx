@@ -1,4 +1,5 @@
 import Calculator from '@/components/Calculator';
+export const runtime = 'edge';
 import Link from 'next/link';
 import problems from '@/data/problems.json';
 import { Suspense } from 'react';

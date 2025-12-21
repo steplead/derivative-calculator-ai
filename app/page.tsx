@@ -10,16 +10,27 @@ export default async function Home() {
   const locale = headersList.get("x-next-locale") || "en";
   const dict = getDictionary(locale);
 
+  if (!dict || !dict.home || !dict.common) {
+    return <div className="p-20 text-center">System initialization... (Dictionary missing)</div>;
+  }
+
   // Fetch popular problems from API instead of local JSON
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
   let popularProblems = [];
-  try {
-    const res = await fetch(`${baseUrl}/api/problems?limit=20`, { next: { revalidate: 3600 } });
-    if (res.ok) {
-      popularProblems = await res.json();
+
+  if (baseUrl) {
+    try {
+      const res = await fetch(`${baseUrl}/api/problems?limit=20`, {
+        cache: 'force-cache',
+        // @ts-ignore
+        next: { revalidate: 3600 }
+      });
+      if (res.ok) {
+        popularProblems = await res.json();
+      }
+    } catch (e) {
+      console.error("Failed to fetch popular problems:", e);
     }
-  } catch (e) {
-    console.error("Failed to fetch popular problems:", e);
   }
 
   return (

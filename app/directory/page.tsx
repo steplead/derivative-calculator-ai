@@ -24,16 +24,26 @@ export default async function DirectoryPage() {
     const locale = headersList.get("x-next-locale") || "en";
     const dict = getDictionary(locale);
 
+    if (!dict || !dict.directory) {
+        return <div className="p-20 text-center">System initialization... (Directory dictionary missing)</div>;
+    }
+
     // Fetch all problems from API
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
     let problemsList = [];
-    try {
-        const res = await fetch(`${baseUrl}/api/problems`, { next: { revalidate: 3600 } });
-        if (res.ok) {
-            problemsList = await res.json();
+    if (baseUrl) {
+        try {
+            const res = await fetch(`${baseUrl}/api/problems`, {
+                cache: 'force-cache',
+                // @ts-ignore
+                next: { revalidate: 3600 }
+            });
+            if (res.ok) {
+                problemsList = await res.json();
+            }
+        } catch (e) {
+            console.error("Failed to fetch problems for directory:", e);
         }
-    } catch (e) {
-        console.error("Failed to fetch problems for directory:", e);
     }
 
     return (

@@ -97,13 +97,19 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     // Fetch problem details from API
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
     let problem: Problem | null = null;
-    try {
-        const res = await fetch(`${baseUrl}/api/problem/${slug}`, { next: { revalidate: 3600 } });
-        if (res.ok) {
-            problem = await res.json();
+    if (baseUrl) {
+        try {
+            const res = await fetch(`${baseUrl}/api/problem/${slug}`, {
+                cache: 'force-cache',
+                // @ts-ignore
+                next: { revalidate: 3600 }
+            });
+            if (res.ok) {
+                problem = await res.json();
+            }
+        } catch (e) {
+            console.error("Failed to fetch problem for metadata:", e);
         }
-    } catch (e) {
-        console.error("Failed to fetch problem for metadata:", e);
     }
 
     const headersList = await headers();
@@ -146,22 +152,32 @@ export default async function ProblemPage({ params }: { params: Promise<{ slug: 
     let problem: Problem | null = null;
     let relatedProblems: Problem[] = [];
 
-    try {
-        const [probRes, allRes] = await Promise.all([
-            fetch(`${baseUrl}/api/problem/${slug}`, { next: { revalidate: 3600 } }),
-            fetch(`${baseUrl}/api/problems?limit=50`, { next: { revalidate: 3600 } })
-        ]);
+    if (baseUrl) {
+        try {
+            const [probRes, allRes] = await Promise.all([
+                fetch(`${baseUrl}/api/problem/${slug}`, {
+                    cache: 'force-cache',
+                    // @ts-ignore
+                    next: { revalidate: 3600 }
+                }),
+                fetch(`${baseUrl}/api/problems?limit=50`, {
+                    cache: 'force-cache',
+                    // @ts-ignore
+                    next: { revalidate: 3600 }
+                })
+            ]);
 
-        if (probRes.ok) problem = await probRes.json();
-        if (allRes.ok) {
-            const allProblems = await allRes.json();
-            relatedProblems = allProblems
-                .filter((p: any) => p.slug !== slug)
-                .sort(() => 0.5 - Math.random())
-                .slice(0, 4);
+            if (probRes.ok) problem = await probRes.json();
+            if (allRes.ok) {
+                const allProblems = await allRes.json();
+                relatedProblems = allProblems
+                    .filter((p: any) => p.slug !== slug)
+                    .sort(() => 0.5 - Math.random())
+                    .slice(0, 4);
+            }
+        } catch (e) {
+            console.error("Failed to fetch problem data:", e);
         }
-    } catch (e) {
-        console.error("Failed to fetch problem data:", e);
     }
 
     const headersList = await headers();

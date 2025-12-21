@@ -8,20 +8,28 @@
  */
 
 export function getBaseUrl(): string {
-    // 1. Check strict environment variable (set in Cloudflare/Vercel)
-    if (process.env.NEXT_PUBLIC_BASE_URL) {
+    // Safe logic for Edge environments where process might be undefined OR shimmed differently
+    const isProcessDefined = typeof process !== 'undefined';
+    const isWindowDefined = typeof window !== 'undefined';
+
+    // 1. Client-side fallback (most reliable relative path preservation)
+    if (isWindowDefined) {
+        return window.location.origin;
+    }
+
+    // 2. Check strict environment variable (set in Cloudflare/Vercel)
+    if (isProcessDefined && process.env.NEXT_PUBLIC_BASE_URL) {
         let url = process.env.NEXT_PUBLIC_BASE_URL;
         if (url.endsWith('/')) url = url.slice(0, -1);
         if (!url.startsWith('http')) url = `https://${url}`;
         return url;
     }
 
-    // 2. Check Vercel system variable
-    if (process.env.VERCEL_URL) {
+    // 3. Check Vercel system variable
+    if (isProcessDefined && process.env.VERCEL_URL) {
         return `https://${process.env.VERCEL_URL}`;
     }
 
-    // 3. Last result fallback: Production Domain
-    // This ensures we NEVER return an empty string or relative path
+    // 4. Last result fallback: Production Domain
     return 'https://derivative-calculator-ai.pages.dev';
 }

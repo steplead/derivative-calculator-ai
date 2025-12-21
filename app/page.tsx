@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { Suspense } from 'react';
 import { headers } from 'next/headers';
 import { getDictionary } from './dictionaries';
-import problemsData from '@/data/problems.json';
 
 export default async function Home() {
   const headersList = await headers();
@@ -45,7 +44,16 @@ export default async function Home() {
 
   // FALLBACK: Use local data if API failed or returned HTML
   if (!popularProblems || popularProblems.length === 0) {
-    popularProblems = (problemsData as any[]).slice(0, 20);
+    try {
+      // Fetch from public/ directory instead of bundling it
+      const fallbackRes = await fetch(`${baseUrl}/problems.json`);
+      if (fallbackRes.ok) {
+        const problemsData = await fallbackRes.json();
+        popularProblems = (problemsData as any[]).slice(0, 20);
+      }
+    } catch (e) {
+      console.error("Static fallback failed:", e);
+    }
   }
 
   return (

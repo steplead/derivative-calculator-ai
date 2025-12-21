@@ -3,7 +3,6 @@ import { headers } from 'next/headers';
 export const runtime = 'edge';
 
 import { getDictionary } from '../dictionaries';
-import problemsData from '@/data/problems.json';
 
 // Helper to get formula title if needed (reuse from [slug]/page logic if possible, or simple mapping)
 function getProblemTitle(locale: string, formula: string, type: string = 'derivative') {
@@ -57,7 +56,14 @@ export default async function DirectoryPage() {
 
     // FALLBACK: Use full local data if API failed
     if (!problemsList || problemsList.length === 0) {
-        problemsList = problemsData as any[];
+        try {
+            const fallbackRes = await fetch(`${baseUrl}/problems.json`);
+            if (fallbackRes.ok) {
+                problemsList = await fallbackRes.json();
+            }
+        } catch (e) {
+            console.error("Static fallback failed in DirectoryPage:", e);
+        }
     }
 
     return (

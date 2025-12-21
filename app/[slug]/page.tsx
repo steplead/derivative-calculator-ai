@@ -4,7 +4,6 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Calculator from '@/components/Calculator';
 import { Suspense } from 'react';
-import problemsData from '@/data/problems.json';
 
 // Define the type for our problem data
 type Problem = {
@@ -121,7 +120,15 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
     // FALLBACK: Look up in local data if API failed or returned HTML
     if (!problem) {
-        problem = (problemsData as Problem[]).find(p => p.slug === slug) || null;
+        try {
+            const fallbackRes = await fetch(`${baseUrl}/problems.json`);
+            if (fallbackRes.ok) {
+                const problemsData = await fallbackRes.json();
+                problem = (problemsData as Problem[]).find(p => p.slug === slug) || null;
+            }
+        } catch (e) {
+            console.error("Static fallback failed in generateMetadata:", e);
+        }
     }
 
     const headersList = await headers();
@@ -206,15 +213,24 @@ export default async function ProblemPage({ params }: { params: Promise<{ slug: 
     }
 
     // FALLBACK: Use local data if API failed
-    if (!problem) {
-        problem = (problemsData as Problem[]).find(p => p.slug === slug) || null;
-    }
-
-    if (relatedProblems.length === 0) {
-        relatedProblems = (problemsData as Problem[])
-            .filter(p => p.slug !== slug)
-            .sort(() => 0.5 - Math.random())
-            .slice(0, 4);
+    if (!problem || relatedProblems.length === 0) {
+        try {
+            const fallbackRes = await fetch(`${baseUrl}/problems.json`);
+            if (fallbackRes.ok) {
+                const problemsData = await fallbackRes.json();
+                if (!problem) {
+                    problem = (problemsData as Problem[]).find(p => p.slug === slug) || null;
+                }
+                if (relatedProblems.length === 0) {
+                    relatedProblems = (problemsData as Problem[])
+                        .filter(p => p.slug !== slug)
+                        .sort(() => 0.5 - Math.random())
+                        .slice(0, 4);
+                }
+            }
+        } catch (e) {
+            console.error("Static fallback failed in ProblemPage:", e);
+        }
     }
 
     const headersList = await headers();

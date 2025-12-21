@@ -1,9 +1,7 @@
 import { headers } from 'next/headers';
-export const runtime = 'edge';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Calculator from '@/components/Calculator';
-import problems from '@/data/problems.json';
 import { Suspense } from 'react';
 
 // Define the type for our problem data
@@ -94,7 +92,19 @@ function getLocalizedContent(locale: string, formula: string, type: string = 'de
 // Generate metadata for SEO
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
     const { slug } = await params;
-    const problem = problems.find((p) => p.slug === slug);
+
+    // Fetch problem details from API
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
+    let problem: Problem | null = null;
+    try {
+        const res = await fetch(`${baseUrl}/api/problem/${slug}`, { next: { revalidate: 3600 } });
+        if (res.ok) {
+            problem = await res.json();
+        }
+    } catch (e) {
+        console.error("Failed to fetch problem for metadata:", e);
+    }
+
     const headersList = await headers();
     const locale = headersList.get("x-next-locale") || "en";
 
@@ -129,7 +139,30 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function ProblemPage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
-    const problem = problems.find((p) => p.slug === slug);
+
+    // Fetch problem details and related problems from API
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
+    let problem: Problem | null = null;
+    let relatedProblems: Problem[] = [];
+
+    try {
+        const [probRes, allRes] = await Promise.all([
+            fetch(`${baseUrl}/api/problem/${slug}`, { next: { revalidate: 3600 } }),
+            fetch(`${baseUrl}/api/problems?limit=50`, { next: { revalidate: 3600 } })
+        ]);
+
+        if (probRes.ok) problem = await probRes.json();
+        if (allRes.ok) {
+            const allProblems = await allRes.json();
+            relatedProblems = allProblems
+                .filter((p: any) => p.slug !== slug)
+                .sort(() => 0.5 - Math.random())
+                .slice(0, 4);
+        }
+    } catch (e) {
+        console.error("Failed to fetch problem data:", e);
+    }
+
     const headersList = await headers();
     const locale = headersList.get("x-next-locale") || "en";
 
@@ -138,12 +171,6 @@ export default async function ProblemPage({ params }: { params: Promise<{ slug: 
     }
 
     const t = getLocalizedContent(locale, problem.formula, problem.type);
-
-    // Advanced SEO: Internal Linking (Random 4 related problems)
-    const relatedProblems = problems
-        .filter(p => p.slug !== slug)
-        .sort(() => 0.5 - Math.random())
-        .slice(0, 4);
 
     // Advanced SEO: JSON-LD Schema (HowTo / MathSolver)
     // Note: Schema usually stays in English or needs full translation. Keeping English for technical schema for now, 

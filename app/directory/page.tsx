@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import problems from '@/data/problems.json';
 import { headers } from 'next/headers';
 export const runtime = 'edge';
 
@@ -25,6 +24,18 @@ export default async function DirectoryPage() {
     const locale = headersList.get("x-next-locale") || "en";
     const dict = getDictionary(locale);
 
+    // Fetch all problems from API
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
+    let problemsList = [];
+    try {
+        const res = await fetch(`${baseUrl}/api/problems`, { next: { revalidate: 3600 } });
+        if (res.ok) {
+            problemsList = await res.json();
+        }
+    } catch (e) {
+        console.error("Failed to fetch problems for directory:", e);
+    }
+
     return (
         <main className="min-h-screen bg-white dark:bg-slate-900 py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-200">
             <div className="max-w-7xl mx-auto">
@@ -33,12 +44,12 @@ export default async function DirectoryPage() {
                         {dict.directory.h1}
                     </h1>
                     <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-                        {dict.directory.subtitle.replace("{count}", problems.length.toString())}
+                        {dict.directory.subtitle.replace("{count}", problemsList.length.toString())}
                     </p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                    {problems.map((problem) => (
+                    {problemsList.map((problem: any) => (
                         <Link
                             key={problem.slug}
                             href={`/${locale === 'en' ? '' : locale + '/'}${problem.slug}`}

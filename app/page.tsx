@@ -1,7 +1,6 @@
 import Calculator from '@/components/Calculator';
 export const runtime = 'edge';
 import Link from 'next/link';
-import problems from '@/data/problems.json';
 import { Suspense } from 'react';
 import { headers } from 'next/headers';
 import { getDictionary } from './dictionaries';
@@ -10,6 +9,18 @@ export default async function Home() {
   const headersList = await headers();
   const locale = headersList.get("x-next-locale") || "en";
   const dict = getDictionary(locale);
+
+  // Fetch popular problems from API instead of local JSON
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
+  let popularProblems = [];
+  try {
+    const res = await fetch(`${baseUrl}/api/problems?limit=20`, { next: { revalidate: 3600 } });
+    if (res.ok) {
+      popularProblems = await res.json();
+    }
+  } catch (e) {
+    console.error("Failed to fetch popular problems:", e);
+  }
 
   return (
     <main className="min-h-screen bg-white dark:bg-slate-900 py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-200">
@@ -63,13 +74,12 @@ export default async function Home() {
         <div className="mt-20">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-8 text-center">{dict.home.popularTitle}</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {problems.slice(0, 20).map((problem) => (
+            {popularProblems.map((problem: any) => (
               <Link
                 key={problem.slug}
                 href={`/${locale === 'en' ? '' : locale + '/'}${problem.slug}`}
                 className="bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 p-3 rounded-lg text-sm text-blue-600 dark:text-blue-300 hover:text-blue-800 dark:hover:text-blue-200 transition-colors text-center block no-underline"
               >
-                {/* Note: In a real app, we would translate problem formulas too, but for now we keep them as is or use a helper */}
                 {locale === 'en' ? `Derivative of ${problem.formula}` :
                   locale === 'es' ? `Derivada de ${problem.formula}` :
                     `Derivada de ${problem.formula}`}

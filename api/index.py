@@ -48,6 +48,39 @@ def health():
         "api_key_configured": bool(OPENROUTER_API_KEY)
     })
 
+# Load problems from JSON
+def load_problems():
+    try:
+        # Try different paths as development/vercel might differ
+        paths = [
+            os.path.join(os.path.dirname(__file__), '..', 'data', 'problems.json'),
+            os.path.join(os.getcwd(), 'data', 'problems.json')
+        ]
+        for path in paths:
+            if os.path.exists(path):
+                with open(path, 'r') as f:
+                    return json.load(f)
+        return []
+    except Exception as e:
+        print(f"Error loading problems: {e}")
+        return []
+
+@app.route('/api/problems', methods=['GET'])
+def get_problems():
+    limit = request.args.get('limit', type=int)
+    problems = load_problems()
+    if limit:
+        return jsonify(problems[:limit])
+    return jsonify(problems)
+
+@app.route('/api/problem/<slug>', methods=['GET'])
+def get_problem(slug):
+    problems = load_problems()
+    problem = next((p for p in problems if p['slug'] == slug), None)
+    if not problem:
+        return jsonify({"error": "Problem not found"}), 404
+    return jsonify(problem)
+
 @app.route('/api/derivative', methods=['GET'])
 def derivative():
     expression = request.args.get('equation')

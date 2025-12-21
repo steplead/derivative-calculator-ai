@@ -20,6 +20,10 @@ export const metadata: Metadata = {
   },
   title: "Derivative Calculator AI - Solve Calculus Problems Instantly",
   description: "Free step-by-step derivative calculator powered by AI. Get instant solutions and explanations for calculus problems.",
+  icons: {
+    icon: '/favicon-sq.png',
+    apple: '/favicon-sq.png',
+  },
 };
 
 const jsonLd = {

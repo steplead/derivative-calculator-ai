@@ -1,0 +1,68 @@
+[
+    {
+        "slug": "chain-rule",
+        "title": "Chain Rule",
+        "description": "Learn how to use the chain rule to find the derivative of composite functions.",
+        "category": "Derivatives",
+        "content": "The chain rule is a formula to compute the derivative of a composite function. If f and g are differentiable, then the chain rule expresses the derivative of their composite f ∘ g in terms of the derivatives of f and g and the functions themselves.",
+        "relatedProblems": [
+            "derivative-of-sin-x2",
+            "derivative-of-cos-2x"
+        ]
+    },
+    {
+        "slug": "product-rule",
+        "title": "Product Rule",
+        "description": "The product rule for finding the derivative of two functions multiplied together.",
+        "category": "Derivatives",
+        "content": "In calculus, the product rule is a formula used to find the derivatives of products of two or more functions. It may be stated as: (fg)' = f'g + fg'.",
+        "relatedProblems": [
+            "derivative-of-x-sin-x",
+            "derivative-of-x-e-x"
+        ]
+    },
+    {
+        "slug": "quotient-rule",
+        "title": "Quotient Rule",
+        "description": "Learn the quotient rule for differentiating ratios of functions.",
+        "category": "Derivatives",
+        "content": "The quotient rule is a method of finding the derivative of a function that is the ratio of two differentiable functions. It states: (f/g)' = (f'g - fg') / g^2.",
+        "relatedProblems": [
+            "derivative-of-tan-x",
+            "derivative-of-1-x"
+        ]
+    },
+    {
+        "slug": "power-rule",
+        "title": "Power Rule",
+        "description": "The most fundamental rule for derivatives: d/dx(x^n) = nx^(n-1).",
+        "category": "Derivatives",
+        "content": "The power rule is used to differentiate functions of the form f(x) = x^n, where n is a real number. The rule states that the derivative is f'(x) = nx^(n-1).",
+        "relatedProblems": [
+            "derivative-of-x2",
+            "derivative-of-x3"
+        ]
+    },
+    {
+        "slug": "l-hopitals-rule",
+        "title": "L'Hôpital's Rule",
+        "description": "Using derivatives to find limits of indeterminate forms.",
+        "category": "Limits",
+        "content": "L'Hôpital's rule provides a technique to evaluate limits of indeterminate forms (0/0 or ∞/∞) using derivatives.",
+        "relatedProblems": [
+            "limit-of-sin-x-x",
+            "limit-of-e-x-1-x"
+        ]
+    },
+    {
+        "slug": "integration-by-parts",
+        "title": "Integration by Parts",
+        "description": "A technique for integration based on the product rule for derivatives.",
+        "category": "Integrals",
+        "content": "Integration by parts is a process that finds the integral of a product of functions in terms of the integral of the product of their derivative and antiderivative.",
+        "relatedProblems": [
+            "integral-of-x-sin-x",
+            "integral-of-x-e-x"
+        ]
+    }
+]

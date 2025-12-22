@@ -1,9 +1,10 @@
 import { MetadataRoute } from 'next';
-import problems from '../data/problems.json';
+import problemsData from '../public/problems.json';
+import wikiData from '../public/wiki.json';
 
 export const runtime = 'edge';
 
-const BASE_URL = 'https://derivative-calculator-ai.pages.dev';
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://derivativecalculatorai.com';
 
 export default function sitemap(): MetadataRoute.Sitemap {
     const staticRoutes = [
@@ -13,38 +14,45 @@ export default function sitemap(): MetadataRoute.Sitemap {
         '/derivative',
         '/matrix',
         '/directory',
+        '/wiki',
     ];
 
-    const locales = ['', '/es', '/pt']; // Empty string for default (en) which is at root
+    const locales = ['', '/es', '/pt'];
 
     const sitemapEntries: MetadataRoute.Sitemap = [];
 
-    // 1. Add Static Routes
+    // 1. Static Routes
     locales.forEach(locale => {
         staticRoutes.forEach(route => {
-            const url = `${BASE_URL}${locale}${route === '' ? '' : route}`;
-
-            let priority = 0.8;
-            if (route === '' && locale === '') priority = 1.0;
-            if (route === '' && locale !== '') priority = 0.9;
-
+            const url = `${BASE_URL}${locale}${route}`;
             sitemapEntries.push({
                 url,
                 lastModified: new Date(),
-                changeFrequency: 'weekly' as const,
-                priority,
+                changeFrequency: 'weekly',
+                priority: (route === '' && locale === '') ? 1.0 : 0.8,
             });
         });
     });
 
-    // 2. Add Dynamic Problem Routes (3000+ per locale)
-    problems.forEach((p: any) => {
+    // 2. Wiki Topics
+    wikiData.forEach((topic: any) => {
         locales.forEach(locale => {
-            const url = `${BASE_URL}${locale}/${p.slug}`;
             sitemapEntries.push({
-                url,
+                url: `${BASE_URL}${locale}/wiki/${topic.slug}`,
                 lastModified: new Date(),
-                changeFrequency: 'monthly' as const,
+                changeFrequency: 'monthly',
+                priority: 0.7,
+            });
+        });
+    });
+
+    // 3. Problem Routes
+    problemsData.forEach((p: any) => {
+        locales.forEach(locale => {
+            sitemapEntries.push({
+                url: `${BASE_URL}${locale}/${p.slug}`,
+                lastModified: new Date(),
+                changeFrequency: 'monthly',
                 priority: 0.6,
             });
         });

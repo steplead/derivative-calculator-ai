@@ -280,7 +280,7 @@ export default async function ProblemPage({ params }: { params: { slug: string }
     // Upgraded from HowTo for better Google Rich Results compatibility.
     const mathSolverSchema = {
         "@context": "https://schema.org",
-        "@type": "MathSolver",
+        "@type": ["MathSolver", "LearningResource"],
         "name": t.title,
         "description": t.description,
         "url": url,
@@ -290,6 +290,7 @@ export default async function ProblemPage({ params }: { params: { slug: string }
         "mathExpression": problem.formula,
         "inLanguage": locale,
         "usageInfo": siteUrl,
+        "learningResourceType": "Math solver",
         "potentialAction": [
             {
                 "@type": "SolveMathAction",
@@ -298,7 +299,7 @@ export default async function ProblemPage({ params }: { params: { slug: string }
                     "@type": "EntryPoint",
                     "urlTemplate": `${baseUrlWithLocale}?equation={math_expression}`
                 },
-                "math_expression-input": "required name=math_expression"
+                "mathExpression-input": "required name=math_expression"
             }
         ],
         "stepByStepInstructions": [

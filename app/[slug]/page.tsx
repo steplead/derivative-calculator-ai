@@ -288,14 +288,18 @@ export default async function ProblemPage({ params }: { params: Promise<{ slug: 
         "educationalLevel": "High School",
         "mathProblemType": "Calculus",
         "mathExpression": problem.formula,
-        "potentialAction": {
-            "@type": "SolveMathAction",
-            "target": {
-                "@type": "EntryPoint",
-                "urlTemplate": `${baseUrlWithLocale}?equation={math_expression}`
-            },
-            "math_expression-input": "required name=math_expression"
-        },
+        "inLanguage": locale,
+        "usageInfo": siteUrl,
+        "potentialAction": [
+            {
+                "@type": "SolveAction",
+                "target": {
+                    "@type": "EntryPoint",
+                    "urlTemplate": `${baseUrlWithLocale}?equation={math_expression}`
+                },
+                "query-input": "required name=math_expression"
+            }
+        ],
         "stepByStepInstructions": [
             {
                 "@type": "HowToStep",

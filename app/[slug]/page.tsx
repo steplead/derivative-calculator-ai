@@ -284,32 +284,39 @@ export default async function ProblemPage({ params }: { params: Promise<{ slug: 
         "name": t.title,
         "description": t.description,
         "url": url,
-        "assesses": "Mathematics",
+        "image": `${siteUrl}/icon-192.png`,
         "educationalLevel": "High School",
         "mathProblemType": "Calculus",
-        "mathExpression": problem.formula,
-        "potentialAction": [
-            {
-                "@type": "SolveMathAction",
-                "target": {
-                    "@type": "EntryPoint",
-                    "urlTemplate": `${baseUrlWithLocale}?equation={equation}`
-                },
-                "query-input": "required name=equation"
-            }
-        ],
+        "potentialAction": {
+            "@type": "SolveMathAction",
+            "target": {
+                "@type": "EntryPoint",
+                "urlTemplate": `${baseUrlWithLocale}?equation={math_expression}`
+            },
+            "math_expression-input": "required name=math_expression"
+        },
         "stepByStepInstructions": [
             {
                 "@type": "HowToStep",
-                "name": "Analyze Problem",
-                "text": `First, we identify the mathematical expression: ${problem.formula}.`
+                "name": "Step 1: Setup",
+                "position": 1,
+                "text": `Identify the function ${problem.formula} and prepare it for differentiation or integration.`
             },
             {
                 "@type": "HowToStep",
-                "name": "Apply Rules",
-                "text": `Then, we apply the appropriate ${problem.type || 'calculus'} rules to solve it.`
+                "name": "Step 2: Solve",
+                "position": 2,
+                "text": "Apply the specialized calculus rules to obtain the final simplified result."
             }
-        ]
+        ],
+        "publisher": {
+            "@type": "Organization",
+            "name": "Derivative Calculator AI",
+            "logo": {
+                "@type": "ImageObject",
+                "url": `${siteUrl}/icon-192.png`
+            }
+        }
     };
 
     const breadcrumbSchema = {

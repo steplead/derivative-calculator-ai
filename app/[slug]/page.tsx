@@ -286,14 +286,14 @@ export default async function ProblemPage({ params }: { params: { slug: string }
         "url": url,
         "image": `${siteUrl}/icon-192.png`,
         "educationalLevel": "High School",
-        "mathProblemType": "PolynomialEquation",
-        "eduQuestionType": problem.type === 'integral' ? "Calculus" : problem.type === 'limit' ? "Calculus" : "Calculus",
+        "eduQuestionType": problem.type === 'integral' ? "Integral" : problem.type === 'limit' ? "Limit" : "Derivative",
         "mathExpression": problem.formula,
         "inLanguage": locale,
         "usageInfo": siteUrl,
         "potentialAction": [
             {
                 "@type": "SolveMathAction",
+                "eduQuestionType": problem.type === 'integral' ? "Integral" : problem.type === 'limit' ? "Limit" : "Derivative",
                 "target": {
                     "@type": "EntryPoint",
                     "urlTemplate": `${baseUrlWithLocale}?equation={math_expression}`

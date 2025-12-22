@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import Calculator from '@/components/Calculator';
 import { Suspense } from 'react';
 import { getBaseUrl } from '@/utils/robust-url';
+import { getRequestContext } from '@cloudflare/next-on-pages';
 
 // Define the type for our problem data
 type Problem = {
@@ -133,6 +134,19 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const headersList = await headers();
     const locale = headersList.get("x-next-locale") || "en";
 
+    // D1 Lookup (Zero-hop)
+    if (!problem) {
+        try {
+            // @ts-ignore
+            const db = getRequestContext().env.DB;
+            if (db) {
+                problem = await db.prepare("SELECT * FROM problems WHERE slug = ?").bind(slug).first();
+            }
+        } catch (e) {
+            console.error("D1 Metadata fetch failed:", e);
+        }
+    }
+
     if (!problem) {
         return {
             title: 'Problem Not Found',
@@ -206,6 +220,25 @@ export default async function ProblemPage({ params }: { params: Promise<{ slug: 
             }
         } catch (e) {
             console.error("Failed to fetch problem data:", e);
+        }
+    }
+
+    // D1 DIRECT LOOKUP (Hybrid Performance)
+    if (!problem || relatedProblems.length === 0) {
+        try {
+            // @ts-ignore
+            const db = getRequestContext().env.DB;
+            if (db) {
+                if (!problem) {
+                    problem = await db.prepare("SELECT * FROM problems WHERE slug = ?").bind(slug).first();
+                }
+                if (relatedProblems.length === 0) {
+                    const { results } = await db.prepare("SELECT * FROM problems WHERE slug != ? ORDER BY RANDOM() LIMIT 4").bind(slug).all();
+                    relatedProblems = results;
+                }
+            }
+        } catch (e) {
+            console.error("D1 Hybrid Direct Fetch Failed:", e);
         }
     }
 

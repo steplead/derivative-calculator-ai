@@ -14,6 +14,8 @@
     "@next/third-parties": "^14.2.35",
     "@tailwindcss/typography": "^0.5.19",
     "@types/mathjs": "^9.4.1",
+    "@upstash/ratelimit": "^2.0.7",
+    "@upstash/redis": "^1.35.8",
     "function-plot": "^1.25.1",
     "katex": "^0.16.25",
     "lucide-react": "^0.559.0",

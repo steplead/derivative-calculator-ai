@@ -2,3 +2,8 @@ name = "derivative-calculator-ai"
 compatibility_date = "2024-09-23"
 compatibility_flags = ["nodejs_compat", "nodejs_als"]
 pages_build_output_dir = ".vercel/output/static"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "problems-db"
+database_id = "PASTE_YOUR_DATABASE_ID_HERE"

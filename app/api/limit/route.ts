@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import nerdamer from 'nerdamer';
 import 'nerdamer/Calculus';
 import { OpenAI } from 'openai';
+import { getCachedExplanation, setCachedExplanation } from '@/utils/cache';
 
 export const runtime = 'edge';
 
@@ -27,44 +28,54 @@ export async function GET(req: NextRequest) {
 
         const apiKey = process.env.OPENROUTER_API_KEY;
 
-        if (includeAi && apiKey) {
-            try {
-                const client = new OpenAI({
-                    baseURL: "https://openrouter.ai/api/v1",
-                    apiKey: apiKey,
-                });
+        if (includeAi) {
+            const cacheKey = `limit:${expression.replace(/\s+/g, '')}:${target}`;
+            const cached = await getCachedExplanation(cacheKey);
 
-                const prompt = `
-                You are a Calculus Tutor.
-                1. Explain the limit technique used for: limit of ${expression} as x -> ${target}
-                2. Provide a step-by-step evaluation (max 3 steps).
-                3. Use LaTeX for math.
-                
-                Output strictly valid JSON:
-                {
-                    "explanation": "...",
-                    "steps": "..."
+            if (cached) {
+                const aiData = JSON.parse(cached);
+                aiExplanation = aiData.explanation;
+                stepsContent = aiData.steps;
+            } else if (apiKey) {
+                try {
+                    const client = new OpenAI({
+                        baseURL: "https://openrouter.ai/api/v1",
+                        apiKey: apiKey,
+                    });
+
+                    const prompt = `
+                    You are a Calculus Tutor.
+                    1. Explain the limit technique used for: limit of ${expression} as x -> ${target}
+                    2. Provide a step-by-step evaluation (max 3 steps).
+                    3. Use LaTeX for math.
+                    
+                    Output strictly valid JSON:
+                    {
+                        "explanation": "...",
+                        "steps": "..."
+                    }
+                    `;
+
+                    const completion = await client.chat.completions.create({
+                        model: "deepseek/deepseek-chat",
+                        messages: [
+                            { role: "system", content: "You are a helpful math tutor. Output JSON only." },
+                            { role: "user", content: prompt }
+                        ],
+                        // @ts-ignore
+                        response_format: { type: "json_object" }
+                    });
+
+                    const content = completion.choices[0].message?.content;
+                    if (content) {
+                        const aiData = JSON.parse(content);
+                        aiExplanation = aiData.explanation || "";
+                        stepsContent = aiData.steps || "";
+                        await setCachedExplanation(cacheKey, content);
+                    }
+                } catch (aiError) {
+                    console.error("AI Error:", aiError);
                 }
-                `;
-
-                const completion = await client.chat.completions.create({
-                    model: "deepseek/deepseek-chat",
-                    messages: [
-                        { role: "system", content: "You are a helpful math tutor. Output JSON only." },
-                        { role: "user", content: prompt }
-                    ],
-                    // @ts-ignore
-                    response_format: { type: "json_object" }
-                });
-
-                const content = completion.choices[0].message?.content;
-                if (content) {
-                    const aiData = JSON.parse(content);
-                    aiExplanation = aiData.explanation || "";
-                    stepsContent = aiData.steps || "";
-                }
-            } catch (aiError) {
-                console.error("AI Error:", aiError);
             }
         }
 

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-export const runtime = 'edge';
+export const runtime = 'experimental-edge';
 
 export const metadata: Metadata = {
   title: 'Derivative Calculator AI',

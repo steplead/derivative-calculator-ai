@@ -93,8 +93,8 @@ function getLocalizedContent(locale: string, formula: string, type: string = 'de
 }
 
 // Generate metadata for SEO
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-    const { slug } = await params;
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+    const { slug } = params;
 
     // Fetch problem details from API
     // Fetch problem details from API
@@ -180,8 +180,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     };
 }
 
-export default async function ProblemPage({ params }: { params: Promise<{ slug: string }> }) {
-    const { slug } = await params;
+export default async function ProblemPage({ params }: { params: { slug: string } }) {
+    const { slug } = params;
 
     // Fetch problem details and related problems from API
     // Fetch problem details and related problems from API

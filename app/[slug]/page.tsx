@@ -292,12 +292,12 @@ export default async function ProblemPage({ params }: { params: { slug: string }
         "usageInfo": siteUrl,
         "potentialAction": [
             {
-                "@type": "SolveAction",
+                "@type": "SolveMathAction",
                 "target": {
                     "@type": "EntryPoint",
                     "urlTemplate": `${baseUrlWithLocale}?equation={math_expression}`
                 },
-                "query-input": "required name=math_expression"
+                "math_expression-input": "required name=math_expression"
             }
         ],
         "stepByStepInstructions": [

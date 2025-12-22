@@ -239,6 +239,10 @@ export default async function ProblemPage({ params }: { params: Promise<{ slug: 
 
     const t = getLocalizedContent(locale, problem.formula, problem.type);
 
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://derivativecalculatorai.com';
+    const baseUrlWithLocale = locale === 'en' ? siteUrl : `${siteUrl}/${locale}`;
+    const url = `${baseUrlWithLocale}/${slug}`;
+
     // Advanced SEO: JSON-LD Schema (MathSolver)
     // Upgraded from HowTo for better Google Rich Results compatibility.
     const mathSolverSchema = {

@@ -6,4 +6,4 @@ pages_build_output_dir = ".vercel/output/static"
 [[d1_databases]]
 binding = "DB"
 database_name = "problems-db"
-database_id = "PASTE_YOUR_DATABASE_ID_HERE"
+database_id = "83d5e571-4a16-4255-ab9a-5f8a95b11b6b"

@@ -1,11 +1,12 @@
 import { MetadataRoute } from 'next';
+import problems from '../data/problems.json';
 
 export const runtime = 'edge';
 
 const BASE_URL = 'https://derivative-calculator-ai.pages.dev';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-    const routes = [
+    const staticRoutes = [
         '',
         '/limit',
         '/integral',
@@ -18,12 +19,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
     const sitemapEntries: MetadataRoute.Sitemap = [];
 
+    // 1. Add Static Routes
     locales.forEach(locale => {
-        routes.forEach(route => {
-            // Avoid double slashes
+        staticRoutes.forEach(route => {
             const url = `${BASE_URL}${locale}${route === '' ? '' : route}`;
 
-            // Determine priority
             let priority = 0.8;
             if (route === '' && locale === '') priority = 1.0;
             if (route === '' && locale !== '') priority = 0.9;
@@ -31,8 +31,21 @@ export default function sitemap(): MetadataRoute.Sitemap {
             sitemapEntries.push({
                 url,
                 lastModified: new Date(),
-                changeFrequency: 'weekly',
+                changeFrequency: 'weekly' as const,
                 priority,
+            });
+        });
+    });
+
+    // 2. Add Dynamic Problem Routes (3000+ per locale)
+    problems.forEach((p: any) => {
+        locales.forEach(locale => {
+            const url = `${BASE_URL}${locale}/${p.slug}`;
+            sitemapEntries.push({
+                url,
+                lastModified: new Date(),
+                changeFrequency: 'monthly' as const,
+                priority: 0.6,
             });
         });
     });

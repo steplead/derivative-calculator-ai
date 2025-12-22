@@ -239,47 +239,63 @@ export default async function ProblemPage({ params }: { params: Promise<{ slug: 
 
     const t = getLocalizedContent(locale, problem.formula, problem.type);
 
-    // Advanced SEO: JSON-LD Schema (HowTo / MathSolver)
-    // Note: Schema usually stays in English or needs full translation. Keeping English for technical schema for now, 
-    // but name/description could be localized.
-    const jsonLd = {
+    // Advanced SEO: JSON-LD Schema (MathSolver)
+    // Upgraded from HowTo for better Google Rich Results compatibility.
+    const mathSolverSchema = {
         "@context": "https://schema.org",
-        "@type": "HowTo",
-        "name": t.howToTitle,
+        "@type": "MathSolver",
+        "name": t.title,
         "description": t.description,
-        "step": [
+        "potentialAction": [
             {
-                "@type": "HowToStep",
-                "name": "Identify the Rules",
-                "text": `Identify which differentiation rules apply to ${problem.formula}.`
-            },
-            {
-                "@type": "HowToStep",
-                "name": "Apply Differentiation",
-                "text": "Apply the rules to each term of the expression."
-            },
-            {
-                "@type": "HowToStep",
-                "name": "Simplify",
-                "text": "Simplify the result to get the final answer."
+                "@type": "SolveAction",
+                "target": {
+                    "@type": "EntryPoint",
+                    "urlTemplate": `${siteUrl}/${slug}?equation=${encodeURIComponent(problem.formula)}`
+                }
             }
         ],
-        "totalTime": "PT0M30S",
-        "supply": {
-            "@type": "HowToSupply",
-            "name": "Calculus Problem"
-        },
-        "tool": {
-            "@type": "HowToTool",
-            "name": "Derivative Calculator AI"
+        "solver": {
+            "@type": "MathSolver",
+            "name": "Derivative Calculator AI",
+            "url": siteUrl
         }
+    };
+
+    const breadcrumbSchema = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": siteUrl
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": problem.type === 'integral' ? "Integral Calculator" : problem.type === 'limit' ? "Limit Calculator" : "Derivative Calculator",
+                "item": `${siteUrl}/${problem.type || 'derivative'}`
+            },
+            {
+                "@type": "ListItem",
+                "position": 3,
+                "name": t.title,
+                "item": url
+            }
+        ]
     };
 
     return (
         <main className="min-h-screen bg-white dark:bg-slate-900 py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-200">
             <script
                 type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(mathSolverSchema) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
             />
 
             <div className="max-w-4xl mx-auto text-center mb-12">

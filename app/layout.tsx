@@ -23,9 +23,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div className="p-4 border-b border-blue-500 bg-blue-50 text-blue-900 font-mono text-xs mb-4">
-          [PHASE 3] Main Page Restored - Full Functionality (Routes Enabled)
-        </div>
         <Navbar dict={dict} />
         {children}
       </body>

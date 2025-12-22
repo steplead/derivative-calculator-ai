@@ -287,6 +287,7 @@ export default async function ProblemPage({ params }: { params: Promise<{ slug: 
         "image": `${siteUrl}/icon-192.png`,
         "educationalLevel": "High School",
         "mathProblemType": "Calculus",
+        "mathExpression": problem.formula,
         "potentialAction": {
             "@type": "SolveMathAction",
             "target": {
@@ -298,25 +299,17 @@ export default async function ProblemPage({ params }: { params: Promise<{ slug: 
         "stepByStepInstructions": [
             {
                 "@type": "HowToStep",
-                "name": "Step 1: Setup",
+                "name": "Analyze Problem",
                 "position": 1,
-                "text": `Identify the function ${problem.formula} and prepare it for differentiation or integration.`
+                "text": `Identify the function ${problem.formula} and prepare it for calculation.`
             },
             {
                 "@type": "HowToStep",
-                "name": "Step 2: Solve",
+                "name": "Solve",
                 "position": 2,
-                "text": "Apply the specialized calculus rules to obtain the final simplified result."
+                "text": `Apply relevant calculus rules to find the ${problem.type || 'result'}.`
             }
-        ],
-        "publisher": {
-            "@type": "Organization",
-            "name": "Derivative Calculator AI",
-            "logo": {
-                "@type": "ImageObject",
-                "url": `${siteUrl}/icon-192.png`
-            }
-        }
+        ]
     };
 
     const breadcrumbSchema = {

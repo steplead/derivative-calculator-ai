@@ -283,6 +283,9 @@ export default async function ProblemPage({ params }: { params: Promise<{ slug: 
         "@type": "MathSolver",
         "name": t.title,
         "description": t.description,
+        "educationalLevel": "High School",
+        "mathProblemType": problem.type === 'integral' ? "Calculus" : problem.type === 'limit' ? "Calculus" : "Calculus",
+        "mathExpression": problem.formula,
         "potentialAction": [
             {
                 "@type": "SolveAction",
@@ -291,12 +294,7 @@ export default async function ProblemPage({ params }: { params: Promise<{ slug: 
                     "urlTemplate": `${siteUrl}/${slug}?equation=${encodeURIComponent(problem.formula)}`
                 }
             }
-        ],
-        "solver": {
-            "@type": "MathSolver",
-            "name": "Derivative Calculator AI",
-            "url": siteUrl
-        }
+        ]
     };
 
     const breadcrumbSchema = {

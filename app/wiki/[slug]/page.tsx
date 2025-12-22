@@ -149,7 +149,7 @@ export default async function WikiTopicPage({ params }: { params: { slug: string
                 </header>
 
                 <div className="prose prose-lg dark:prose-invert max-w-none mb-16">
-                    <p className="whitespace-pre-wrap">{topic.content}</p>
+                    <div className="whitespace-pre-wrap" dangerouslySetInnerHTML={{ __html: topic.content }} />
                 </div>
 
                 {/* Protocol 5: Stir-Fry Deep Linking */}

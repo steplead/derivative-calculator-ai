@@ -14,8 +14,12 @@ export const runtime = 'edge';
 
 export const metadata: Metadata = {
   title: 'Derivative Calculator AI',
-  description: 'AI-powered derivative calculator',
+  description: 'AI-powered derivative calculator with step-by-step solutions.',
   manifest: '/manifest.json',
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default async function RootLayout({

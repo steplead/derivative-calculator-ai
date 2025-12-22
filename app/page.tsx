@@ -5,6 +5,29 @@ import { Suspense } from 'react';
 import { headers } from 'next/headers';
 import { getDictionary } from './dictionaries';
 import { getBaseUrl } from '@/utils/robust-url';
+import type { Metadata } from 'next';
+
+export async function generateMetadata(): Promise<Metadata> {
+  const headersList = await headers();
+  const locale = headersList.get("x-next-locale") || "en";
+  const dict = getDictionary(locale);
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://derivativecalculatorai.com';
+
+  const url = locale === 'en' ? siteUrl : `${siteUrl}/${locale}`;
+
+  return {
+    title: `${dict.home.h1} - Derivative Calculator AI`,
+    description: dict.home.subtitle,
+    alternates: {
+      canonical: url,
+      languages: {
+        'en': siteUrl,
+        'es': `${siteUrl}/es`,
+        'pt': `${siteUrl}/pt`,
+      }
+    }
+  };
+}
 
 export default async function Home() {
   const headersList = await headers();
@@ -86,18 +109,18 @@ export default async function Home() {
           <div>
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">{dict.home.rulesTitle}</h2>
             <div className="space-y-4">
-              <div className="bg-gray-100 dark:bg-slate-800 p-4 rounded-lg">
-                <h3 className="font-semibold text-blue-600 dark:text-blue-400">{dict.home.rules.power.title}</h3>
+              <Link href="/wiki/power-rule" className="block bg-gray-100 dark:bg-slate-800 p-4 rounded-lg hover:ring-2 hover:ring-blue-500 transition-all no-underline group">
+                <h3 className="font-semibold text-blue-600 dark:text-blue-400 group-hover:text-blue-700">{dict.home.rules.power.title}</h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{dict.home.rules.power.text}</p>
-              </div>
-              <div className="bg-gray-100 dark:bg-slate-800 p-4 rounded-lg">
-                <h3 className="font-semibold text-purple-600 dark:text-purple-400">{dict.home.rules.product.title}</h3>
+              </Link>
+              <Link href="/wiki/product-rule" className="block bg-gray-100 dark:bg-slate-800 p-4 rounded-lg hover:ring-2 hover:ring-purple-500 transition-all no-underline group">
+                <h3 className="font-semibold text-purple-600 dark:text-purple-400 group-hover:text-purple-700">{dict.home.rules.product.title}</h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{dict.home.rules.product.text}</p>
-              </div>
-              <div className="bg-gray-100 dark:bg-slate-800 p-4 rounded-lg">
-                <h3 className="font-semibold text-green-600 dark:text-green-400">{dict.home.rules.chain.title}</h3>
+              </Link>
+              <Link href="/wiki/chain-rule" className="block bg-gray-100 dark:bg-slate-800 p-4 rounded-lg hover:ring-2 hover:ring-green-500 transition-all no-underline group">
+                <h3 className="font-semibold text-green-600 dark:text-green-400 group-hover:text-green-700">{dict.home.rules.chain.title}</h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{dict.home.rules.chain.text}</p>
-              </div>
+              </Link>
             </div>
           </div>
         </div>

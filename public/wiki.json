@@ -4,7 +4,7 @@
         "title": "Chain Rule",
         "description": "Learn how to use the chain rule to find the derivative of composite functions.",
         "category": "Derivatives",
-        "content": "The chain rule is a formula to compute the derivative of a composite function. If f and g are differentiable, then the chain rule expresses the derivative of their composite f ∘ g in terms of the derivatives of f and g and the functions themselves.",
+        "content": "The chain rule is a formula to compute the derivative of a composite function. If f and g are differentiable, then the chain rule expresses the derivative of their composite f ∘ g in terms of the <a href=\"/wiki/definition-of-derivative\">derivatives</a> of f and g.",
         "relatedProblems": [
             "derivative-of-sin-x2",
             "derivative-of-cos-2x"
@@ -15,7 +15,7 @@
         "title": "Product Rule",
         "description": "The product rule for finding the derivative of two functions multiplied together.",
         "category": "Derivatives",
-        "content": "In calculus, the product rule is a formula used to find the derivatives of products of two or more functions. It may be stated as: (fg)' = f'g + fg'.",
+        "content": "In calculus, the product rule is a formula used to find the derivatives of products of two or more functions. It may be stated as: (fg)' = f'g + fg'. It is often used with the <a href=\"/wiki/chain-rule\">Chain Rule</a>.",
         "relatedProblems": [
             "derivative-of-x-sin-x",
             "derivative-of-x-e-x"
@@ -37,7 +37,7 @@
         "title": "Power Rule",
         "description": "The most fundamental rule for derivatives: d/dx(x^n) = nx^(n-1).",
         "category": "Derivatives",
-        "content": "The power rule is used to differentiate functions of the form f(x) = x^n, where n is a real number. The rule states that the derivative is f'(x) = nx^(n-1).",
+        "content": "The power rule is used to differentiate functions of the form f(x) = x^n. The rule states that f'(x) = nx^(n-1). This is derived from the <a href=\"/wiki/definition-of-derivative\">definition of the derivative</a>.",
         "relatedProblems": [
             "derivative-of-x2",
             "derivative-of-x3"
@@ -103,10 +103,65 @@
         "title": "U-Substitution",
         "description": "The integration counterpart to the chain rule.",
         "category": "Integrals",
-        "content": "U-substitution is a method for finding integrals. Using the Fundamental Theorem of Calculus, it corresponds to the chain rule for differentiation. It involves replacing a complex part of the integrand with a single variable 'u'.",
+        "content": "U-substitution is a method for finding integrals. Using the <a href=\"/wiki/fundamental-theorem-of-calculus\">Fundamental Theorem of Calculus</a>, it corresponds to the <a href=\"/wiki/chain-rule\">chain rule</a> for differentiation. It involves replacing a complex part of the integrand with a single variable 'u'.",
         "relatedProblems": [
             "integral-of-x-cos-x2",
             "integral-of-2x-x2-1"
+        ]
+    },
+    {
+        "slug": "definition-of-derivative",
+        "title": "Definition of Derivative",
+        "description": "The formal limit definition that explains the concept of instantaneous rate of change.",
+        "category": "Derivatives",
+        "content": "The derivative of a function represents the slope of the tangent line at a point. The formal definition is given by the limit: f'(x) = lim(h→0) [f(x+h) - f(x)] / h. This is the foundation for rules like the <a href=\"/wiki/power-rule\">Power Rule</a> and <a href=\"/wiki/product-rule\">Product Rule</a>.",
+        "relatedProblems": [
+            "derivative-of-x2-by-definition",
+            "derivative-of-3x-by-definition"
+        ]
+    },
+    {
+        "slug": "trigonometric-derivatives",
+        "title": "Trigonometric Derivatives",
+        "description": "A guide to the derivatives of sine, cosine, tangent, and other trig functions.",
+        "category": "Derivatives",
+        "content": "Derivatives of trigonometric functions are essential for solving problems involving periodic motion or geometry. Basic formulas include d/dx(sin x) = cos x and d/dx(cos x) = -sin x. For complex functions, these are often combined with the <a href=\"/wiki/chain-rule\">Chain Rule</a>.",
+        "relatedProblems": [
+            "derivative-of-tan-x",
+            "derivative-of-sin-2x"
+        ]
+    },
+    {
+        "slug": "exponential-derivatives",
+        "title": "Exponential Derivatives",
+        "description": "Understanding the unique properties of the derivative of e^x and other bases.",
+        "category": "Derivatives",
+        "content": "The natural exponential function f(x) = e^x is unique because its derivative is also e^x. For general bases, d/dx(a^x) = a^x * ln(a). These functions appear in growth models and are differentiated using the <a href=\"/wiki/product-rule\">Product Rule</a> and <a href=\"/wiki/chain-rule\">Chain Rule</a>.",
+        "relatedProblems": [
+            "derivative-of-e-x",
+            "derivative-of-2-x"
+        ]
+    },
+    {
+        "slug": "definite-integrals",
+        "title": "Definite Integrals",
+        "description": "Calculating the total accumulation or area under a curve between two limits.",
+        "category": "Integrals",
+        "content": "Unlike an indefinite integral, a definite integral has specific limits of integration. According to the <a href=\"/wiki/fundamental-theorem-of-calculus\">Fundamental Theorem of Calculus</a>, the definite integral of f(x) from a to b is F(b) - F(a), where F is the antiderivative.",
+        "relatedProblems": [
+            "integral-of-x-from-0-to-2",
+            "integral-of-x2-from-1-to-3"
+        ]
+    },
+    {
+        "slug": "mean-value-theorem",
+        "title": "Mean Value Theorem",
+        "description": "A fundamental theorem linking the average rate of change to the instantaneous rate of change.",
+        "category": "Theorems",
+        "content": "The Mean Value Theorem (MVT) states that if a function f is continuous on [a, b] and differentiable on (a, b), there exists at least one point c in (a, b) such that f'(c) = [f(b) - f(a)] / (b - a). This theorem provides deep insights into the behavior of <a href=\"/wiki/definition-of-derivative\">derivatives</a>.",
+        "relatedProblems": [
+            "mvt-problem-1",
+            "mvt-problem-2"
         ]
     }
 ]

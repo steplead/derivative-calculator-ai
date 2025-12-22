@@ -279,11 +279,13 @@ export default async function ProblemPage({ params }: { params: Promise<{ slug: 
     // Advanced SEO: JSON-LD Schema (MathSolver)
     // Upgraded from HowTo for better Google Rich Results compatibility.
     const mathSolverSchema = {
-        "@context": "https://schema.org",
+        "@context": "https://schema.org/",
         "@type": "MathSolver",
         "name": t.title,
         "description": t.description,
-        "educationalLevel": "High School",
+        "url": url,
+        "assesses": "Mathematics",
+        "educationalLevel": ["High School", "College"],
         "mathProblemType": problem.type === 'integral' ? "Calculus" : problem.type === 'limit' ? "Calculus" : "Calculus",
         "mathExpression": problem.formula,
         "potentialAction": [
@@ -293,6 +295,14 @@ export default async function ProblemPage({ params }: { params: Promise<{ slug: 
                     "@type": "EntryPoint",
                     "urlTemplate": `${siteUrl}/${slug}?equation=${encodeURIComponent(problem.formula)}`
                 }
+            }
+        ],
+        "stepByStepInstructions": [
+            {
+                "@type": "HowToStep",
+                "text": `Follow the steps to solve the ${problem.type || 'derivative'} of ${problem.formula}.`,
+                "name": "Calculation Process",
+                "url": url
             }
         ]
     };

@@ -11,26 +11,26 @@
     "pages:build": "npx @cloudflare/next-on-pages"
   },
   "dependencies": {
-    "@next/third-parties": "^16.0.7",
+    "@next/third-parties": "^14.2.16",
     "@tailwindcss/typography": "^0.5.19",
     "function-plot": "^1.25.1",
     "katex": "^0.16.25",
     "lucide-react": "^0.559.0",
-    "next": "^16.0.7",
-    "react": "^19.2.1",
-    "react-dom": "^19.2.1",
+    "next": "14.2.16",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-latex-next": "^3.0.0"
   },
   "devDependencies": {
     "@cloudflare/next-on-pages": "^1.13.16",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "^16.0.7",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.16",
     "tailwindcss": "^4",
     "typescript": "^5",
-    "wrangler": "^4.56.0"
+    "wrangler": "^3.57.1"
   }
 }

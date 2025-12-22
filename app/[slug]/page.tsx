@@ -285,23 +285,29 @@ export default async function ProblemPage({ params }: { params: Promise<{ slug: 
         "description": t.description,
         "url": url,
         "assesses": "Mathematics",
-        "educationalLevel": ["High School", "College"],
-        "mathProblemType": problem.type === 'integral' ? "Calculus" : problem.type === 'limit' ? "Calculus" : "Calculus",
+        "educationalLevel": "High School",
+        "mathProblemType": problem.type === 'integral' ? "Integral" : problem.type === 'limit' ? "Limit" : "Derivative",
         "mathExpression": problem.formula,
         "potentialAction": [
             {
                 "@type": "SolveAction",
                 "target": {
                     "@type": "EntryPoint",
-                    "urlTemplate": `${siteUrl}/${slug}?equation=${encodeURIComponent(problem.formula)}`
+                    "urlTemplate": `${baseUrlWithLocale}/${slug}?equation=${encodeURIComponent(problem.formula)}`
                 }
             }
         ],
         "stepByStepInstructions": [
             {
                 "@type": "HowToStep",
-                "text": `Follow the steps to solve the ${problem.type || 'derivative'} of ${problem.formula}.`,
-                "name": "Calculation Process",
+                "text": `Identify the function ${problem.formula} and apply the relevant ${problem.type || 'derivative'} rules.`,
+                "name": "Step 1: Setup",
+                "url": url
+            },
+            {
+                "@type": "HowToStep",
+                "text": `Apply the mathematical formula to find the final result for the ${problem.type || 'derivative'}.`,
+                "name": "Step 2: Solve",
                 "url": url
             }
         ]

@@ -279,14 +279,14 @@ export default async function ProblemPage({ params }: { params: Promise<{ slug: 
     // Advanced SEO: JSON-LD Schema (MathSolver)
     // Upgraded from HowTo for better Google Rich Results compatibility.
     const mathSolverSchema = {
-        "@context": "https://schema.org/",
+        "@context": "https://schema.org",
         "@type": "MathSolver",
         "name": t.title,
         "description": t.description,
         "url": url,
         "assesses": "Mathematics",
         "educationalLevel": "High School",
-        "mathProblemType": problem.type === 'integral' ? "Integral" : problem.type === 'limit' ? "Limit" : "Derivative",
+        "mathProblemType": "Calculus",
         "mathExpression": problem.formula,
         "potentialAction": [
             {

@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: "Rank operation not fully implemented in TS yet" }, { status: 400 });
         }
         else {
-            return NextResponse.json({ error: f"Unknown operation: ${operation}" }, { status: 400 });
+            return NextResponse.json({ error: `Unknown operation: ${operation}` }, { status: 400 });
         }
 
         return NextResponse.json({

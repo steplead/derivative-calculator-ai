@@ -11,7 +11,7 @@
     "pages:build": "npx @cloudflare/next-on-pages"
   },
   "dependencies": {
-    "@next/third-parties": "^14.2.16",
+    "@next/third-parties": "^14.2.35",
     "@tailwindcss/typography": "^0.5.19",
     "@types/mathjs": "^9.4.1",
     "function-plot": "^1.25.1",

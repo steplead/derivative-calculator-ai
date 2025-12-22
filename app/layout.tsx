@@ -1,6 +1,5 @@
-import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
-import './globals.css';
+import Navbar from "@/components/Navbar";
+import { getDictionary } from "./dictionaries";
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -16,12 +15,15 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  const dict = getDictionary('en');
+
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div className="p-4 border-b border-red-500 bg-red-50 text-red-900 font-mono text-xs mb-4">
-          [SAFE MODE] Runtime: experimental-edge
+        <div className="p-4 border-b border-green-500 bg-green-50 text-green-900 font-mono text-xs mb-4">
+          [PHASE 2] Navbar Restored - Next.js 14 Stable
         </div>
+        <Navbar dict={dict} />
         {children}
       </body>
     </html>

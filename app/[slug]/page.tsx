@@ -293,22 +293,21 @@ export default async function ProblemPage({ params }: { params: Promise<{ slug: 
                 "@type": "SolveAction",
                 "target": {
                     "@type": "EntryPoint",
-                    "urlTemplate": `${baseUrlWithLocale}/${slug}?equation=${encodeURIComponent(problem.formula)}`
-                }
+                    "urlTemplate": `${baseUrlWithLocale}?equation={equation}`
+                },
+                "query-input": "required name=equation"
             }
         ],
         "stepByStepInstructions": [
             {
                 "@type": "HowToStep",
-                "text": `Identify the function ${problem.formula} and apply the relevant ${problem.type || 'derivative'} rules.`,
-                "name": "Step 1: Setup",
-                "url": url
+                "name": "Analyze Problem",
+                "text": `First, we identify the mathematical expression: ${problem.formula}.`
             },
             {
                 "@type": "HowToStep",
-                "text": `Apply the mathematical formula to find the final result for the ${problem.type || 'derivative'}.`,
-                "name": "Step 2: Solve",
-                "url": url
+                "name": "Apply Rules",
+                "text": `Then, we apply the appropriate ${problem.type || 'calculus'} rules to solve it.`
             }
         ]
     };

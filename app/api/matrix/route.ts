@@ -1,10 +1,75 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { create, all } from 'mathjs';
+import { create, all, format } from 'mathjs';
 
 // Initialize mathjs with all functions
 const math = create(all);
 
 export const runtime = 'edge';
+
+// Helper function to compute RREF (Gaussian Elimination)
+function rref(matrix: any): { rrefMatrix: any, rank: number } {
+    let m = matrix.clone();
+    const size = m.size();
+    const rows = size[0];
+    const cols = size[1];
+    let lead = 0;
+
+    for (let r = 0; r < rows; r++) {
+        if (cols <= lead) break;
+
+        let i = r;
+        while (m.get([i, lead]) === 0) {
+            i++;
+            if (rows === i) {
+                i = r;
+                lead++;
+                if (cols === lead) return { rrefMatrix: m, rank: r }; // Rank is number of non-zero rows processed
+            }
+        }
+
+        // Swap rows i and r
+        if (i !== r) {
+            const tempRow = m.subset(math.index(i, math.range(0, cols)));
+            m.subset(math.index(i, math.range(0, cols)), m.subset(math.index(r, math.range(0, cols))));
+            m.subset(math.index(r, math.range(0, cols)), tempRow);
+        }
+
+        const val = m.get([r, lead]);
+        // Divide row r by val
+        const rowR = m.subset(math.index(r, math.range(0, cols)));
+        const newRowR = math.divide(rowR, val);
+        m.subset(math.index(r, math.range(0, cols)), newRowR);
+
+        for (let i = 0; i < rows; i++) {
+            if (i !== r) {
+                const leadVal = m.get([i, lead]);
+                const rowToSub = math.multiply(m.subset(math.index(r, math.range(0, cols))), leadVal);
+                const currentRow = m.subset(math.index(i, math.range(0, cols)));
+                // @ts-ignore
+                const newRow = math.subtract(currentRow, rowToSub);
+                m.subset(math.index(i, math.range(0, cols)), newRow);
+            }
+        }
+        lead++;
+    }
+
+    // Calculate rank: count non-zero rows
+    let rank = 0;
+    for (let r = 0; r < rows; r++) {
+        let isZero = true;
+        for (let c = 0; c < cols; c++) {
+            // Use small epsilon for float comparison if needed, but mathjs handles exact fractions often
+            if (math.abs(m.get([r, c])) > 1e-10) {
+                isZero = false;
+                break;
+            }
+        }
+        if (!isZero) rank++;
+    }
+
+    return { rrefMatrix: m, rank };
+}
+
 
 export async function POST(req: NextRequest) {
     try {
@@ -27,7 +92,8 @@ export async function POST(req: NextRequest) {
         if (operation === 'determinant') {
             if (rows !== cols) return NextResponse.json({ error: "Square matrix required" }, { status: 400 });
             const det = math.det(M);
-            result = det.toString();
+            // Format to avoid long floats (e.g. 3.00000004)
+            result = math.format(det, { precision: 14 });
             stepsContent = `Calculated Determinant: $$ ${result} $$`;
         }
         else if (operation === 'inverse') {
@@ -47,15 +113,36 @@ export async function POST(req: NextRequest) {
             result = math.parse(T.toString()).toTex();
             stepsContent = `Calculated Transpose: $$ ${result} $$`;
         }
+        else if (operation === 'rref') {
+            const { rrefMatrix } = rref(M);
+            // @ts-ignore
+            result = math.parse(rrefMatrix.toString()).toTex();
+            stepsContent = `Calculated RREF: $$ ${result} $$`;
+        }
         else if (operation === 'rank') {
-            // MathJS doesn't have a direct 'rank' function in basic build, checking...
-            // Fallback implementation or assumption:
-            // For now, let's skip rank properly or find a workaround. 
-            // MathJS allows 'lup' decomposition which can imply rank, but explicit rank is better in nerdamer/sympy.
-            // Let's defer rank if complex. 
-            // Actually, let's just return a placeholder for rank if mathjs lacks it in this context.
-            // Or try generic numeric rank.
-            return NextResponse.json({ error: "Rank operation not fully implemented in TS yet" }, { status: 400 });
+            const { rank } = rref(M); // Rank is derived from RREF
+            result = rank.toString();
+            stepsContent = `Calculated Rank: $$ ${result} $$`;
+        }
+        else if (operation === 'eigenvals') {
+            if (rows !== cols) return NextResponse.json({ error: "Square matrix required" }, { status: 400 });
+            try {
+                // @ts-ignore
+                const eigs = math.eigs(M);
+                // eigs.values is the vector of eigenvalues
+                // @ts-ignore
+                const vals = eigs.values;
+
+                // Format nicely
+                // @ts-ignore
+                const valStr = vals.map(v => math.format(v, { precision: 4 })).join(", ");
+
+                result = `\\lambda = ${valStr}`;
+                stepsContent = `Calculated Eigenvalues: $$ \\lambda = [${valStr}] $$`;
+
+            } catch (e: any) {
+                return NextResponse.json({ error: `Eigenvalue calculation failed: ${e.message}` }, { status: 500 });
+            }
         }
         else {
             return NextResponse.json({ error: `Unknown operation: ${operation}` }, { status: 400 });

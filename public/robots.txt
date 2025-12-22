@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /api/
 
-Sitemap: https://www.derivativecalculatorai.com/sitemap.xml
+Sitemap: https://derivativecalculatorai.com/sitemap.xml

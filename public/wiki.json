@@ -64,5 +64,49 @@
             "integral-of-x-sin-x",
             "integral-of-x-e-x"
         ]
+    },
+    {
+        "slug": "fundamental-theorem-of-calculus",
+        "title": "Fundamental Theorem of Calculus",
+        "description": "The theorem that links the concept of differentiating a function with the concept of integrating a function.",
+        "category": "Integrals",
+        "content": "The Fundamental Theorem of Calculus is a theorem that links the concept of differentiating a function with the concept of integrating a function. It consists of two parts: the first part deals with the derivative of an antiderivative, while the second part provides the method to evaluate definite integrals using antiderivatives.",
+        "relatedProblems": [
+            "integral-of-x2-from-0-to-1",
+            "integral-of-sin-x-from-0-to-pi"
+        ]
+    },
+    {
+        "slug": "implicit-differentiation",
+        "title": "Implicit Differentiation",
+        "description": "How to differentiate equations where y is not explicitly isolated.",
+        "category": "Derivatives",
+        "content": "Implicit differentiation is a technique used in calculus to find the derivative of an algebraic function when the dependent variable depends on the independent variable in an implicit way (e.g., x^2 + y^2 = 25) rather than an explicit one (y = f(x)).",
+        "relatedProblems": [
+            "derivative-of-x2-y2-25",
+            "derivative-of-sin-xy-x"
+        ]
+    },
+    {
+        "slug": "partial-derivatives",
+        "title": "Partial Derivatives",
+        "description": "Find derivatives of multivariable functions with respect to one variable at a time.",
+        "category": "Multivariable",
+        "content": "In mathematics, a partial derivative of a function of several variables is its derivative with respect to one of those variables, with the others held constant. It is used in multivariable calculus and vector calculus.",
+        "relatedProblems": [
+            "partial-derivative-of-x2y-xy2",
+            "partial-derivative-of-sin-xy"
+        ]
+    },
+    {
+        "slug": "u-substitution",
+        "title": "U-Substitution",
+        "description": "The integration counterpart to the chain rule.",
+        "category": "Integrals",
+        "content": "U-substitution is a method for finding integrals. Using the Fundamental Theorem of Calculus, it corresponds to the chain rule for differentiation. It involves replacing a complex part of the integrand with a single variable 'u'.",
+        "relatedProblems": [
+            "integral-of-x-cos-x2",
+            "integral-of-2x-x2-1"
+        ]
     }
 ]

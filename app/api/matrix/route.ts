@@ -132,10 +132,13 @@ export async function POST(req: NextRequest) {
                 // eigs.values is the vector of eigenvalues
                 // @ts-ignore
                 const vals = eigs.values;
+                // Convert to array if it is a Matrix object
+                // @ts-ignore
+                const valsArr = vals.toArray ? vals.toArray() : vals;
 
                 // Format nicely
                 // @ts-ignore
-                const valStr = vals.map(v => math.format(v, { precision: 4 })).join(", ");
+                const valStr = valsArr.map(v => math.format(v, { precision: 4 })).join(", ");
 
                 result = `\\lambda = ${valStr}`;
                 stepsContent = `Calculated Eigenvalues: $$ \\lambda = [${valStr}] $$`;

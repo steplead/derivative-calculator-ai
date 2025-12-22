@@ -99,12 +99,16 @@ export async function POST(req: NextRequest) {
         else if (operation === 'inverse') {
             if (rows !== cols) return NextResponse.json({ error: "Square matrix required" }, { status: 400 });
             try {
+                const det = math.det(M);
+                if (math.abs(det) < 1e-10) {
+                    return NextResponse.json({ error: "Cannot calculate inverse: Determinant is 0 (Matrix is Singular)" }, { status: 400 });
+                }
                 const inv = math.inv(M);
                 // @ts-ignore
                 result = math.parse(inv.toString()).toTex();
                 stepsContent = `Calculated Inverse: $$ ${result} $$`;
-            } catch (e) {
-                return NextResponse.json({ error: "Matrix is singular or not invertible" }, { status: 400 });
+            } catch (e: any) {
+                return NextResponse.json({ error: `Inversion failed: ${e.message}` }, { status: 400 });
             }
         }
         else if (operation === 'transpose') {

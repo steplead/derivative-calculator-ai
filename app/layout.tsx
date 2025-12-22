@@ -23,8 +23,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div className="p-4 border-b border-green-500 bg-green-50 text-green-900 font-mono text-xs mb-4">
-          [PHASE 2] Navbar Restored - Next.js 14 Stable
+        <div className="p-4 border-b border-blue-500 bg-blue-50 text-blue-900 font-mono text-xs mb-4">
+          [PHASE 3] Main Page Restored - Full Functionality (Routes Enabled)
         </div>
         <Navbar dict={dict} />
         {children}

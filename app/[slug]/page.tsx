@@ -290,7 +290,7 @@ export default async function ProblemPage({ params }: { params: Promise<{ slug: 
         "mathExpression": problem.formula,
         "potentialAction": [
             {
-                "@type": "SolveAction",
+                "@type": "SolveMathAction",
                 "target": {
                     "@type": "EntryPoint",
                     "urlTemplate": `${baseUrlWithLocale}?equation={equation}`

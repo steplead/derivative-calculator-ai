@@ -1,6 +1,5 @@
 DROP TABLE IF EXISTS problems;
 CREATE TABLE problems (id INTEGER PRIMARY KEY AUTOINCREMENT, slug TEXT UNIQUE, formula TEXT, title TEXT, description TEXT, type TEXT, limitTo TEXT);
-BEGIN TRANSACTION;
 INSERT INTO problems (slug, formula, title, description, type, limitTo) VALUES ('derivative-of-x-squared', 'x^2', 'Derivative of x^2', 'Calculate the derivative of x^2 using the power rule.', 'derivative', '');
 INSERT INTO problems (slug, formula, title, description, type, limitTo) VALUES ('derivative-of-sin-x', 'sin(x)', 'Derivative of sin(x)', 'Find the derivative of sin(x) step-by-step.', 'derivative', '');
 INSERT INTO problems (slug, formula, title, description, type, limitTo) VALUES ('derivative-of-cos-x', 'cos(x)', 'Derivative of cos(x)', 'Calculate the derivative of cos(x) with explanations.', 'derivative', '');
@@ -3113,4 +3112,3 @@ INSERT INTO problems (slug, formula, title, description, type, limitTo) VALUES (
 INSERT INTO problems (slug, formula, title, description, type, limitTo) VALUES ('limit-of-1-over-1-over-x--1-over-sinx-as-x-to-pi-2', '(1/1/x) - (1/sin(x))', 'Limit of (1/1/x) - (1/sin(x)) as x -> pi/2', 'Calculate the limit of (1/1/x) - (1/sin(x)) as x approaches pi/2 step-by-step.', 'limit', 'pi/2');
 INSERT INTO problems (slug, formula, title, description, type, limitTo) VALUES ('limit-of-31-over-x2-over-sinx-as-x-to--2', '3*1/(x^2) / sin(x)', 'Limit of 3*1/(x^2) / sin(x) as x -> -2', 'Calculate the limit of 3*1/(x^2) / sin(x) as x approaches -2 step-by-step.', 'limit', '-2');
 INSERT INTO problems (slug, formula, title, description, type, limitTo) VALUES ('limit-of-31-over-x-over-tanx-as-x-to-pi', '3*1/x / tan(x)', 'Limit of 3*1/x / tan(x) as x -> pi', 'Calculate the limit of 3*1/x / tan(x) as x approaches pi step-by-step.', 'limit', 'pi');
-COMMIT;

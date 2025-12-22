@@ -6,8 +6,7 @@ def generate_sql():
     
     sql_lines = [
         "DROP TABLE IF EXISTS problems;",
-        "CREATE TABLE problems (id INTEGER PRIMARY KEY AUTOINCREMENT, slug TEXT UNIQUE, formula TEXT, title TEXT, description TEXT, type TEXT, limitTo TEXT);",
-        "BEGIN TRANSACTION;"
+        "CREATE TABLE problems (id INTEGER PRIMARY KEY AUTOINCREMENT, slug TEXT UNIQUE, formula TEXT, title TEXT, description TEXT, type TEXT, limitTo TEXT);"
     ]
     
     for p in problems:
@@ -20,8 +19,6 @@ def generate_sql():
         limitTo = p.get('limitTo', '').replace("'", "''")
         
         sql_lines.append(f"INSERT INTO problems (slug, formula, title, description, type, limitTo) VALUES ('{slug}', '{formula}', '{title}', '{description}', '{p_type}', '{limitTo}');")
-    
-    sql_lines.append("COMMIT;")
     
     with open('scripts/d1_migration.sql', 'w') as f:
         f.write("\n".join(sql_lines))

@@ -21,8 +21,8 @@ export default function Calculator({ initialEquation = '', initialLimitTo = '0',
     const equationParam = searchParams.get('equation');
     const limitToParam = searchParams.get('to');
 
-    const [input, setInput] = useState(equationParam || initialEquation);
-    const [limitTo, setLimitTo] = useState(limitToParam || initialLimitTo);
+    const [input, setInput] = useState((equationParam || initialEquation || '').toString());
+    const [limitTo, setLimitTo] = useState((limitToParam || initialLimitTo || '0').toString());
     const [result, setResult] = useState<any>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -42,18 +42,20 @@ export default function Calculator({ initialEquation = '', initialLimitTo = '0',
     };
 
     useEffect(() => {
-        const eq = equationParam || initialEquation;
-        const to = limitToParam || '0';
+        const eq = (equationParam || initialEquation || '').toString();
+        const to = (limitToParam || initialLimitTo || '0').toString();
 
         if (eq) {
             setInput(eq);
             if (mode === 'limit') setLimitTo(to);
-            handleCalculate(eq);
+            handleCalculate(eq, to);
         }
-    }, [equationParam, limitToParam, initialEquation, mode]);
+    }, [equationParam, limitToParam, initialEquation, initialLimitTo, mode]);
 
-    const handleCalculate = async (equationToSolve = input) => {
-        if (!equationToSolve) return;
+    const handleCalculate = async (equationToSolve = input, targetToSolve = limitTo) => {
+        const formula = (equationToSolve || '').toString();
+        const target = (targetToSolve || '0').toString();
+        if (!formula) return;
 
         setLoading(true);
         setError('');
@@ -62,13 +64,13 @@ export default function Calculator({ initialEquation = '', initialLimitTo = '0',
         try {
             let baseUrl = '';
             if (mode === 'derivative') {
-                baseUrl = `/api/derivative?equation=${encodeURIComponent(equationToSolve)}`;
+                baseUrl = `/api/derivative?equation=${encodeURIComponent(formula)}`;
             } else if (mode === 'integral') {
-                baseUrl = `/api/integral?equation=${encodeURIComponent(equationToSolve)}`;
+                baseUrl = `/api/integral?equation=${encodeURIComponent(formula)}`;
             } else if (mode === 'limit') {
-                baseUrl = `/api/limit?equation=${encodeURIComponent(equationToSolve)}&to=${encodeURIComponent(limitTo)}`;
+                baseUrl = `/api/limit?equation=${encodeURIComponent(formula)}&to=${encodeURIComponent(target)}`;
             } else if (mode === 'ode') {
-                baseUrl = `/api/ode?equation=${encodeURIComponent(equationToSolve)}`;
+                baseUrl = `/api/ode?equation=${encodeURIComponent(formula)}`;
             }
 
             // Step 1: Fast fetch (Math only)
@@ -206,10 +208,10 @@ export default function Calculator({ initialEquation = '', initialLimitTo = '0',
                                     {t.ai}
                                 </h3>
                                 <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                                    {result.ai_explanation.toLowerCase().includes("generating") || result.ai_explanation.toLowerCase().includes("processing") ? (
+                                    {result.ai_explanation && result.ai_explanation.toLowerCase().includes("generating") || result.ai_explanation?.toLowerCase().includes("processing") ? (
                                         <span className="animate-pulse text-gray-500">Generating explanation...</span>
                                     ) : (
-                                        result.ai_explanation
+                                        result.ai_explanation || "No explanation available."
                                     )}
                                 </p>
                             </div>

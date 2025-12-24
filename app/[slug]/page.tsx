@@ -51,6 +51,11 @@ function parseSlugToMath(slug: string): Problem | null {
     // Replace keywords with math symbols
     let mathFormula = formula
         .replace(/-/g, ' ')
+        .replace(/\be to the\b/gi, 'e^')
+        .replace(/\bto the\b/gi, '^')
+        .replace(/\bsqrt\b/gi, 'sqrt')
+        .replace(/\broot\b/gi, 'sqrt')
+        .replace(/\bcbrt\b/gi, 'cbrt')
         .replace(/\bplus\b/gi, '+')
         .replace(/\bminus\b/gi, '-')
         .replace(/\btimes\b/gi, '*')
@@ -59,6 +64,13 @@ function parseSlugToMath(slug: string): Problem | null {
         .replace(/\bsquared\b/gi, '^2')
         .replace(/\bcubed\b/gi, '^3')
         .replace(/\s+/g, '');
+
+    // Add parentheses for functions if missing (simple heuristic)
+    const functions = ['sin', 'cos', 'tan', 'ln', 'log', 'sqrt', 'cbrt', 'exp', 'arcsin', 'arccos', 'arctan', 'sec', 'csc', 'cot'];
+    functions.forEach(fn => {
+        const regex = new RegExp(`\\b${fn}([a-z0-9]+)\\b`, 'gi');
+        mathFormula = mathFormula.replace(regex, `${fn}($1)`);
+    });
 
     // Handle common shorthand like x2 -> x^2
     mathFormula = mathFormula.replace(/([a-z])(\d+)/gi, '$1^$2');

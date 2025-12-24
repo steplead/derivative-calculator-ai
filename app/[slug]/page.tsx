@@ -246,6 +246,7 @@ export default async function ProblemPage({ params }: { params: { slug: string }
         if (!problem || relatedProblems.length === 0) {
             try {
                 const context = getRequestContext();
+                // @ts-ignore
                 const db = context?.env?.DB;
                 if (db) {
                     if (!problem) {

@@ -17,9 +17,63 @@ type Problem = {
     limitTo?: string;
 };
 
-// ... (rest of file)
+/**
+ * Smart Slug-to-Math Parser
+ * Converts SEO-friendly descriptive slugs into mathematical formulas.
+ * e.g., "integral-of-31-over-x2-plus-1" -> "31/(x^2+1)"
+ */
+function parseSlugToMath(slug: string): Problem | null {
+    let type: 'derivative' | 'integral' | 'limit' = 'derivative';
+    let formula = slug;
+    let limitTo = '0';
 
+    if (slug.startsWith('integral-of-')) {
+        type = 'integral';
+        formula = slug.replace('integral-of-', '');
+    } else if (slug.startsWith('limit-of-')) {
+        type = 'limit';
+        formula = slug.replace('limit-of-', '');
+        // Handle limit targets like "to-0" or "as-x-approaches-0"
+        const limitMatch = formula.match(/(.*?)-(?:to|as-x-approaches)-(.*)/i);
+        if (limitMatch) {
+            formula = limitMatch[1];
+            limitTo = limitMatch[2].replace(/-/g, '.'); // Handle negative numbers if they use hyphens
+        }
+    } else if (slug.startsWith('derivative-of-')) {
+        type = 'derivative';
+        formula = slug.replace('derivative-of-', '');
+    } else {
+        // Not a descriptive slugs, check if it's raw math
+        const looksLikeMath = /[\+\*\/\^\(\)]/.test(decodeURIComponent(slug)) || (slug.length < 15 && !slug.includes('-'));
+        if (!looksLikeMath) return null;
+    }
 
+    // Replace keywords with math symbols
+    let mathFormula = formula
+        .replace(/-/g, ' ')
+        .replace(/\bplus\b/gi, '+')
+        .replace(/\bminus\b/gi, '-')
+        .replace(/\btimes\b/gi, '*')
+        .replace(/\bover\b/gi, '/')
+        .replace(/\bpower\b/gi, '^')
+        .replace(/\bsquared\b/gi, '^2')
+        .replace(/\bcubed\b/gi, '^3')
+        .replace(/\s+/g, '');
+
+    // Handle common shorthand like x2 -> x^2
+    mathFormula = mathFormula.replace(/([a-z])(\d+)/gi, '$1^$2');
+
+    // Final sanity check
+    if (!mathFormula || mathFormula.length < 1) return null;
+
+    return {
+        slug,
+        formula: mathFormula,
+        title: type === 'integral' ? `Integral of ${mathFormula}` : type === 'limit' ? `Limit of ${mathFormula}` : `Derivative of ${mathFormula}`,
+        type,
+        limitTo
+    };
+}
 
 // Force dynamic rendering to ensure headers() (and thus locale) are read correctly for every request
 export const dynamic = 'force-dynamic';
@@ -147,24 +201,9 @@ export async function generateMetadata({ params }: { params: { slug: string } })
         }
     }
 
-    // DYNAMIC FALLBACK: Treat slug as formula (only if it doesn't look like a descriptive sentence)
+    // DYNAMIC FALLBACK: Smart Parser (Heuristic for descriptive or raw math slugs)
     if (!problem) {
-        try {
-            const decodedFormula = decodeURIComponent(slug);
-            const hasMultipleHyphens = (slug.match(/-/g) || []).length > 2;
-            const looksLikeMath = /[\+\*\/\^\(\)]/.test(decodedFormula) || (decodedFormula.length < 15 && !decodedFormula.includes('-'));
-
-            if (looksLikeMath && !hasMultipleHyphens && decodedFormula.length < 50) {
-                problem = {
-                    slug: slug,
-                    formula: decodedFormula,
-                    title: `Derivative of ${decodedFormula}`,
-                    type: 'derivative'
-                };
-            }
-        } catch (e) {
-            // Ignore
-        }
+        problem = parseSlugToMath(slug);
     }
 
     if (!problem) {
@@ -285,18 +324,9 @@ export default async function ProblemPage({ params }: { params: { slug: string }
             }
         }
 
-        // DYNAMIC MATH FALLBACK
+        // DYNAMIC MATH FALLBACK: Smart Parser
         if (!problem) {
-            const decodedFormula = decodeURIComponent(slug);
-            const looksLikeMath = /[\+\*\/\^\(\)]/.test(decodedFormula) || (decodedFormula.length < 15 && !decodedFormula.includes('-'));
-            if (looksLikeMath && (slug.match(/-/g) || []).length <= 2 && decodedFormula.length < 50) {
-                problem = {
-                    slug: slug,
-                    formula: decodedFormula,
-                    title: `Derivative of ${decodedFormula}`,
-                    type: 'derivative'
-                };
-            }
+            problem = parseSlugToMath(slug);
         }
 
         if (!problem) {

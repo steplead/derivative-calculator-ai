@@ -13,9 +13,35 @@ const inter = Inter({ subsets: ['latin'] });
 export const runtime = 'edge';
 
 export const metadata: Metadata = {
-  title: 'Derivative Calculator AI',
-  description: 'AI-powered derivative calculator with step-by-step solutions.',
+  metadataBase: new URL('https://derivativecalculatorai.com'),
+  title: {
+    default: 'Derivative Calculator AI | The No.1 Math Engineering Toolkit',
+    template: '%s | Derivative Calculator AI'
+  },
+  description: 'AI-powered mathematical toolkit with step-by-step solutions for derivatives, integrals, limits, and matrices using DeepSeek R1/V3.',
   manifest: '/manifest.json',
+  openGraph: {
+    title: 'Derivative Calculator AI',
+    description: 'The world\'s most advanced AI-first mathematical toolkit for engineers and students.',
+    url: 'https://derivativecalculatorai.com',
+    siteName: 'Derivative Calculator AI',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Derivative Calculator AI Billboard',
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Derivative Calculator AI',
+    description: 'AI-powered math solutions with step-by-step logic.',
+    images: ['/og-image.png'],
+  },
   robots: {
     index: true,
     follow: true,
@@ -51,13 +77,15 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang={locale}>
-      <body className={inter.className}>
+    <html lang={locale} className="bg-white dark:bg-[#0a0a0a]">
+      <body className={`${inter.className} min-h-screen bg-white dark:bg-[#0a0a0a] text-gray-900 dark:text-gray-100 flex flex-col`}>
         <Navbar dict={dict} />
-        {children}
+        <main className="flex-grow w-full">
+          {children}
+        </main>
         <Footer wikiTopics={wikiTopics} problems={popularProblems} locale={locale} />
       </body>
-      <GoogleAnalytics gaId="G-PLACEHOLDER" />
+      <GoogleAnalytics gaId="G-3WHC12TKH4" />
     </html>
   );
 }

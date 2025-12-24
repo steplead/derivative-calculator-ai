@@ -49,7 +49,7 @@ export default function MatrixCalculator({ dict }: MatrixCalculatorProps) {
     };
 
     return (
-        <main className="min-h-screen bg-white dark:bg-slate-900 text-gray-900 dark:text-white selection:bg-blue-500/30 transition-colors duration-200">
+        <div className="text-gray-900 dark:text-white selection:bg-blue-500/30 transition-colors duration-200">
             <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] opacity-20 pointer-events-none"></div>
 
             <div className="max-w-4xl mx-auto px-4 pt-32 pb-20 relative">
@@ -121,7 +121,7 @@ export default function MatrixCalculator({ dict }: MatrixCalculatorProps) {
                 {/* Results */}
                 <MatrixResult result={result} steps={steps} error={error} isLoading={isLoading} />
             </div>
-        </main>
+        </div>
     );
 }
 

@@ -78,7 +78,7 @@ export default async function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-white dark:bg-slate-900 py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-200">
+    <div className="py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-200">
       <div className="max-w-4xl mx-auto text-center mb-12 mt-10">
         <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-4">
           {dict.home.h1} <span className="text-blue-600 dark:text-blue-500">AI</span>
@@ -148,8 +148,6 @@ export default async function Home() {
           </div>
         </div>
       </div>
-
-
-    </main>
+    </div>
   );
 }

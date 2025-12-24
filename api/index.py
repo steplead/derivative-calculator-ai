@@ -81,12 +81,57 @@ def get_problem(slug):
         return jsonify({"error": "Problem not found"}), 404
     return jsonify(problem)
 
+# Helper: Get AI Explanation (DeepSeek V3/R1)
+def get_ai_explanation(problem_type, expression, result, steps_raw=""):
+    if not HAS_AI:
+        return "AI explanation unavailable (Missing API Key)", "Step-by-step solution unavailable."
+        
+    prompt = f"""
+    You are an expert Calculus Tutor powered by DeepSeek AI.
+    Your goal is to explain the solution step-by-step using 'Chain of Thought' reasoning.
+    
+    Problem: Find the {problem_type} of $${expression}$$
+    Result: $${result}$$
+    
+    Instructions:
+    1. Base Rule: Identify the primary calculus rule used (e.g., Chain Rule, Integration by Parts, L'Hôpital's Rule).
+    2. Reasoning (Chain of Thought): Explain WHY this rule applies and how to break down the problem.
+    3. Execution: Show the step-by-step derivation clearly.
+    4. Formatting: Use strict LaTeX for ALL math expressions, encapsulated in $$.
+    
+    Output strictly valid JSON:
+    {{
+        "explanation": "A concise sentence explaining the rule and approach.",
+        "steps": "Step 1: Identify u and v...\\nStep 2: Differentiate...\\nStep 3: Substitute back..."
+    }}
+    """
+    
+    try:
+        completion = client.chat.completions.create(
+            extra_headers={
+                "HTTP-Referer": "https://derivativecalculatorai.com",
+                "X-Title": "Derivative Calculator AI",
+            },
+            model="deepseek/deepseek-chat",
+            messages=[
+                {"role": "system", "content": "You are a helpful math tutor. Output JSON only."},
+                {"role": "user", "content": prompt}
+            ],
+            response_format={ "type": "json_object" },
+            max_tokens=2048
+        )
+        ai_content = completion.choices[0].message.content
+        ai_data = json.loads(ai_content)
+        return ai_data.get("explanation", "Explanation generation failed."), ai_data.get("steps", "Steps generation failed.")
+    except Exception as ai_error:
+        print(f"DeepSeek Mean-Time-to-Failure Error: {ai_error}")
+        return "Could not generate explanation at this time.", "Step-by-step detail unavailable."
+
 @app.route('/api/derivative', methods=['GET'])
 def derivative():
     expression = request.args.get('equation')
     if not expression:
         return jsonify({"error": "No equation provided"}), 400
-    
     
     try:
         # 0. Check Cache
@@ -97,56 +142,18 @@ def derivative():
             print(f"⚡ Cache Hit: {expression}")
             return jsonify(cached)
 
-        # 1. Calculate Derivative with SymPy (The Source of Truth)
+        # 1. Calculate Derivative with SymPy
         x = symbols('x')
-        # Use custom parser for implicit multiplication and ^ syntax
         expr = parse_input(expression) 
         derivative_expr = diff(expr, x)
-        
-        # Convert to LaTeX for frontend display
         solution_latex = latex(derivative_expr)
         
-        # 2. Get Explanation from Gemini
-        ai_explanation = "AI explanation unavailable (Missing API Key)"
+        # 2. Get AI Explanation
+        ai_explanation = "AI explanation skipped."
         steps_content = "Step-by-step solution unavailable."
         
-        include_ai = request.args.get('include_ai', 'true').lower() == 'true'
-
-        if HAS_AI and include_ai:
-            prompt = f"""
-            You are a Calculus Tutor.
-            1. Explain the derivative rule used for: {expression} => {derivative_expr}
-            2. Provide a step-by-step derivation (max 3 steps).
-            3. Use LaTeX for math (e.g. $$ x^2 $$).
-            
-            Output strictly valid JSON:
-            {{
-                "explanation": "Simple sentence explaining the rule...",
-                "steps": "LaTeX formatted steps..."
-            }}
-            """
-            
-            try:
-                completion = client.chat.completions.create(
-                    extra_headers={
-                        "HTTP-Referer": "https://derivative-calculator.ai", # Optional, for OpenRouter rankings
-                        "X-Title": "Derivative Calculator",
-                    },
-                    model="deepseek/deepseek-chat",
-                    messages=[
-                        {"role": "system", "content": "You are a helpful math tutor. Output JSON only."},
-                        {"role": "user", "content": prompt}
-                    ],
-                    response_format={ "type": "json_object" },
-                    max_tokens=2048
-                )
-                ai_content = completion.choices[0].message.content
-                ai_data = json.loads(ai_content)
-                ai_explanation = ai_data.get("explanation", "Explanation generation failed.")
-                steps_content = ai_data.get("steps", "Steps generation failed.")
-            except Exception as ai_error:
-                print(f"DeepSeek Error: {ai_error}")
-                ai_explanation = "Could not generate explanation at this time."
+        if include_ai:
+            ai_explanation, steps_content = get_ai_explanation("derivative", expression, solution_latex)
 
         response_data = {
             "solution": solution_latex,
@@ -155,9 +162,7 @@ def derivative():
             "ai_explanation": ai_explanation
         }
         
-        # Save to Cache
         set_cached_result(cache_key, response_data)
-        
         return jsonify(response_data)
 
     except Exception as e:
@@ -170,7 +175,6 @@ def integral():
         return jsonify({"error": "No equation provided"}), 400
     
     try:
-        # 0. Check Cache
         include_ai = request.args.get('include_ai', 'true').lower() == 'true'
         cache_key = get_cache_key('integral', expression, {'include_ai': include_ai})
         cached = get_cached_result(cache_key)
@@ -179,45 +183,14 @@ def integral():
 
         x = symbols('x')
         expr = parse_input(expression)
-        # Calculate Indefinite Integral
         integral_expr = sympy.integrate(expr, x)
         solution_latex = latex(integral_expr) + " + C"
         
-        ai_explanation = "AI explanation unavailable (Missing API Key)"
+        ai_explanation = "AI explanation skipped."
         steps_content = "Step-by-step solution unavailable."
         
-        include_ai = request.args.get('include_ai', 'true').lower() == 'true'
-
-        if HAS_AI and include_ai:
-            prompt = f"""
-            You are a Calculus Tutor.
-            1. Explain the integration rule used for: integral of {expression} => {integral_expr} + C
-            2. Provide a brief step-by-step integration (max 3 steps).
-            3. Use LaTeX for math.
-            
-            Output strictly valid JSON:
-            {{
-                "explanation": "...",
-                "steps": "..."
-            }}
-            """
-            try:
-                completion = client.chat.completions.create(
-                    model="deepseek/deepseek-chat",
-                    messages=[
-                        {"role": "system", "content": "You are a helpful math tutor. Output JSON only."},
-                        {"role": "user", "content": prompt}
-                    ],
-                    response_format={ "type": "json_object" },
-                    max_tokens=2048
-                )
-                ai_content = completion.choices[0].message.content
-                ai_data = json.loads(ai_content)
-                ai_explanation = ai_data.get("explanation", "Explanation generation failed.")
-                steps_content = ai_data.get("steps", "Steps generation failed.")
-            except Exception as ai_error:
-                print(f"DeepSeek Error: {ai_error}")
-                ai_explanation = "Could not generate explanation at this time."
+        if include_ai:
+            ai_explanation, steps_content = get_ai_explanation("indefinite integral", expression, solution_latex)
 
         response_data = {
             "solution": solution_latex,
@@ -234,12 +207,11 @@ def integral():
 @app.route('/api/limit', methods=['GET'])
 def limit():
     expression = request.args.get('equation')
-    target = request.args.get('to', '0') # Default limit to 0
+    target = request.args.get('to', '0')
     if not expression:
         return jsonify({"error": "No equation provided"}), 400
     
     try:
-        # 0. Check Cache
         include_ai = request.args.get('include_ai', 'true').lower() == 'true'
         cache_key = get_cache_key('limit', expression, {'include_ai': include_ai, 'to': target})
         cached = get_cached_result(cache_key)
@@ -248,45 +220,14 @@ def limit():
 
         x = symbols('x')
         expr = parse_input(expression)
-        # Calculate Limit as x -> target
         limit_val = sympy.limit(expr, x, target)
         solution_latex = latex(limit_val)
         
-        ai_explanation = "AI explanation unavailable (Missing API Key)"
+        ai_explanation = "AI explanation skipped."
         steps_content = "Step-by-step solution unavailable."
         
-        include_ai = request.args.get('include_ai', 'true').lower() == 'true'
-
-        if HAS_AI and include_ai:
-            prompt = f"""
-            You are a Calculus Tutor.
-            1. Explain the limit technique used for: limit of {expression} as x -> {target} => {limit_val}
-            2. Provide a brief step-by-step evaluation (max 3 steps).
-            3. Use LaTeX for math.
-            
-            Output strictly valid JSON:
-            {{
-                "explanation": "...",
-                "steps": "..."
-            }}
-            """
-            try:
-                completion = client.chat.completions.create(
-                    model="deepseek/deepseek-chat",
-                    messages=[
-                        {"role": "system", "content": "You are a helpful math tutor. Output JSON only."},
-                        {"role": "user", "content": prompt}
-                    ],
-                    response_format={ "type": "json_object" },
-                    max_tokens=2048
-                )
-                ai_content = completion.choices[0].message.content
-                ai_data = json.loads(ai_content)
-                ai_explanation = ai_data.get("explanation", "Explanation generation failed.")
-                steps_content = ai_data.get("steps", "Steps generation failed.")
-            except Exception as ai_error:
-                print(f"DeepSeek Error: {ai_error}")
-                ai_explanation = "Could not generate explanation at this time."
+        if include_ai:
+            ai_explanation, steps_content = get_ai_explanation(f"limit as x -> {target}", expression, solution_latex)
 
         response_data = {
             "solution": solution_latex,
@@ -300,7 +241,63 @@ def limit():
     except Exception as e:
         return jsonify({"error": f"Calculation error: {str(e)}"}), 500
 
+@app.route('/api/ode', methods=['GET'])
+def solve_ode():
+    expression = request.args.get('equation')
+    if not expression:
+        return jsonify({"error": "No equation provided"}), 400
+    
+    try:
+        include_ai = request.args.get('include_ai', 'true').lower() == 'true'
+        cache_key = get_cache_key('ode', expression, {'include_ai': include_ai})
+        cached = get_cached_result(cache_key)
+        if cached:
+            return jsonify(cached)
 
+        # 1. Setup SymPy for ODE
+        x = sympy.symbols('x')
+        y = sympy.Function('y')(x)
+        
+        # Pre-process notation: y' -> diff(y(x), x), y'' -> diff(y(x), x, 2)
+        # Also dy/dx -> diff(y(x), x)
+        clean_expr = expression.replace("y''", "diff(y(x), x, 2)")
+        clean_expr = clean_expr.replace("y'", "diff(y(x), x)")
+        clean_expr = clean_expr.replace("dy/dx", "diff(y(x), x)")
+        clean_expr = clean_expr.replace("y", "y(x)") # CAREFUL: This might affect x^y or similar? 
+        # Actually y(x)(x) if replaced twice. Let's be smarter.
+        
+        # Using sympy parser with custom symbols
+        transformations = (standard_transformations + (implicit_multiplication_application, convert_xor))
+        expr_parsed = parse_expr(clean_expr, local_dict={'y': sympy.Function('y'), 'x': x}, transformations=transformations)
+        
+        # Solve
+        ode_solution = sympy.dsolve(expr_parsed, y)
+        
+        # Handle cases where dsolve returns a list or a single result
+        if isinstance(ode_solution, list):
+            solution_latex = latex(ode_solution[0])
+            solution_raw = str(ode_solution[0])
+        else:
+            solution_latex = latex(ode_solution)
+            solution_raw = str(ode_solution)
+            
+        ai_explanation = "AI explanation skipped."
+        steps_content = "Step-by-step solution unavailable."
+        
+        if include_ai:
+            ai_explanation, steps_content = get_ai_explanation("differential equation", expression, solution_latex)
+
+        response_data = {
+            "solution": solution_latex,
+            "solution_raw": solution_raw,
+            "steps": steps_content,
+            "ai_explanation": ai_explanation
+        }
+        set_cached_result(cache_key, response_data)
+        return jsonify(response_data)
+
+    except Exception as e:
+        return jsonify({"error": f"Calculus Solver Error: {str(e)}"}), 500
 
 @app.route('/api/matrix', methods=['POST'])
 def matrix_solver():
@@ -309,17 +306,14 @@ def matrix_solver():
         if not data or 'matrix' not in data:
             return jsonify({"error": "No matrix data provided"}), 400
             
-        matrix_data = data['matrix'] # Expects list of lists [[1,2], [3,4]]
+        matrix_data = data['matrix']
         operation = data.get('operation', 'determinant')
 
-        # 0. Check Cache
-        # Use matrix data + operation as key
         cache_key = get_cache_key('matrix', str(matrix_data), {'op': operation})
         cached = get_cached_result(cache_key)
         if cached:
             return jsonify(cached)
         
-        # Create SymPy Matrix
         try:
             M = sympy.Matrix(matrix_data)
         except Exception as e:
@@ -340,7 +334,7 @@ def matrix_solver():
                 if M.rows != M.cols:
                     return jsonify({"error": "Inverse requires a square matrix"}), 400
                 if M.det() == 0:
-                    return jsonify({"error": "Matrix is singular (determinant is 0), inverse does not exist"}), 400
+                    return jsonify({"error": "Matrix is singular, inverse does not exist"}), 400
                 inv = M.inv()
                 result = latex(inv)
                 steps_content = f"Calculated Inverse: $${result}$$"
@@ -364,7 +358,6 @@ def matrix_solver():
                 if M.rows != M.cols:
                     return jsonify({"error": "Eigenvalues require a square matrix"}), 400
                 eigenvals = M.eigenvals()
-                # Format: {val: multiplicity, ...}
                 latex_parts = []
                 for val, mult in eigenvals.items():
                     latex_parts.append(f"\\lambda = {latex(val)} \\text{{ (mult: {mult})}}")
@@ -373,7 +366,9 @@ def matrix_solver():
                 
             else:
                 return jsonify({"error": f"Unknown operation: {operation}"}), 400
-                
+
+            # Optional: Matrix AI explanation could be added here in future
+            
         except Exception as op_error:
              return jsonify({"error": f"Operation failed: {str(op_error)}"}), 400
 

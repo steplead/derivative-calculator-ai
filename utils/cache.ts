@@ -33,7 +33,7 @@ export async function getCachedExplanation(key: string): Promise<string | null> 
     }
 }
 
-export async function setCachedExplanation(key: string, value: string, ttl: number = 604800) {
+export async function setCachedExplanation(key: string, value: string, ttl: number = 2592000) {
     if (!redis) return;
     try {
         await redis.set(`explanation:${key}`, value, { ex: ttl });

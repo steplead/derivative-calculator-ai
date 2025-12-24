@@ -9,9 +9,24 @@ interface StepDisplayProps {
 }
 
 export default function StepDisplay({ content }: StepDisplayProps) {
+    if (!content) return null;
+
+    // Split by literal newline characters
+    const steps = content.split('\n').filter(step => step.trim().length > 0);
+
     return (
-        <div className="text-gray-600 dark:text-gray-300 leading-relaxed text-sm font-mono">
-            <Latex>{content}</Latex>
+        <div className="space-y-3">
+            {steps.map((step, index) => {
+                const isStepLabel = step.trim().startsWith('Step') || step.trim().startsWith('Final Answer');
+
+                return (
+                    <div key={index} className={`text-sm leading-relaxed ${isStepLabel ? 'pl-2 border-l-2 border-blue-500/30' : ''}`}>
+                        <div className="text-gray-700 dark:text-gray-300">
+                            <Latex>{step}</Latex>
+                        </div>
+                    </div>
+                );
+            })}
         </div>
     );
 }

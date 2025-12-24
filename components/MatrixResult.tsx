@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import MathDisplay from './MathDisplay';
-import AdUnit from './AdUnit';
+import AdShell from './AdShell';
 import { Loader2, AlertCircle } from 'lucide-react';
 interface MatrixResultProps {
     result: string | null;
@@ -45,7 +45,7 @@ export default function MatrixResult({ result, steps, error, isLoading }: Matrix
             </div>
 
             {/* Ad Unit: Sponsored Result */}
-            <AdUnit slot="matrix-result-1" className="mb-8" />
+            <AdShell type="donation" className="mb-8" />
 
             {/* Steps Section */}
             {steps && (

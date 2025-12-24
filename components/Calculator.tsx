@@ -7,12 +7,12 @@ import dynamic from 'next/dynamic';
 const MathDisplay = dynamic(() => import('./MathDisplay'), { ssr: false });
 const Graph = dynamic(() => import('./Graph'), { ssr: false });
 const StepDisplay = dynamic(() => import('./StepDisplay'), { ssr: false });
-import AdUnit from './AdUnit';
+import AdShell from './AdShell';
 
 type CalculatorProps = {
     initialEquation?: string;
     initialLimitTo?: string;
-    mode?: 'derivative' | 'integral' | 'limit';
+    mode?: 'derivative' | 'integral' | 'limit' | 'ode';
     dict?: any;
 };
 
@@ -33,6 +33,7 @@ export default function Calculator({ initialEquation = '', initialLimitTo = '0',
         solve: "Solve",
         integrate: "Integrate",
         limit: "Find Limit",
+        ode: "Solve ODE",
         solving: "Solving...",
         solution: "Solution",
         steps: "Step-by-Step",
@@ -66,6 +67,8 @@ export default function Calculator({ initialEquation = '', initialLimitTo = '0',
                 baseUrl = `/api/integral?equation=${encodeURIComponent(equationToSolve)}`;
             } else if (mode === 'limit') {
                 baseUrl = `/api/limit?equation=${encodeURIComponent(equationToSolve)}&to=${encodeURIComponent(limitTo)}`;
+            } else if (mode === 'ode') {
+                baseUrl = `/api/ode?equation=${encodeURIComponent(equationToSolve)}`;
             }
 
             // Step 1: Fast fetch (Math only)
@@ -129,8 +132,8 @@ export default function Calculator({ initialEquation = '', initialLimitTo = '0',
     };
 
     const getPlaceholder = () => {
-        if (mode === 'integral') return 'e.g. x^2, sin(x)';
         if (mode === 'limit') return 'e.g. (sin(x))/x';
+        if (mode === 'ode') return "e.g. y' + y = x";
         return t.placeholder;
     };
 
@@ -138,6 +141,7 @@ export default function Calculator({ initialEquation = '', initialLimitTo = '0',
         if (loading) return t.solving;
         if (mode === 'integral') return t.integrate;
         if (mode === 'limit') return t.limit;
+        if (mode === 'ode') return t.ode;
         return t.solve;
     };
 
@@ -202,7 +206,7 @@ export default function Calculator({ initialEquation = '', initialLimitTo = '0',
                                     {t.ai}
                                 </h3>
                                 <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                                    {result.ai_explanation.includes("unavailable") ? (
+                                    {result.ai_explanation.toLowerCase().includes("generating") || result.ai_explanation.toLowerCase().includes("processing") ? (
                                         <span className="animate-pulse text-gray-500">Generating explanation...</span>
                                     ) : (
                                         result.ai_explanation
@@ -235,7 +239,7 @@ export default function Calculator({ initialEquation = '', initialLimitTo = '0',
                 {/* Ad Unit */}
                 <div className="mt-8">
                     {/* Use a placeholder slot ID for now */}
-                    <AdUnit slot="main-calc-result-1" />
+                    <AdShell type="donation" className="mt-8" />
                 </div>
             </div>
         </div>

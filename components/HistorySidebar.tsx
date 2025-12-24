@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import AdUnit from './AdUnit';
+import AdShell from './AdShell';
 
 type HistoryItem = {
     equation: string;
@@ -107,7 +107,7 @@ export default function HistorySidebar() {
                     )}
 
                     <div className="mt-auto pt-4">
-                        <AdUnit slot="sidebar-1" format="rectangle" />
+                        <AdShell type="donation" />
                     </div>
                 </div>
             </div >

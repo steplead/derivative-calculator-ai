@@ -1,17 +1,43 @@
 import Calculator from '@/components/Calculator';
 import Link from 'next/link';
 
-export const metadata = {
-    title: "Integral Calculator AI - Solve Integrals Instantly",
-    description: "Free step-by-step integral calculator powered by AI. Solve indefinite and definite integrals with explanations.",
-};
+import { getDictionary } from '../dictionaries';
+
+export async function generateMetadata() {
+    let locale = "en";
+    let dict = getDictionary("en");
+
+    try {
+        const headersList = await headers();
+        locale = headersList.get("x-next-locale") || "en";
+        dict = getDictionary(locale);
+    } catch (e) {
+        console.error("Integral metadata error:", e);
+    }
+
+    const h1 = dict?.integral?.h1 || "Integral Calculator";
+    const subtitle = dict?.integral?.subtitle || "Solve integrals instantly.";
+
+    return {
+        title: `${h1} - Derivative Calculator AI`,
+        description: subtitle,
+        alternates: {
+            canonical: '/integral',
+            languages: {
+                'en': '/integral',
+                'es': '/es/integral',
+                'pt': '/pt/integral',
+            },
+        },
+    };
+}
 
 import { Suspense } from 'react';
 
 import { headers } from 'next/headers';
 export const runtime = 'edge';
 
-import { getDictionary } from '../dictionaries';
+import { getDictionary as getDict } from '../dictionaries';
 
 export const dynamic = 'force-dynamic';
 
@@ -32,7 +58,7 @@ export default async function IntegralPage() {
     }
 
     return (
-        <main className="min-h-screen bg-white dark:bg-slate-900 py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-200">
+        <div className="py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-200">
             <div className="max-w-4xl mx-auto text-center mb-12 mt-10">
                 <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-4">
                     {dict.integral.h1} <span className="text-purple-600 dark:text-purple-500">AI</span>
@@ -63,6 +89,6 @@ export default async function IntegralPage() {
             </div>
 
 
-        </main>
+        </div>
     );
 }

@@ -147,6 +147,26 @@ export async function generateMetadata({ params }: { params: { slug: string } })
         }
     }
 
+    // DYNAMIC FALLBACK: Treat slug as formula (only if it doesn't look like a descriptive sentence)
+    if (!problem) {
+        try {
+            const decodedFormula = decodeURIComponent(slug);
+            const hasMultipleHyphens = (slug.match(/-/g) || []).length > 2;
+            const looksLikeMath = /[\+\*\/\^\(\)]/.test(decodedFormula) || (decodedFormula.length < 15 && !decodedFormula.includes('-'));
+
+            if (looksLikeMath && !hasMultipleHyphens && decodedFormula.length < 50) {
+                problem = {
+                    slug: slug,
+                    formula: decodedFormula,
+                    title: `Derivative of ${decodedFormula}`,
+                    type: 'derivative'
+                };
+            }
+        } catch (e) {
+            // Ignore
+        }
+    }
+
     if (!problem) {
         return {
             title: 'Problem Not Found',
@@ -263,6 +283,27 @@ export default async function ProblemPage({ params }: { params: { slug: string }
         }
     }
 
+    // DYNAMIC FALLBACK: If not found in DB/JSON, treat slug as a raw formula
+    // This enables URLs like /x^2 or /sin(x) to work instantly
+    if (!problem) {
+        try {
+            const decodedFormula = decodeURIComponent(slug);
+            const hasMultipleHyphens = (slug.match(/-/g) || []).length > 2;
+            const looksLikeMath = /[\+\*\/\^\(\)]/.test(decodedFormula) || (decodedFormula.length < 15 && !decodedFormula.includes('-'));
+
+            if (looksLikeMath && !hasMultipleHyphens && decodedFormula.length < 50) {
+                problem = {
+                    slug: slug,
+                    formula: decodedFormula,
+                    title: `Derivative of ${decodedFormula}`,
+                    type: 'derivative'
+                };
+            }
+        } catch (e) {
+            console.error("Dynamic decoding failed:", e);
+        }
+    }
+
     const headersList = await headers();
     const locale = headersList.get("x-next-locale") || "en";
 
@@ -344,7 +385,7 @@ export default async function ProblemPage({ params }: { params: { slug: string }
     };
 
     return (
-        <main className="min-h-screen bg-white dark:bg-slate-900 py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-200">
+        <div className="py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-200">
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(mathSolverSchema) }}
@@ -400,6 +441,6 @@ export default async function ProblemPage({ params }: { params: { slug: string }
             </div>
 
 
-        </main>
+        </div>
     );
 }

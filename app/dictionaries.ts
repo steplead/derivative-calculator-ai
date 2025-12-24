@@ -9,6 +9,7 @@ export const dictionaries = {
             integral: "Integral Calculator",
             limit: "Limit Calculator",
             matrix: "Matrix Calculator",
+            ode: "Differential Equation Solver",
             directory: "Directory",
             wiki: "Wiki",
         },
@@ -17,6 +18,7 @@ export const dictionaries = {
             integral: "Integral",
             limit: "Limit",
             matrix: "Matrix",
+            ode: "ODE",
             wiki: "Wiki",
             directory: "Directory",
         },
@@ -74,7 +76,7 @@ export const dictionaries = {
         },
         integral: {
             h1: "Integral Calculator",
-            subtitle: "Instant step-by-step integration powered by SymPy & Gemini.",
+            subtitle: "Instant step-by-step integration powered by SymPy & DeepSeek AI.",
             howToTitle: "How to use this Integral Calculator",
             howToText: "Enter your function to find the antiderivative (indefinite integral).",
             bullet1: "Polynomials (e.g., x^2 + 3x)",
@@ -83,7 +85,7 @@ export const dictionaries = {
         },
         limit: {
             h1: "Limit Calculator",
-            subtitle: "Instant step-by-step limit evaluation powered by SymPy & Gemini.",
+            subtitle: "Instant step-by-step limit evaluation powered by SymPy & DeepSeek AI.",
             howToTitle: "How to use this Limit Calculator",
             howToText: "Enter your function and the value x approaches to find the limit.",
             bullet1: "Rational functions (e.g., (x^2-1)/(x-1))",
@@ -103,6 +105,15 @@ export const dictionaries = {
                 rref: "RREF",
                 eigenvals: "Eigenvalues",
             }
+        },
+        ode: {
+            h1: "Differential Equation Solver",
+            subtitle: "Solve 1st and 2nd order differential equations with step-by-step logic.",
+            howToTitle: "How to use this ODE Solver",
+            howToText: "Enter your differential equation using y' or dy/dx notation.",
+            bullet1: "1st Order Linear (e.g., y' + y = x)",
+            bullet2: "Separable Equations (e.g., dy/dx = y*x)",
+            bullet3: "2nd Order Linear (e.g., y'' + y = 0)",
         }
     },
     es: {
@@ -113,6 +124,7 @@ export const dictionaries = {
             integral: "Calculadora de Integrales",
             limit: "Calculadora de Límites",
             matrix: "Calculadora de Matrices",
+            ode: "Solucionador de EDO",
             directory: "Directorio",
             wiki: "Wiki",
         },
@@ -121,6 +133,7 @@ export const dictionaries = {
             integral: "Integrales",
             limit: "Límites",
             matrix: "Matrices",
+            ode: "EDO",
             wiki: "Wiki",
             directory: "Directorio",
         },
@@ -207,6 +220,15 @@ export const dictionaries = {
                 rref: "F. Escalonada (RREF)",
                 eigenvals: "Valores Propios",
             }
+        },
+        ode: {
+            h1: "Solucionador de Ecuaciones Diferenciales",
+            subtitle: "Resuelve ecuaciones diferenciales de primer y segundo orden paso a paso.",
+            howToTitle: "Cómo usar este Solucionador de EDO",
+            howToText: "Ingresa tu ecuación diferencial usando la notación y' o dy/dx.",
+            bullet1: "Lineales de 1er Orden (ej: y' + y = x)",
+            bullet2: "Ecuaciones Separables (ej: dy/dx = y*x)",
+            bullet3: "Lineales de 2do Orden (ej: y'' + y = 0)",
         }
     },
     pt: {
@@ -217,6 +239,7 @@ export const dictionaries = {
             integral: "Calculadora de Integrais",
             limit: "Calculadora de Limites",
             matrix: "Calculadora de Matrizes",
+            ode: "Resolvedor de EDO",
             directory: "Diretório",
             wiki: "Wiki",
         },
@@ -225,6 +248,7 @@ export const dictionaries = {
             integral: "Integrais",
             limit: "Limites",
             matrix: "Matrizes",
+            ode: "EDO",
             wiki: "Wiki",
             directory: "Diretório",
         },
@@ -311,6 +335,15 @@ export const dictionaries = {
                 rref: "Escalonada (RREF)",
                 eigenvals: "Autovalores",
             }
+        },
+        ode: {
+            h1: "Resolvedor de Equações Diferenciais",
+            subtitle: "Resolva equações diferenciais de 1ª e 2ª ordem com lógica passo a passo.",
+            howToTitle: "Como usar este Resolvedor de EDO",
+            howToText: "Digite sua equação diferencial usando a notação y' ou dy/dx.",
+            bullet1: "Linear de 1ª ordem (ex: y' + y = x)",
+            bullet2: "Equações Separáveis (ex: dy/dx = y*x)",
+            bullet3: "Linear de 2ª ordem (ex: y'' + y = 0)",
         }
     }
 };

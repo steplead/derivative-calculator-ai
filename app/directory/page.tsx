@@ -15,10 +15,33 @@ function getProblemTitle(locale: string, formula: string, type: string = 'deriva
 
 export const dynamic = 'force-dynamic';
 
-export const metadata = {
-    title: 'All Derivative Problems - Derivative Calculator AI',
-    description: 'Browse our complete list of derivative problems and solutions.',
-};
+export async function generateMetadata() {
+    let locale = "en";
+    let dict = getDictionary("en");
+
+    try {
+        const headersList = await headers();
+        locale = headersList.get("x-next-locale") || "en";
+        dict = getDictionary(locale);
+    } catch (e) {
+        console.error("Directory metadata error:", e);
+    }
+
+    const h1 = dict?.directory?.h1 || "All Problems";
+
+    return {
+        title: `${h1} - Derivative Calculator AI`,
+        description: 'Browse our complete list of derivative problems and solutions.',
+        alternates: {
+            canonical: '/directory',
+            languages: {
+                'en': '/directory',
+                'es': '/es/directory',
+                'pt': '/pt/directory',
+            },
+        },
+    };
+}
 
 export default async function DirectoryPage() {
     const headersList = await headers();
@@ -65,7 +88,7 @@ export default async function DirectoryPage() {
     }
 
     return (
-        <main className="min-h-screen bg-white dark:bg-slate-900 py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-200">
+        <div className="py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-200">
             <div className="max-w-7xl mx-auto">
                 <div className="text-center mb-12">
                     <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">
@@ -99,6 +122,6 @@ export default async function DirectoryPage() {
                     </Link>
                 </div>
             </div>
-        </main>
+        </div>
     );
 }

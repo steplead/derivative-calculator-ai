@@ -1,17 +1,43 @@
 import Calculator from '@/components/Calculator';
 import Link from 'next/link';
 
-export const metadata = {
-    title: "Limit Calculator AI - Solve Limits Instantly",
-    description: "Free step-by-step limit calculator powered by AI. Solve limits as x approaches any value.",
-};
+import { getDictionary } from '../dictionaries';
+
+export async function generateMetadata() {
+    let locale = "en";
+    let dict = getDictionary("en");
+
+    try {
+        const headersList = await headers();
+        locale = headersList.get("x-next-locale") || "en";
+        dict = getDictionary(locale);
+    } catch (e) {
+        console.error("Limit metadata error:", e);
+    }
+
+    const h1 = dict?.limit?.h1 || "Limit Calculator";
+    const subtitle = dict?.limit?.subtitle || "Solve limits instantly.";
+
+    return {
+        title: `${h1} - Derivative Calculator AI`,
+        description: subtitle,
+        alternates: {
+            canonical: '/limit',
+            languages: {
+                'en': '/limit',
+                'es': '/es/limit',
+                'pt': '/pt/limit',
+            },
+        },
+    };
+}
 
 import { Suspense } from 'react';
 
 import { headers } from 'next/headers';
 export const runtime = 'edge';
 
-import { getDictionary } from '../dictionaries';
+import { getDictionary as getDict } from '../dictionaries';
 
 export const dynamic = 'force-dynamic';
 
@@ -32,7 +58,7 @@ export default async function LimitPage() {
     }
 
     return (
-        <main className="min-h-screen bg-white dark:bg-slate-900 py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-200">
+        <div className="py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-200">
             <div className="max-w-4xl mx-auto text-center mb-12 mt-10">
                 <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-4">
                     {dict.limit.h1} <span className="text-green-600 dark:text-green-500">AI</span>
@@ -63,6 +89,6 @@ export default async function LimitPage() {
             </div>
 
 
-        </main>
+        </div>
     );
 }

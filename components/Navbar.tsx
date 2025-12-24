@@ -24,6 +24,7 @@ export default function Navbar({ dict }: { dict: any }) {
         { name: dict.navShort.integral, href: '/integral', id: 'nav-int' },
         { name: dict.navShort.limit, href: '/limit', id: 'nav-lim' },
         { name: dict.navShort.matrix, href: '/matrix', id: 'nav-mat' },
+        { name: dict.navShort.ode, href: '/ode', id: 'nav-ode' },
         { name: dict.navShort.wiki, href: '/wiki', id: 'nav-wiki' },
         { name: dict.navShort.directory, href: '/directory', id: 'nav-dir' },
     ];

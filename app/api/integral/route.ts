@@ -15,11 +15,27 @@ export async function GET(req: NextRequest) {
         return NextResponse.json({ error: "No equation provided" }, { status: 400 });
     }
 
+    // Heuristic Check: Ensure it doesn't look like a descriptive sentence/slug
+    const hasMultipleHyphens = (expression.match(/-/g) || []).length > 2;
+    const hasMathSymbols = /[\+\*\/\^\(\)=]/.test(expression);
+    const looksLikeDescriptive = /[a-zA-Z]{4,}-[a-zA-Z]{4,}/.test(expression);
+    const looksLikeMath = hasMathSymbols || (expression.length < 15 && !looksLikeDescriptive);
+
+    if (hasMultipleHyphens || !looksLikeMath || expression.length > 200) {
+        return NextResponse.json({ error: "Invalid mathematical expression" }, { status: 400 });
+    }
+
     try {
         // 1. Calculate Integral with Nerdamer
-        const integral = nerdamer(`integrate(${expression}, x)`);
-        const solutionLatex = integral.toTeX() + " + C";
-        const solutionRaw = integral.toString();
+        let solutionLatex = "";
+        let solutionRaw = "";
+        try {
+            const integral = nerdamer(`integrate(${expression}, x)`);
+            solutionLatex = integral.toTeX() + " + C";
+            solutionRaw = integral.toString();
+        } catch (nerdError) {
+            console.error("Nerdamer Integral Error:", nerdError);
+        }
 
         let stepsContent = "Step-by-step solution unavailable.";
         let aiExplanation = "AI explanation unavailable.";
@@ -41,27 +57,17 @@ export async function GET(req: NextRequest) {
                         apiKey: apiKey,
                     });
 
-                    const prompt = `
-                    You are a Calculus Tutor.
-                    1. Explain the integration rule for: integral of ${expression}
-                    2. Provide a step-by-step integration (max 3 steps).
-                    3. Use LaTeX for math.
-                    
-                    Output strictly valid JSON:
-                    {
-                        "explanation": "...",
-                        "steps": "..."
-                    }
-                    `;
+                    const prompt = `Integrate ${expression}. 1. Brief rule. 2. Max 3 LaTeX steps. JSON format: {"explanation": "...", "steps": "..."}`;
 
                     const completion = await client.chat.completions.create({
                         model: "deepseek/deepseek-chat",
                         messages: [
-                            { role: "system", content: "You are a helpful math tutor. Output JSON only." },
+                            { role: "system", content: "Math tutor. JSON only. Be extremely brief." },
                             { role: "user", content: prompt }
                         ],
                         // @ts-ignore
-                        response_format: { type: "json_object" }
+                        response_format: { type: "json_object" },
+                        max_tokens: 1000
                     });
 
                     const content = completion.choices[0].message?.content;

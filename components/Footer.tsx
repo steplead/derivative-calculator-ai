@@ -100,10 +100,13 @@ export default function Footer({ wikiTopics, problems, locale }: FooterProps) {
                                 <Link href={`${baseUrl}/matrix`} className="text-gray-600 dark:text-gray-400 hover:text-blue-600 text-sm">Matrix Calculator</Link>
                             </li>
                             <li>
-                                <a href="#" className="text-gray-600 dark:text-gray-400 hover:text-blue-600 text-sm">Privacy Policy</a>
+                                <Link href={`${baseUrl}/about`} className="text-gray-600 dark:text-gray-400 hover:text-blue-600 text-sm">About Us</Link>
                             </li>
                             <li>
-                                <a href="#" className="text-gray-600 dark:text-gray-400 hover:text-blue-600 text-sm">Contact Us</a>
+                                <Link href={`${baseUrl}/privacy`} className="text-gray-600 dark:text-gray-400 hover:text-blue-600 text-sm">Privacy Policy</Link>
+                            </li>
+                            <li>
+                                <Link href={`${baseUrl}/contact`} className="text-gray-600 dark:text-gray-400 hover:text-blue-600 text-sm">Contact Us</Link>
                             </li>
                         </ul>
                     </div>

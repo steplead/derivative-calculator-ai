@@ -1,0 +1,458 @@
+{
+    "timestamp": "2025-12-24T11:19:49.864758",
+    "summary": {
+        "PASS": 9247,
+        "PASS_AI_ONLY": 90,
+        "FAIL": 27,
+        "CRITICAL": 0,
+        "ERROR": 47
+    },
+    "duration_minutes": 11.175315332412719,
+    "total_checked": 9411,
+    "failures": [
+        {
+            "slug": "derivative-of-sin-squared-x",
+            "loc": "es",
+            "status": "ERROR",
+            "msg": "('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))"
+        },
+        {
+            "slug": "derivative-of-x-minus-to-minus-the-minus-6",
+            "loc": "es",
+            "status": "ERROR",
+            "msg": "('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))"
+        },
+        {
+            "slug": "derivative-of-9-minus-to-minus-the-minus-x",
+            "loc": "pt",
+            "status": "ERROR",
+            "msg": "HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /api/derivative?equation=9%5Ex (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+        },
+        {
+            "slug": "derivative-of-xe-minus-to-minus-the-minus-13x",
+            "loc": "pt",
+            "status": "ERROR",
+            "msg": "('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))"
+        },
+        {
+            "slug": "derivative-of-1-minus-over-minus-x-minus-to-minus-the-minus-2",
+            "loc": "pt",
+            "status": "ERROR",
+            "msg": "('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))"
+        },
+        {
+            "slug": "derivative-of-e-minus-to-minus-the-minus-2xsin4x",
+            "loc": "",
+            "status": "ERROR",
+            "msg": "HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /api/derivative?equation=e%5E%282%2Ax%29%2Asin%284%2Ax%29 (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+        },
+        {
+            "slug": "derivative-of-e-minus-to-minus-the-minus-7xsin4x",
+            "loc": "",
+            "status": "ERROR",
+            "msg": "HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Read timed out. (read timeout=20)"
+        },
+        {
+            "slug": "derivative-of-lncosx",
+            "loc": "",
+            "status": "ERROR",
+            "msg": "HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /api/derivative?equation=ln%28cos%28x%29%29 (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+        },
+        {
+            "slug": "derivative-of-x-minus-to-minus-the-minus-4-minus-plus-minus-x-minus-to-minus-the-minus-3",
+            "loc": "",
+            "status": "ERROR",
+            "msg": "('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))"
+        },
+        {
+            "slug": "derivative-of-2x-minus-plus-minus-1-minus-to-minus-the-minus-2",
+            "loc": "es",
+            "status": "ERROR",
+            "msg": "HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /api/derivative?equation=%282%2Ax%2B1%29%5E2 (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+        },
+        {
+            "slug": "derivative-of-4x-minus-1-minus-to-minus-the-minus-3",
+            "loc": "",
+            "status": "ERROR",
+            "msg": "HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /api/derivative?equation=%284%2Ax-1%29%5E3 (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+        },
+        {
+            "slug": "derivative-of-1-minus-over-minus-x-minus-to-minus-the-minus-2-minus-plus-minus-5-minus-to-minus-the-minus-2",
+            "loc": "pt",
+            "status": "ERROR",
+            "msg": "HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /api/derivative?equation=1/%28x%5E2%2B5%29%5E2 (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+        },
+        {
+            "slug": "integral-of-51-over-x",
+            "loc": "es",
+            "status": "ERROR",
+            "msg": "HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /api/integral?equation=5%2A1/x (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+        },
+        {
+            "slug": "integral-of-3x2",
+            "loc": "es",
+            "status": "ERROR",
+            "msg": "HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Read timed out. (read timeout=20)"
+        },
+        {
+            "slug": "integral-of-2ex--ex",
+            "loc": "es",
+            "status": "ERROR",
+            "msg": "HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /api/integral?equation=2%2Ae%5Ex%20-%20e%5Ex (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+        },
+        {
+            "slug": "integral-of--1-over-sqrt1-x2--sinx",
+            "loc": "",
+            "status": "FAIL",
+            "msg": "API 400"
+        },
+        {
+            "slug": "integral-of--1-over-sqrt1-x2--sinx",
+            "loc": "es",
+            "status": "FAIL",
+            "msg": "API 400"
+        },
+        {
+            "slug": "integral-of--1-over-sqrt1-x2--sinx",
+            "loc": "pt",
+            "status": "FAIL",
+            "msg": "API 400"
+        },
+        {
+            "slug": "integral-of-1-over-sqrt1-x2--ex",
+            "loc": "es",
+            "status": "ERROR",
+            "msg": "HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /api/integral?equation=1/sqrt%281-x%5E2%29%20-%20e%5Ex (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+        },
+        {
+            "slug": "integral-of--1-over-1+x2-+-5cosx-+-5sinx",
+            "loc": "pt",
+            "status": "ERROR",
+            "msg": "HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /api/integral?equation=-1/%281%2Bx%5E2%29%20%2B%205%2Acos%28x%29%20%2B%205%2Asin%28x%29 (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+        },
+        {
+            "slug": "integral-of-1-over-2x3-+-5sinx",
+            "loc": "es",
+            "status": "ERROR",
+            "msg": "HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Read timed out. (read timeout=20)"
+        },
+        {
+            "slug": "integral-of-x3-+-1-over-2sqrtx",
+            "loc": "pt",
+            "status": "ERROR",
+            "msg": "HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /api/integral?equation=x%5E3%20%2B%201/2%2Asqrt%28x%29 (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+        },
+        {
+            "slug": "integral-of-5x4--cosx",
+            "loc": "pt",
+            "status": "ERROR",
+            "msg": "HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Read timed out. (read timeout=20)"
+        },
+        {
+            "slug": "integral-of-1-over-21-over-x2-+-41-over-sqrt1-x2-+-3x4",
+            "loc": "es",
+            "status": "ERROR",
+            "msg": "HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Read timed out. (read timeout=20)"
+        },
+        {
+            "slug": "integral-of-31-over-x2-+-41-over-sqrt1-x2--1-over-sqrt1-x2",
+            "loc": "",
+            "status": "FAIL",
+            "msg": "API 400"
+        },
+        {
+            "slug": "integral-of-31-over-x2-+-41-over-sqrt1-x2--1-over-sqrt1-x2",
+            "loc": "es",
+            "status": "FAIL",
+            "msg": "API 400"
+        },
+        {
+            "slug": "integral-of-31-over-x2-+-41-over-sqrt1-x2--1-over-sqrt1-x2",
+            "loc": "pt",
+            "status": "FAIL",
+            "msg": "API 400"
+        },
+        {
+            "slug": "integral-of-cosx-+-5x",
+            "loc": "es",
+            "status": "ERROR",
+            "msg": "HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /api/integral?equation=cos%28x%29%20%2B%205%2Ax (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+        },
+        {
+            "slug": "integral-of-1-over-2sqrtx-+-2x3",
+            "loc": "pt",
+            "status": "ERROR",
+            "msg": "HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Read timed out. (read timeout=20)"
+        },
+        {
+            "slug": "integral-of--1-over-sqrt1-x2-+-5sinx--lnx",
+            "loc": "",
+            "status": "FAIL",
+            "msg": "API 400"
+        },
+        {
+            "slug": "integral-of--1-over-sqrt1-x2-+-5sinx--lnx",
+            "loc": "es",
+            "status": "FAIL",
+            "msg": "API 400"
+        },
+        {
+            "slug": "integral-of--1-over-sqrt1-x2-+-5sinx--lnx",
+            "loc": "pt",
+            "status": "FAIL",
+            "msg": "API 400"
+        },
+        {
+            "slug": "integral-of-4lnx-+-2tanx",
+            "loc": "es",
+            "status": "ERROR",
+            "msg": "HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /api/integral?equation=4%2Aln%28x%29%20%2B%202%2Atan%28x%29 (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+        },
+        {
+            "slug": "integral-of-4secx2-+-3tanx",
+            "loc": "es",
+            "status": "ERROR",
+            "msg": "HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Read timed out. (read timeout=20)"
+        },
+        {
+            "slug": "integral-of-31-over-1+x2--1-over-sqrt1-x2",
+            "loc": "pt",
+            "status": "ERROR",
+            "msg": "HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Read timed out. (read timeout=20)"
+        },
+        {
+            "slug": "integral-of--cosx-+-2secx2--1-over-sqrt1-x2",
+            "loc": "",
+            "status": "FAIL",
+            "msg": "API 400"
+        },
+        {
+            "slug": "integral-of--cosx-+-2secx2--1-over-sqrt1-x2",
+            "loc": "es",
+            "status": "FAIL",
+            "msg": "API 400"
+        },
+        {
+            "slug": "integral-of--cosx-+-2secx2--1-over-sqrt1-x2",
+            "loc": "pt",
+            "status": "FAIL",
+            "msg": "API 400"
+        },
+        {
+            "slug": "integral-of--sqrtx-+-51-over-sqrt1-x2--x3",
+            "loc": "",
+            "status": "FAIL",
+            "msg": "API 400"
+        },
+        {
+            "slug": "integral-of--sqrtx-+-51-over-sqrt1-x2--x3",
+            "loc": "es",
+            "status": "FAIL",
+            "msg": "API 400"
+        },
+        {
+            "slug": "integral-of--sqrtx-+-51-over-sqrt1-x2--x3",
+            "loc": "pt",
+            "status": "FAIL",
+            "msg": "API 400"
+        },
+        {
+            "slug": "integral-of-1-over-2x3-+-21-over-sqrt1-x2-+-31-over-1+x2",
+            "loc": "es",
+            "status": "ERROR",
+            "msg": "HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Read timed out. (read timeout=20)"
+        },
+        {
+            "slug": "integral-of-5x4-+-3tanx",
+            "loc": "pt",
+            "status": "ERROR",
+            "msg": "HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Read timed out. (read timeout=20)"
+        },
+        {
+            "slug": "limit-of-1-over-x-as-x-to--infinity",
+            "loc": "es",
+            "status": "ERROR",
+            "msg": "HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /api/limit?equation=1/x&to=0 (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+        },
+        {
+            "slug": "limit-of-tanx-as-x-to-1",
+            "loc": "",
+            "status": "ERROR",
+            "msg": "HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Read timed out. (read timeout=20)"
+        },
+        {
+            "slug": "limit-of-absx-4x-over-absx-as-x-to-0",
+            "loc": "",
+            "status": "ERROR",
+            "msg": "HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /api/limit?equation=%28abs%28x%29%20%2A%204%2Ax%29%20/%20abs%28x%29&to=0 (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+        },
+        {
+            "slug": "limit-of-sqrt1-over-x--sqrtex-as-x-to-pi-2",
+            "loc": "pt",
+            "status": "ERROR",
+            "msg": "HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /api/limit?equation=sqrt%281/x%29%20-%20sqrt%28e%5Ex%29&to=0 (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+        },
+        {
+            "slug": "limit-of-sqrt3x--sqrtx-as-x-to-pi",
+            "loc": "",
+            "status": "ERROR",
+            "msg": "HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Read timed out. (read timeout=20)"
+        },
+        {
+            "slug": "limit-of-1-over-sqrtx--1-over-3sinx-as-x-to-pi-2",
+            "loc": "es",
+            "status": "ERROR",
+            "msg": "HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /api/limit?equation=%281/sqrt%28x%29%29%20-%20%281/3%2Asin%28x%29%29&to=0 (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+        },
+        {
+            "slug": "limit-of-absx-over-1-over-x-as-x-to-pi",
+            "loc": "",
+            "status": "FAIL",
+            "msg": "API 503"
+        },
+        {
+            "slug": "limit-of-absx-over-1-over-x-as-x-to-pi",
+            "loc": "es",
+            "status": "FAIL",
+            "msg": "API 503"
+        },
+        {
+            "slug": "limit-of-absx-over-1-over-x-as-x-to-pi",
+            "loc": "pt",
+            "status": "FAIL",
+            "msg": "API 503"
+        },
+        {
+            "slug": "limit-of-1-over-x-over-1-over-x-as-x-to--1",
+            "loc": "es",
+            "status": "ERROR",
+            "msg": "HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /api/limit?equation=1/x%20/%201/x&to=0 (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+        },
+        {
+            "slug": "limit-of-sqrtabsx--sqrttanx-as-x-to-1",
+            "loc": "es",
+            "status": "ERROR",
+            "msg": "HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /api/limit?equation=sqrt%28abs%28x%29%29%20-%20sqrt%28tan%28x%29%29&to=0 (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+        },
+        {
+            "slug": "limit-of-1-over-1-over-x--1-over-x2-as-x-to-pi",
+            "loc": "",
+            "status": "ERROR",
+            "msg": "'list' object has no attribute 'lower'"
+        },
+        {
+            "slug": "limit-of-5absx-sqrtx-over-x-as-x-to--2",
+            "loc": "",
+            "status": "FAIL",
+            "msg": "API 503"
+        },
+        {
+            "slug": "limit-of-5absx-sqrtx-over-x-as-x-to--2",
+            "loc": "es",
+            "status": "FAIL",
+            "msg": "API 503"
+        },
+        {
+            "slug": "limit-of-5absx-sqrtx-over-x-as-x-to--2",
+            "loc": "pt",
+            "status": "FAIL",
+            "msg": "API 503"
+        },
+        {
+            "slug": "limit-of-1-over-x-over-4cosx-as-x-to--inf",
+            "loc": "pt",
+            "status": "ERROR",
+            "msg": "HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /api/limit?equation=1/x%20/%204%2Acos%28x%29&to=0 (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+        },
+        {
+            "slug": "limit-of-absx-over-1-over-x-as-x-to-pi-2",
+            "loc": "",
+            "status": "FAIL",
+            "msg": "API 503"
+        },
+        {
+            "slug": "limit-of-absx-over-1-over-x-as-x-to-pi-2",
+            "loc": "es",
+            "status": "FAIL",
+            "msg": "API 503"
+        },
+        {
+            "slug": "limit-of-absx-over-1-over-x-as-x-to-pi-2",
+            "loc": "pt",
+            "status": "FAIL",
+            "msg": "API 503"
+        },
+        {
+            "slug": "limit-of-sqrtx--3x2-over-x3--absx-as-x-to-inf",
+            "loc": "",
+            "status": "ERROR",
+            "msg": "HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /api/limit?equation=%28sqrt%28x%29%20-%203%2Ax%5E2%29%20/%20%28x%5E3%20-%20abs%28x%29%29&to=0 (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+        },
+        {
+            "slug": "limit-of-3sqrtx--4tanx-over-cosx--1-over-x-as-x-to--1",
+            "loc": "pt",
+            "status": "ERROR",
+            "msg": "HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /api/limit?equation=%283%2Asqrt%28x%29%20-%204%2Atan%28x%29%29%20/%20%28cos%28x%29%20-%201/x%29&to=0 (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+        },
+        {
+            "slug": "limit-of-2absx-over-5cosx-as-x-to-1",
+            "loc": "",
+            "status": "ERROR",
+            "msg": "HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Read timed out. (read timeout=20)"
+        },
+        {
+            "slug": "limit-of-4tanx2--cosx2-as-x-to--2",
+            "loc": "es",
+            "status": "ERROR",
+            "msg": "HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Read timed out. (read timeout=20)"
+        },
+        {
+            "slug": "limit-of-4x2-over-5cosx-as-x-to-1",
+            "loc": "pt",
+            "status": "ERROR",
+            "msg": "HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /api/limit?equation=4%2Ax%5E2%20/%205%2Acos%28x%29&to=0 (Caused by ProxyError('Unable to connect to proxy', RemoteDisconnected('Remote end closed connection without response')))"
+        },
+        {
+            "slug": "limit-of-sqrtx2--sqrttanx-as-x-to-inf",
+            "loc": "es",
+            "status": "ERROR",
+            "msg": "HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /api/limit?equation=sqrt%28x%5E2%29%20-%20sqrt%28tan%28x%29%29&to=0 (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+        },
+        {
+            "slug": "limit-of-5absx-over-1-over-x-as-x-to-1",
+            "loc": "",
+            "status": "FAIL",
+            "msg": "API 503"
+        },
+        {
+            "slug": "limit-of-5absx-over-1-over-x-as-x-to-1",
+            "loc": "es",
+            "status": "FAIL",
+            "msg": "API 503"
+        },
+        {
+            "slug": "limit-of-5absx-over-1-over-x-as-x-to-1",
+            "loc": "pt",
+            "status": "FAIL",
+            "msg": "API 503"
+        },
+        {
+            "slug": "limit-of-tanx--3x-over-sinx--sinx-as-x-to-0",
+            "loc": "es",
+            "status": "ERROR",
+            "msg": "'list' object has no attribute 'lower'"
+        },
+        {
+            "slug": "limit-of-sqrt3x2--sqrt4sinx-as-x-to--inf",
+            "loc": "pt",
+            "status": "ERROR",
+            "msg": "HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /api/limit?equation=sqrt%283%2Ax%5E2%29%20-%20sqrt%284%2Asin%28x%29%29&to=0 (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+        },
+        {
+            "slug": "limit-of-1-over-1-over-x--1-over-sinx-as-x-to-pi-2",
+            "loc": "pt",
+            "status": "ERROR",
+            "msg": "'list' object has no attribute 'lower'"
+        }
+    ]
+}

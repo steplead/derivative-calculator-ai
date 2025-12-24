@@ -19,26 +19,33 @@ client = OpenAI(
     api_key=api_key,
 )
 
-prompt = """
-You are a Calculus Tutor.
-1. Explain the derivative rule used for: x^2 => 2x
-2. Provide a step-by-step derivation (max 3 steps).
-3. Use LaTeX for math.
-
-Output strictly valid JSON:
-{
-    "explanation": "...",
-    "steps": "..."
-}
-"""
-
-print("⏳ Sending request to DeepSeek V3 (OpenRouter)...")
+prompt = f"""
+    You are an expert Calculus Tutor powered by DeepSeek AI.
+    Your goal is to explain the solution step-by-step using 'Chain of Thought' reasoning.
+    
+    Problem: Find the derivative of $$x^2$$
+    Result: $$2x$$
+    
+    Instructions:
+    1. Base Rule: Identify the primary calculus rule used.
+    2. Reasoning (Chain of Thought): Explain WHY this rule applies.
+    3. Execution: Show the step-by-step derivation.
+    4. Formatting: Use strict LaTeX for ALL math expressions, encapsulated in $$.
+    
+    Output strictly valid JSON:
+    {{
+        "explanation": "A concise sentence explaining the rule and approach.",
+        "steps": "Step 1: ...\\nStep 2: ..."
+    }}
+    """
+    
+print("⏳ Sending request to DeepSeek V3 (OpenRouter) with CoT Prompt...")
 
 try:
     completion = client.chat.completions.create(
         extra_headers={
-            "HTTP-Referer": "https://derivative-calculator.ai",
-            "X-Title": "Derivative Calculator",
+            "HTTP-Referer": "https://derivativecalculatorai.com",
+            "X-Title": "Derivative Calculator AI",
         },
         model="deepseek/deepseek-chat",
         messages=[
@@ -48,7 +55,7 @@ try:
         response_format={ "type": "json_object" },
         max_tokens=2048 
     )
-    
+
     content = completion.choices[0].message.content
     print("\n📩 Raw Response:")
     print(content)

@@ -6,6 +6,8 @@ import { getDictionary } from '@/app/dictionaries';
 import { getBaseUrl } from '@/utils/robust-url';
 import { Metadata } from 'next';
 
+import wikiData from '@/data/wiki.json';
+
 export const runtime = 'edge';
 
 type WikiTopic = {
@@ -19,21 +21,14 @@ type WikiTopic = {
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
     const { slug } = params;
-    const baseUrl = getBaseUrl();
+    const topic = wikiData.find((t: any) => t.slug === slug);
 
-    try {
-        const res = await fetch(`${baseUrl}/wiki.json`, { cache: 'force-cache' });
-        if (res.ok) {
-            const topics = await res.json();
-            const topic = topics.find((t: any) => t.slug === slug);
-            if (topic) {
-                return {
-                    title: `${topic.title} - Math Wiki | Derivative Calculator AI`,
-                    description: topic.description,
-                };
-            }
-        }
-    } catch (e) { }
+    if (topic) {
+        return {
+            title: `${topic.title} - Math Wiki | Derivative Calculator AI`,
+            description: topic.description,
+        };
+    }
 
     return { title: 'Wiki Topic' };
 }
@@ -42,23 +37,9 @@ export default async function WikiTopicPage({ params }: { params: { slug: string
     const { slug } = params;
     const headersList = await headers();
     const locale = headersList.get("x-next-locale") || "en";
-    const baseUrl = getBaseUrl();
 
-    let topic: WikiTopic | null = null;
-    let allTopics: WikiTopic[] = [];
-
-    try {
-        const res = await fetch(`${baseUrl}/wiki.json`, {
-            cache: 'force-cache',
-            next: { revalidate: 3600 }
-        });
-        if (res.ok) {
-            allTopics = await res.json();
-            topic = allTopics.find(t => t.slug === slug) || null;
-        }
-    } catch (e) {
-        console.error("Failed to fetch wiki topic:", e);
-    }
+    const allTopics: WikiTopic[] = wikiData;
+    const topic = allTopics.find(t => t.slug === slug) || null;
 
     if (!topic) {
         notFound();

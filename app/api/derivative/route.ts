@@ -15,11 +15,29 @@ export async function GET(req: NextRequest) {
         return NextResponse.json({ error: "No equation provided" }, { status: 400 });
     }
 
+    // Heuristic Check: Ensure it doesn't look like a descriptive sentence/slug
+    const hasMultipleHyphens = (expression.match(/-/g) || []).length > 2;
+    // Math usually contains symbols, or no hyphens if it's a single variable
+    const hasMathSymbols = /[\+\*\/\^\(\)=]/.test(expression);
+    const looksLikeDescriptive = /[a-zA-Z]{4,}-[a-zA-Z]{4,}/.test(expression); // e.g. "derivative-of"
+    const looksLikeMath = hasMathSymbols || (expression.length < 15 && !looksLikeDescriptive);
+
+    if (hasMultipleHyphens || !looksLikeMath || expression.length > 100) {
+        return NextResponse.json({ error: "Invalid mathematical expression" }, { status: 400 });
+    }
+
     try {
         // 1. Calculate Derivative with Nerdamer (local verification)
-        const d = nerdamer(`diff(${expression}, x)`);
-        const solutionLatex = d.toTeX();
-        const solutionRaw = d.toString();
+        let solutionLatex = "";
+        let solutionRaw = "";
+        try {
+            const d = nerdamer(`diff(${expression}, x)`);
+            solutionLatex = d.toTeX();
+            solutionRaw = d.toString();
+        } catch (nerdError) {
+            console.error("Nerdamer Error:", nerdError);
+            // We will let AI provide the solution if Nerdamer fails
+        }
 
         let stepsContent = "Step-by-step solution unavailable (AI disabled).";
         let aiExplanation = "AI explanation unavailable (AI disabled).";
@@ -44,27 +62,17 @@ export async function GET(req: NextRequest) {
                         apiKey: apiKey,
                     });
 
-                    const prompt = `
-                    You are a Calculus Tutor.
-                    1. Explain the derivative rule used for: d/dx (${expression})
-                    2. Provide a step-by-step derivation (max 3 steps).
-                    3. Use LaTeX for math (e.g. $$ x^2 $$).
-                    
-                    Output strictly valid JSON:
-                    {
-                        "explanation": "Simple sentence explaining the rule...",
-                        "steps": "LaTeX formatted steps..."
-                    }
-                    `;
+                    const prompt = `Solve d/dx(${expression}). 1. Brief rule explanation. 2. Max 3 LaTeX steps. JSON format: {"explanation": "...", "steps": "..."}`;
 
                     const completion = await client.chat.completions.create({
                         model: "deepseek/deepseek-chat",
                         messages: [
-                            { role: "system", content: "You are a helpful math tutor. Output JSON only." },
+                            { role: "system", content: "Math tutor. JSON only. Be extremely brief." },
                             { role: "user", content: prompt }
                         ],
                         // @ts-ignore - OpenRouter specific
-                        response_format: { type: "json_object" }
+                        response_format: { type: "json_object" },
+                        max_tokens: 1000
                     });
 
                     const content = completion.choices[0].message?.content;

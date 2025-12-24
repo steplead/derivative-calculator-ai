@@ -1,8 +1,36 @@
 
+export async function generateMetadata() {
+    let locale = "en";
+    let dict = getDictionary("en");
+
+    try {
+        const headersList = await headers();
+        locale = headersList.get("x-next-locale") || "en";
+        dict = getDictionary(locale);
+    } catch (e) {
+        console.error("Wiki metadata error:", e);
+    }
+
+    return {
+        title: `Math Wiki - Derivative Calculator AI`,
+        description: `Learn the fundamental rules and concepts of calculus in our Math Wiki.`,
+        alternates: {
+            canonical: '/wiki',
+            languages: {
+                'en': '/wiki',
+                'es': '/es/wiki',
+                'pt': '/pt/wiki',
+            },
+        },
+    };
+}
+
 import Link from 'next/link';
 import { headers } from 'next/headers';
 import { getDictionary } from '../dictionaries';
 import { getBaseUrl } from '@/utils/robust-url';
+
+import wikiData from '@/data/wiki.json';
 
 export const runtime = 'edge';
 
@@ -11,20 +39,7 @@ export default async function WikiHome() {
     const locale = headersList.get("x-next-locale") || "en";
     const dict = getDictionary(locale);
 
-    const baseUrl = getBaseUrl();
-    let wikiTopics = [];
-
-    try {
-        const res = await fetch(`${baseUrl}/wiki.json`, {
-            cache: 'force-cache',
-            next: { revalidate: 3600 }
-        });
-        if (res.ok) {
-            wikiTopics = await res.json();
-        }
-    } catch (e) {
-        console.error("Failed to fetch wiki topics:", e);
-    }
+    const wikiTopics = wikiData;
 
     // Group topics by category
     const categories = wikiTopics.reduce((acc: any, topic: any) => {

@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "generate-sitemap": "node scripts/generate-sitemap.js",
-    "pages:build": "npx @cloudflare/next-on-pages"
+    "pages:build": "npm run generate-sitemap && npx @cloudflare/next-on-pages"
   },
   "dependencies": {
     "@next/third-parties": "^14.2.35",

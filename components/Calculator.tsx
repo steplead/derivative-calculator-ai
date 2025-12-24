@@ -21,8 +21,8 @@ export default function Calculator({ initialEquation = '', initialLimitTo = '0',
     const equationParam = searchParams.get('equation');
     const limitToParam = searchParams.get('to');
 
-    const [input, setInput] = useState((equationParam || initialEquation || '').toString());
-    const [limitTo, setLimitTo] = useState((limitToParam || initialLimitTo || '0').toString());
+    const [input, setInput] = useState((equationParam || initialEquation || '').toString().replace(/^null$/i, ''));
+    const [limitTo, setLimitTo] = useState((limitToParam || initialLimitTo || '0').toString().replace(/^null$/i, '0'));
     const [result, setResult] = useState<any>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -42,8 +42,8 @@ export default function Calculator({ initialEquation = '', initialLimitTo = '0',
     };
 
     useEffect(() => {
-        const eq = (equationParam || initialEquation || '').toString();
-        const to = (limitToParam || initialLimitTo || '0').toString();
+        const eq = (equationParam || initialEquation || '').toString().replace(/^null$/i, '');
+        const to = (limitToParam || initialLimitTo || '0').toString().replace(/^null$/i, '0');
 
         if (eq) {
             setInput(eq);
@@ -53,8 +53,8 @@ export default function Calculator({ initialEquation = '', initialLimitTo = '0',
     }, [equationParam, limitToParam, initialEquation, initialLimitTo, mode]);
 
     const handleCalculate = async (equationToSolve = input, targetToSolve = limitTo) => {
-        const formula = (equationToSolve || '').toString();
-        const target = (targetToSolve || '0').toString();
+        const formula = (equationToSolve || '').toString().replace(/^null$/i, '');
+        const target = (targetToSolve || '0').toString().replace(/^null$/i, '0');
         if (!formula) return;
 
         setLoading(true);

@@ -303,13 +303,21 @@ export default async function ProblemPage({ params }: { params: { slug: string }
             notFound();
         }
 
-        // SANITIZE: Ensure no null values crash the render
+        // SANITIZE: Ensure no null values or "null" strings crash the render
+        const problemSlug = (problem.slug || slug || '').toString();
+        const problemFormula = (problem.formula || decodeURIComponent(slug) || '').toString().replace(/^null$/i, '');
+        const problemLimitTo = (problem.limitTo || '0').toString().replace(/^null$/i, '0');
+
+        if (!problemFormula) {
+            notFound();
+        }
+
         const safeProblem: Problem = {
-            slug: problem.slug || slug,
-            formula: problem.formula || decodeURIComponent(slug),
-            title: problem.title || "Math Problem",
+            slug: problemSlug,
+            formula: problemFormula,
+            title: problem.title || `Problem ${problemFormula}`,
             type: problem.type || 'derivative',
-            limitTo: problem.limitTo || '0',
+            limitTo: problemLimitTo,
             description: problem.description || ""
         };
 

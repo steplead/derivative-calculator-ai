@@ -37,7 +37,11 @@ function parseSlugToMath(slug: string): Problem | null {
         const limitMatch = formula.match(/(.*?)-(?:to|as-x-approaches)-(.*)/i);
         if (limitMatch) {
             formula = limitMatch[1];
-            limitTo = limitMatch[2].replace(/-/g, '.'); // Handle negative numbers if they use hyphens
+            // Handle the limit target (to-X)
+            limitTo = limitMatch[2]
+                .replace(/^minus-/i, '-') // e.g. minus-2 -> -2
+                .replace(/^-+/g, '-')     // e.g. --2 -> -2
+                .replace(/(\d)-(\d)/g, '$1.$2'); // e.g. 1-5 -> 1.5
         }
     } else if (slug.startsWith('derivative-of-')) {
         type = 'derivative';

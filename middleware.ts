@@ -13,6 +13,17 @@ export function middleware(request: NextRequest) {
         (l) => pathname.startsWith(`/${l}/`) || pathname === `/${l}`
     );
 
+    const url = request.nextUrl.clone();
+    const host = request.headers.get("host") || "";
+
+    // 1. Enforce Non-WWW and HTTPS (Production only ideally, but safe everywhere here)
+    if (host.startsWith("www.")) {
+        const newHost = host.replace("www.", "");
+        url.host = newHost;
+        url.protocol = "https";
+        return NextResponse.redirect(url, 301);
+    }
+
     if (locale) {
         // Remove locale from path to get the underlying route
         // e.g. /es/derivative-of-sin-x -> /derivative-of-sin-x

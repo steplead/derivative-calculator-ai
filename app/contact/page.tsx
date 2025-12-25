@@ -1,9 +1,27 @@
 import { Mail, Globe, Shield } from "lucide-react";
 
-export const metadata = {
-    title: "Contact Support | Derivative Calculator AI",
-    description: "Get in touch with our engineering team for support, partnership inquiries, or feedback on our mathematical toolkit.",
-};
+import { headers } from 'next/headers';
+import type { Metadata } from 'next';
+
+export async function generateMetadata(): Promise<Metadata> {
+    const headersList = await headers();
+    const locale = headersList.get("x-next-locale") || "en";
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://derivativecalculatorai.com';
+    const url = locale === 'en' ? `${siteUrl}/contact` : `${siteUrl}/${locale}/contact`;
+
+    return {
+        title: "Contact Support | Derivative Calculator AI",
+        description: "Get in touch with our engineering team for support, partnership inquiries, or feedback on our mathematical toolkit.",
+        alternates: {
+            canonical: url,
+            languages: {
+                'en': `${siteUrl}/contact`,
+                'es': `${siteUrl}/es/contact`,
+                'pt': `${siteUrl}/pt/contact`,
+            }
+        }
+    };
+}
 
 export default function ContactPage() {
     return (

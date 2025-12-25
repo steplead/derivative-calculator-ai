@@ -1,0 +1,283 @@
+{
+  "timestamp": "2025-12-24T21:36:07.304037",
+  "total": 9477,
+  "success": 9431,
+  "failures": [
+    {
+      "url": "https://derivativecalculatorai.com/es/derivative-of-e-minus-to-minus-the-minus-x-minus-over-minus-x-minus-to-minus-the-minus-2",
+      "status": 0,
+      "success": false,
+      "reason": "Error: HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /es/derivative-of-e-minus-to-minus-the-minus-x-minus-over-minus-x-minus-to-minus-the-minus-2 (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+    },
+    {
+      "url": "https://derivativecalculatorai.com/derivative-of-x-minus-to-minus-the-minus-7-minus-plus-minus-x-minus-to-minus-the-minus-4",
+      "status": 0,
+      "success": false,
+      "reason": "Error: HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /derivative-of-x-minus-to-minus-the-minus-7-minus-plus-minus-x-minus-to-minus-the-minus-4 (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+    },
+    {
+      "url": "https://derivativecalculatorai.com/derivative-of-x-minus-to-minus-the-minus-2asinx",
+      "status": 0,
+      "success": false,
+      "reason": "Error: HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /derivative-of-x-minus-to-minus-the-minus-2asinx (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+    },
+    {
+      "url": "https://derivativecalculatorai.com/derivative-of-x-minus-to-minus-the-minus-5sinhx",
+      "status": 0,
+      "success": false,
+      "reason": "Error: HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /derivative-of-x-minus-to-minus-the-minus-5sinhx (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+    },
+    {
+      "url": "https://derivativecalculatorai.com/derivative-of-4x-minus-plus-minus-1-minus-to-minus-the-minus-4",
+      "status": 0,
+      "success": false,
+      "reason": "Error: HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /derivative-of-4x-minus-plus-minus-1-minus-to-minus-the-minus-4 (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+    },
+    {
+      "url": "https://derivativecalculatorai.com/pt/derivative-of-5x-minus-3-minus-to-minus-the-minus-2",
+      "status": 0,
+      "success": false,
+      "reason": "Error: HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /pt/derivative-of-5x-minus-3-minus-to-minus-the-minus-2 (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+    },
+    {
+      "url": "https://derivativecalculatorai.com/derivative-of-5x-minus-plus-minus-5-minus-to-minus-the-minus-2",
+      "status": 0,
+      "success": false,
+      "reason": "Error: HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /derivative-of-5x-minus-plus-minus-5-minus-to-minus-the-minus-2 (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+    },
+    {
+      "url": "https://derivativecalculatorai.com/es/derivative-of-sqrt1-minus-x-minus-to-minus-the-minus-2",
+      "status": 0,
+      "success": false,
+      "reason": "Timeout"
+    },
+    {
+      "url": "https://derivativecalculatorai.com/pt/derivative-of-x-minus-to-minus-the-minus-2-minus-1-minus-to-minus-the-minus-3",
+      "status": 0,
+      "success": false,
+      "reason": "Error: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))"
+    },
+    {
+      "url": "https://derivativecalculatorai.com/es/derivative-of-x-minus-to-minus-the-minus-3-minus-plus-minus-2-minus-to-minus-the-minus-4",
+      "status": 0,
+      "success": false,
+      "reason": "Error: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))"
+    },
+    {
+      "url": "https://derivativecalculatorai.com/es/derivative-of-tanx-minus-to-minus-the-minus-6",
+      "status": 0,
+      "success": false,
+      "reason": "Error: HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /es/derivative-of-tanx-minus-to-minus-the-minus-6 (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+    },
+    {
+      "url": "https://derivativecalculatorai.com/es/derivative-of-1-minus-over-minus-x-minus-to-minus-the-minus-2-minus-plus-minus-1-minus-to-minus-the-minus-2",
+      "status": 0,
+      "success": false,
+      "reason": "Error: HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /es/derivative-of-1-minus-over-minus-x-minus-to-minus-the-minus-2-minus-plus-minus-1-minus-to-minus-the-minus-2 (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+    },
+    {
+      "url": "https://derivativecalculatorai.com/pt/derivative-of-x-minus-to-minus-the-minus-7-minus-over-minus-2",
+      "status": 0,
+      "success": false,
+      "reason": "Timeout"
+    },
+    {
+      "url": "https://derivativecalculatorai.com/derivative-of-e-minus-to-minus-the-minus-5x-minus-plus-minus-2",
+      "status": 0,
+      "success": false,
+      "reason": "Error: HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /derivative-of-e-minus-to-minus-the-minus-5x-minus-plus-minus-2 (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+    },
+    {
+      "url": "https://derivativecalculatorai.com/es/derivative-of-atanx-minus-over-minus-2",
+      "status": 0,
+      "success": false,
+      "reason": "Error: HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /es/derivative-of-atanx-minus-over-minus-2 (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+    },
+    {
+      "url": "https://derivativecalculatorai.com/integral-of-4cosx",
+      "status": 0,
+      "success": false,
+      "reason": "Error: HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /integral-of-4cosx (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+    },
+    {
+      "url": "https://derivativecalculatorai.com/pt/integral-of-3x2-+-1-over-2x3-+-3x4",
+      "status": 0,
+      "success": false,
+      "reason": "Error: HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /pt/integral-of-3x2-+-1-over-2x3-+-3x4 (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+    },
+    {
+      "url": "https://derivativecalculatorai.com/integral-of-3x4-+-2x-+-5x2",
+      "status": 0,
+      "success": false,
+      "reason": "Error: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))"
+    },
+    {
+      "url": "https://derivativecalculatorai.com/es/integral-of-21-over-sqrt1-x2-+-4x4",
+      "status": 0,
+      "success": false,
+      "reason": "Error: HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /es/integral-of-21-over-sqrt1-x2-+-4x4 (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+    },
+    {
+      "url": "https://derivativecalculatorai.com/pt/integral-of-3tanx-+-3tanx",
+      "status": 0,
+      "success": false,
+      "reason": "Error: HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /pt/integral-of-3tanx-+-3tanx (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+    },
+    {
+      "url": "https://derivativecalculatorai.com/integral-of-4x4--1-over-1+x2",
+      "status": 0,
+      "success": false,
+      "reason": "Timeout"
+    },
+    {
+      "url": "https://derivativecalculatorai.com/pt/integral-of-2secx2-+-4secx2",
+      "status": 0,
+      "success": false,
+      "reason": "Timeout"
+    },
+    {
+      "url": "https://derivativecalculatorai.com/es/integral-of-lnx--lnx-+-2cosx",
+      "status": 0,
+      "success": false,
+      "reason": "Error: HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /es/integral-of-lnx--lnx-+-2cosx (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+    },
+    {
+      "url": "https://derivativecalculatorai.com/integral-of--1-over-1+x2-+-1-over-21-over-x-+-2sqrtx",
+      "status": 0,
+      "success": false,
+      "reason": "Error: HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /integral-of--1-over-1+x2-+-1-over-21-over-x-+-2sqrtx (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+    },
+    {
+      "url": "https://derivativecalculatorai.com/integral-of-31-over-1+x2-+-3x2",
+      "status": 0,
+      "success": false,
+      "reason": "Error: HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /integral-of-31-over-1+x2-+-3x2 (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+    },
+    {
+      "url": "https://derivativecalculatorai.com/es/integral-of-4sinx-+-2x2-+-sqrtx",
+      "status": 0,
+      "success": false,
+      "reason": "Error: HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /es/integral-of-4sinx-+-2x2-+-sqrtx (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+    },
+    {
+      "url": "https://derivativecalculatorai.com/integral-of-2ex-+-1-over-x-+-1-over-21-over-sqrt1-x2",
+      "status": 0,
+      "success": false,
+      "reason": "Error: HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /integral-of-2ex-+-1-over-x-+-1-over-21-over-sqrt1-x2 (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+    },
+    {
+      "url": "https://derivativecalculatorai.com/integral-of-5x4-+-3secx2",
+      "status": 0,
+      "success": false,
+      "reason": "Error: HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /integral-of-5x4-+-3secx2 (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+    },
+    {
+      "url": "https://derivativecalculatorai.com/es/integral-of-1-over-2x-+-1-over-x2",
+      "status": 0,
+      "success": false,
+      "reason": "Error: HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /es/integral-of-1-over-2x-+-1-over-x2 (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+    },
+    {
+      "url": "https://derivativecalculatorai.com/integral-of-2sqrtx-+-1-over-2x2",
+      "status": 0,
+      "success": false,
+      "reason": "Error: HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /integral-of-2sqrtx-+-1-over-2x2 (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+    },
+    {
+      "url": "https://derivativecalculatorai.com/pt/integral-of-1-over-2tanx-+-1-over-2cosx",
+      "status": 0,
+      "success": false,
+      "reason": "Error: HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /pt/integral-of-1-over-2tanx-+-1-over-2cosx (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+    },
+    {
+      "url": "https://derivativecalculatorai.com/integral-of-5tanx-+-4sqrtx",
+      "status": 0,
+      "success": false,
+      "reason": "Timeout"
+    },
+    {
+      "url": "https://derivativecalculatorai.com/pt/limit-of-31-over-x-5x2-over-1-over-x2-as-x-to-pi",
+      "status": 0,
+      "success": false,
+      "reason": "Error: HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /pt/limit-of-31-over-x-5x2-over-1-over-x2-as-x-to-pi (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+    },
+    {
+      "url": "https://derivativecalculatorai.com/limit-of-3ex-1-over-x2-over-lnx-as-x-to--2",
+      "status": 0,
+      "success": false,
+      "reason": "Error: HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /limit-of-3ex-1-over-x2-over-lnx-as-x-to--2 (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+    },
+    {
+      "url": "https://derivativecalculatorai.com/es/limit-of-4x-5x2-over-sqrtx-as-x-to-pi-2",
+      "status": 0,
+      "success": false,
+      "reason": "Error: HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /es/limit-of-4x-5x2-over-sqrtx-as-x-to-pi-2 (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+    },
+    {
+      "url": "https://derivativecalculatorai.com/es/limit-of-5x3-over-lnx-as-x-to--1",
+      "status": 0,
+      "success": false,
+      "reason": "Error: HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /es/limit-of-5x3-over-lnx-as-x-to--1 (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+    },
+    {
+      "url": "https://derivativecalculatorai.com/limit-of-3x2-4sinx-over-cosx-as-x-to-1",
+      "status": 0,
+      "success": false,
+      "reason": "Error: HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /limit-of-3x2-4sinx-over-cosx-as-x-to-1 (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+    },
+    {
+      "url": "https://derivativecalculatorai.com/pt/limit-of-31-over-x22--1-over-x2-as-x-to--2",
+      "status": 0,
+      "success": false,
+      "reason": "Error: HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /pt/limit-of-31-over-x22--1-over-x2-as-x-to--2 (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+    },
+    {
+      "url": "https://derivativecalculatorai.com/pt/limit-of-sqrtabsx--sqrt3absx-as-x-to--2",
+      "status": 0,
+      "success": false,
+      "reason": "Error: HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /pt/limit-of-sqrtabsx--sqrt3absx-as-x-to--2 (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+    },
+    {
+      "url": "https://derivativecalculatorai.com/es/limit-of-4cosx2--1-over-x2-as-x-to-inf",
+      "status": 0,
+      "success": false,
+      "reason": "Timeout"
+    },
+    {
+      "url": "https://derivativecalculatorai.com/es/limit-of-sqrtx2--4absx2-as-x-to-0",
+      "status": 0,
+      "success": false,
+      "reason": "Error: HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /es/limit-of-sqrtx2--4absx2-as-x-to-0 (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+    },
+    {
+      "url": "https://derivativecalculatorai.com/pt/limit-of-sinx-4sqrtx-over-absx-as-x-to--2",
+      "status": 0,
+      "success": false,
+      "reason": "Timeout"
+    },
+    {
+      "url": "https://derivativecalculatorai.com/es/limit-of-2x3-over-4absx-as-x-to-pi",
+      "status": 0,
+      "success": false,
+      "reason": "Error: HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /es/limit-of-2x3-over-4absx-as-x-to-pi (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+    },
+    {
+      "url": "https://derivativecalculatorai.com/pt/limit-of-3lnx2--x22-as-x-to-pi",
+      "status": 0,
+      "success": false,
+      "reason": "Timeout"
+    },
+    {
+      "url": "https://derivativecalculatorai.com/es/limit-of-1-over-sqrtx--1-over-4ex-as-x-to--1",
+      "status": 0,
+      "success": false,
+      "reason": "Error: HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /es/limit-of-1-over-sqrtx--1-over-4ex-as-x-to--1 (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+    },
+    {
+      "url": "https://derivativecalculatorai.com/es/limit-of-3cosx2--cosx2-as-x-to-pi-2",
+      "status": 0,
+      "success": false,
+      "reason": "Error: HTTPSConnectionPool(host='derivativecalculatorai.com', port=443): Max retries exceeded with url: /es/limit-of-3cosx2--cosx2-as-x-to-pi-2 (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)')))"
+    }
+  ]
+}

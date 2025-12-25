@@ -1,7 +1,25 @@
-export const metadata = {
-    title: "About Us | Derivative Calculator AI",
-    description: "Learn more about the mission and technology behind the world's most advanced AI-first mathematical toolkit.",
-};
+import { headers } from 'next/headers';
+import type { Metadata } from 'next';
+
+export async function generateMetadata(): Promise<Metadata> {
+    const headersList = await headers();
+    const locale = headersList.get("x-next-locale") || "en";
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://derivativecalculatorai.com';
+    const url = locale === 'en' ? `${siteUrl}/about` : `${siteUrl}/${locale}/about`;
+
+    return {
+        title: "About Us | Derivative Calculator AI",
+        description: "Learn more about the mission and technology behind the world's most advanced AI-first mathematical toolkit.",
+        alternates: {
+            canonical: url,
+            languages: {
+                'en': `${siteUrl}/about`,
+                'es': `${siteUrl}/es/about`,
+                'pt': `${siteUrl}/pt/about`,
+            }
+        }
+    };
+}
 
 export default function AboutPage() {
     return (

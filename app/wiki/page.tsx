@@ -11,15 +11,18 @@ export async function generateMetadata() {
         console.error("Wiki metadata error:", e);
     }
 
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://derivativecalculatorai.com';
+    const url = locale === 'en' ? `${siteUrl}/wiki` : `${siteUrl}/${locale}/wiki`;
+
     return {
         title: `Math Wiki - Derivative Calculator AI`,
         description: `Learn the fundamental rules and concepts of calculus in our Math Wiki.`,
         alternates: {
-            canonical: '/wiki',
+            canonical: url,
             languages: {
-                'en': '/wiki',
-                'es': '/es/wiki',
-                'pt': '/pt/wiki',
+                'en': `${siteUrl}/wiki`,
+                'es': `${siteUrl}/es/wiki`,
+                'pt': `${siteUrl}/pt/wiki`,
             },
         },
     };

@@ -1,12 +1,26 @@
 import type { Metadata } from 'next';
 
-export const metadata: Metadata = {
-    title: 'Privacy Policy - Derivative Calculator AI',
-    description: 'Privacy Policy for Derivative Calculator AI and Chrome Extension.',
-    alternates: {
-        canonical: 'https://derivativecalculatorai.com/privacy'
-    }
-};
+import { headers } from 'next/headers';
+
+export async function generateMetadata(): Promise<Metadata> {
+    const headersList = await headers();
+    const locale = headersList.get("x-next-locale") || "en";
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://derivativecalculatorai.com';
+    const url = locale === 'en' ? `${siteUrl}/privacy` : `${siteUrl}/${locale}/privacy`;
+
+    return {
+        title: 'Privacy Policy - Derivative Calculator AI',
+        description: 'Privacy Policy for Derivative Calculator AI and Chrome Extension.',
+        alternates: {
+            canonical: url,
+            languages: {
+                'en': `${siteUrl}/privacy`,
+                'es': `${siteUrl}/es/privacy`,
+                'pt': `${siteUrl}/pt/privacy`,
+            }
+        }
+    };
+}
 
 export default function PrivacyPage() {
     return (

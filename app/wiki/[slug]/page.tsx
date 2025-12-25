@@ -22,11 +22,23 @@ type WikiTopic = {
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
     const { slug } = params;
     const topic = wikiData.find((t: any) => t.slug === slug);
+    const headersList = await headers();
+    const locale = headersList.get("x-next-locale") || "en";
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://derivativecalculatorai.com';
+    const url = locale === 'en' ? `${siteUrl}/wiki/${slug}` : `${siteUrl}/${locale}/wiki/${slug}`;
 
     if (topic) {
         return {
             title: `${topic.title} - Math Wiki | Derivative Calculator AI`,
             description: topic.description,
+            alternates: {
+                canonical: url,
+                languages: {
+                    'en': `${siteUrl}/wiki/${slug}`,
+                    'es': `${siteUrl}/es/wiki/${slug}`,
+                    'pt': `${siteUrl}/pt/wiki/${slug}`,
+                }
+            }
         };
     }
 

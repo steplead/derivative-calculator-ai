@@ -29,15 +29,18 @@ export async function generateMetadata() {
 
     const h1 = dict?.directory?.h1 || "All Problems";
 
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://derivativecalculatorai.com';
+    const url = locale === 'en' ? `${siteUrl}/directory` : `${siteUrl}/${locale}/directory`;
+
     return {
         title: `${h1} - Derivative Calculator AI`,
         description: 'Browse our complete list of derivative problems and solutions.',
         alternates: {
-            canonical: '/directory',
+            canonical: url,
             languages: {
-                'en': '/directory',
-                'es': '/es/directory',
-                'pt': '/pt/directory',
+                'en': `${siteUrl}/directory`,
+                'es': `${siteUrl}/es/directory`,
+                'pt': `${siteUrl}/pt/directory`,
             },
         },
     };

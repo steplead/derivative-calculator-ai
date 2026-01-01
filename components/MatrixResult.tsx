@@ -55,13 +55,19 @@ export default function MatrixResult({ result, steps, error, isLoading }: Matrix
                         {/* Simple parser for steps, assuming simple text + latex for now */}
                         <div className="text-gray-300 leading-relaxed">
                             {/* Replace $$...$$ with MathDisplay or simple render if MathDisplay handles blocks */}
-                            {/* Current MathDisplay might handle simple strings or just latex. 
+                            {/* Current MathDisplay might handle simple strings or just latex.
                      For safety, we treat steps as a single block containing LaTeX. */}
-                            <p>{steps.split('$$')[0]}</p>
-                            {steps.includes('$$') && (
-                                <div className="my-4">
-                                    <MathDisplay latex={steps.split('$$')[1]} />
-                                </div>
+                            {typeof steps === 'string' ? (
+                                <>
+                                    <p>{steps.split('$$')[0]}</p>
+                                    {steps.includes('$$') && (
+                                        <div className="my-4">
+                                            <MathDisplay latex={steps.split('$$')[1]} />
+                                        </div>
+                                    )}
+                                </>
+                            ) : (
+                                <p>{String(steps)}</p>
                             )}
                         </div>
                     </div>

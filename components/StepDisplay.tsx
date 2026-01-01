@@ -5,14 +5,27 @@ import dynamic from 'next/dynamic';
 const Latex = dynamic(() => import('react-latex-next'), { ssr: false });
 
 interface StepDisplayProps {
-    content: string;
+    content: string | string[];
 }
 
 export default function StepDisplay({ content }: StepDisplayProps) {
     if (!content) return null;
 
-    // Split by literal newline characters
-    const steps = content.split('\n').filter(step => step.trim().length > 0);
+    // Handle both string and array formats
+    let steps: string[] = [];
+
+    if (Array.isArray(content)) {
+        // API returned an array
+        steps = content;
+    } else if (typeof content === 'string') {
+        // API returned a string with newlines
+        steps = content.split('\n').filter(step => step.trim().length > 0);
+    } else {
+        // Unexpected type, convert to string
+        steps = [String(content)];
+    }
+
+    if (steps.length === 0) return null;
 
     return (
         <div className="space-y-3">

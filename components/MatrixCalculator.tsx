@@ -58,9 +58,9 @@ export default function MatrixCalculator({ dict }: MatrixCalculatorProps) {
                 <div className="text-center mb-12">
                     <h1 className="text-4xl md:text-5xl font-bold mb-4">
                         <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">
-                            {dict.matrix.h1.split(' ')[0]}
+                            {(typeof dict.matrix.h1 === 'string' ? dict.matrix.h1.split(' ')[0] : 'Matrix')}
                         </span>{' '}
-                        <span>{dict.matrix.h1.split(' ').slice(1).join(' ')}</span>
+                        <span>{typeof dict.matrix.h1 === 'string' ? dict.matrix.h1.split(' ').slice(1).join(' ') : 'Calculator'}</span>
                     </h1>
                     <p className="text-gray-600 dark:text-gray-400 text-lg">
                         {dict.matrix.subtitle}

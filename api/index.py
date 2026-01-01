@@ -85,26 +85,8 @@ def get_problem(slug):
 def get_ai_explanation(problem_type, expression, result, steps_raw=""):
     if not HAS_AI:
         return "AI explanation unavailable (Missing API Key)", "Step-by-step solution unavailable."
-        
-    prompt = f"""
-    You are an expert Calculus Tutor powered by DeepSeek AI.
-    Your goal is to explain the solution step-by-step using 'Chain of Thought' reasoning.
-    
-    Problem: Find the {problem_type} of $${expression}$$
-    Result: $${result}$$
-    
-    Instructions:
-    1. Base Rule: Identify the primary calculus rule used (e.g., Chain Rule, Integration by Parts, L'Hôpital's Rule).
-    2. Reasoning (Chain of Thought): Explain WHY this rule applies and how to break down the problem.
-    3. Execution: Show the step-by-step derivation clearly.
-    4. Formatting: Use strict LaTeX for ALL math expressions, encapsulated in $$.
-    
-    Output strictly valid JSON:
-    {{
-        "explanation": "A concise sentence explaining the rule and approach.",
-        "steps": "Step 1: Identify u and v...\\nStep 2: Differentiate...\\nStep 3: Substitute back..."
-    }}
-    """
+
+    prompt = f"Find the {problem_type} of {expression} = {result}. JSON: {{\"explanation\": \"1 sentence rule\", \"steps\": \"max 3 LaTeX steps\"}}"
     
     try:
         completion = client.chat.completions.create(
@@ -118,7 +100,7 @@ def get_ai_explanation(problem_type, expression, result, steps_raw=""):
                 {"role": "user", "content": prompt}
             ],
             response_format={ "type": "json_object" },
-            max_tokens=2048
+            max_tokens=300
         )
         ai_content = completion.choices[0].message.content
         ai_data = json.loads(ai_content)

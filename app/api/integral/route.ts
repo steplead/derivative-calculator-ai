@@ -57,17 +57,17 @@ export async function GET(req: NextRequest) {
                         apiKey: apiKey,
                     });
 
-                    const prompt = `Integrate ${expression}. 1. Brief rule. 2. Max 3 LaTeX steps. JSON format: {"explanation": "...", "steps": "..."}`;
+                    const prompt = `Integral of ${expression}. JSON: {"explanation": "1 sentence", "steps": "max 3 steps"}`;
 
                     const completion = await client.chat.completions.create({
                         model: "deepseek/deepseek-chat",
                         messages: [
-                            { role: "system", content: "Math tutor. JSON only. Be extremely brief." },
+                            { role: "system", content: "Math tutor. JSON only. Be brief." },
                             { role: "user", content: prompt }
                         ],
                         // @ts-ignore
                         response_format: { type: "json_object" },
-                        max_tokens: 1000
+                        max_tokens: 300
                     });
 
                     const content = completion.choices[0].message?.content;

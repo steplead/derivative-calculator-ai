@@ -1,4 +1,5 @@
 import Calculator from '@/components/Calculator';
+import DynamicRecommendations from '@/components/DynamicRecommendations';
 export const runtime = 'edge';
 import Link from 'next/link';
 import { Suspense } from 'react';
@@ -146,6 +147,14 @@ export default async function Home() {
               {dict.home.viewAll} &rarr;
             </Link>
           </div>
+        </div>
+
+        {/* Dynamic Recommendations - Protocol 5 "Stir Fry" Internal Linking */}
+        <div className="mt-16">
+          <Suspense fallback={<div className="text-center py-12">Loading recommendations...</div>}>
+            {/* @ts-ignore */}
+            <DynamicRecommendations baseUrl={baseUrl} locale={locale} count={8} refreshInterval={60000} />
+          </Suspense>
         </div>
       </div>
     </div>

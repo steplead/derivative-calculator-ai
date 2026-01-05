@@ -8,8 +8,8 @@ const BASE_URL = 'https://derivativecalculatorai.com';
 function generateSitemap() {
   const locales = ['', 'es', 'pt'];
 
-  // Static Pages
-  const staticPages = ['', 'integral', 'limit', 'matrix', 'ode', 'directory', 'wiki'];
+  // Static Pages (updated with new SEO architecture)
+  const staticPages = ['', 'integral', 'limit', 'matrix', 'ode', 'directory', 'wiki', 'problems', 'calculators'];
 
   const staticUrls = staticPages.flatMap(page => {
     return locales.map(locale => {

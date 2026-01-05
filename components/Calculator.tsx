@@ -14,9 +14,10 @@ type CalculatorProps = {
     initialLimitTo?: string;
     mode?: 'derivative' | 'integral' | 'limit' | 'ode';
     dict?: any;
+    embedded?: boolean;
 };
 
-export default function Calculator({ initialEquation = '', initialLimitTo = '0', mode = 'derivative', dict }: CalculatorProps) {
+export default function Calculator({ initialEquation = '', initialLimitTo = '0', mode = 'derivative', dict, embedded = false }: CalculatorProps) {
     const searchParams = useSearchParams();
     const equationParam = searchParams.get('equation');
     const limitToParam = searchParams.get('to');
@@ -238,11 +239,13 @@ export default function Calculator({ initialEquation = '', initialLimitTo = '0',
                     </div>
                 )}
 
-                {/* Ad Unit */}
-                <div className="mt-8">
-                    {/* Use a placeholder slot ID for now */}
-                    <AdShell type="donation" className="mt-8" />
-                </div>
+                {/* Ad Unit - Hide in embedded mode */}
+                {!embedded && (
+                    <div className="mt-8">
+                        {/* Use a placeholder slot ID for now */}
+                        <AdShell type="donation" className="mt-8" />
+                    </div>
+                )}
             </div>
         </div>
     );

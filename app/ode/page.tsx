@@ -1,4 +1,5 @@
 import Calculator from '@/components/Calculator';
+import EmbedWidget from '@/components/EmbedWidget';
 import Link from 'next/link';
 import { Suspense } from 'react';
 import { headers } from 'next/headers';
@@ -81,6 +82,16 @@ export default async function ODEPage() {
                         </ul>
                     </div>
                 </div>
+            </div>
+
+            {/* Embed Widget - Link Magnet Strategy */}
+            <div className="max-w-4xl mx-auto mt-16 pt-8 border-t border-gray-200 dark:border-slate-800">
+                <EmbedWidget
+                    problemSlug="y-prime-plus-y-equals-x"
+                    problemFormula="y' + y = x"
+                    problemType="ode"
+                    locale={locale}
+                />
             </div>
         </div>
     );

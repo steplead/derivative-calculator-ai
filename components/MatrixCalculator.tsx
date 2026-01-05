@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import MatrixInput from '@/components/MatrixInput';
 import MatrixResult from '@/components/MatrixResult';
+import EmbedWidget from '@/components/EmbedWidget';
 
 type Operation = 'determinant' | 'inverse' | 'transpose' | 'rank' | 'rref' | 'eigenvals';
 
@@ -120,6 +121,15 @@ export default function MatrixCalculator({ dict }: MatrixCalculatorProps) {
 
                 {/* Results */}
                 <MatrixResult result={result} steps={steps} error={error} isLoading={isLoading} />
+
+                {/* Embed Widget - Link Magnet Strategy */}
+                <div className="mt-16 pt-8 border-t border-gray-200 dark:border-slate-800">
+                    <EmbedWidget
+                        problemSlug="matrix-calculator-3x3"
+                        problemFormula="3×3 Matrix"
+                        problemType="matrix"
+                    />
+                </div>
             </div>
         </div>
     );

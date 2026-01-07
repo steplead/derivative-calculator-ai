@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Copy, Check, Code, ExternalLink } from 'lucide-react';
+import { Copy, Check, Code, ExternalLink, Play } from 'lucide-react';
 
 interface EmbedWidgetProps {
   problemSlug: string;
@@ -47,6 +47,7 @@ export default function EmbedWidget({
   const [height, setHeight] = useState(500);
   const [copied, setCopied] = useState(false);
   const [showCode, setShowCode] = useState(false);
+  const [isWidgetLoaded, setIsWidgetLoaded] = useState(false);
 
   const embedCode = generateEmbedCode(problemSlug, theme, width, height);
 
@@ -155,15 +156,42 @@ export default function EmbedWidget({
           Live Preview
         </h4>
         <div className="bg-gray-50 dark:bg-slate-900 rounded-lg p-4 border border-gray-200 dark:border-slate-600 flex justify-center">
-          <iframe
-            src={previewUrl}
-            width={Math.min(width, 800)}
-            height={Math.min(height, 600)}
-            className="border border-gray-300 dark:border-slate-600 rounded"
-            style={{ maxWidth: '100%' }}
-            title={`Embed preview: ${problemFormula}`}
-          />
+          {isWidgetLoaded ? (
+            <iframe
+              src={previewUrl}
+              width={Math.min(width, 800)}
+              height={Math.min(height, 600)}
+              className="border border-gray-300 dark:border-slate-600 rounded"
+              style={{ maxWidth: '100%' }}
+              title={`Embed preview: ${problemFormula}`}
+            />
+          ) : (
+            <div 
+              className="flex flex-col items-center justify-center bg-gray-100 dark:bg-slate-800 border border-gray-300 dark:border-slate-600 rounded cursor-pointer hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors group"
+              style={{ 
+                width: Math.min(width, 800), 
+                height: Math.min(height, 600),
+                maxWidth: '100%'
+              }}
+              onClick={() => setIsWidgetLoaded(true)}
+            >
+              <div className="bg-blue-600 text-white p-4 rounded-full mb-4 shadow-lg group-hover:scale-110 transition-transform">
+                <Play className="w-8 h-8 fill-current ml-1" />
+              </div>
+              <span className="text-lg font-medium text-gray-900 dark:text-gray-100">
+                Load Calculator
+              </span>
+              <span className="text-sm text-gray-500 dark:text-gray-400 mt-2">
+                Click to start
+              </span>
+            </div>
+          )}
         </div>
+        {!isWidgetLoaded && (
+            <p className="text-xs text-center text-gray-400 dark:text-gray-500 mt-2">
+                Calculator loads on click to save data.
+            </p>
+        )}
         <a
           href={previewUrl}
           target="_blank"

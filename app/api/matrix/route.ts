@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { create, all, format } from 'mathjs';
+import { ratelimit } from '@/utils/cache';
 
 // Initialize mathjs with all functions
 const math = create(all);
@@ -72,12 +73,37 @@ function rref(matrix: any): { rrefMatrix: any, rank: number } {
 
 
 export async function POST(req: NextRequest) {
+    // Rate limiting: 10 requests per 10 seconds per IP
+    if (ratelimit) {
+        const ip = req.headers.get('cf-connecting-ip') || req.headers.get('x-forwarded-for') || 'unknown';
+        try {
+            const { success } = await ratelimit.limit(ip);
+            if (!success) {
+                return NextResponse.json(
+                    { error: "Too many requests. Please slow down." },
+                    { status: 429 }
+                );
+            }
+        } catch (rateLimitError) {
+            console.error("Rate limit error:", rateLimitError);
+        }
+    }
+
     try {
         const body = await req.json();
         const { matrix: matrixData, operation } = body;
 
         if (!matrixData) {
             return NextResponse.json({ error: "No matrix data provided" }, { status: 400 });
+        }
+
+        // Request size validation (limit matrix size to prevent DoS)
+        const totalElements = matrixData.length * (matrixData[0]?.length || 0);
+        if (totalElements > 100) {
+            return NextResponse.json(
+                { error: "Matrix too large. Maximum 100 elements." },
+                { status: 400 }
+            );
         }
 
         // Convert array to MathJS matrix

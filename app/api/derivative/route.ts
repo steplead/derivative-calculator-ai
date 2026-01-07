@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import nerdamer from 'nerdamer';
 import 'nerdamer/Calculus'; // Load calculus plugin
 import { OpenAI } from 'openai';
-import { getCachedExplanation, setCachedExplanation } from '@/utils/cache';
+import { getCachedExplanation, setCachedExplanation, ratelimit } from '@/utils/cache';
 
 export const runtime = 'edge';
 
@@ -13,6 +13,31 @@ export async function GET(req: NextRequest) {
 
     if (!expression) {
         return NextResponse.json({ error: "No equation provided" }, { status: 400 });
+    }
+
+    // Rate limiting: 10 requests per 10 seconds per IP
+    if (ratelimit) {
+        const ip = req.headers.get('cf-connecting-ip') || req.headers.get('x-forwarded-for') || 'unknown';
+        try {
+            const { success } = await ratelimit.limit(ip);
+            if (!success) {
+                return NextResponse.json(
+                    { error: "Too many requests. Please slow down." },
+                    { status: 429 }
+                );
+            }
+        } catch (rateLimitError) {
+            console.error("Rate limit error:", rateLimitError);
+            // Continue anyway if rate limiting fails (fail open)
+        }
+    }
+
+    // Request size validation
+    if (expression.length > 200) {
+        return NextResponse.json(
+            { error: "Expression too long. Maximum 200 characters." },
+            { status: 400 }
+        );
     }
 
     // Heuristic Check: Ensure it doesn't look like a descriptive sentence/slug
@@ -60,6 +85,7 @@ export async function GET(req: NextRequest) {
                     const client = new OpenAI({
                         baseURL: "https://openrouter.ai/api/v1",
                         apiKey: apiKey,
+                        timeout: 10000, // 10 second timeout
                     });
 
                     const prompt = `Derivative of ${expression}. JSON: {"explanation": "1 sentence", "steps": "max 3 steps"}`;

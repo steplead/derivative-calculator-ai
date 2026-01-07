@@ -28,9 +28,6 @@ jobs:
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
 
-      - name: Generate sitemap
-        run: npm run generate-sitemap
-
       - name: Build with Next.js
         run: npm run build
         env:

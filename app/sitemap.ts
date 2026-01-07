@@ -1,5 +1,4 @@
 import { MetadataRoute } from 'next';
-import problems from '../public/problems.json';
 
 const baseUrl = 'https://derivativecalculatorai.com';
 
@@ -61,13 +60,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
         },
     ];
 
-    // Add all problem pages from problems.json
-    const problemUrls: MetadataRoute.Sitemap = problems.map((problem: any) => ({
-        url: `${baseUrl}/${problem.slug}`,
-        lastModified: new Date(),
-        changeFrequency: 'monthly' as const,
-        priority: 0.8,
-    }));
+    // Note: Problem URLs are dynamically generated at runtime
+    // For large sitemaps, use sitemap index files (see Next.js docs)
+    // This static sitemap covers core pages for immediate SEO benefit
 
-    return [...staticUrls, ...problemUrls];
+    return staticUrls;
 }

@@ -3,6 +3,8 @@ import nerdamer from 'nerdamer';
 import 'nerdamer/Calculus'; // Load calculus plugin
 import { OpenAI } from 'openai';
 import { getCachedExplanation, setCachedExplanation, ratelimit } from '@/utils/cache';
+import { checkD1RateLimit } from '@/utils/ratelimit-d1';
+import { getRequestContext } from '@cloudflare/next-on-pages';
 
 export const runtime = 'edge';
 
@@ -15,9 +17,41 @@ export async function GET(req: NextRequest) {
         return NextResponse.json({ error: "No equation provided" }, { status: 400 });
     }
 
-    // Rate limiting: 10 requests per 10 seconds per IP
+    // Rate limiting: 20 requests per minute per IP
+    const ip = req.headers.get('cf-connecting-ip') || req.headers.get('x-forwarded-for') || 'unknown';
+
+    // Try D1 rate limiting first (persistent, works across all instances)
+    try {
+        // @ts-ignore - Cloudflare Workers D1 binding
+        const db = getRequestContext()?.env?.DB;
+
+        if (db) {
+            const result = await checkD1RateLimit(db, ip, 20, 60);
+            if (!result.success) {
+                return NextResponse.json(
+                    {
+                        error: "Too many requests. Please slow down.",
+                        retryAfter: Math.ceil((result.resetTime - Date.now()) / 1000)
+                    },
+                    {
+                        status: 429,
+                        headers: {
+                            'Retry-After': Math.ceil((result.resetTime - Date.now()) / 1000).toString(),
+                            'X-RateLimit-Limit': '20',
+                            'X-RateLimit-Remaining': '0',
+                            'X-RateLimit-Reset': new Date(result.resetTime).toISOString()
+                        }
+                    }
+                );
+            }
+        }
+    } catch (dbError) {
+        console.error('D1 rate limit error:', dbError);
+        // Continue to Upstash fallback
+    }
+
+    // Try Upstash rate limiting (if configured)
     if (ratelimit) {
-        const ip = req.headers.get('cf-connecting-ip') || req.headers.get('x-forwarded-for') || 'unknown';
         try {
             const { success } = await ratelimit.limit(ip);
             if (!success) {
@@ -28,7 +62,6 @@ export async function GET(req: NextRequest) {
             }
         } catch (rateLimitError) {
             console.error("Rate limit error:", rateLimitError);
-            // Continue anyway if rate limiting fails (fail open)
         }
     }
 

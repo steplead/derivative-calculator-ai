@@ -39,11 +39,23 @@ export async function GET(req: NextRequest) {
 
         // Block obvious bots
         if (!isLegitimateBrowser) {
-            console.warn(`[BOT_BLOCKED] IP: ${ip}, UA: ${userAgent}, Endpoint: /api/derivative`);
+            const accept = req.headers.get('accept');
+            const acceptLang = req.headers.get('accept-language');
+            const referer = req.headers.get('referer');
+            console.warn(`[BOT_BLOCKED] IP: ${ip}, UA: ${userAgent}, Endpoint: /api/derivative, Accept: ${accept}, Accept-Lang: ${acceptLang}, Referer: ${referer}`);
             return NextResponse.json(
                 { error: "Access denied. Please use a web browser." },
                 { status: 403 }
             );
+        }
+
+        // Log suspicious but passed requests for monitoring
+        // This helps identify bots that might be bypassing detection
+        const accept = req.headers.get('accept');
+        const acceptLang = req.headers.get('accept-language');
+        if (!acceptLang || acceptLang.length < 2) {
+            // Browser-like UA but missing Accept-Language - log for monitoring
+            console.info(`[SUSPICIOUS] IP: ${ip}, UA: ${userAgent}, Endpoint: /api/derivative, Missing Accept-Language`);
         }
     }
 

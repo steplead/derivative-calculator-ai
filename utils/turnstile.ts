@@ -135,6 +135,30 @@ export function looksLikeLegitimateBrowser(
         if (!hasDetailedAccept && !hasAcceptLanguage) {
             return false;
         }
+
+        // Additional browser fingerprinting checks
+        // Real browsers typically send these headers
+        const secFetchMode = getHeader('sec-fetch-mode');
+        const secFetchSite = getHeader('sec-fetch-site');
+        const secFetchUser = getHeader('sec-fetch-user');
+        const secChUa = getHeader('sec-ch-ua');
+        const secChUaPlatform = getHeader('sec-ch-ua-platform');
+
+        // Modern browsers (Chrome 90+, Edge 90+, etc.) send Sec-Fetch-* headers
+        // If User-Agent claims to be a modern browser but lacks these headers, suspicious
+        const claimsModernBrowser = /chrome\/9[0-9]|edg\/9[0-9]|safari\/1[4-9]|firefox\/9[0-9]/i.test(userAgent);
+        if (claimsModernBrowser && !secFetchMode && !secChUa) {
+            // Modern browser UA but missing modern browser headers - likely spoofed
+            return false;
+        }
+
+        // Check for suspicious header combinations
+        // Real browsers don't send certain combinations
+        const connection = getHeader('connection');
+        if (connection && connection.toLowerCase() === 'close' && !secFetchMode) {
+            // HTTP/1.0 style connection: close without modern headers - suspicious
+            return false;
+        }
     }
 
     return true;

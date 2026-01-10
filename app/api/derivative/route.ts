@@ -182,7 +182,8 @@ export async function GET(req: NextRequest) {
             solution: solutionLatex,
             solution_raw: solutionRaw,
             steps: stepsContent,
-            ai_explanation: aiExplanation
+            ai_explanation: aiExplanation,
+            _version: "v2.1-bot-detection" // Deployment verification
         });
 
     } catch (e: any) {

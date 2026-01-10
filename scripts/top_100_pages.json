@@ -1,0 +1,902 @@
+[
+  {
+    "slug": "derivative-of-cos3x",
+    "formula": "cos(3*x)",
+    "type": "derivative",
+    "title": "Derivative of cos(3*x)",
+    "score": 60,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-ln12x",
+    "formula": "ln(12*x)",
+    "type": "derivative",
+    "title": "Derivative of ln(12*x)",
+    "score": 60,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-ln13x",
+    "formula": "ln(13*x)",
+    "type": "derivative",
+    "title": "Derivative of ln(13*x)",
+    "score": 60,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-ln3x",
+    "formula": "ln(3*x)",
+    "type": "derivative",
+    "title": "Derivative of ln(3*x)",
+    "score": 60,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-sin3x",
+    "formula": "sin(3*x)",
+    "type": "derivative",
+    "title": "Derivative of sin(3*x)",
+    "score": 60,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-tan2x",
+    "formula": "tan(2*x)",
+    "type": "derivative",
+    "title": "Derivative of tan(2*x)",
+    "score": 60,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-tan3x",
+    "formula": "tan(3*x)",
+    "type": "derivative",
+    "title": "Derivative of tan(3*x)",
+    "score": 60,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-xln2x",
+    "formula": "x*ln(2*x)",
+    "type": "derivative",
+    "title": "Derivative of x*ln(2*x)",
+    "score": 60,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-xln3x",
+    "formula": "x*ln(3*x)",
+    "type": "derivative",
+    "title": "Derivative of x*ln(3*x)",
+    "score": 60,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "integral-of-2x--lnx",
+    "formula": "2*x - ln(x)",
+    "type": "integral",
+    "title": "Integral of 2*x - ln(x)",
+    "score": 60,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "integral-of-2x3",
+    "formula": "2*x^3",
+    "type": "integral",
+    "title": "Integral of 2*x^3",
+    "score": 60,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "integral-of-3x3--x",
+    "formula": "3*x^3 - x",
+    "type": "integral",
+    "title": "Integral of 3*x^3 - x",
+    "score": 60,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "integral-of-3x4--x3",
+    "formula": "3*x^4 - x^3",
+    "type": "integral",
+    "title": "Integral of 3*x^4 - x^3",
+    "score": 60,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "integral-of-ex--x2",
+    "formula": "e^x - x^2",
+    "type": "integral",
+    "title": "Integral of e^x - x^2",
+    "score": 60,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "integral-of-lnx--x2",
+    "formula": "ln(x) - x^2",
+    "type": "integral",
+    "title": "Integral of ln(x) - x^2",
+    "score": 60,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "integral-of-x-+-3x3",
+    "formula": "x + 3*x^3",
+    "type": "integral",
+    "title": "Integral of x + 3*x^3",
+    "score": 60,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "integral-of-x3-+-ex",
+    "formula": "x^3 + e^x",
+    "type": "integral",
+    "title": "Integral of x^3 + e^x",
+    "score": 60,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "integral-of--x2",
+    "formula": "-x^2",
+    "type": "integral",
+    "title": "Integral of -x^2",
+    "score": 57,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "integral-of--x2--x",
+    "formula": "-x^2 - x",
+    "type": "integral",
+    "title": "Integral of -x^2 - x",
+    "score": 57,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "integral-of-4x2",
+    "formula": "4*x^2",
+    "type": "integral",
+    "title": "Integral of 4*x^2",
+    "score": 57,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "integral-of-4x2-+-x",
+    "formula": "4*x^2 + x",
+    "type": "integral",
+    "title": "Integral of 4*x^2 + x",
+    "score": 57,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "integral-of-5x2",
+    "formula": "5*x^2",
+    "type": "integral",
+    "title": "Integral of 5*x^2",
+    "score": 57,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "integral-of-x-+-4x2",
+    "formula": "x + 4*x^2",
+    "type": "integral",
+    "title": "Integral of x + 4*x^2",
+    "score": 57,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-6cosx",
+    "formula": "6*cos(x)",
+    "type": "derivative",
+    "title": "Derivative of 6*cos(x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-6sinx",
+    "formula": "6*sin(x)",
+    "type": "derivative",
+    "title": "Derivative of 6*sin(x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-7cosx",
+    "formula": "7*cos(x)",
+    "type": "derivative",
+    "title": "Derivative of 7*cos(x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-7sinx",
+    "formula": "7*sin(x)",
+    "type": "derivative",
+    "title": "Derivative of 7*sin(x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-8cosx",
+    "formula": "8*cos(x)",
+    "type": "derivative",
+    "title": "Derivative of 8*cos(x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-8sinx",
+    "formula": "8*sin(x)",
+    "type": "derivative",
+    "title": "Derivative of 8*sin(x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-9cosx",
+    "formula": "9*cos(x)",
+    "type": "derivative",
+    "title": "Derivative of 9*cos(x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-9sinx",
+    "formula": "9*sin(x)",
+    "type": "derivative",
+    "title": "Derivative of 9*sin(x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-cos4x",
+    "formula": "cos(4*x)",
+    "type": "derivative",
+    "title": "Derivative of cos(4*x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-cos5x",
+    "formula": "cos(5*x)",
+    "type": "derivative",
+    "title": "Derivative of cos(5*x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-cos6x",
+    "formula": "cos(6*x)",
+    "type": "derivative",
+    "title": "Derivative of cos(6*x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-cos7x",
+    "formula": "cos(7*x)",
+    "type": "derivative",
+    "title": "Derivative of cos(7*x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-cos8x",
+    "formula": "cos(8*x)",
+    "type": "derivative",
+    "title": "Derivative of cos(8*x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-cos9x",
+    "formula": "cos(9*x)",
+    "type": "derivative",
+    "title": "Derivative of cos(9*x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-ln10x",
+    "formula": "ln(10*x)",
+    "type": "derivative",
+    "title": "Derivative of ln(10*x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-ln11x",
+    "formula": "ln(11*x)",
+    "type": "derivative",
+    "title": "Derivative of ln(11*x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-ln14x",
+    "formula": "ln(14*x)",
+    "type": "derivative",
+    "title": "Derivative of ln(14*x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-ln15x",
+    "formula": "ln(15*x)",
+    "type": "derivative",
+    "title": "Derivative of ln(15*x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-ln4x",
+    "formula": "ln(4*x)",
+    "type": "derivative",
+    "title": "Derivative of ln(4*x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-ln5x",
+    "formula": "ln(5*x)",
+    "type": "derivative",
+    "title": "Derivative of ln(5*x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-ln6x",
+    "formula": "ln(6*x)",
+    "type": "derivative",
+    "title": "Derivative of ln(6*x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-ln7x",
+    "formula": "ln(7*x)",
+    "type": "derivative",
+    "title": "Derivative of ln(7*x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-ln8x",
+    "formula": "ln(8*x)",
+    "type": "derivative",
+    "title": "Derivative of ln(8*x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-ln9x",
+    "formula": "ln(9*x)",
+    "type": "derivative",
+    "title": "Derivative of ln(9*x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-log-x",
+    "formula": "log(x)",
+    "type": "derivative",
+    "title": "Derivative of log(x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-sin4x",
+    "formula": "sin(4*x)",
+    "type": "derivative",
+    "title": "Derivative of sin(4*x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-sin5x",
+    "formula": "sin(5*x)",
+    "type": "derivative",
+    "title": "Derivative of sin(5*x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-sin6x",
+    "formula": "sin(6*x)",
+    "type": "derivative",
+    "title": "Derivative of sin(6*x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-sin7x",
+    "formula": "sin(7*x)",
+    "type": "derivative",
+    "title": "Derivative of sin(7*x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-sin8x",
+    "formula": "sin(8*x)",
+    "type": "derivative",
+    "title": "Derivative of sin(8*x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-sin9x",
+    "formula": "sin(9*x)",
+    "type": "derivative",
+    "title": "Derivative of sin(9*x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-tan4x",
+    "formula": "tan(4*x)",
+    "type": "derivative",
+    "title": "Derivative of tan(4*x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-tan5x",
+    "formula": "tan(5*x)",
+    "type": "derivative",
+    "title": "Derivative of tan(5*x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-tan6x",
+    "formula": "tan(6*x)",
+    "type": "derivative",
+    "title": "Derivative of tan(6*x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-tan7x",
+    "formula": "tan(7*x)",
+    "type": "derivative",
+    "title": "Derivative of tan(7*x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-tan8x",
+    "formula": "tan(8*x)",
+    "type": "derivative",
+    "title": "Derivative of tan(8*x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-tan9x",
+    "formula": "tan(9*x)",
+    "type": "derivative",
+    "title": "Derivative of tan(9*x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-xln4x",
+    "formula": "x*ln(4*x)",
+    "type": "derivative",
+    "title": "Derivative of x*ln(4*x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-xln5x",
+    "formula": "x*ln(5*x)",
+    "type": "derivative",
+    "title": "Derivative of x*ln(5*x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-xln6x",
+    "formula": "x*ln(6*x)",
+    "type": "derivative",
+    "title": "Derivative of x*ln(6*x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-xln7x",
+    "formula": "x*ln(7*x)",
+    "type": "derivative",
+    "title": "Derivative of x*ln(7*x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-xln8x",
+    "formula": "x*ln(8*x)",
+    "type": "derivative",
+    "title": "Derivative of x*ln(8*x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-xln9x",
+    "formula": "x*ln(9*x)",
+    "type": "derivative",
+    "title": "Derivative of x*ln(9*x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "integral-of--cosx",
+    "formula": "-cos(x)",
+    "type": "integral",
+    "title": "Integral of -cos(x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "integral-of--lnx",
+    "formula": "-ln(x)",
+    "type": "integral",
+    "title": "Integral of -ln(x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "integral-of--sinx",
+    "formula": "-sin(x)",
+    "type": "integral",
+    "title": "Integral of -sin(x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "integral-of--tanx",
+    "formula": "-tan(x)",
+    "type": "integral",
+    "title": "Integral of -tan(x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "integral-of--x3",
+    "formula": "-x^3",
+    "type": "integral",
+    "title": "Integral of -x^3",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "integral-of--x4--x3",
+    "formula": "-x^4 - x^3",
+    "type": "integral",
+    "title": "Integral of -x^4 - x^3",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "integral-of-2lnx",
+    "formula": "2*ln(x)",
+    "type": "integral",
+    "title": "Integral of 2*ln(x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "integral-of-2lnx--x",
+    "formula": "2*ln(x) - x",
+    "type": "integral",
+    "title": "Integral of 2*ln(x) - x",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "integral-of-2tanx",
+    "formula": "2*tan(x)",
+    "type": "integral",
+    "title": "Integral of 2*tan(x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "integral-of-3lnx",
+    "formula": "3*ln(x)",
+    "type": "integral",
+    "title": "Integral of 3*ln(x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "integral-of-3tanx",
+    "formula": "3*tan(x)",
+    "type": "integral",
+    "title": "Integral of 3*tan(x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "integral-of-4lnx",
+    "formula": "4*ln(x)",
+    "type": "integral",
+    "title": "Integral of 4*ln(x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "integral-of-4tanx",
+    "formula": "4*tan(x)",
+    "type": "integral",
+    "title": "Integral of 4*tan(x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "integral-of-4x3",
+    "formula": "4*x^3",
+    "type": "integral",
+    "title": "Integral of 4*x^3",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "integral-of-5lnx",
+    "formula": "5*ln(x)",
+    "type": "integral",
+    "title": "Integral of 5*ln(x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "integral-of-5tanx",
+    "formula": "5*tan(x)",
+    "type": "integral",
+    "title": "Integral of 5*tan(x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "integral-of-5x3",
+    "formula": "5*x^3",
+    "type": "integral",
+    "title": "Integral of 5*x^3",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "integral-of-x--sinx",
+    "formula": "x - sin(x)",
+    "type": "integral",
+    "title": "Integral of x - sin(x)",
+    "score": 56,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-arccos-x",
+    "formula": "acos(x)",
+    "type": "derivative",
+    "title": "Derivative of arccos(x)",
+    "score": 55,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-arcsin-x",
+    "formula": "asin(x)",
+    "type": "derivative",
+    "title": "Derivative of arcsin(x)",
+    "score": 55,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-arctan-x",
+    "formula": "atan(x)",
+    "type": "derivative",
+    "title": "Derivative of arctan(x)",
+    "score": 55,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-asin10x",
+    "formula": "asin(10*x)",
+    "type": "derivative",
+    "title": "Derivative of asin(10*x)",
+    "score": 55,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-asin2x",
+    "formula": "asin(2*x)",
+    "type": "derivative",
+    "title": "Derivative of asin(2*x)",
+    "score": 55,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-asin3x",
+    "formula": "asin(3*x)",
+    "type": "derivative",
+    "title": "Derivative of asin(3*x)",
+    "score": 55,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-asin4x",
+    "formula": "asin(4*x)",
+    "type": "derivative",
+    "title": "Derivative of asin(4*x)",
+    "score": 55,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-asin5x",
+    "formula": "asin(5*x)",
+    "type": "derivative",
+    "title": "Derivative of asin(5*x)",
+    "score": 55,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-asin6x",
+    "formula": "asin(6*x)",
+    "type": "derivative",
+    "title": "Derivative of asin(6*x)",
+    "score": 55,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-asin7x",
+    "formula": "asin(7*x)",
+    "type": "derivative",
+    "title": "Derivative of asin(7*x)",
+    "score": 55,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-asin8x",
+    "formula": "asin(8*x)",
+    "type": "derivative",
+    "title": "Derivative of asin(8*x)",
+    "score": 55,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-asin9x",
+    "formula": "asin(9*x)",
+    "type": "derivative",
+    "title": "Derivative of asin(9*x)",
+    "score": 55,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-atan10x",
+    "formula": "atan(10*x)",
+    "type": "derivative",
+    "title": "Derivative of atan(10*x)",
+    "score": 55,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-atan2x",
+    "formula": "atan(2*x)",
+    "type": "derivative",
+    "title": "Derivative of atan(2*x)",
+    "score": 55,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-atan3x",
+    "formula": "atan(3*x)",
+    "type": "derivative",
+    "title": "Derivative of atan(3*x)",
+    "score": 55,
+    "tags": "",
+    "difficulty": "unknown"
+  },
+  {
+    "slug": "derivative-of-atan4x",
+    "formula": "atan(4*x)",
+    "type": "derivative",
+    "title": "Derivative of atan(4*x)",
+    "score": 55,
+    "tags": "",
+    "difficulty": "unknown"
+  }
+]

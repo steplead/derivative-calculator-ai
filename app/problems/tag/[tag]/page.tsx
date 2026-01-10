@@ -39,7 +39,8 @@ export default async function ProblemsByTagPage({ params }: { params: { tag: str
 
   if (baseUrl) {
     try {
-      const res = await fetch(`${baseUrl}/api/problems?limit=1000`, {
+      // Use database tag filtering instead of string matching
+      const res = await fetch(`${baseUrl}/api/problems?limit=1000&tag=${encodeURIComponent(tag)}`, {
         cache: 'force-cache',
         // @ts-ignore
         next: { revalidate: 3600 }
@@ -53,39 +54,7 @@ export default async function ProblemsByTagPage({ params }: { params: { tag: str
     }
   }
 
-  // Filter problems by tag logic
-  // This is a simple implementation - you can enhance with actual tags in your data
-  const filteredProblems = allProblems.filter((problem: any) => {
-    const formula = problem.formula?.toLowerCase() || '';
-    const slug = problem.slug?.toLowerCase() || '';
-
-    // Tag matching logic
-    switch (tag) {
-      case 'trigonometric':
-        return formula.includes('sin') || formula.includes('cos') || formula.includes('tan') ||
-               slug.includes('sin') || slug.includes('cos') || slug.includes('tan');
-      case 'polynomial':
-        return /^[x\d\+\-\*\/\^\(\)\.\s]+$/.test(formula) && !formula.includes('sin') && !formula.includes('cos');
-      case 'chain-rule':
-        return slug.includes('chain') || (formula.includes('(') && formula.includes('x'));
-      case 'product-rule':
-        return slug.includes('product') || (formula.includes('*') || /\w\w/.test(formula));
-      case 'quotient-rule':
-        return slug.includes('quotient') || formula.includes('/');
-      case 'exponential':
-        return formula.includes('e^') || formula.includes('exp') || formula.includes('e');
-      case 'logarithmic':
-        return formula.includes('ln') || formula.includes('log');
-      case 'easy':
-        return formula.length <= 10 && !formula.includes('sin') && !formula.includes('cos');
-      case 'medium':
-        return formula.length > 10 && formula.length <= 20;
-      case 'hard':
-        return formula.length > 20;
-      default:
-        return false;
-    }
-  });
+  const filteredProblems = allProblems;
 
   const tagName = tag.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 

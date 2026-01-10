@@ -4,9 +4,12 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Calculator from '@/components/Calculator';
 import EmbedWidget from '@/components/EmbedWidget';
+import StructuredData, { generateMathSolverData } from '@/components/StructuredData';
+import Breadcrumbs from '@/components/Breadcrumbs';
 import { Suspense } from 'react';
 import { getBaseUrl } from '@/utils/robust-url';
 import { getRequestContext } from '@cloudflare/next-on-pages';
+import { NOINDEX_SLUGS } from '@/lib/noindex-slugs';
 
 // Define the type for our problem data
 type Problem = {
@@ -239,6 +242,10 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     return {
         title: `${t.title} - Derivative Calculator AI`,
         description: t.description,
+        robots: NOINDEX_SLUGS.has(slug) ? {
+            index: false,
+            follow: true,
+        } : undefined,
         alternates: {
             canonical: url,
             languages: {
@@ -290,7 +297,7 @@ export default async function ProblemPage({ params }: { params: { slug: string }
                         relatedProblems = allProblems
                             .filter((p: any) => p && p.slug !== slug)
                             .sort(() => 0.5 - Math.random())
-                            .slice(0, 4);
+                            .slice(0, 10);
                     }
                 }
             } catch (e) {
@@ -309,7 +316,7 @@ export default async function ProblemPage({ params }: { params: { slug: string }
                         problem = await db.prepare("SELECT * FROM problems WHERE slug = ?").bind(slug).first();
                     }
                     if (relatedProblems.length === 0) {
-                        const { results } = await db.prepare("SELECT * FROM problems WHERE slug != ? ORDER BY RANDOM() LIMIT 4").bind(slug).all();
+                        const { results } = await db.prepare("SELECT * FROM problems WHERE slug != ? ORDER BY RANDOM() LIMIT 10").bind(slug).all();
                         if (Array.isArray(results)) relatedProblems = results;
                     }
                 }
@@ -373,12 +380,29 @@ export default async function ProblemPage({ params }: { params: { slug: string }
         const baseUrlWithLocale = locale === 'en' ? siteUrl : `${siteUrl}/${locale}`;
         const url = `${baseUrlWithLocale}/${slug}`;
 
-        // Schema & Breadcrumbs (omitted for brevity in patch but assumed present in original)
-        // ...
+        // Generate Schema.org structured data
+        const mathSolverSchema = generateMathSolverData({
+            name: t.title,
+            description: t.description,
+            url: url,
+            educationalLevel: "College"
+        });
 
         return (
-            <div className="py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-200">
-                <div className="max-w-4xl mx-auto text-center mb-12">
+            <>
+                <StructuredData data={mathSolverSchema} />
+                <div className="py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-200">
+                <div className="max-w-4xl mx-auto">
+                    <Breadcrumbs
+                        items={[
+                            { name: 'Home', href: '/' },
+                            { name: 'Problems', href: '/problems' },
+                            { name: safeProblem.type || 'Derivative', href: `/problems/${safeProblem.type || 'derivative'}` },
+                            { name: t.h1, href: `/${slug}` }
+                        ]}
+                    />
+                </div>
+                <div className="max-w-4xl mx-auto text-center mb-12 mt-8">
                     <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-4">
                         {t.h1}
                     </h1>
@@ -405,7 +429,7 @@ export default async function ProblemPage({ params }: { params: { slug: string }
                     <h2 className="text-2xl font-bold text-gray-900 dark:text-white text-center mb-6">
                         {t.practiceTitle}
                     </h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
                         {relatedProblems.map((p) => {
                             const pSafeFormula = p.formula || "";
                             const pSafeType = p.type || 'derivative';
@@ -438,6 +462,7 @@ export default async function ProblemPage({ params }: { params: { slug: string }
                     />
                 </div>
             </div>
+            </>
         );
     } catch (criticalError) {
         console.error("Critical Render Error in ProblemPage:", criticalError);

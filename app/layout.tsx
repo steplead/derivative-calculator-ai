@@ -15,8 +15,8 @@ export const runtime = 'edge';
 export const metadata: Metadata = {
   metadataBase: new URL('https://derivativecalculatorai.com'),
   title: {
-    default: 'Derivative Calculator AI | The No.1 Math Engineering Toolkit',
-    template: '%s | Derivative Calculator AI'
+    default: 'Derivative Calculator - Instant Step-by-Step Solutions | Derivative Calculator AI',
+    template: '%s - Instant Step-by-Step Solutions | Derivative Calculator AI'
   },
   description: 'AI-powered mathematical toolkit with step-by-step solutions for derivatives, integrals, limits, and matrices using DeepSeek R1/V3.',
   manifest: '/manifest.json',
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     siteName: 'Derivative Calculator AI',
     images: [
       {
-        url: '/og-image.png',
+        url: '/og-image.webp',
         width: 1200,
         height: 630,
         alt: 'Derivative Calculator AI Billboard',
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Derivative Calculator AI',
     description: 'AI-powered math solutions with step-by-step logic.',
-    images: ['/og-image.png'],
+    images: ['/og-image.webp'],
   },
   robots: {
     index: true,

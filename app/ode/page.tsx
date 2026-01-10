@@ -24,7 +24,7 @@ export async function generateMetadata() {
     const subtitle = dict?.ode?.subtitle || "Solve ODEs step-by-step.";
 
     return {
-        title: `${h1} - Derivative Calculator AI`,
+        title: `${h1} - Step-by-Step ODE Solutions | Derivative Calculator AI`,
         description: subtitle,
         alternates: {
             canonical: '/ode',

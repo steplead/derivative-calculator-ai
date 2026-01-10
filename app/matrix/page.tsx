@@ -20,7 +20,7 @@ export async function generateMetadata() {
     const subtitle = dict?.matrix?.subtitle || "Calculate determinants and more.";
 
     return {
-        title: `${h1} - Derivative Calculator AI`,
+        title: `${h1} - Matrix Operations & Solutions | Derivative Calculator AI`,
         description: subtitle,
         alternates: {
             canonical: '/matrix',

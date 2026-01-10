@@ -20,7 +20,7 @@ export async function generateMetadata() {
     const subtitle = dict?.limit?.subtitle || "Solve limits instantly.";
 
     return {
-        title: `${h1} - Derivative Calculator AI`,
+        title: `${h1} - Evaluate Limits with Steps | Derivative Calculator AI`,
         description: subtitle,
         alternates: {
             canonical: '/limit',

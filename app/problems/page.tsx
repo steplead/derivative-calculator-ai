@@ -11,7 +11,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const url = locale === 'en' ? `${siteUrl}/problems` : `${siteUrl}/${locale}/problems`;
 
   return {
-    title: `All Calculus Problems - Derivative Calculator AI`,
+    title: `All Calculus Problems - Complete Library | Derivative Calculator AI`,
     description: `Browse our complete library of calculus problems including derivatives, integrals, limits, and ODEs. Step-by-step solutions with AI explanations.`,
     alternates: {
       canonical: url,
@@ -22,7 +22,7 @@ export async function generateMetadata(): Promise<Metadata> {
       }
     },
     openGraph: {
-      title: `All Calculus Problems - Derivative Calculator AI`,
+      title: `All Calculus Problems - Complete Library | Derivative Calculator AI`,
       description: `Browse our complete library of calculus problems.`,
       url,
       type: 'website',

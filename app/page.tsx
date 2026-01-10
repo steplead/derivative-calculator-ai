@@ -17,8 +17,8 @@ export async function generateMetadata(): Promise<Metadata> {
   const url = locale === 'en' ? siteUrl : `${siteUrl}/${locale}`;
 
   return {
-    title: `${dict.home.h1} - Derivative Calculator AI`,
-    description: dict.home.subtitle,
+    title: `Derivative Calculator - Instant Step-by-Step Solutions | Derivative Calculator AI`,
+    description: `Free, No Sign-up, Instant Results. ${dict.home.subtitle}`,
     alternates: {
       canonical: url,
       languages: {
@@ -92,6 +92,19 @@ export default async function Home() {
       <Suspense fallback={<div className="text-gray-900 dark:text-white text-center">{dict.common.loading}</div>}>
         <Calculator dict={dict.calculator} />
       </Suspense>
+
+      {/* Quick Links Section - Protocol 2 Compliance */}
+      <div className="max-w-4xl mx-auto mt-8 flex justify-center gap-4">
+        <Link href="/problems" className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl transform hover:scale-105">
+          <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+          </svg>
+          Browse All Problems
+        </Link>
+        <Link href="/directory" className="inline-flex items-center px-6 py-3 bg-gray-100 dark:bg-slate-800 text-gray-900 dark:text-white font-semibold rounded-lg hover:bg-gray-200 dark:hover:bg-slate-700 transition-all border border-gray-300 dark:border-slate-600">
+          View Directory
+        </Link>
+      </div>
 
       <div className="max-w-4xl mx-auto mt-20 prose prose-invert">
         <div className="grid md:grid-cols-2 gap-12">

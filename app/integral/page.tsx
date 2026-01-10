@@ -20,7 +20,7 @@ export async function generateMetadata() {
     const subtitle = dict?.integral?.subtitle || "Solve integrals instantly.";
 
     return {
-        title: `${h1} - Derivative Calculator AI`,
+        title: `${h1} - Step-by-Step Integration | Derivative Calculator AI`,
         description: subtitle,
         alternates: {
             canonical: '/integral',

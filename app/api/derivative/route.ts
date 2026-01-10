@@ -4,6 +4,7 @@ import 'nerdamer/Calculus'; // Load calculus plugin
 import { OpenAI } from 'openai';
 import { getCachedExplanation, setCachedExplanation, ratelimit } from '@/utils/cache';
 import { checkD1RateLimit } from '@/utils/ratelimit-d1';
+import { verifyTurnstileToken, looksLikeLegitimateBrowser } from '@/utils/turnstile';
 import { getRequestContext } from '@cloudflare/next-on-pages';
 
 export const runtime = 'edge';
@@ -19,8 +20,34 @@ export async function GET(req: NextRequest) {
 
     // Rate limiting: 20 requests per minute per IP
     const ip = req.headers.get('cf-connecting-ip') || req.headers.get('x-forwarded-for') || 'unknown';
+    const userAgent = req.headers.get('user-agent');
 
-    // Try D1 rate limiting first (persistent, works across all instances)
+    // Primary Defense: Turnstile Verification (if configured)
+    const turnstileToken = searchParams.get('turnstile_token');
+    if (turnstileToken) {
+        const verification = await verifyTurnstileToken(turnstileToken, ip);
+        if (!verification.success) {
+            return NextResponse.json(
+                { error: "CAPTCHA verification failed. Please try again.", details: verification.error },
+                { status: 429 }
+            );
+        }
+        // Turnstile verified - skip other checks
+    } else {
+        // Secondary Defense: Bot detection for requests without Turnstile
+        const isLegitimateBrowser = looksLikeLegitimateBrowser(userAgent);
+
+        // Block obvious bots
+        if (!isLegitimateBrowser) {
+            console.warn(`Blocked request from suspicious User-Agent: ${userAgent}`);
+            return NextResponse.json(
+                { error: "Access denied. Please use a web browser." },
+                { status: 403 }
+            );
+        }
+    }
+
+    // Tertiary Defense: D1 rate limiting (persistent, works across all instances)
     try {
         // @ts-ignore - Cloudflare Workers D1 binding
         const db = getRequestContext()?.env?.DB;

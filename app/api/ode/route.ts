@@ -4,6 +4,7 @@ import 'nerdamer/Algebra';
 import 'nerdamer/Calculus';
 import { OpenAI } from 'openai';
 import { getCachedExplanation, setCachedExplanation, ratelimit } from '@/utils/cache';
+import { looksLikeLegitimateBrowser } from '@/utils/turnstile';
 
 export const runtime = 'edge';
 
@@ -16,9 +17,21 @@ export async function GET(req: NextRequest) {
         return NextResponse.json({ error: "No equation provided" }, { status: 400 });
     }
 
+    // Bot detection: Block non-browser requests
+    const userAgent = req.headers.get('user-agent');
+    const ip = req.headers.get('cf-connecting-ip') || req.headers.get('x-forwarded-for') || 'unknown';
+    const isLegitimateBrowser = looksLikeLegitimateBrowser(userAgent, req.headers);
+
+    if (!isLegitimateBrowser) {
+        console.warn(`[BOT_BLOCKED] IP: ${ip}, UA: ${userAgent}, Endpoint: /api/ode`);
+        return NextResponse.json(
+            { error: "Access denied. Please use a web browser." },
+            { status: 403 }
+        );
+    }
+
     // Rate limiting: 10 requests per 10 seconds per IP
     if (ratelimit) {
-        const ip = req.headers.get('cf-connecting-ip') || req.headers.get('x-forwarded-for') || 'unknown';
         try {
             const { success } = await ratelimit.limit(ip);
             if (!success) {

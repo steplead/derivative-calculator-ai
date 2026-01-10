@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { create, all, format } from 'mathjs';
 import { ratelimit } from '@/utils/cache';
+import { looksLikeLegitimateBrowser } from '@/utils/turnstile';
 
 // Initialize mathjs with all functions
 const math = create(all);
@@ -73,9 +74,21 @@ function rref(matrix: any): { rrefMatrix: any, rank: number } {
 
 
 export async function POST(req: NextRequest) {
+    // Bot detection: Block non-browser requests
+    const userAgent = req.headers.get('user-agent');
+    const ip = req.headers.get('cf-connecting-ip') || req.headers.get('x-forwarded-for') || 'unknown';
+    const isLegitimateBrowser = looksLikeLegitimateBrowser(userAgent, req.headers);
+
+    if (!isLegitimateBrowser) {
+        console.warn(`[BOT_BLOCKED] IP: ${ip}, UA: ${userAgent}, Endpoint: /api/matrix`);
+        return NextResponse.json(
+            { error: "Access denied. Please use a web browser." },
+            { status: 403 }
+        );
+    }
+
     // Rate limiting: 10 requests per 10 seconds per IP
     if (ratelimit) {
-        const ip = req.headers.get('cf-connecting-ip') || req.headers.get('x-forwarded-for') || 'unknown';
         try {
             const { success } = await ratelimit.limit(ip);
             if (!success) {

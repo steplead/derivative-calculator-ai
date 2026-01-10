@@ -34,12 +34,12 @@ export async function GET(req: NextRequest) {
         }
         // Turnstile verified - skip other checks
     } else {
-        // Secondary Defense: Bot detection for requests without Turnstile
-        const isLegitimateBrowser = looksLikeLegitimateBrowser(userAgent);
+        // Secondary Defense: Enhanced bot detection for requests without Turnstile
+        const isLegitimateBrowser = looksLikeLegitimateBrowser(userAgent, req.headers);
 
         // Block obvious bots
         if (!isLegitimateBrowser) {
-            console.warn(`Blocked request from suspicious User-Agent: ${userAgent}`);
+            console.warn(`[BOT_BLOCKED] IP: ${ip}, UA: ${userAgent}, Endpoint: /api/derivative`);
             return NextResponse.json(
                 { error: "Access denied. Please use a web browser." },
                 { status: 403 }

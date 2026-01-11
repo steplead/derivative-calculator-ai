@@ -22,7 +22,7 @@ export default function Calculator({ initialEquation = '', initialLimitTo = '0',
     const searchParams = useSearchParams();
     const equationParam = searchParams.get('equation');
     const limitToParam = searchParams.get('to');
-    const { token, executeTurnstile } = useTurnstile();
+    const { token } = useTurnstile();
 
     const [input, setInput] = useState((equationParam || initialEquation || '').toString().replace(/^null$/i, ''));
     const [limitTo, setLimitTo] = useState((limitToParam || initialLimitTo || '0').toString().replace(/^null$/i, '0'));
@@ -67,10 +67,13 @@ export default function Calculator({ initialEquation = '', initialLimitTo = '0',
         setResult(null);
 
         try {
-            // Get Turnstile token (wait if needed)
-            console.log('[Calculator] Getting Turnstile token...');
-            const turnstileToken = await executeTurnstile();
-            console.log('[Calculator] Got Turnstile token:', turnstileToken ? 'EXISTS' : 'NULL');
+            // Try to get Turnstile token if available (optional)
+            let turnstileToken = token;
+            if (token) {
+                console.log('[Calculator] Using existing Turnstile token');
+            } else {
+                console.log('[Calculator] No Turnstile token, proceeding without it');
+            }
 
             let baseUrl = '';
             if (mode === 'derivative') {

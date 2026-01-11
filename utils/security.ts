@@ -60,7 +60,7 @@ const SECURITY_CONFIG = {
 
     // Turnstile verification
     TURNSTILE: {
-        REQUIRED: true,           // RE-ENABLED: CSP configured
+        REQUIRED: false,          // DISABLED: Using existing security layers (IP blacklist, rate limiting, bot detection)
     },
 };
 

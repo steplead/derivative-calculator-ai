@@ -12,12 +12,14 @@ interface TurnstileContextType {
   token: string | null;
   refreshTokens: () => void;
   isLoaded: boolean;
+  executeTurnstile: () => Promise<string>; // New method to manually trigger Turnstile
 }
 
 const TurnstileContext = createContext<TurnstileContextType>({
   token: null,
   refreshTokens: () => {},
   isLoaded: false,
+  executeTurnstile: async () => '',
 });
 
 const SITE_KEY = '0x4AAAAAACLw2qsqlvg_5lIN'; // Your Turnstile Site Key
@@ -167,8 +169,53 @@ export function TurnstileProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  // Execute Turnstile and wait for token
+  const executeTurnstile = async (): Promise<string> => {
+    console.log('[Turnstile] executeTurnstile called');
+
+    // If token already exists, return it
+    if (token) {
+      console.log('[Turnstile] Token already exists, returning immediately');
+      return token;
+    }
+
+    // Wait for token to be generated
+    return new Promise<string>((resolve, reject) => {
+      const timeout = setTimeout(() => {
+        reject(new Error('Turnstile timeout'));
+      }, 10000); // 10 second timeout
+
+      const checkToken = () => {
+        if (token) {
+          clearTimeout(timeout);
+          console.log('[Turnstile] Token generated, resolving promise');
+          resolve(token);
+        } else {
+          // Check again in 100ms
+          setTimeout(checkToken, 100);
+        }
+      };
+
+      // Trigger Turnstile if widget exists
+      if (widgetId && window.turnstile) {
+        try {
+          console.log('[Turnstile] Triggering Turnstile challenge');
+          window.turnstile.execute(widgetId);
+          checkToken();
+        } catch (e) {
+          console.error('[Turnstile] Execute error:', e);
+          clearTimeout(timeout);
+          reject(e);
+        }
+      } else {
+        console.warn('[Turnstile] Widget not ready, waiting for auto-generation');
+        checkToken();
+      }
+    });
+  };
+
   return (
-    <TurnstileContext.Provider value={{ token, refreshTokens, isLoaded }}>
+    <TurnstileContext.Provider value={{ token, refreshTokens, isLoaded, executeTurnstile }}>
       {children}
     </TurnstileContext.Provider>
   );

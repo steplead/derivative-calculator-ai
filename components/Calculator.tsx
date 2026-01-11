@@ -22,7 +22,7 @@ export default function Calculator({ initialEquation = '', initialLimitTo = '0',
     const searchParams = useSearchParams();
     const equationParam = searchParams.get('equation');
     const limitToParam = searchParams.get('to');
-    const { token } = useTurnstile();
+    const { token, executeTurnstile } = useTurnstile();
 
     const [input, setInput] = useState((equationParam || initialEquation || '').toString().replace(/^null$/i, ''));
     const [limitTo, setLimitTo] = useState((limitToParam || initialLimitTo || '0').toString().replace(/^null$/i, '0'));
@@ -60,20 +60,18 @@ export default function Calculator({ initialEquation = '', initialLimitTo = '0',
         const target = (targetToSolve || '0').toString().replace(/^null$/i, '0');
         if (!formula) return;
 
-        // Check if Turnstile token is available
-        if (!token) {
-            console.warn('[Calculator] No Turnstile token available yet');
-            setError('CAPTCHA verification required. Please wait a moment and try again.');
-            return;
-        }
-
-        console.log('[Calculator] Starting calculation with token:', token ? 'EXISTS' : 'NULL');
+        console.log('[Calculator] Starting calculation...');
 
         setLoading(true);
         setError('');
         setResult(null);
 
         try {
+            // Get Turnstile token (wait if needed)
+            console.log('[Calculator] Getting Turnstile token...');
+            const turnstileToken = await executeTurnstile();
+            console.log('[Calculator] Got Turnstile token:', turnstileToken ? 'EXISTS' : 'NULL');
+
             let baseUrl = '';
             if (mode === 'derivative') {
                 baseUrl = `/api/derivative?equation=${encodeURIComponent(formula)}`;
@@ -86,7 +84,7 @@ export default function Calculator({ initialEquation = '', initialLimitTo = '0',
             }
 
             // Step 1: Fast fetch (Math only)
-            const urlWithToken = addTokenToUrl(`${baseUrl}&include_ai=false`, token);
+            const urlWithToken = addTokenToUrl(`${baseUrl}&include_ai=false`, turnstileToken);
             console.log('[Calculator] Fetching URL:', urlWithToken);
             const resFast = await fetch(urlWithToken);
             if (!resFast.ok) {
@@ -107,7 +105,7 @@ export default function Calculator({ initialEquation = '', initialLimitTo = '0',
             // Step 2: Slow fetch (AI Explanation)
             // We keep the result but maybe show a loading indicator for the explanation part
             try {
-                const resFull = await fetch(addTokenToUrl(`${baseUrl}&include_ai=true`, token));
+                const resFull = await fetch(addTokenToUrl(`${baseUrl}&include_ai=true`, turnstileToken));
                 if (resFull.ok) {
                     const dataFull = await resFull.json();
                     setResult(dataFull); // Update with full data including AI

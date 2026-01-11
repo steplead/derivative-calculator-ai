@@ -179,9 +179,10 @@ export function TurnstileProvider({ children }: { children: ReactNode }) {
       return token;
     }
 
-    // Wait for token to be generated
+    // Wait for token to be generated (invisible mode auto-triggers on interaction)
     return new Promise<string>((resolve, reject) => {
       const timeout = setTimeout(() => {
+        console.error('[Turnstile] Timeout waiting for token');
         reject(new Error('Turnstile timeout'));
       }, 10000); // 10 second timeout
 
@@ -196,21 +197,10 @@ export function TurnstileProvider({ children }: { children: ReactNode }) {
         }
       };
 
-      // Trigger Turnstile if widget exists
-      if (widgetId && window.turnstile) {
-        try {
-          console.log('[Turnstile] Triggering Turnstile challenge');
-          window.turnstile.execute(widgetId);
-          checkToken();
-        } catch (e) {
-          console.error('[Turnstile] Execute error:', e);
-          clearTimeout(timeout);
-          reject(e);
-        }
-      } else {
-        console.warn('[Turnstile] Widget not ready, waiting for auto-generation');
-        checkToken();
-      }
+      // Invisible mode auto-triggers on user interaction (button click)
+      // We don't need to manually call execute()
+      console.log('[Turnstile] Waiting for invisible widget to auto-trigger...');
+      checkToken();
     });
   };
 

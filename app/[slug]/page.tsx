@@ -3,7 +3,7 @@ export const runtime = 'edge';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Calculator from '@/components/Calculator';
-import EmbedWidget from '@/components/EmbedWidget';
+// EmbedWidget removed to prevent API abuse
 import StructuredData, { generateMathSolverData } from '@/components/StructuredData';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { Suspense } from 'react';
@@ -450,16 +450,6 @@ export default async function ProblemPage({ params }: { params: { slug: string }
                             );
                         })}
                     </div>
-                </div>
-
-                {/* Embed Widget - Link Magnet Strategy */}
-                <div className="max-w-4xl mx-auto mt-16 pt-8 border-t border-gray-200 dark:border-slate-800">
-                    <EmbedWidget
-                        problemSlug={safeProblem.slug}
-                        problemFormula={safeProblem.formula}
-                        problemType={safeProblem.type}
-                        locale={locale}
-                    />
                 </div>
             </div>
             </>

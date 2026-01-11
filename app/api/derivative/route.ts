@@ -2,10 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import nerdamer from 'nerdamer';
 import 'nerdamer/Calculus'; // Load calculus plugin
 import { OpenAI } from 'openai';
-import { getCachedExplanation, setCachedExplanation, ratelimit } from '@/utils/cache';
-import { checkD1RateLimit } from '@/utils/ratelimit-d1';
-import { verifyTurnstileToken, looksLikeLegitimateBrowser } from '@/utils/turnstile';
-import { getRequestContext } from '@cloudflare/next-on-pages';
+import { getCachedExplanation, setCachedExplanation } from '@/utils/cache';
+import { performSecurityCheck } from '@/utils/security';
 
 export const runtime = 'edge';
 
@@ -18,90 +16,24 @@ export async function GET(req: NextRequest) {
         return NextResponse.json({ error: "No equation provided" }, { status: 400 });
     }
 
-    // Rate limiting: 20 requests per minute per IP
-    const ip = req.headers.get('cf-connecting-ip') || req.headers.get('x-forwarded-for') || 'unknown';
-    const userAgent = req.headers.get('user-agent');
+    // Unified Security Check (Rate limiting, Bot detection, IP blacklist, Strict Referer check)
+    const securityResult = await performSecurityCheck(req.headers, searchParams, '/api/derivative', {
+        rateLimit: 5,       // EMERGENCY: Reduced from 10 to 5 requests per minute
+        rateWindow: 60,     // 60 second window
+    });
 
-    // Primary Defense: Turnstile Verification (if configured)
-    const turnstileToken = searchParams.get('turnstile_token');
-    if (turnstileToken) {
-        const verification = await verifyTurnstileToken(turnstileToken, ip);
-        if (!verification.success) {
-            return NextResponse.json(
-                { error: "CAPTCHA verification failed. Please try again.", details: verification.error },
-                { status: 429 }
-            );
-        }
-        // Turnstile verified - skip other checks
-    } else {
-        // Secondary Defense: Enhanced bot detection for requests without Turnstile
-        const isLegitimateBrowser = looksLikeLegitimateBrowser(userAgent, req.headers);
-
-        // Block obvious bots
-        if (!isLegitimateBrowser) {
-            const accept = req.headers.get('accept');
-            const acceptLang = req.headers.get('accept-language');
-            const referer = req.headers.get('referer');
-            console.warn(`[BOT_BLOCKED] IP: ${ip}, UA: ${userAgent}, Endpoint: /api/derivative, Accept: ${accept}, Accept-Lang: ${acceptLang}, Referer: ${referer}`);
-            return NextResponse.json(
-                { error: "Access denied. Please use a web browser." },
-                { status: 403 }
-            );
-        }
-
-        // Log suspicious but passed requests for monitoring
-        // This helps identify bots that might be bypassing detection
-        const accept = req.headers.get('accept');
-        const acceptLang = req.headers.get('accept-language');
-        if (!acceptLang || acceptLang.length < 2) {
-            // Browser-like UA but missing Accept-Language - log for monitoring
-            console.info(`[SUSPICIOUS] IP: ${ip}, UA: ${userAgent}, Endpoint: /api/derivative, Missing Accept-Language`);
-        }
-    }
-
-    // Tertiary Defense: D1 rate limiting (persistent, works across all instances)
-    try {
-        // @ts-ignore - Cloudflare Workers D1 binding
-        const db = getRequestContext()?.env?.DB;
-
-        if (db) {
-            const result = await checkD1RateLimit(db, ip, 20, 60);
-            if (!result.success) {
-                return NextResponse.json(
-                    {
-                        error: "Too many requests. Please slow down.",
-                        retryAfter: Math.ceil((result.resetTime - Date.now()) / 1000)
-                    },
-                    {
-                        status: 429,
-                        headers: {
-                            'Retry-After': Math.ceil((result.resetTime - Date.now()) / 1000).toString(),
-                            'X-RateLimit-Limit': '20',
-                            'X-RateLimit-Remaining': '0',
-                            'X-RateLimit-Reset': new Date(result.resetTime).toISOString()
-                        }
-                    }
-                );
+    if (!securityResult.success) {
+        return NextResponse.json(
+            { error: securityResult.error },
+            {
+                status: securityResult.blocked ? 403 : 429,
+                headers: securityResult.retryAfter ? {
+                    'Retry-After': String(securityResult.retryAfter),
+                    'X-RateLimit-Limit': '20',
+                    'X-RateLimit-Remaining': '0',
+                } : undefined
             }
-        }
-    } catch (dbError) {
-        console.error('D1 rate limit error:', dbError);
-        // Continue to Upstash fallback
-    }
-
-    // Try Upstash rate limiting (if configured)
-    if (ratelimit) {
-        try {
-            const { success } = await ratelimit.limit(ip);
-            if (!success) {
-                return NextResponse.json(
-                    { error: "Too many requests. Please slow down." },
-                    { status: 429 }
-                );
-            }
-        } catch (rateLimitError) {
-            console.error("Rate limit error:", rateLimitError);
-        }
+        );
     }
 
     // Request size validation
@@ -195,7 +127,7 @@ export async function GET(req: NextRequest) {
             solution_raw: solutionRaw,
             steps: stepsContent,
             ai_explanation: aiExplanation,
-            _version: "v2.1-bot-detection" // Deployment verification
+            _version: "v3.0-unified-security" // Unified security layer with IP blacklist
         });
 
     } catch (e: any) {

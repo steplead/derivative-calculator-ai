@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { create, all, format } from 'mathjs';
-import { ratelimit } from '@/utils/cache';
-import { looksLikeLegitimateBrowser } from '@/utils/turnstile';
+import { performSecurityCheck } from '@/utils/security';
 
 // Initialize mathjs with all functions
 const math = create(all);
@@ -74,32 +73,23 @@ function rref(matrix: any): { rrefMatrix: any, rank: number } {
 
 
 export async function POST(req: NextRequest) {
-    // Bot detection: Block non-browser requests
-    const userAgent = req.headers.get('user-agent');
-    const ip = req.headers.get('cf-connecting-ip') || req.headers.get('x-forwarded-for') || 'unknown';
-    const isLegitimateBrowser = looksLikeLegitimateBrowser(userAgent, req.headers);
+    // Unified Security Check (Rate limiting, Bot detection, IP blacklist)
+    const { searchParams } = new URL(req.url);
+    const securityResult = await performSecurityCheck(req.headers, searchParams, '/api/matrix', {
+        rateLimit: 5,       // EMERGENCY: Reduced from 10 to 5 requests per minute
+        rateWindow: 60,     // 60 second window
+    });
 
-    if (!isLegitimateBrowser) {
-        console.warn(`[BOT_BLOCKED] IP: ${ip}, UA: ${userAgent}, Endpoint: /api/matrix`);
+    if (!securityResult.success) {
         return NextResponse.json(
-            { error: "Access denied. Please use a web browser." },
-            { status: 403 }
-        );
-    }
-
-    // Rate limiting: 10 requests per 10 seconds per IP
-    if (ratelimit) {
-        try {
-            const { success } = await ratelimit.limit(ip);
-            if (!success) {
-                return NextResponse.json(
-                    { error: "Too many requests. Please slow down." },
-                    { status: 429 }
-                );
+            { error: securityResult.error },
+            {
+                status: securityResult.blocked ? 403 : 429,
+                headers: securityResult.retryAfter ? {
+                    'Retry-After': securityResult.retryAfter.toString()
+                } : undefined
             }
-        } catch (rateLimitError) {
-            console.error("Rate limit error:", rateLimitError);
-        }
+        );
     }
 
     try {

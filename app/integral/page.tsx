@@ -1,5 +1,5 @@
 import Calculator from '@/components/Calculator';
-import EmbedWidget from '@/components/EmbedWidget';
+// EmbedWidget removed to prevent API abuse
 import Link from 'next/link';
 
 import { getDictionary } from '../dictionaries';
@@ -88,17 +88,6 @@ export default async function IntegralPage() {
                     </div>
                 </div>
             </div>
-
-            {/* Embed Widget - Link Magnet Strategy */}
-            <div className="max-w-4xl mx-auto mt-16 pt-8 border-t border-gray-200 dark:border-slate-800">
-                <EmbedWidget
-                    problemSlug="integral-of-x-squared"
-                    problemFormula="x^2"
-                    problemType="integral"
-                    locale={locale}
-                />
-            </div>
-
         </div>
     );
 }

@@ -211,6 +211,15 @@ export async function performSecurityCheck(
     const referer = headers.get('referer') || '';
     const origin = headers.get('origin') || '';
 
+    // DIAGNOSTIC MODE: Skip all security checks if enabled
+    // @ts-ignore - Cloudflare Workers environment binding
+    const skipSecurity = getRequestContext()?.env?.SKIP_SECURITY === 'true';
+
+    if (skipSecurity) {
+        console.warn(`[SECURITY_BYPASS] ⚠️ SECURITY DISABLED - Skipping all checks for IP: ${ip}`);
+        return { success: true };
+    }
+
     // Log Turnstile token status
     console.log(`[SECURITY_CHECK] IP: ${ip} | Endpoint: ${endpoint} | Turnstile Token: ${turnstileToken ? 'PRESENT (length: ' + turnstileToken.length + ')' : 'MISSING'}`);
 

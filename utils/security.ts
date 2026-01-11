@@ -60,7 +60,7 @@ const SECURITY_CONFIG = {
 
     // Turnstile verification
     TURNSTILE: {
-        REQUIRED: false,          // TEMPORARY: Disabled due to CSP conflicts
+        REQUIRED: true,           // RE-ENABLED: CSP configured
     },
 };
 

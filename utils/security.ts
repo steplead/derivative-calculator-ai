@@ -60,7 +60,7 @@ const SECURITY_CONFIG = {
 
     // Turnstile verification
     TURNSTILE: {
-        REQUIRED: true,           // EMERGENCY: Enabled to stop distributed abuse
+        REQUIRED: false,          // TEMPORARY: Disabled due to CSP conflicts
     },
 };
 
@@ -297,8 +297,9 @@ export async function performSecurityCheck(
         };
     }
 
-    // ========== 2. Turnstile Verification (MANDATORY for all requests) ==========
-    // REMOVED same-origin bypass - all requests must verify Turnstile
+    // ========== 2. Turnstile Verification (OPTIONAL) ==========
+    // Turnstile is optional due to CSP conflicts
+    // If provided, skip other checks. Otherwise continue to bot detection.
     const requireTurnstile = options.requireTurnstile ?? SECURITY_CONFIG.TURNSTILE.REQUIRED;
 
     if (turnstileToken) {
@@ -328,6 +329,7 @@ export async function performSecurityCheck(
             error: 'CAPTCHA verification required. Please refresh the page.',
         };
     }
+    // If Turnstile not provided and not required, continue to other checks
 
     // ========== 3. Bot Detection (only if Turnstile not required) ==========
     const isLegitimateBrowser = looksLikeLegitimateBrowser(userAgent, headers);

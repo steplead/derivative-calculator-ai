@@ -5,3 +5,10 @@
 - New Key: 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
 - Location: Cloudflare Pages Environment Variables
 
+
+- Date: 2026-01-11 (17:00 UTC)
+- Action: Created Cloudflare Turnstile Widget
+- Site Key: 0x4AAAAAACLw2qsqlvg_5lIN
+- Secret Key: 0x4AAAAAACLw2tmHLxTXfUfID5pfhNxKYaU
+- Mode: Managed (Invisible)
+- Domains: derivativecalculatorai.com, derivative-calculator-ai.com

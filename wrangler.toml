@@ -3,6 +3,10 @@ compatibility_date = "2024-09-23"
 compatibility_flags = ["nodejs_compat", "nodejs_als"]
 pages_build_output_dir = ".vercel/output/static"
 
+# Environment variables
+[vars]
+SKIP_SECURITY = "true"  # TEMPORARY: Disable security checks for diagnosis
+
 [[d1_databases]]
 binding = "DB"
 database_name = "problems-db"

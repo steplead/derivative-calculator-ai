@@ -211,9 +211,12 @@ export async function performSecurityCheck(
     const referer = headers.get('referer') || '';
     const origin = headers.get('origin') || '';
 
-    // DIAGNOSTIC MODE: Skip all security checks if enabled
+    // DIAGNOSTIC MODE: Skip all security checks if enabled (CHECKED FIRST)
     // @ts-ignore - Cloudflare Workers environment binding
-    const skipSecurity = getRequestContext()?.env?.SKIP_SECURITY === 'true';
+    const env = getRequestContext()?.env;
+    const skipSecurity = env?.SKIP_SECURITY === 'true';
+
+    console.log(`[SECURITY_DIAGNOSIS] IP: ${ip} | SKIP_SECURITY env var: ${env?.SKIP_SECURITY || 'UNDEFINED'} | skipSecurity: ${skipSecurity}`);
 
     if (skipSecurity) {
         console.warn(`[SECURITY_BYPASS] ⚠️ SECURITY DISABLED - Skipping all checks for IP: ${ip}`);
@@ -223,7 +226,18 @@ export async function performSecurityCheck(
     // Log Turnstile token status
     console.log(`[SECURITY_CHECK] IP: ${ip} | Endpoint: ${endpoint} | Turnstile Token: ${turnstileToken ? 'PRESENT (length: ' + turnstileToken.length + ')' : 'MISSING'}`);
 
-    // ========== 0. Strict Referer/Origin Check ==========
+    // Get D1 database
+    // @ts-ignore - Cloudflare Workers D1 binding
+    const db = getRequestContext()?.env?.DB;
+
+    if (!db) {
+        console.error('[SECURITY_ERROR] D1 database not available');
+        // Fail open - allow request but log error
+        return { success: true };
+    }
+
+    // ========== 1. Check IP Blacklist ==========
+    const blockedEntry = await isIpBlocked(db, ip);
     // ONLY allow requests from actual browser navigation on your site
     // Block all direct API calls, even with same-origin
 
@@ -286,18 +300,7 @@ export async function performSecurityCheck(
         };
     }
 
-    // Get D1 database
-    // @ts-ignore - Cloudflare Workers D1 binding
-    const db = getRequestContext()?.env?.DB;
-
-    if (!db) {
-        console.error('[SECURITY_ERROR] D1 database not available');
-        // Fail open - allow request but log error
-        return { success: true };
-    }
-
-    // ========== 1. Check IP Blacklist ==========
-    const blockedEntry = await isIpBlocked(db, ip);
+    // ========== 2. Check IP Blacklist ==========
     if (blockedEntry) {
         const retryAfter = Math.ceil(blockedEntry.blocked_until - Date.now() / 1000);
         console.warn(`[BLOCKED_IP] ${ip} | Endpoint: ${endpoint} | Reason: ${blockedEntry.reason} | RetryAfter: ${retryAfter}s`);

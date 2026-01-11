@@ -19,10 +19,17 @@ export async function verifyTurnstileToken(
 
     const secretKey = process.env.TURNSTILE_SECRET_KEY;
 
+    console.log('[TURNSTILE_VERIFY] Starting verification...', {
+        hasToken: !!token,
+        tokenLength: token?.length,
+        hasSecretKey: !!secretKey,
+        remoteIp: remoteIp || 'none'
+    });
+
     if (!secretKey) {
         // Turnstile not configured - fail open for development
-        console.warn('TURNSTILE_SECRET_KEY not configured');
-        return { success: true };
+        console.error('[TURNSTILE_VERIFY] TURNSTILE_SECRET_KEY not configured in environment');
+        return { success: false, error: 'Server configuration error: TURNSTILE_SECRET_KEY not set' };
     }
 
     if (!token) {
@@ -30,6 +37,7 @@ export async function verifyTurnstileToken(
     }
 
     try {
+        console.log('[TURNSTILE_VERIFY] Sending request to Cloudflare...');
         const response = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
             method: 'POST',
             headers: {
@@ -44,16 +52,26 @@ export async function verifyTurnstileToken(
 
         const result: TurnstileResponse = await response.json();
 
+        console.log('[TURNSTILE_VERIFY] Cloudflare response:', {
+            success: result.success,
+            errorCodes: result['error-codes'],
+            challengeTs: result.challenge_ts,
+            hostname: result.hostname,
+            httpStatus: response.status
+        });
+
         if (result.success) {
+            console.log('[TURNSTILE_VERIFY] ✓ Token verified successfully');
             return { success: true };
         } else {
+            console.error('[TURNSTILE_VERIFY] ✗ Token verification failed:', result['error-codes']);
             return {
                 success: false,
                 error: result['error-codes']?.join(', ') || 'Verification failed'
             };
         }
     } catch (error) {
-        console.error('Turnstile verification error:', error);
+        console.error('[TURNSTILE_VERIFY] Network error during verification:', error);
         // Fail open on network errors
         return { success: true };
     }

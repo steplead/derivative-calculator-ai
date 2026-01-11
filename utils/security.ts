@@ -310,10 +310,29 @@ export async function performSecurityCheck(
         const verification = await verifyTurnstileToken(turnstileToken, ip);
 
         if (verification.success) {
-            // Turnstile verified - skip other checks and clear abuse score
+            // Turnstile verified - clear abuse score and allow subsequent requests
             await db.prepare("DELETE FROM abuse_scores WHERE ip = ?").bind(ip).run();
+
+            // Mark this IP as verified for 30 seconds (allow multiple requests with one token)
+            const now = Math.floor(Date.now() / 1000);
+            await db.prepare(`
+                INSERT OR REPLACE INTO ip_blacklist (ip, blocked_until, reason, offense_count, created_at)
+                VALUES (?, ?, ?, ?, ?)
+            `).bind(ip, now + 30, 'turnstile_verified', 0, now).run();
+
+            console.log(`[TURNSTILE_SUCCESS] IP ${ip} verified for 30 seconds`);
             return { success: true };
         } else {
+            // Check if this IP was recently verified via Turnstile (within 30 seconds)
+            const recentVerification = await db.prepare(
+                "SELECT * FROM ip_blacklist WHERE ip = ? AND reason = 'turnstile_verified' AND blocked_until > ?"
+            ).bind(ip, Math.floor(Date.now() / 1000)).first() as any;
+
+            if (recentVerification) {
+                console.log(`[TURNSTILE_CACHED] IP ${ip} using cached verification (${Math.ceil(recentVerification.blocked_until - Date.now()/1000)}s remaining)`);
+                return { success: true };
+            }
+
             // Invalid Turnstile token - add to abuse score
             const score = await getAndUpdateAbuseScore(db, ip, 50);
             if (score >= SECURITY_CONFIG.ABUSE_SCORING.BLOCK_THRESHOLD) {
@@ -326,7 +345,17 @@ export async function performSecurityCheck(
             };
         }
     } else if (requireTurnstile) {
-        // Turnstile required but not provided
+        // Turnstile required but not provided - check for recent verification
+        const recentVerification = await db.prepare(
+            "SELECT * FROM ip_blacklist WHERE ip = ? AND reason = 'turnstile_verified' AND blocked_until > ?"
+        ).bind(ip, Math.floor(Date.now() / 1000)).first() as any;
+
+        if (recentVerification) {
+            console.log(`[TURNSTILE_CACHED] IP ${ip} using cached verification, no token provided (${Math.ceil(recentVerification.blocked_until - Date.now()/1000)}s remaining)`);
+            return { success: true };
+        }
+
+        // No recent verification - require Turnstile
         return {
             success: false,
             error: 'CAPTCHA verification required. Please refresh the page.',

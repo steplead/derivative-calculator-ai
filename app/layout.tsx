@@ -7,6 +7,7 @@ import { GoogleAnalytics } from '@next/third-parties/google';
 import Footer from "@/components/Footer";
 import { headers } from 'next/headers';
 import { getBaseUrl } from '@/utils/robust-url';
+import { TurnstileProvider } from "@/components/TurnstileProvider";
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -79,11 +80,13 @@ export default async function RootLayout({
   return (
     <html lang={locale} className="bg-white dark:bg-[#0a0a0a]">
       <body className={`${inter.className} min-h-screen bg-white dark:bg-[#0a0a0a] text-gray-900 dark:text-gray-100 flex flex-col`}>
-        <Navbar dict={dict} />
-        <main className="flex-grow w-full">
-          {children}
-        </main>
-        <Footer wikiTopics={wikiTopics} problems={popularProblems} locale={locale} />
+        <TurnstileProvider>
+          <Navbar dict={dict} />
+          <main className="flex-grow w-full">
+            {children}
+          </main>
+          <Footer wikiTopics={wikiTopics} problems={popularProblems} locale={locale} />
+        </TurnstileProvider>
       </body>
       <GoogleAnalytics gaId="G-3WHC12TKH4" />
     </html>

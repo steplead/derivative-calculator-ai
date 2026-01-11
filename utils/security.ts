@@ -297,19 +297,10 @@ export async function performSecurityCheck(
         };
     }
 
-    // ========== 2. Skip bot detection for same-origin requests ==========
-    // If request passed referer check (same origin), skip strict bot detection
-    // This allows legitimate API calls from your own site
-    // Reuse the isSameOrigin computed earlier
-    const refererHostForBot = referer ? new URL(referer).hostname : '';
-    const originHostForBot = origin ? new URL(origin).hostname : '';
-    const isSameOriginForBot = refererHostForBot === host || originHostForBot === host;
-
-    if (isSameOriginForBot) {
-        // Same-origin request - skip strict bot detection
-        // Proceed to rate limiting
-    } else {
+    // ========== 2. Turnstile Verification (MANDATORY for all requests) ==========
+    // REMOVED same-origin bypass - all requests must verify Turnstile
     const requireTurnstile = options.requireTurnstile ?? SECURITY_CONFIG.TURNSTILE.REQUIRED;
+
     if (turnstileToken) {
         const { verifyTurnstileToken } = await import('./turnstile');
         const verification = await verifyTurnstileToken(turnstileToken, ip);
@@ -338,7 +329,7 @@ export async function performSecurityCheck(
         };
     }
 
-    // ========== 3. Bot Detection ==========
+    // ========== 3. Bot Detection (only if Turnstile not required) ==========
     const isLegitimateBrowser = looksLikeLegitimateBrowser(userAgent, headers);
 
     if (!isLegitimateBrowser) {
@@ -360,7 +351,6 @@ export async function performSecurityCheck(
             success: false,
             error: 'Access denied. Please use a web browser.',
         };
-    }
     }
 
     // ========== 4. D1 Rate Limiting ==========

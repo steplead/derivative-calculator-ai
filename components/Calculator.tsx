@@ -8,6 +8,7 @@ const MathDisplay = dynamic(() => import('./MathDisplay'), { ssr: false });
 const Graph = dynamic(() => import('./Graph'), { ssr: false });
 const StepDisplay = dynamic(() => import('./StepDisplay'), { ssr: false });
 import AdShell from './AdShell';
+import { useTurnstile, addTokenToUrl } from './TurnstileProvider';
 
 type CalculatorProps = {
     initialEquation?: string;
@@ -21,6 +22,7 @@ export default function Calculator({ initialEquation = '', initialLimitTo = '0',
     const searchParams = useSearchParams();
     const equationParam = searchParams.get('equation');
     const limitToParam = searchParams.get('to');
+    const { token } = useTurnstile();
 
     const [input, setInput] = useState((equationParam || initialEquation || '').toString().replace(/^null$/i, ''));
     const [limitTo, setLimitTo] = useState((limitToParam || initialLimitTo || '0').toString().replace(/^null$/i, '0'));
@@ -75,7 +77,7 @@ export default function Calculator({ initialEquation = '', initialLimitTo = '0',
             }
 
             // Step 1: Fast fetch (Math only)
-            const resFast = await fetch(`${baseUrl}&include_ai=false`);
+            const resFast = await fetch(addTokenToUrl(`${baseUrl}&include_ai=false`, token));
             if (!resFast.ok) {
                 const text = await resFast.text();
                 try {
@@ -94,7 +96,7 @@ export default function Calculator({ initialEquation = '', initialLimitTo = '0',
             // Step 2: Slow fetch (AI Explanation)
             // We keep the result but maybe show a loading indicator for the explanation part
             try {
-                const resFull = await fetch(`${baseUrl}&include_ai=true`);
+                const resFull = await fetch(addTokenToUrl(`${baseUrl}&include_ai=true`, token));
                 if (resFull.ok) {
                     const dataFull = await resFull.json();
                     setResult(dataFull); // Update with full data including AI

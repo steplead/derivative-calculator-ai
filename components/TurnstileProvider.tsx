@@ -25,16 +25,17 @@ const SITE_KEY = '0x4AAAAAACLw2qsqlvg_5lIN'; // Your Turnstile Site Key
 export function TurnstileProvider({ children }: { children: ReactNode }) {
   const [token, setToken] = useState<string | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [widgetId, setWidgetId] = useState<string | null>(null);
 
   // Load Turnstile script
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
-    console.log('[Turnstile] Loading...');
+    console.log('[Turnstile] Loading script...');
 
     // Check if already loaded
     if (window.turnstile) {
-      console.log('[Turnstile] Already loaded');
+      console.log('[Turnstile] Script already loaded');
       setIsLoaded(true);
       return;
     }
@@ -56,114 +57,112 @@ export function TurnstileProvider({ children }: { children: ReactNode }) {
     document.head.appendChild(script);
 
     return () => {
-      // Don't remove script as other components might need it
+      // Don't remove script
     };
   }, []);
 
-  // Get token when loaded
+  // Render widget when script is loaded
   useEffect(() => {
-    if (!isLoaded) {
-      console.log('[Turnstile] Waiting for script to load...');
-      return;
-    }
-
-    if (!window.turnstile) {
-      console.error('[Turnstile] Script loaded but window.turnstile not available');
+    if (!isLoaded || !window.turnstile) {
+      console.log('[Turnstile] Waiting for script...', { isLoaded, hasTurnstile: !!window.turnstile });
       return;
     }
 
     console.log('[Turnstile] Initializing widget...');
 
-    // Invisible widget - get token automatically
+    // Create container
+    const containerId = 'turnstile-container';
+    let container = document.getElementById(containerId);
+
+    if (!container) {
+      container = document.createElement('div');
+      container.id = containerId;
+      container.style.position = 'fixed';
+      container.style.bottom = '0';
+      container.style.right = '0';
+      container.style.zIndex = '-9999';
+      container.style.opacity = '0';
+      container.style.pointerEvents = 'none';
+      document.body.appendChild(container);
+    }
+
+    // Clear previous widget
+    if (widgetId && window.turnstile) {
+      try {
+        window.turnstile.remove(widgetId);
+        console.log('[Turnstile] Previous widget removed');
+      } catch (e) {
+        console.error('[Turnstile] Error removing previous widget:', e);
+      }
+    }
+
+    // Render new widget
     try {
-      // Create invisible container
-      const containerId = 'turnstile-invisible-container';
-      let container = document.getElementById(containerId);
-
-      if (!container) {
-        container = document.createElement('div');
-        container.id = containerId;
-        container.style.position = 'absolute';
-        container.style.visibility = 'hidden';
-        container.style.zIndex = '-1';
-        document.body.appendChild(container);
-      }
-
-      // Clear previous widget if exists
-      if (window.turnstile?.getWidget(container)) {
-        window.turnstile.remove(window.turnstile.getWidget(container));
-      }
-
-      // Render invisible widget with explicit execution
-      const widgetId = window.turnstile.render(container, {
+      const newWidgetId = window.turnstile.render(container, {
         sitekey: SITE_KEY,
         theme: 'auto',
-        size: 'invisible',
         callback: (newToken: string) => {
-          console.log('[Turnstile] Token received:', newToken ? 'YES' : 'NO');
+          console.log('[Turnstile] ✓ Token received');
           setToken(newToken);
         },
-        'error-callback': (error: any): void => {
-          console.error('[Turnstile] Token generation failed:', error);
+        'error-callback': (error: any) => {
+          console.error('[Turnstile] ✗ Token generation failed:', error);
           setToken(null);
         },
-        'expired-callback': (): void => {
+        'expired-callback': () => {
           console.log('[Turnstile] Token expired');
           setToken(null);
         },
       });
 
-      console.log('[Turnstile] Widget rendered, ID:', widgetId);
+      setWidgetId(newWidgetId);
+      console.log('[Turnstile] Widget rendered, ID:', newWidgetId);
 
-      // Try to execute immediately to get token
+      // Try to get token immediately
       setTimeout(() => {
         try {
-          if (window.turnstile && container) {
-            const wid = window.turnstile.getWidget(container);
-            if (wid) {
-              console.log('[Turnstile] Executing widget...');
-              window.turnstile.execute(wid);
+          if (window.turnstile && newWidgetId) {
+            console.log('[Turnstile] Attempting to get response...');
+            const response = window.turnstile.getResponse(newWidgetId);
+            if (response) {
+              console.log('[Turnstile] ✓ Got immediate response');
+              setToken(response);
+            } else {
+              console.log('[Turnstile] No immediate response available (need interaction)');
             }
           }
         } catch (e) {
-          console.error('[Turnstile] Execute error:', e);
+          console.error('[Turnstile] Error getting response:', e);
         }
       }, 500);
 
-      // Cleanup
-      return () => {
+    } catch (e) {
+      console.error('[Turnstile] Widget render error:', e);
+    }
+
+    // Cleanup
+    return () => {
+      if (widgetId && window.turnstile) {
         try {
-          if (window.turnstile && container) {
-            const wid = window.turnstile.getWidget(container);
-            if (wid) {
-              window.turnstile.remove(wid);
-            }
-          }
+          window.turnstile.remove(widgetId);
+          console.log('[Turnstile] Widget cleaned up');
         } catch (e) {
           console.error('[Turnstile] Cleanup error:', e);
         }
-      };
-    } catch (e) {
-      console.error('[Turnstile] Initialization error:', e);
-    }
+      }
+    };
   }, [isLoaded]);
 
   const refreshTokens = () => {
     console.log('[Turnstile] Refreshing token...');
     setToken(null);
-    // Force re-render of widget
-    if (window.turnstile) {
-      const container = document.getElementById('turnstile-invisible-container');
-      if (container) {
-        try {
-          const wid = window.turnstile.getWidget(container);
-          if (wid) {
-            window.turnstile.reset(wid);
-            setTimeout(() => window.turnstile.execute(wid), 100);
-          }
-        } catch (e) {
-          console.error('[Turnstile] Reset error:', e);
-        }
+
+    if (widgetId && window.turnstile) {
+      try {
+        window.turnstile.reset(widgetId);
+        console.log('[Turnstile] Widget reset');
+      } catch (e) {
+        console.error('[Turnstile] Reset error:', e);
       }
     }
   };
@@ -177,14 +176,17 @@ export function TurnstileProvider({ children }: { children: ReactNode }) {
 
 export function useTurnstile() {
   const context = useContext(TurnstileContext);
-  console.log('[Turnstile] useTurnstile called, token:', context.token ? 'EXISTS' : 'NULL');
+  // Only log when token changes, not on every render
+  useEffect(() => {
+    console.log('[Turnstile] Current token state:', context.token ? 'EXISTS' : 'NULL');
+  }, [context.token]);
   return context;
 }
 
 // Helper function to add token to URL
 export function addTokenToUrl(url: string, token: string | null): string {
   if (!token) {
-    console.log('[Turnstile] No token to add to URL');
+    console.log('[Turnstile] No token available');
     return url;
   }
   const separator = url.includes('?') ? '&' : '?';

@@ -213,7 +213,7 @@ export async function performSecurityCheck(
 
     // DIAGNOSTIC MODE: Skip all security checks if enabled (CHECKED FIRST)
     // @ts-ignore - Cloudflare Workers environment binding
-    const env = getRequestContext()?.env;
+    const env = getRequestContext()?.env as any;
     const skipSecurity = env?.SKIP_SECURITY === 'true';
 
     console.log(`[SECURITY_DIAGNOSIS] IP: ${ip} | SKIP_SECURITY env var: ${env?.SKIP_SECURITY || 'UNDEFINED'} | skipSecurity: ${skipSecurity}`);

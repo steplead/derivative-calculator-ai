@@ -186,11 +186,11 @@ export function useTurnstile() {
 // Helper function to add token to URL
 export function addTokenToUrl(url: string, token: string | null): string {
   if (!token) {
-    console.log('[Turnstile] No token available');
+    console.warn('[Turnstile] ⚠ No token available - URL unchanged');
     return url;
   }
   const separator = url.includes('?') ? '&' : '?';
   const result = `${url}${separator}turnstile_token=${encodeURIComponent(token)}`;
-  console.log('[Turnstile] Token added to URL');
+  console.log('[Turnstile] ✓ Token added to URL (length:', token.length, 'chars)');
   return result;
 }

@@ -211,6 +211,9 @@ export async function performSecurityCheck(
     const referer = headers.get('referer') || '';
     const origin = headers.get('origin') || '';
 
+    // Log Turnstile token status
+    console.log(`[SECURITY_CHECK] IP: ${ip} | Endpoint: ${endpoint} | Turnstile Token: ${turnstileToken ? 'PRESENT (length: ' + turnstileToken.length + ')' : 'MISSING'}`);
+
     // ========== 0. Strict Referer/Origin Check ==========
     // ONLY allow requests from actual browser navigation on your site
     // Block all direct API calls, even with same-origin

@@ -60,6 +60,15 @@ export default function Calculator({ initialEquation = '', initialLimitTo = '0',
         const target = (targetToSolve || '0').toString().replace(/^null$/i, '0');
         if (!formula) return;
 
+        // Check if Turnstile token is available
+        if (!token) {
+            console.warn('[Calculator] No Turnstile token available yet');
+            setError('CAPTCHA verification required. Please wait a moment and try again.');
+            return;
+        }
+
+        console.log('[Calculator] Starting calculation with token:', token ? 'EXISTS' : 'NULL');
+
         setLoading(true);
         setError('');
         setResult(null);
@@ -77,7 +86,9 @@ export default function Calculator({ initialEquation = '', initialLimitTo = '0',
             }
 
             // Step 1: Fast fetch (Math only)
-            const resFast = await fetch(addTokenToUrl(`${baseUrl}&include_ai=false`, token));
+            const urlWithToken = addTokenToUrl(`${baseUrl}&include_ai=false`, token);
+            console.log('[Calculator] Fetching URL:', urlWithToken);
+            const resFast = await fetch(urlWithToken);
             if (!resFast.ok) {
                 const text = await resFast.text();
                 try {

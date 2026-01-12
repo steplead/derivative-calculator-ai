@@ -236,55 +236,23 @@ export async function performSecurityCheck(
         return { success: true };
     }
 
-    // ========== 1. Check IP Blacklist ==========
-    const blockedEntry = await isIpBlocked(db, ip);
-    // ONLY allow requests from actual browser navigation on your site
-    // Block all direct API calls, even with same-origin
+    // ========== 1. Host Check (SIMPLIFIED - Only check allowed domains) ==========
 
     const allowedHosts = [
         'derivative-calculator-ai.com',
         'www.derivative-calculator-ai.com',
         'derivativecalculatorai.com',
+        'localhost', // For local development
     ];
 
-    const isAllowedHost = allowedHosts.includes(host);
+    const isAllowedHost = allowedHosts.some(h => host === h || host.endsWith('.' + h));
 
     // Block if host is not allowed
     if (!isAllowedHost) {
-        console.warn(`[HOST_BLOCKED] IP: ${ip} | Host: ${host} | Referer: ${referer} | Origin: ${origin} | Endpoint: ${endpoint}`);
+        console.warn(`[HOST_BLOCKED] IP: ${ip} | Host: ${host} | Endpoint: ${endpoint}`);
         return {
             success: false,
             error: 'API access restricted. Please use the web interface at derivativecalculatorai.com',
-            blocked: true,
-        };
-    }
-
-    // CRITICAL: Require BOTH referer AND origin for non-navigation requests
-    // API calls should have Origin header (fetch, XMLHttpRequest)
-    // Direct navigation has Referer but no Origin
-    const hasOrigin = !!origin;
-    const hasReferer = !!referer;
-
-    // Must have either Origin (API call) or Referer (navigation)
-    if (!hasOrigin && !hasReferer) {
-        console.warn(`[NO_HEADERS_BLOCKED] IP: ${ip} | Host: ${host} | UA: ${userAgent} | Endpoint: ${endpoint}`);
-        return {
-            success: false,
-            error: 'Direct API access is not allowed. Please use derivativecalculatorai.com',
-            blocked: true,
-        };
-    }
-
-    // Verify Origin/Referer matches the host (prevent spoofed headers)
-    const refererHost = referer ? new URL(referer).hostname : '';
-    const originHost = origin ? new URL(origin).hostname : '';
-    const isSameOrigin = refererHost === host || originHost === host;
-
-    if (!isSameOrigin) {
-        console.warn(`[SPOOFED_HEADERS_BLOCKED] IP: ${ip} | Host: ${host} | Referer: ${referer} | Origin: ${origin} | Endpoint: ${endpoint}`);
-        return {
-            success: false,
-            error: 'Invalid request headers. Please use a modern web browser.',
             blocked: true,
         };
     }
@@ -325,10 +293,7 @@ export async function performSecurityCheck(
         const verification = await verifyTurnstileToken(turnstileToken, ip);
 
         if (verification.success) {
-            // Turnstile verified - clear abuse score and allow subsequent requests
-            await db.prepare("DELETE FROM abuse_scores WHERE ip = ?").bind(ip).run();
-
-            // Mark this IP as verified for 30 seconds (allow multiple requests with one token)
+            // Turnstile verified - mark this IP as verified for 30 seconds
             const now = Math.floor(Date.now() / 1000);
             await db.prepare(`
                 INSERT OR REPLACE INTO ip_blacklist (ip, blocked_until, reason, offense_count, created_at)
@@ -348,12 +313,7 @@ export async function performSecurityCheck(
                 return { success: true };
             }
 
-            // Invalid Turnstile token - add to abuse score
-            const score = await getAndUpdateAbuseScore(db, ip, 50);
-            if (score >= SECURITY_CONFIG.ABUSE_SCORING.BLOCK_THRESHOLD) {
-                await blockIp(db, ip, 'Invalid Turnstile token', 1);
-            }
-
+            // Invalid Turnstile token - just return error (NO abuse scoring to prevent false positives)
             return {
                 success: false,
                 error: 'CAPTCHA verification failed. Please refresh and try again.',

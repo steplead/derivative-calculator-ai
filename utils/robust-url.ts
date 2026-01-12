@@ -30,6 +30,6 @@ export function getBaseUrl(): string {
         return `https://${process.env.VERCEL_URL}`;
     }
 
-    // 4. Last result fallback: Production Domain
-    return 'https://derivative-calculator-ai.pages.dev';
+    // 4. Last resort fallback: Production Domain (use custom domain, not Cloudflare's default)
+    return 'https://derivativecalculatorai.com';
 }

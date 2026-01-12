@@ -10,7 +10,7 @@ export const runtime = 'edge';
 export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const expression = searchParams.get('equation');
-    const includeAi = false; // EMERGENCY: AI disabled to stop API abuse
+    const includeAi = searchParams.get('include_ai') !== 'false'; // Re-enabled: AI now active with rate limiting protection
 
     if (!expression) {
         return NextResponse.json({ error: "No equation provided" }, { status: 400 });
@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
 
     // Unified Security Check (Rate limiting, Bot detection, IP blacklist, Strict Referer check)
     const securityResult = await performSecurityCheck(req.headers, searchParams, '/api/derivative', {
-        rateLimit: 5,       // EMERGENCY: Reduced from 10 to 5 requests per minute
+        rateLimit: 20,      // Adjusted: 20 req/min (balance user experience and abuse prevention)
         rateWindow: 60,     // 60 second window
     });
 

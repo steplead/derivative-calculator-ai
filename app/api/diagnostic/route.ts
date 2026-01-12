@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getRequestContext } from '@cloudflare/next-on-pages';
 
 export const runtime = 'edge';
 
 export async function GET(request: NextRequest) {
     try {
-        // @ts-ignore - Cloudflare Workers environment
-        const env = getRequestContext()?.env;
+        // @ts-ignore - Cloudflare Workers environment binding
+        const env = getRequestContext()?.env as any;
 
         const diagnostic = {
             timestamp: new Date().toISOString(),

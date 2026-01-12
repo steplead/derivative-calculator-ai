@@ -37,9 +37,9 @@ interface AbuseScoreEntry {
 const SECURITY_CONFIG = {
     // Rate limiting: requests per window
     RATE_LIMIT: {
-        DEFAULT_LIMIT: 5,         // EMERGENCY: Lowered from 20 to 5 req/min
+        DEFAULT_LIMIT: 20,        // Adjusted: 20 req/min (balance between user experience and abuse prevention)
         DEFAULT_WINDOW: 60,       // seconds
-        STRICT_LIMIT: 2,          // EMERGENCY: Lowered from 5 to 2 for suspicious IPs
+        STRICT_LIMIT: 5,          // For suspicious IPs (increased from 2)
         STRICT_WINDOW: 60,        // seconds
     },
 
@@ -289,28 +289,31 @@ export async function performSecurityCheck(
         };
     }
 
-    // Additional check: Require Accept-Language header (browsers always send it)
-    const acceptLanguage = headers.get('accept-language');
-    if (!acceptLanguage || acceptLanguage.length < 2) {
-        console.warn(`[NO_ACCEPT_LANG_BLOCKED] IP: ${ip} | UA: ${userAgent} | Accept-Language: ${acceptLanguage} | Endpoint: ${endpoint}`);
-        return {
-            success: false,
-            error: 'Invalid request. Please use a web browser to access this service.',
-            blocked: true,
-        };
-    }
+    // ========== 2. IP Blacklist Check (DISABLED - Causing false positives) ==========
+    // Only Rate Limiting is enabled to prevent false positives
+    // if (blockedEntry) {
+    //     const retryAfter = Math.ceil(blockedEntry.blocked_until - Date.now() / 1000);
+    //     console.warn(`[BLOCKED_IP] ${ip} | Endpoint: ${endpoint} | Reason: ${blockedEntry.reason} | RetryAfter: ${retryAfter}s`);
+    //     return {
+    //         success: false,
+    //         error: 'Your IP has been temporarily blocked due to suspicious activity.',
+    //         retryAfter,
+    //         blocked: true,
+    //     };
+    // }
 
-    // ========== 2. Check IP Blacklist ==========
-    if (blockedEntry) {
-        const retryAfter = Math.ceil(blockedEntry.blocked_until - Date.now() / 1000);
-        console.warn(`[BLOCKED_IP] ${ip} | Endpoint: ${endpoint} | Reason: ${blockedEntry.reason} | RetryAfter: ${retryAfter}s`);
-        return {
-            success: false,
-            error: 'Your IP has been temporarily blocked due to suspicious activity.',
-            retryAfter,
-            blocked: true,
-        };
-    }
+    // ========== 2.1. Accept-Language Check (DISABLED - Too many false positives) ==========
+    // Some browser extensions/privacy settings block or modify Accept-Language
+    // const acceptLanguage = headers.get('accept-language');
+    // if (!acceptLanguage || acceptLanguage.length < 2) {
+    //     console.warn(`[NO_ACCEPT_LANG_BLOCKED] IP: ${ip} | UA: ${userAgent} | Accept-Language: ${acceptLanguage} | Endpoint: ${endpoint}`);
+    //     return {
+    //         success: false,
+    //         error: 'Invalid request. Please use a web browser to access this service.',
+    //         blocked: true,
+    //     };
+    // }
+
 
     // ========== 2. Turnstile Verification (OPTIONAL) ==========
     // Turnstile is optional due to CSP conflicts
@@ -375,61 +378,30 @@ export async function performSecurityCheck(
     }
     // If Turnstile not provided and not required, continue to other checks
 
-    // ========== 3. Bot Detection (only if Turnstile not required) ==========
-    const isLegitimateBrowser = looksLikeLegitimateBrowser(userAgent, headers);
-
-    if (!isLegitimateBrowser) {
-        // Add to abuse score
-        const score = await getAndUpdateAbuseScore(db, ip, 30);
-
-        console.warn(`[BOT_DETECTED] IP: ${ip} | UA: ${userAgent} | Endpoint: ${endpoint} | Score: ${score}`);
-
-        if (score >= SECURITY_CONFIG.ABUSE_SCORING.BLOCK_THRESHOLD) {
-            await blockIp(db, ip, 'Automated bot detected', 1);
-            return {
-                success: false,
-                error: 'Access denied. Please use a web browser.',
-                blocked: true,
-            };
-        }
-
-        return {
-            success: false,
-            error: 'Access denied. Please use a web browser.',
-        };
-    }
+    // ========== 3. Bot Detection (DISABLED - Too many false positives) ==========
+    // Only Rate Limiting is enabled to avoid false positives
+    // const isLegitimateBrowser = looksLikeLegitimateBrowser(userAgent, headers);
+    // if (!isLegitimateBrowser) {
+    //     const score = await getAndUpdateAbuseScore(db, ip, 30);
+    //     console.warn(`[BOT_DETECTED] IP: ${ip} | UA: ${userAgent} | Endpoint: ${endpoint} | Score: ${score}`);
+    //     if (score >= SECURITY_CONFIG.ABUSE_SCORING.BLOCK_THRESHOLD) {
+    //         await blockIp(db, ip, 'Automated bot detected', 1);
+    //         return { success: false, error: 'Access denied. Please use a web browser.', blocked: true };
+    //     }
+    //     return { success: false, error: 'Access denied. Please use a web browser.' };
+    // }
 
     // ========== 4. D1 Rate Limiting ==========
     const limit = options.rateLimit ?? SECURITY_CONFIG.RATE_LIMIT.DEFAULT_LIMIT;
     const window = options.rateWindow ?? SECURITY_CONFIG.RATE_LIMIT.DEFAULT_WINDOW;
 
     try {
-        // Get current abuse score to determine if we should use strict rate limiting
-        const abuseEntry = await db.prepare(
-            "SELECT * FROM abuse_scores WHERE ip = ?"
-        ).bind(ip).first() as AbuseScoreEntry | null;
-
-        // Use strict rate limiting for IPs with high abuse scores
-        const effectiveLimit = abuseEntry && abuseEntry.score > 50
-            ? SECURITY_CONFIG.RATE_LIMIT.STRICT_LIMIT
-            : limit;
-
-        const result = await checkD1RateLimitWithStrictMode(db, ip, effectiveLimit, window);
+        // Simplified rate limiting (NO strict mode based on abuse scores)
+        const result = await checkD1RateLimitWithStrictMode(db, ip, limit, window);
 
         if (!result.success) {
-            // Rate limit exceeded - add to abuse score
-            const score = await getAndUpdateAbuseScore(db, ip, 20);
-
-            console.warn(`[RATE_LIMIT] IP: ${ip} | Endpoint: ${endpoint} | Score: ${score}`);
-
-            if (score >= SECURITY_CONFIG.ABUSE_SCORING.BLOCK_THRESHOLD) {
-                await blockIp(db, ip, 'Excessive rate limiting violations', 1);
-                return {
-                    success: false,
-                    error: 'You have been temporarily blocked due to excessive requests.',
-                    blocked: true,
-                };
-            }
+            // Rate limit exceeded - simple rate limit response (NO abuse scoring to prevent false positives)
+            console.warn(`[RATE_LIMIT] IP: ${ip} | Endpoint: ${endpoint}`);
 
             return {
                 success: false,

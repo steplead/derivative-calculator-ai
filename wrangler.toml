@@ -5,7 +5,7 @@ pages_build_output_dir = ".vercel/output/static"
 
 # Environment variables
 [vars]
-SKIP_SECURITY = "true"  # TEMPORARY: Disable security checks for diagnosis
+# SKIP_SECURITY = "true"  # REMOVED: Security checks now active
 
 [[d1_databases]]
 binding = "DB"

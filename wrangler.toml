@@ -4,9 +4,9 @@ compatibility_flags = ["nodejs_compat", "nodejs_als"]
 pages_build_output_dir = ".vercel/output/static"
 
 # Environment variables
+# IMPORTANT: Add OPENROUTER_API_KEY in Cloudflare Dashboard:
+# Settings > Environment variables > Production & Preview
 [vars]
-OPENROUTER_API_KEY = "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"
-# SKIP_SECURITY = "true"  # REMOVED: Security checks now active
 
 [[d1_databases]]
 binding = "DB"

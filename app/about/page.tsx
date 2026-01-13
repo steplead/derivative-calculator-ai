@@ -1,6 +1,6 @@
 import { headers } from 'next/headers';
 import type { Metadata } from 'next';
-import StructuredData, { generateMathSolverData } from '@/components/StructuredData';
+import StructuredData from '@/components/StructuredData';
 
 export async function generateMetadata(): Promise<Metadata> {
     const headersList = await headers();
@@ -59,7 +59,7 @@ export default function AboutPage() {
                             </p>
 
                             <p>
-                                Born from the need for a more intuitive, reliable, and accessible mathematical toolkit, we've built a platform that combines the rigid precision of symbolic math engines with the contextual intelligence of modern Large Language Models (LLMs).
+                                Born from the need for a more intuitive, reliable, and accessible mathematical toolkit, we&apos;ve built a platform that combines the rigid precision of symbolic math engines with the contextual intelligence of modern Large Language Models (LLMs).
                             </p>
 
                             <div className="grid md:grid-cols-2 gap-8 my-12">
@@ -74,11 +74,11 @@ export default function AboutPage() {
                             </div>
 
                             <p>
-                                Whether you're a university student tackling advanced multivariable calculus or a professional engineer optimizing a system, our "Elite" toolkit is designed to provide clarity where others provide confusion.
+                                Whether you&apos;re a university student tackling advanced multivariable calculus or a professional engineer optimizing a system, our &quot;Elite&quot; toolkit is designed to provide clarity where others provide confusion.
                             </p>
 
                             <p className="italic text-blue-600 dark:text-blue-400 pt-4">
-                                "We don't just solve problems; we solve for understanding."
+                                &quot;We don&apos;t just solve problems; we solve for understanding.&quot;
                             </p>
 
                             {/* E-E-A-T: Author/Team Section */}
@@ -144,7 +144,7 @@ export default function AboutPage() {
                             <div className="mt-12 p-6 rounded-2xl bg-gradient-to-r from-blue-600 to-teal-600 text-white">
                                 <h3 className="text-2xl font-bold mb-3">Get in Touch</h3>
                                 <p className="text-blue-50 mb-4">
-                                    Have questions, suggestions, or feedback? We'd love to hear from you.
+                                    Have questions, suggestions, or feedback? We&apos;d love to hear from you.
                                 </p>
                                 <a
                                     href="mailto:contact@derivativecalculatorai.com"

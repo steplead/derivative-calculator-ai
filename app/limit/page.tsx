@@ -1,8 +1,11 @@
+import { Suspense } from 'react';
+import { headers } from 'next/headers';
 import Calculator from '@/components/Calculator';
 // EmbedWidget removed to prevent API abuse
-import Link from 'next/link';
-
 import { getDictionary } from '../dictionaries';
+
+export const runtime = 'edge';
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata() {
     let locale = "en";
@@ -18,29 +21,29 @@ export async function generateMetadata() {
 
     const h1 = dict?.limit?.h1 || "Limit Calculator";
     const subtitle = dict?.limit?.subtitle || "Solve limits instantly.";
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://derivativecalculatorai.com';
+    const baseUrlWithLocale = locale === 'en' ? siteUrl : `${siteUrl}/${locale}`;
+    const url = `${baseUrlWithLocale}/limit`;
 
     return {
         title: `${h1} - Evaluate Limits with Steps | Derivative Calculator AI`,
         description: subtitle,
         alternates: {
-            canonical: '/limit',
+            canonical: url,
             languages: {
-                'en': '/limit',
-                'es': '/es/limit',
-                'pt': '/pt/limit',
+                'en': `${siteUrl}/limit`,
+                'es': `${siteUrl}/es/limit`,
+                'pt': `${siteUrl}/pt/limit`,
             },
+        },
+        openGraph: {
+            title: `${h1} - Derivative Calculator AI`,
+            description: subtitle,
+            url,
+            type: 'website',
         },
     };
 }
-
-import { Suspense } from 'react';
-
-import { headers } from 'next/headers';
-export const runtime = 'edge';
-
-import { getDictionary as getDict } from '../dictionaries';
-
-export const dynamic = 'force-dynamic';
 
 export default async function LimitPage() {
     let locale = "en";

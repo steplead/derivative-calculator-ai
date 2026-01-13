@@ -5,14 +5,6 @@ export const runtime = 'edge';
 import { getDictionary } from '../dictionaries';
 import { getBaseUrl } from '@/utils/robust-url';
 
-// Helper to get formula title if needed (reuse from [slug]/page logic if possible, or simple mapping)
-function getProblemTitle(locale: string, formula: string, type: string = 'derivative') {
-    if (locale === 'en') return `Derivative of ${formula}`;
-    if (locale === 'es') return `Derivada de ${formula}`;
-    if (locale === 'pt') return `Derivada de ${formula}`; // Or "Derivada de"
-    return `Derivative of ${formula}`;
-}
-
 export const dynamic = 'force-dynamic';
 
 export async function generateMetadata() {

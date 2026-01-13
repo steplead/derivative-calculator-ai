@@ -171,7 +171,7 @@ export default function CalculatorsPage() {
               </div>
               <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">AI-Powered</h3>
               <p className="text-gray-600 dark:text-gray-400">
-                Get step-by-step explanations powered by advanced AI. Learn the "why" behind every solution.
+                Get step-by-step explanations powered by advanced AI. Learn the &quot;why&quot; behind every solution.
               </p>
             </div>
 

@@ -35,7 +35,7 @@ export default function PrivacyPage() {
 
                 <h2>1. Introduction</h2>
                 <p>
-                    Derivative Calculator AI ("we", "our", or "us") operates the website https://derivativecalculatorai.com and the associated Chrome Extension.
+                    Derivative Calculator AI (&quot;we&quot;, &quot;our&quot;, or &quot;us&quot;) operates the website https://derivativecalculatorai.com and the associated Chrome Extension.
                     We respect your privacy and are committed to protecting it through our compliance with this policy.
                 </p>
 
@@ -66,7 +66,7 @@ export default function PrivacyPage() {
                 </p>
                 <ul>
                     <li><strong>activeTab:</strong> To read the mathematical formula you explicitly select on a webpage. We do not read other page content.</li>
-                    <li><strong>contextMenus:</strong> To provide the "Solve" right-click option.</li>
+                    <li><strong>contextMenus:</strong> To provide the &quot;Solve&quot; right-click option.</li>
                 </ul>
                 <p>
                     The extension only communicates with <code>derivativecalculatorai.com</code> APIs.

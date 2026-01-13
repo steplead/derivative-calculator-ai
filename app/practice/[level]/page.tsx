@@ -1,4 +1,3 @@
-import { headers } from 'next/headers';
 export const runtime = 'edge';
 import Link from 'next/link';
 import Breadcrumbs from '@/components/Breadcrumbs';

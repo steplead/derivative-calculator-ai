@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { create, all, format } from 'mathjs';
+import { create, all } from 'mathjs';
 import { performSecurityCheck } from '@/utils/security';
 
 // Initialize mathjs with all functions

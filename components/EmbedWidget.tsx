@@ -40,7 +40,7 @@ export default function EmbedWidget({
   problemSlug,
   problemFormula,
   problemType = 'derivative',
-  locale = 'en'
+  // locale = 'en' // Locale parameter not used in current implementation
 }: EmbedWidgetProps) {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [width, setWidth] = useState(600);

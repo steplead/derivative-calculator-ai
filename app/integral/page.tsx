@@ -1,8 +1,11 @@
+import { Suspense } from 'react';
+import { headers } from 'next/headers';
 import Calculator from '@/components/Calculator';
 // EmbedWidget removed to prevent API abuse
-import Link from 'next/link';
-
 import { getDictionary } from '../dictionaries';
+
+export const runtime = 'edge';
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata() {
     let locale = "en";
@@ -18,29 +21,29 @@ export async function generateMetadata() {
 
     const h1 = dict?.integral?.h1 || "Integral Calculator";
     const subtitle = dict?.integral?.subtitle || "Solve integrals instantly.";
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://derivativecalculatorai.com';
+    const baseUrlWithLocale = locale === 'en' ? siteUrl : `${siteUrl}/${locale}`;
+    const url = `${baseUrlWithLocale}/integral`;
 
     return {
         title: `${h1} - Step-by-Step Integration | Derivative Calculator AI`,
         description: subtitle,
         alternates: {
-            canonical: '/integral',
+            canonical: url,
             languages: {
-                'en': '/integral',
-                'es': '/es/integral',
-                'pt': '/pt/integral',
+                'en': `${siteUrl}/integral`,
+                'es': `${siteUrl}/es/integral`,
+                'pt': `${siteUrl}/pt/integral`,
             },
+        },
+        openGraph: {
+            title: `${h1} - Derivative Calculator AI`,
+            description: subtitle,
+            url,
+            type: 'website',
         },
     };
 }
-
-import { Suspense } from 'react';
-
-import { headers } from 'next/headers';
-export const runtime = 'edge';
-
-import { getDictionary as getDict } from '../dictionaries';
-
-export const dynamic = 'force-dynamic';
 
 export default async function IntegralPage() {
     let locale = "en";

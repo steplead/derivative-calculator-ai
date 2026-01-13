@@ -1,7 +1,9 @@
+/* eslint-disable no-unused-vars */
 'use client';
 
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 
+// Global interface extension for Window - intentionally declared for TypeScript types
 declare global {
   interface Window {
     turnstile: any;

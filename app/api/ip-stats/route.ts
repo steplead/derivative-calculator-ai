@@ -10,7 +10,7 @@ interface IpStats {
     isBlocked: boolean;
 }
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
     try {
         // @ts-ignore - Cloudflare Workers environment binding
         const env = getRequestContext()?.env as any;

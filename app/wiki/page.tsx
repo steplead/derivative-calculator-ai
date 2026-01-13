@@ -1,12 +1,10 @@
 
 export async function generateMetadata() {
     let locale = "en";
-    let dict = getDictionary("en");
 
     try {
         const headersList = await headers();
         locale = headersList.get("x-next-locale") || "en";
-        dict = getDictionary(locale);
     } catch (e) {
         console.error("Wiki metadata error:", e);
     }
@@ -30,8 +28,6 @@ export async function generateMetadata() {
 
 import Link from 'next/link';
 import { headers } from 'next/headers';
-import { getDictionary } from '../dictionaries';
-import { getBaseUrl } from '@/utils/robust-url';
 
 import wikiData from '@/data/wiki.json';
 
@@ -40,7 +36,7 @@ export const runtime = 'edge';
 export default async function WikiHome() {
     const headersList = await headers();
     const locale = headersList.get("x-next-locale") || "en";
-    const dict = getDictionary(locale);
+    // const _dict = getDictionary(locale); // Dictionary variable defined but unused
 
     const wikiTopics = wikiData;
 

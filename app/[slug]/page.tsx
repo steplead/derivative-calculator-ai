@@ -10,6 +10,7 @@ import { Suspense } from 'react';
 import { getBaseUrl } from '@/utils/robust-url';
 import { getRequestContext } from '@cloudflare/next-on-pages';
 import { NOINDEX_SLUGS } from '@/lib/noindex-slugs';
+import { sanitizeSlug, sanitizeLimitValue } from '@/utils/sanitize';
 
 // Define the type for our problem data
 type Problem = {
@@ -27,8 +28,12 @@ type Problem = {
  * e.g., "integral-of-31-over-x2-plus-1" -> "31/(x^2+1)"
  */
 function parseSlugToMath(slug: string): Problem | null {
+    // Sanitize the slug first
+    const sanitizedSlug = sanitizeSlug(slug);
+    if (!sanitizedSlug) return null;
+
     let type: 'derivative' | 'integral' | 'limit' = 'derivative';
-    let formula = slug;
+    let formula = sanitizedSlug;
     let limitTo = '0';
 
     if (slug.startsWith('integral-of-')) {
@@ -41,11 +46,13 @@ function parseSlugToMath(slug: string): Problem | null {
         const limitMatch = formula.match(/(.*?)-(?:to|as-x-approaches)-(.*)/i);
         if (limitMatch) {
             formula = limitMatch[1];
-            // Handle the limit target (to-X)
-            limitTo = limitMatch[2]
-                .replace(/^minus-/i, '-') // e.g. minus-2 -> -2
-                .replace(/^-+/g, '-')     // e.g. --2 -> -2
-                .replace(/(\d)-(\d)/g, '$1.$2'); // e.g. 1-5 -> 1.5
+            // Sanitize the limit target value
+            limitTo = sanitizeLimitValue(
+                limitMatch[2]
+                    .replace(/^minus-/i, '-') // e.g. minus-2 -> -2
+                    .replace(/^-+/g, '-')     // e.g. --2 -> -2
+                    .replace(/(\d)-(\d)/g, '$1.$2') // e.g. 1-5 -> 1.5
+            );
         }
     } else if (slug.startsWith('derivative-of-')) {
         type = 'derivative';

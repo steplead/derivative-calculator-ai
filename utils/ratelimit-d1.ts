@@ -19,7 +19,7 @@ export async function checkD1RateLimit(
 ): Promise<{ success: boolean; remaining: number; resetTime: number }> {
 
     const now = Math.floor(Date.now() / 1000);
-    const windowStart = now - windowSeconds;
+    const _windowStart = now - windowSeconds;
 
     try {
         // Clean up old entries first (optional, keeps table small)

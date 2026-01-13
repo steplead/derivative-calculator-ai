@@ -6,7 +6,7 @@ export default function SidePanel() {
     useEffect(() => {
         // Listen for messages from background script
         chrome.runtime.onMessage.addListener((request: any) => {
-            if (request.action === "SOLVE_SELECTION") {
+            if (request.action === &quot;SOLVE_SELECTION&quot;) {
                 setSelection(request.text);
             }
         });
@@ -19,7 +19,7 @@ export default function SidePanel() {
             {!selection ? (
                 <div className="text-center mt-10 opacity-60">
                     <p>Highlight math on any page,</p>
-                    <p>Right-click &rarr; "Solve"</p>
+                    <p>Right-click &rarr; &quot;Solve&quot;</p>
                 </div>
             ) : (
                 <div className="animate-in fade-in slide-in-from-bottom-4 duration-300">

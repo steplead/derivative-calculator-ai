@@ -76,7 +76,7 @@ export default function LanguageSwitcher() {
     );
 }
 
-function LanguageOption({ label, code, current, onClick }: { label: string, code: string, current: boolean, onClick: (c: string) => void }) {
+function LanguageOption({ label, code, current, onClick }: { label: string, code: string, current: boolean, onClick: (_c: string) => void }) {
     return (
         <button
             onClick={() => onClick(code)}

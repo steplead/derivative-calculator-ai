@@ -1,7 +1,6 @@
 import { headers } from 'next/headers';
 export const runtime = 'edge';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
 import { getBaseUrl } from '@/utils/robust-url';
 import type { Metadata } from 'next';
 
@@ -75,7 +74,7 @@ export default async function ProblemsByTagPage({ params }: { params: { tag: str
             {tagName} Problems
           </h1>
           <p className="text-xl text-gray-600 dark:text-gray-400">
-            {filteredProblems.length} problems tagged with "{tagName}"
+            {filteredProblems.length} problems tagged with &quot;{tagName}&quot;
           </p>
         </div>
 

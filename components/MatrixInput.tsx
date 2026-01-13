@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 interface MatrixInputProps {
     rows: number;
     cols: number;
-    onChange: (data: number[][]) => void;
+    onChange: (_data: number[][]) => void;
 }
 
 export default function MatrixInput({ rows: initialRows, cols: initialCols, onChange }: MatrixInputProps) {

@@ -18,17 +18,26 @@ export async function generateMetadata() {
 
     const h1 = dict?.matrix?.h1 || "Matrix Calculator";
     const subtitle = dict?.matrix?.subtitle || "Calculate determinants and more.";
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://derivativecalculatorai.com';
+    const baseUrlWithLocale = locale === 'en' ? siteUrl : `${siteUrl}/${locale}`;
+    const url = `${baseUrlWithLocale}/matrix`;
 
     return {
         title: `${h1} - Matrix Operations & Solutions | Derivative Calculator AI`,
         description: subtitle,
         alternates: {
-            canonical: '/matrix',
+            canonical: url,
             languages: {
-                'en': '/matrix',
-                'es': '/es/matrix',
-                'pt': '/pt/matrix',
+                'en': `${siteUrl}/matrix`,
+                'es': `${siteUrl}/es/matrix`,
+                'pt': `${siteUrl}/pt/matrix`,
             },
+        },
+        openGraph: {
+            title: `${h1} - Derivative Calculator AI`,
+            description: subtitle,
+            url,
+            type: 'website',
         },
     };
 }

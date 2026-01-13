@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import AdShell from './AdShell';
+import { sanitizeMathFormula } from '@/utils/sanitize';
 
 type HistoryItem = {
     equation: string;
@@ -20,7 +21,13 @@ export default function HistorySidebar() {
             try {
                 const stored = localStorage.getItem('calc_history');
                 if (stored) {
-                    setHistory(JSON.parse(stored));
+                    const parsed = JSON.parse(stored);
+                    // Sanitize all equations in history
+                    const sanitized = parsed.map((item: HistoryItem) => ({
+                        ...item,
+                        equation: sanitizeMathFormula(item.equation)
+                    }));
+                    setHistory(sanitized);
                 }
             } catch (e) {
                 console.error('Failed to load history', e);

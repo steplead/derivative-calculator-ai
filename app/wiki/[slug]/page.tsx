@@ -2,8 +2,6 @@
 import Link from 'next/link';
 import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
-import { getDictionary } from '@/app/dictionaries';
-import { getBaseUrl } from '@/utils/robust-url';
 import { Metadata } from 'next';
 
 import wikiData from '@/data/wiki.json';

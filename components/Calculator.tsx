@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import dynamic from 'next/dynamic';
+import { sanitizeMathFormula, sanitizeLimitValue } from '@/utils/sanitize';
 
 const MathDisplay = dynamic(() => import('./MathDisplay'), { ssr: false });
 const Graph = dynamic(() => import('./Graph'), { ssr: false });
@@ -56,8 +57,8 @@ export default function Calculator({ initialEquation = '', initialLimitTo = '0',
     }, [equationParam, limitToParam, initialEquation, initialLimitTo, mode]);
 
     const handleCalculate = async (equationToSolve = input, targetToSolve = limitTo) => {
-        const formula = (equationToSolve || '').toString().replace(/^null$/i, '');
-        const target = (targetToSolve || '0').toString().replace(/^null$/i, '0');
+        const formula = sanitizeMathFormula((equationToSolve || '').toString().replace(/^null$/i, ''));
+        const target = sanitizeLimitValue((targetToSolve || '0').toString().replace(/^null$/i, '0'));
         if (!formula) return;
 
         console.log('[Calculator] Starting calculation...');

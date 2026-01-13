@@ -69,7 +69,7 @@ export default function AdShell({ type = 'share', className = '' }: AdShellProps
                     Fix your Essay Grammar?
                 </h3>
                 <p className="text-xs text-slate-600 dark:text-slate-400 mb-3 leading-relaxed">
-                    Don't lose points on typos. Use Grammarly to check your papers for free.
+                    Don&apos;t lose points on typos. Use Grammarly to check your papers for free.
                 </p>
                 <div className="flex items-center text-blue-600 dark:text-blue-400 text-xs font-semibold group">
                     Try it for free <ExternalLink className="w-3 h-3 ml-1 group-hover:translate-x-1 transition-transform" />
@@ -87,7 +87,7 @@ export default function AdShell({ type = 'share', className = '' }: AdShellProps
                 </div>
                 <div>
                     <h3 className="font-bold text-slate-800 dark:text-slate-200 text-sm">Help us grow?</h3>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">We don't run ads. Please share!</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">We don&apos;t run ads. Please share!</p>
                 </div>
             </div>
             <a

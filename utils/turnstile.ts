@@ -19,6 +19,7 @@ export async function verifyTurnstileToken(
 
     const secretKey = process.env.TURNSTILE_SECRET_KEY;
 
+    // eslint-disable-next-line no-console
     console.log('[TURNSTILE_VERIFY] Starting verification...', {
         hasToken: !!token,
         tokenLength: token?.length,
@@ -37,6 +38,7 @@ export async function verifyTurnstileToken(
     }
 
     try {
+              // eslint-disable-next-line no-console
         console.log('[TURNSTILE_VERIFY] Sending request to Cloudflare...');
         const response = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
             method: 'POST',
@@ -52,7 +54,8 @@ export async function verifyTurnstileToken(
 
         const result: TurnstileResponse = await response.json();
 
-        console.log('[TURNSTILE_VERIFY] Cloudflare response:', {
+              // eslint-disable-next-line no-console
+            console.log('[TURNSTILE_VERIFY] Cloudflare response:', {
             success: result.success,
             errorCodes: result['error-codes'],
             challengeTs: result.challenge_ts,
@@ -61,7 +64,8 @@ export async function verifyTurnstileToken(
         });
 
         if (result.success) {
-            console.log('[TURNSTILE_VERIFY] ✓ Token verified successfully');
+              // eslint-disable-next-line no-console
+                console.log('[TURNSTILE_VERIFY] ✓ Token verified successfully');
             return { success: true };
         } else {
             console.error('[TURNSTILE_VERIFY] ✗ Token verification failed:', result['error-codes']);
@@ -157,10 +161,10 @@ export function looksLikeLegitimateBrowser(
         // Additional browser fingerprinting checks
         // Real browsers typically send these headers
         const secFetchMode = getHeader('sec-fetch-mode');
-        const secFetchSite = getHeader('sec-fetch-site');
-        const secFetchUser = getHeader('sec-fetch-user');
+        const _secFetchSite = getHeader('sec-fetch-site');
+        const _secFetchUser = getHeader('sec-fetch-user');
         const secChUa = getHeader('sec-ch-ua');
-        const secChUaPlatform = getHeader('sec-ch-ua-platform');
+        const _secChUaPlatform = getHeader('sec-ch-ua-platform');
 
         // Modern browsers (Chrome 90+, Edge 90+, etc.) send Sec-Fetch-* headers
         // If User-Agent claims to be a modern browser but lacks these headers, suspicious

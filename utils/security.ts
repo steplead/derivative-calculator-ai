@@ -10,7 +10,6 @@
  */
 
 import { getRequestContext } from '@cloudflare/next-on-pages';
-import { looksLikeLegitimateBrowser } from './turnstile';
 
 interface SecurityCheckResult {
     success: boolean;
@@ -77,7 +76,7 @@ export function getClientIp(headers: Headers): string {
 /**
  * Check if IP is blocked
  */
-async function isIpBlocked(db: any, ip: string): Promise<BlacklistEntry | null> {
+async function _isIpBlocked(db: any, ip: string): Promise<BlacklistEntry | null> {
     try {
         const entry = await db.prepare(
             "SELECT * FROM ip_blacklist WHERE ip = ?"
@@ -103,7 +102,7 @@ async function isIpBlocked(db: any, ip: string): Promise<BlacklistEntry | null> 
 /**
  * Add IP to blacklist
  */
-async function blockIp(
+async function _blockIp(
     db: any,
     ip: string,
     reason: string,
@@ -136,7 +135,7 @@ async function blockIp(
 /**
  * Get and update abuse score for IP
  */
-async function getAndUpdateAbuseScore(
+async function _getAndUpdateAbuseScore(
     db: any,
     ip: string,
     offensePoints: number
@@ -205,17 +204,18 @@ export async function performSecurityCheck(
     } = {}
 ): Promise<SecurityCheckResult> {
     const ip = getClientIp(headers);
-    const userAgent = headers.get('user-agent');
+    const _userAgent = headers.get('user-agent');
     const turnstileToken = searchParams.get('turnstile_token');
     const host = headers.get('host') || '';
-    const referer = headers.get('referer') || '';
-    const origin = headers.get('origin') || '';
+    const _referer = headers.get('referer') || '';
+    const _origin = headers.get('origin') || '';
 
     // DIAGNOSTIC MODE: Skip all security checks if enabled (CHECKED FIRST)
     // @ts-ignore - Cloudflare Workers environment binding
     const env = getRequestContext()?.env as any;
     const skipSecurity = env?.SKIP_SECURITY === 'true';
 
+    // eslint-disable-next-line no-console
     console.log(`[SECURITY_DIAGNOSIS] IP: ${ip} | SKIP_SECURITY env var: ${env?.SKIP_SECURITY || 'UNDEFINED'} | skipSecurity: ${skipSecurity}`);
 
     if (skipSecurity) {
@@ -224,6 +224,7 @@ export async function performSecurityCheck(
     }
 
     // Log Turnstile token status
+    // eslint-disable-next-line no-console
     console.log(`[SECURITY_CHECK] IP: ${ip} | Endpoint: ${endpoint} | Turnstile Token: ${turnstileToken ? 'PRESENT (length: ' + turnstileToken.length + ')' : 'MISSING'}`);
 
     // Get D1 database
@@ -300,6 +301,7 @@ export async function performSecurityCheck(
                 VALUES (?, ?, ?, ?, ?)
             `).bind(ip, now + 30, 'turnstile_verified', 0, now).run();
 
+            // eslint-disable-next-line no-console
             console.log(`[TURNSTILE_SUCCESS] IP ${ip} verified for 30 seconds`);
             return { success: true };
         } else {
@@ -309,6 +311,7 @@ export async function performSecurityCheck(
             ).bind(ip, Math.floor(Date.now() / 1000)).first() as any;
 
             if (recentVerification) {
+                // eslint-disable-next-line no-console
                 console.log(`[TURNSTILE_CACHED] IP ${ip} using cached verification (${Math.ceil(recentVerification.blocked_until - Date.now()/1000)}s remaining)`);
                 return { success: true };
             }
@@ -326,6 +329,7 @@ export async function performSecurityCheck(
         ).bind(ip, Math.floor(Date.now() / 1000)).first() as any;
 
         if (recentVerification) {
+            // eslint-disable-next-line no-console
             console.log(`[TURNSTILE_CACHED] IP ${ip} using cached verification, no token provided (${Math.ceil(recentVerification.blocked_until - Date.now()/1000)}s remaining)`);
             return { success: true };
         }

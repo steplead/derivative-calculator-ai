@@ -1,6 +1,5 @@
 import Calculator from '@/components/Calculator';
 // EmbedWidget removed to prevent API abuse
-import Link from 'next/link';
 import { Suspense } from 'react';
 import { headers } from 'next/headers';
 import { getDictionary } from '../dictionaries';
@@ -22,17 +21,26 @@ export async function generateMetadata() {
 
     const h1 = dict?.ode?.h1 || "Differential Equation Solver";
     const subtitle = dict?.ode?.subtitle || "Solve ODEs step-by-step.";
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://derivativecalculatorai.com';
+    const baseUrlWithLocale = locale === 'en' ? siteUrl : `${siteUrl}/${locale}`;
+    const url = `${baseUrlWithLocale}/ode`;
 
     return {
         title: `${h1} - Step-by-Step ODE Solutions | Derivative Calculator AI`,
         description: subtitle,
         alternates: {
-            canonical: '/ode',
+            canonical: url,
             languages: {
-                'en': '/ode',
-                'es': '/es/ode',
-                'pt': '/pt/ode',
+                'en': `${siteUrl}/ode`,
+                'es': `${siteUrl}/es/ode`,
+                'pt': `${siteUrl}/pt/ode`,
             },
+        },
+        openGraph: {
+            title: `${h1} - Derivative Calculator AI`,
+            description: subtitle,
+            url,
+            type: 'website',
         },
     };
 }

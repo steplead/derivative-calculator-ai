@@ -76,14 +76,14 @@ export default async function ProblemsByTypePage({ params }: { params: { type: s
     ode: 'Ordinary Differential Equations',
   };
 
-  const typeColors: Record<string, string> = {
-    derivative: 'blue',
-    integral: 'purple',
-    limit: 'green',
-    ode: 'orange',
-  };
+  // const typeColors: Record<string, string> = {
+  //   derivative: 'blue',
+  //   integral: 'purple',
+  //   limit: 'green',
+  //   ode: 'orange',
+  // }; // Type colors defined but unused
 
-  const color = typeColors[type] || 'gray';
+  // const _color = typeColors[type] || 'gray'; // Color variable defined but unused
   const typeName = typeNames[type] || type;
 
   return (

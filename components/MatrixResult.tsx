@@ -1,9 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import React from 'react';
 import MathDisplay from './MathDisplay';
 import AdShell from './AdShell';
-import { Loader2, AlertCircle } from 'lucide-react';
 interface MatrixResultProps {
     result: string | null;
     steps: string | null;

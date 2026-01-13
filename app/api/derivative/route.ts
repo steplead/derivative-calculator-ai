@@ -84,40 +84,121 @@ export async function GET(req: NextRequest) {
                 aiExplanation = aiData.explanation;
                 stepsContent = aiData.steps;
             } else if (apiKey) {
-                // If not cached, call AI
-                try {
-                    const client = new OpenAI({
-                        baseURL: "https://openrouter.ai/api/v1",
-                        apiKey: apiKey,
-                        timeout: 10000, // 10 second timeout
-                    });
+                // If not cached, call AI with enhanced pedagogical prompt
+                let retryCount = 0;
+                const maxRetries = 3;
+                let aiContent = null;
+                let lastError = null;
 
-                    const prompt = `Derivative of ${expression}. JSON: {"explanation": "1 sentence", "steps": "max 3 steps"}`;
+                while (retryCount < maxRetries && !aiContent) {
+                    try {
+                        const client = new OpenAI({
+                            baseURL: "https://openrouter.ai/api/v1",
+                            apiKey: apiKey,
+                            timeout: 20000, // Increased to 20 seconds for better quality
+                        });
 
-                    const completion = await client.chat.completions.create({
-                        model: "deepseek/deepseek-chat",
-                        messages: [
-                            { role: "system", content: "Math tutor. JSON only. Be brief." },
-                            { role: "user", content: prompt }
-                        ],
-                        // @ts-ignore - OpenRouter specific
-                        response_format: { type: "json_object" },
-                        max_tokens: 300
-                    });
+                        // ENHANCED PROMPT: Comprehensive pedagogical explanation
+                        const prompt = `You are an expert Calculus Tutor. Create a comprehensive, educational explanation for finding the derivative of: ${expression}
 
-                    const content = completion.choices[0].message?.content;
-                    if (content) {
-                        const aiData = JSON.parse(content);
-                        aiExplanation = aiData.explanation || "No explanation provided.";
-                        stepsContent = aiData.steps || "No steps provided.";
+Pedagogical Requirements:
+1. Conceptual Understanding: Explain WHAT rule applies and WHY it works
+2. Step-by-Step Reasoning: Show EVERY intermediate step using LaTeX format ($$...$$)
+3. Common Mistakes: Mention typical errors students make with this type of problem
+4. Verification: Show how to verify the answer
+5. Real-World Context: Brief mention of when this is useful
 
-                        // Save to cache
-                        await setCachedExplanation(cacheKey, content);
+Output Format (strict JSON):
+{
+  "explanation": "A comprehensive 2-3 sentence explanation covering the concept, rule application, and significance (must be > 100 characters)",
+  "steps": "Detailed step-by-step derivation with:\\nStep 1: [Identify the rule]\\nStep 2: [Apply the rule]\\nStep 3: [Show intermediate work]\\nStep 4: [Simplify]\\nStep 5: [Final answer with verification]\\nMust use $$LaTeX$$ for all math expressions",
+  "common_mistakes": "1-2 typical student errors with brief explanations",
+  "application": "Brief real-world or advanced math context (1 sentence)"
+}`;
+
+                        const completion = await client.chat.completions.create({
+                            model: "deepseek/deepseek-chat",
+                            messages: [
+                                {
+                                    role: "system",
+                                    content: "You are an expert Calculus Tutor. Output valid JSON only. Be comprehensive, pedagogical, and detailed. Your goal is to help students truly understand the mathematics, not just get the answer."
+                                },
+                                { role: "user", content: prompt }
+                            ],
+                            // @ts-ignore - OpenRouter specific
+                            response_format: { type: "json_object" },
+                            max_tokens: 1500 // Increased from 300 to 1500 for detailed content
+                        });
+
+                        const content = completion.choices[0].message?.content;
+
+                        if (content) {
+                            // Validate content quality before accepting
+                            const aiData = JSON.parse(content);
+
+                            // Quality checks
+                            if (!aiData.explanation || !aiData.steps) {
+                                throw new Error("Missing required fields: explanation or steps");
+                            }
+
+                            if (aiData.explanation.length < 50) {
+                                throw new Error("Explanation too brief (< 50 chars)");
+                            }
+
+                            if (aiData.steps.length < 100) {
+                                throw new Error("Steps too brief (< 100 chars)");
+                            }
+
+                            // Content passed validation - use it
+                            aiExplanation = aiData.explanation;
+                            stepsContent = aiData.steps;
+
+                            // Save to cache
+                            await setCachedExplanation(cacheKey, content);
+
+                            break; // Success, exit retry loop
+                        }
+
+                    } catch (aiError: any) {
+                        lastError = aiError;
+                        retryCount++;
+
+                        console.error(`AI Attempt ${retryCount} failed:`, aiError.message);
+
+                        if (retryCount < maxRetries) {
+                            // Exponential backoff before retry
+                            await new Promise(resolve => setTimeout(resolve, Math.pow(2, retryCount) * 1000));
+                        }
                     }
-                } catch (aiError) {
-                    console.error("AI Error:", aiError);
-                    aiExplanation = "AI temporary unavailable.";
-                    stepsContent = "Could not generate steps.";
+                }
+
+                // If all retries failed, provide high-quality fallback
+                if (!aiContent) {
+                    console.error("All AI attempts failed, using enhanced fallback:", lastError?.message);
+
+                    // Generate enhanced SymPy-based explanation
+                    aiExplanation = `The derivative of ${expression} with respect to x is ${solutionLatex || solutionRaw}. This result is obtained by systematically applying the appropriate differentiation rules from calculus. The derivative represents the instantaneous rate of change of the function at any point.`;
+
+                    stepsContent = `**Step 1: Problem Identification**
+We need to find d/dx of the function: f(x) = ${expression}
+
+**Step 2: Rule Selection**
+Based on the function type, we apply the differentiation rules.
+
+**Step 3: Systematic Application**
+Calculate the derivative step-by-step:
+\\[\\frac{d}{dx}(${expression}) = ${solutionLatex || solutionRaw}\\]
+
+**Step 4: Simplification**
+Express the result in its simplest form.
+
+**Step 5: Verification**
+You can verify this result by:
+- Checking against standard derivative tables
+- Using numerical differentiation methods
+- Applying the definition of the derivative as a limit
+
+**Final Answer:** $$${solutionLatex || solutionRaw}$$`;
                 }
             }
         }

@@ -89,7 +89,7 @@ export async function GET(req: NextRequest) {
                     const client = new OpenAI({
                         baseURL: "https://openrouter.ai/api/v1",
                         apiKey: apiKey,
-                        timeout: 10000, // 10 second timeout
+                        timeout: 5000, // OPTIMIZED: 5s timeout (reduce CPU time, faster failover)
                     });
 
                     const prompt = `Solve ODE: ${equation}. JSON: {"explanation": "1 sentence method", "steps": "max 3 steps"}`;

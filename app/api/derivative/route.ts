@@ -95,7 +95,7 @@ export async function GET(req: NextRequest) {
                         const client = new OpenAI({
                             baseURL: "https://openrouter.ai/api/v1",
                             apiKey: apiKey,
-                            timeout: 20000, // Increased to 20 seconds for better quality
+                            timeout: 8000, // OPTIMIZED: 8s timeout (balance quality and CPU usage)
                         });
 
                         // ENHANCED PROMPT: Comprehensive pedagogical explanation

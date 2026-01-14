@@ -36,9 +36,9 @@ interface AbuseScoreEntry {
 const SECURITY_CONFIG = {
     // Rate limiting: requests per window
     RATE_LIMIT: {
-        DEFAULT_LIMIT: 20,        // Adjusted: 20 req/min (balance between user experience and abuse prevention)
+        DEFAULT_LIMIT: 10,        // OPTIMIZED: 10 req/min (reduce quota overage from 164% to ~82%)
         DEFAULT_WINDOW: 60,       // seconds
-        STRICT_LIMIT: 5,          // For suspicious IPs (increased from 2)
+        STRICT_LIMIT: 3,          // For suspicious IPs (stricter enforcement)
         STRICT_WINDOW: 60,        // seconds
     },
 
@@ -342,18 +342,41 @@ export async function performSecurityCheck(
     }
     // If Turnstile not provided and not required, continue to other checks
 
-    // ========== 3. Bot Detection (DISABLED - Too many false positives) ==========
-    // Only Rate Limiting is enabled to avoid false positives
-    // const isLegitimateBrowser = looksLikeLegitimateBrowser(userAgent, headers);
-    // if (!isLegitimateBrowser) {
-    //     const score = await getAndUpdateAbuseScore(db, ip, 30);
-    //     console.warn(`[BOT_DETECTED] IP: ${ip} | UA: ${userAgent} | Endpoint: ${endpoint} | Score: ${score}`);
-    //     if (score >= SECURITY_CONFIG.ABUSE_SCORING.BLOCK_THRESHOLD) {
-    //         await blockIp(db, ip, 'Automated bot detected', 1);
-    //         return { success: false, error: 'Access denied. Please use a web browser.', blocked: true };
-    //     }
-    //     return { success: false, error: 'Access denied. Please use a web browser.' };
-    // }
+    // ========== 3. Bot Detection (RE-ENABLED with lenient threshold) ==========
+    // Helps reduce bot traffic while minimizing false positives
+    const { looksLikeLegitimateBrowser } = await import('./turnstile');
+    const isLegitimateBrowser = looksLikeLegitimateBrowser(_userAgent, headers);
+
+    if (!isLegitimateBrowser) {
+        // Log suspicious activity but don't immediately block (reduce false positives)
+        const score = await _getAndUpdateAbuseScore(db, ip, 10); // Lower penalty (30 → 10)
+        console.warn(`[BOT_SUSPICIOUS] IP: ${ip} | UA: ${_userAgent} | Endpoint: ${endpoint} | Score: ${score}`);
+
+        // Only block if score is VERY high (threshold doubled from 60 → 120)
+        if (score >= 120) {
+            await _blockIp(db, ip, 'Automated bot pattern detected', 1);
+            return {
+                success: false,
+                error: 'Access denied. Please use a web browser.',
+                blocked: true,
+            };
+        }
+
+        // For moderate scores, just rate limit more strictly
+        if (score >= 60) {
+            const limit = SECURITY_CONFIG.RATE_LIMIT.STRICT_LIMIT; // 3 req/min
+            const window = SECURITY_CONFIG.RATE_LIMIT.STRICT_WINDOW; // 60s
+
+            const result = await checkD1RateLimitWithStrictMode(db, ip, limit, window);
+            if (!result.success) {
+                return {
+                    success: false,
+                    error: 'Too many requests. Please slow down.',
+                    retryAfter: Math.ceil((result.resetTime - Date.now()) / 1000),
+                };
+            }
+        }
+    }
 
     // ========== 4. D1 Rate Limiting ==========
     const limit = options.rateLimit ?? SECURITY_CONFIG.RATE_LIMIT.DEFAULT_LIMIT;

@@ -15,13 +15,11 @@ NC='\033[0m' # No Color
 
 # 函数：检查条件并输出结果
 check() {
-  local condition=$1
-  local message=$2
-  if eval $condition; then
-    echo -e "${GREEN}✅ PASS${NC}: $message"
+  if eval "$1"; then
+    echo -e "${GREEN}✅ PASS${NC}: $2"
     return 0
   else
-    echo -e "${RED}❌ FAIL${NC}: $message"
+    echo -e "${RED}❌ FAIL${NC}: $2"
     return 1
   fi
 }
@@ -37,36 +35,58 @@ warn() {
 echo "1. 全局配额计数器检查"
 echo "-------------------------------------------"
 
-CURRENT_HOUR=$(($(date +%s) / 3600))
-CURRENT_DAY=$(($(date +%s) / 86400))
-
-# 检查当前小时计数
-HOUR_COUNT=$(npx wrangler d1 execute problems-db --command="
-SELECT COALESCE(value, 0) as count
+# 查询最新的全局计数器（PRODUCTION database）
+QUOTA_RESULT=$(npx wrangler d1 execute problems-db --remote --command="
+SELECT key, value,
+  datetime(last_updated, 'unixepoch', 'localtime') as updated_at
 FROM counters
-WHERE key = 'global:hour:$CURRENT_HOUR'
-" --json 2>/dev/null | grep -o '"count":[0-9]*' | cut -d: -f2)
+WHERE key LIKE 'global:%'
+ORDER BY last_updated DESC
+LIMIT 2
+" --json 2>/dev/null)
 
-if [ -z "$HOUR_COUNT" ]; then
+# 解析结果
+HOUR_COUNT=0
+DAY_COUNT=0
+
+if echo "$QUOTA_RESULT" | grep -q '"key":'; then
+  # 提取小时计数（包含 "global:hour:" 的行）
+  HOUR_ROW=$(echo "$QUOTA_RESULT" | grep '"key"' | grep "hour" | head -1)
+  if [ -n "$HOUR_ROW" ]; then
+    HOUR_COUNT=$(echo "$HOUR_ROW" | grep -o '"value":[0-9]*' | cut -d: -f2)
+  fi
+
+  # 提取日计数（包含 "global:day:" 的行）
+  DAY_ROW=$(echo "$QUOTA_RESULT" | grep '"key"' | grep "day" | head -1)
+  if [ -n "$DAY_ROW" ]; then
+    DAY_COUNT=$(echo "$DAY_ROW" | grep -o '"value":[0-9]*' | cut -d: -f2)
+  fi
+fi
+
+if [ -z "$HOUR_COUNT" ] || [ "$HOUR_COUNT" = "null" ]; then
   HOUR_COUNT=0
 fi
 
-# 检查当前日计数
-DAY_COUNT=$(npx wrangler d1 execute problems-db --command="
-SELECT COALESCE(value, 0) as count
-FROM counters
-WHERE key = 'global:day:$CURRENT_DAY'
-" --json 2>/dev/null | grep -o '"count":[0-9]*' | cut -d: -f2)
-
-if [ -z "$DAY_COUNT" ]; then
+if [ -z "$DAY_COUNT" ] || [ "$DAY_COUNT" = "null" ]; then
   DAY_COUNT=0
 fi
 
 echo "当前小时请求数: $HOUR_COUNT / 3,750"
 echo "当前日请求数: $DAY_COUNT / 90,000"
+echo ""
 
-check [ "$HOUR_COUNT" -lt 3750 ] "小时配额合规"
-check [ "$DAY_COUNT" -lt 90000 ] "日配额合规"
+# 修正 check 函数调用 - 直接使用 test 命令
+if [ "$HOUR_COUNT" -lt 3750 ]; then
+  echo -e "${GREEN}✅ PASS${NC}: 小时配额合规"
+else
+  echo -e "${RED}❌ FAIL${NC}: 小时配额超限"
+fi
+
+if [ "$DAY_COUNT" -lt 90000 ]; then
+  echo -e "${GREEN}✅ PASS${NC}: 日配额合规"
+else
+  echo -e "${RED}❌ FAIL${NC}: 日配额超限"
+fi
 
 echo ""
 

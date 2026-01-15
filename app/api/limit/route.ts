@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import nerdamer from 'nerdamer';
 import 'nerdamer/Calculus';
 import { OpenAI } from 'openai';
-import { getCachedExplanation, setCachedExplanation, ratelimit } from '@/utils/cache';
-import { looksLikeLegitimateBrowser } from '@/utils/turnstile';
+import { getCachedExplanation, setCachedExplanation } from '@/utils/cache';
+import { performSecurityCheck } from '@/utils/security';
 
 export const runtime = 'edge';
 
@@ -17,32 +17,19 @@ export async function GET(req: NextRequest) {
         return NextResponse.json({ error: "No equation provided" }, { status: 400 });
     }
 
-    // Bot detection: Block non-browser requests
-    const userAgent = req.headers.get('user-agent');
-    const ip = req.headers.get('cf-connecting-ip') || req.headers.get('x-forwarded-for') || 'unknown';
-    const isLegitimateBrowser = looksLikeLegitimateBrowser(userAgent, req.headers);
+    // SECURITY: Use unified security check (includes bot detection, rate limiting, global quota)
+    const securityResult = await performSecurityCheck(req.headers, searchParams, '/api/limit');
 
-    if (!isLegitimateBrowser) {
-        console.warn(`[BOT_BLOCKED] IP: ${ip}, UA: ${userAgent}, Endpoint: /api/limit`);
+    if (!securityResult.success) {
         return NextResponse.json(
-            { error: "Access denied. Please use a web browser." },
-            { status: 403 }
-        );
-    }
-
-    // Rate limiting: 10 requests per 10 seconds per IP
-    if (ratelimit) {
-        try {
-            const { success } = await ratelimit.limit(ip);
-            if (!success) {
-                return NextResponse.json(
-                    { error: "Too many requests. Please slow down." },
-                    { status: 429 }
-                );
+            { error: securityResult.error },
+            {
+                status: securityResult.blocked ? 403 : 429,
+                headers: securityResult.retryAfter ? {
+                    'Retry-After': securityResult.retryAfter.toString()
+                } : undefined
             }
-        } catch (rateLimitError) {
-            console.error("Rate limit error:", rateLimitError);
-        }
+        );
     }
 
     // Request size validation
@@ -59,7 +46,7 @@ export async function GET(req: NextRequest) {
     const looksLikeDescriptive = /[a-zA-Z]{4,}-[a-zA-Z]{4,}/.test(expression);
     const looksLikeMath = hasMathSymbols || (expression.length < 15 && !looksLikeDescriptive);
 
-    if (hasMultipleHyphens || !looksLikeMath || expression.length > 200) {
+    if (hasMultipleHyphens || !looksLikeMath) {
         return NextResponse.json({ error: "Invalid mathematical expression" }, { status: 400 });
     }
 

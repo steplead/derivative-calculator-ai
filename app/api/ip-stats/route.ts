@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getRequestContext } from '@cloudflare/next-on-pages';
+import { isAdminRequest } from '@/utils/admin-auth';
 
 export const runtime = 'edge';
 
@@ -11,6 +12,13 @@ interface IpStats {
 }
 
 export async function GET(_request: NextRequest) {
+    // SECURITY: Require admin authentication
+    if (!isAdminRequest(_request.headers)) {
+        return NextResponse.json({
+            error: 'Unauthorized. Admin access required.',
+        }, { status: 401 });
+    }
+
     try {
         // @ts-ignore - Cloudflare Workers environment binding
         const env = getRequestContext()?.env as any;

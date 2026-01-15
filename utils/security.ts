@@ -35,22 +35,25 @@ interface AbuseScoreEntry {
 // Configuration
 const SECURITY_CONFIG = {
     // Global quota: maximum requests per day for entire system
+    // OPTIMIZED: Reduced to 85k/day (85% of free tier, 15% safety margin)
     GLOBAL_QUOTA: {
-        DAILY_LIMIT: 90000,       // EMERGENCY: 90k requests/day (90% of free tier, 10% safety margin)
-        HOURLY_LIMIT: 3750,       // 90k / 24 hours = 3,750 requests/hour
+        DAILY_LIMIT: 85000,       // 85k requests/day (85% of free tier, 15% safety margin)
+        HOURLY_LIMIT: 3542,       // 85k / 24 hours = 3,542 requests/hour (rounded)
     },
 
     // Rate limiting: requests per window
+    // OPTIMIZED: Reduced from 3 to 2 req/min to reduce total traffic by ~33%
     RATE_LIMIT: {
-        DEFAULT_LIMIT: 3,         // EMERGENCY: 3 req/min (limit total quota usage)
+        DEFAULT_LIMIT: 2,         // 2 req/min (reduced from 3 to limit total quota usage)
         DEFAULT_WINDOW: 60,       // seconds
         STRICT_LIMIT: 1,          // For suspicious IPs (stricter enforcement)
         STRICT_WINDOW: 60,        // seconds
     },
 
     // Abuse scoring: block when score exceeds threshold
+    // OPTIMIZED: Lowered threshold to block bots faster
     ABUSE_SCORING: {
-        BLOCK_THRESHOLD: 60,      // EMERGENCY: Lowered from 100 to block faster
+        BLOCK_THRESHOLD: 50,      // Lowered from 60 to block faster (50 points = 5 suspicious requests)
         DECAY_INTERVAL: 3600,     // decay score by 50% every hour
         DECAY_AMOUNT: 0.5,        // decay factor
     },
@@ -437,12 +440,12 @@ export async function performSecurityCheck(
     const isLegitimateBrowser = looksLikeLegitimateBrowser(_userAgent, headers);
 
     if (!isLegitimateBrowser) {
-        // Log suspicious activity but don't immediately block (reduce false positives)
-        const score = await _getAndUpdateAbuseScore(db, ip, 10); // Lower penalty (30 → 10)
+        // OPTIMIZED: Increased penalty to block bots faster
+        const score = await _getAndUpdateAbuseScore(db, ip, 15); // Increased from 10 to 15
         console.warn(`[BOT_SUSPICIOUS] IP: ${ip} | UA: ${_userAgent} | Endpoint: ${endpoint} | Score: ${score}`);
 
-        // Only block if score is VERY high (threshold doubled from 60 → 120)
-        if (score >= 120) {
+        // OPTIMIZED: Lowered threshold from 120 to 50 to block faster
+        if (score >= SECURITY_CONFIG.ABUSE_SCORING.BLOCK_THRESHOLD) {
             await _blockIp(db, ip, 'Automated bot pattern detected', 1);
             return {
                 success: false,
@@ -451,9 +454,9 @@ export async function performSecurityCheck(
             };
         }
 
-        // For moderate scores, just rate limit more strictly
-        if (score >= 60) {
-            const limit = SECURITY_CONFIG.RATE_LIMIT.STRICT_LIMIT; // 3 req/min
+        // For moderate scores, apply strict rate limiting
+        if (score >= 30) {
+            const limit = SECURITY_CONFIG.RATE_LIMIT.STRICT_LIMIT; // 1 req/min
             const window = SECURITY_CONFIG.RATE_LIMIT.STRICT_WINDOW; // 60s
 
             const result = await checkD1RateLimitWithStrictMode(db, ip, limit, window);

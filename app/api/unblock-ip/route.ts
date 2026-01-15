@@ -1,9 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getRequestContext } from '@cloudflare/next-on-pages';
+import { isAdminRequest } from '@/utils/admin-auth';
 
 export const runtime = 'edge';
 
 export async function GET(request: NextRequest) {
+    // SECURITY: Require admin authentication
+    if (!isAdminRequest(request.headers)) {
+        return NextResponse.json({
+            error: 'Unauthorized. Admin access required.',
+        }, { status: 401 });
+    }
+
     try {
         const { searchParams } = new URL(request.url);
         const ipToUnblock = searchParams.get('ip');

@@ -1,9 +1,16 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
 import { getCacheMetrics } from '@/utils/cache';
+import { isAdminRequest } from '@/utils/admin-auth';
 
 export const runtime = 'edge';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+    // SECURITY: Require admin authentication
+    if (!isAdminRequest(request.headers)) {
+        return NextResponse.json({
+            error: 'Unauthorized. Admin access required.',
+        }, { status: 401 });
+    }
     const metrics = getCacheMetrics();
 
     // Add health warnings

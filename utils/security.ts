@@ -34,11 +34,17 @@ interface AbuseScoreEntry {
 
 // Configuration
 const SECURITY_CONFIG = {
+    // Global quota: maximum requests per day for entire system
+    GLOBAL_QUOTA: {
+        DAILY_LIMIT: 90000,       // EMERGENCY: 90k requests/day (90% of free tier, 10% safety margin)
+        HOURLY_LIMIT: 3750,       // 90k / 24 hours = 3,750 requests/hour
+    },
+
     // Rate limiting: requests per window
     RATE_LIMIT: {
-        DEFAULT_LIMIT: 10,        // OPTIMIZED: 10 req/min (reduce quota overage from 164% to ~82%)
+        DEFAULT_LIMIT: 3,         // EMERGENCY: 3 req/min (limit total quota usage)
         DEFAULT_WINDOW: 60,       // seconds
-        STRICT_LIMIT: 3,          // For suspicious IPs (stricter enforcement)
+        STRICT_LIMIT: 1,          // For suspicious IPs (stricter enforcement)
         STRICT_WINDOW: 60,        // seconds
     },
 
@@ -71,6 +77,78 @@ export function getClientIp(headers: Headers): string {
            headers.get('x-forwarded-for')?.split(',')[0].trim() ||
            headers.get('x-real-ip') ||
            'unknown';
+}
+
+/**
+ * Global quota check: Enforce daily/hourly limits for entire system
+ * Returns false if quota exceeded, true if OK
+ */
+async function _checkGlobalQuota(db: any): Promise<{ allowed: boolean; reason?: string; retryAfter?: number }> {
+    try {
+        const now = Math.floor(Date.now() / 1000);
+        const currentHour = Math.floor(now / 3600);
+        const currentDay = Math.floor(now / 86400);
+
+        // Check hourly quota first (more granular)
+        const hourKey = `global:hour:${currentHour}`;
+        const hourCount = await db.prepare(
+            "SELECT value FROM counters WHERE key = ?"
+        ).bind(hourKey).first() as { value: number } | null;
+
+        const hourlyRequests = hourCount?.value || 0;
+
+        if (hourlyRequests >= SECURITY_CONFIG.GLOBAL_QUOTA.HOURLY_LIMIT) {
+            const retryAfter = 3600 - (now % 3600); // Seconds until next hour
+            console.warn(`[GLOBAL_QUOTA] Hourly limit exceeded: ${hourlyRequests}/${SECURITY_CONFIG.GLOBAL_QUOTA.HOURLY_LIMIT}`);
+            return {
+                allowed: false,
+                reason: 'Service is temporarily at capacity. Please try again later.',
+                retryAfter
+            };
+        }
+
+        // Check daily quota
+        const dayKey = `global:day:${currentDay}`;
+        const dayCount = await db.prepare(
+            "SELECT value FROM counters WHERE key = ?"
+        ).bind(dayKey).first() as { value: number } | null;
+
+        const dailyRequests = dayCount?.value || 0;
+
+        if (dailyRequests >= SECURITY_CONFIG.GLOBAL_QUOTA.DAILY_LIMIT) {
+            const retryAfter = 86400 - (now % 86400); // Seconds until next day
+            console.warn(`[GLOBAL_QUOTA] Daily limit exceeded: ${dailyRequests}/${SECURITY_CONFIG.GLOBAL_QUOTA.DAILY_LIMIT}`);
+            return {
+                allowed: false,
+                reason: 'Daily quota exceeded. Service will resume tomorrow.',
+                retryAfter
+            };
+        }
+
+        // Increment counters
+        await db.prepare(`
+            INSERT INTO counters (key, value, last_updated)
+            VALUES (?, 1, ?)
+            ON CONFLICT(key) DO UPDATE SET
+                value = value + 1,
+                last_updated = ?
+        `).bind(hourKey, now, now).run();
+
+        await db.prepare(`
+            INSERT INTO counters (key, value, last_updated)
+            VALUES (?, 1, ?)
+            ON CONFLICT(key) DO UPDATE SET
+                value = value + 1,
+                last_updated = ?
+        `).bind(dayKey, now, now).run();
+
+        return { allowed: true };
+
+    } catch (error) {
+        console.error('Error checking global quota:', error);
+        // Fail open - allow request if counter fails
+        return { allowed: true };
+    }
 }
 
 /**
@@ -255,6 +333,17 @@ export async function performSecurityCheck(
             success: false,
             error: 'API access restricted. Please use the web interface at derivativecalculatorai.com',
             blocked: true,
+        };
+    }
+
+    // ========== 1.5. Global Quota Check (EMERGENCY) ==========
+    const quotaCheck = await _checkGlobalQuota(db);
+    if (!quotaCheck.allowed) {
+        console.warn(`[GLOBAL_QUOTA_BLOCKED] IP: ${ip} | Reason: ${quotaCheck.reason}`);
+        return {
+            success: false,
+            error: quotaCheck.reason || 'Service temporarily unavailable',
+            retryAfter: quotaCheck.retryAfter,
         };
     }
 

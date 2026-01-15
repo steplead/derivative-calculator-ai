@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const expression = searchParams.get('equation');
     const target = searchParams.get('to') || '0';
-    const includeAi = searchParams.get('include_ai') !== 'false'; // Re-enabled: AI now active with rate limiting protection
+    const includeAi = false; // EMERGENCY: AI completely disabled to reduce quota usage
 
     if (!expression) {
         return NextResponse.json({ error: "No equation provided" }, { status: 400 });

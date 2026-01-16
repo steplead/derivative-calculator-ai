@@ -25,7 +25,7 @@ export async function middleware(request: NextRequest) {
 
     // AGGRESSIVE: Apply rate limiting to page requests to prevent quota abuse
     // Since main traffic source is page visits (not API), we need to limit page access too
-    // Use a more lenient limit for pages (5 req/min) vs API (1 req/min)
+    // Use same strict limit as API (1 req/min) to truly control traffic
     if (!pathname.startsWith('/api/') && !pathname.startsWith('/_next/')) {
         const searchParams = new URLSearchParams();
         const securityResult = await performSecurityCheck(
@@ -33,7 +33,7 @@ export async function middleware(request: NextRequest) {
             searchParams,
             pathname,
             {
-                rateLimit: 5, // 5 req/min for pages (more lenient than API)
+                rateLimit: 1, // 1 req/min for pages (same as API - aggressive limit)
                 rateWindow: 60,
             }
         );

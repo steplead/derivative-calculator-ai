@@ -11,10 +11,16 @@ export function middleware(request: NextRequest) {
 
     // Track request path for traffic analysis (async, non-blocking)
     // This helps analyze traffic distribution since Cloudflare Log Explorer is paid
-    trackPath(pathname).catch(err => {
-        // Silently fail - don't break the request flow
-        console.error('[MIDDLEWARE] Error tracking path:', err);
-    });
+    // NOTE: Track embed requests separately to monitor widget abuse
+    if (pathname.startsWith('/embed/')) {
+        trackPath(pathname, 200).catch(err => {
+            console.error('[MIDDLEWARE] Error tracking embed path:', err);
+        });
+    } else {
+        trackPath(pathname).catch(err => {
+            console.error('[MIDDLEWARE] Error tracking path:', err);
+        });
+    }
 
     // Check if path starts with a locale
     const locale = locales.find(

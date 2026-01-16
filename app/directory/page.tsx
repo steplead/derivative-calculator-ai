@@ -5,7 +5,9 @@ export const runtime = 'edge';
 import { getDictionary } from '../dictionaries';
 import { getBaseUrl } from '@/utils/robust-url';
 
-export const dynamic = 'force-dynamic';
+// OPTIMIZED: Allow caching to reduce quota usage
+// Directory page content is relatively static, can be cached for 1 hour
+export const revalidate = 3600; // 1 hour
 
 export async function generateMetadata() {
     let locale = "en";

@@ -9,8 +9,6 @@
  * providing a user-friendly message.
  */
 
-import { notFound } from 'next/navigation';
-
 export const runtime = 'edge';
 
 interface PageProps {
@@ -23,7 +21,7 @@ interface PageProps {
     };
 }
 
-export default function EmbedPage({ params, searchParams }: PageProps) {
+export default function EmbedPage({ searchParams }: PageProps) {
     // Return a simple static page - no API calls, no JavaScript, minimal quota usage
     return (
         <html>

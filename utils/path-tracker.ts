@@ -35,11 +35,12 @@ export async function trackPath(path: string, statusCode: number = 200): Promise
         // Insert or update path statistics
         // Group by hour to reduce storage
         // Try to update first, if no rows affected, insert
+        // NOTE: Primary key is (path, timestamp, status_code), so WHERE must include all three
         const updateResult = await db.prepare(`
             UPDATE path_stats 
             SET count = count + 1
-            WHERE path = ? AND timestamp = ?
-        `).bind(normalizedPath, hourTimestamp).run();
+            WHERE path = ? AND timestamp = ? AND status_code = ?
+        `).bind(normalizedPath, hourTimestamp, statusCode).run();
 
         if (updateResult.meta.changes === 0) {
             // No existing record, insert new one

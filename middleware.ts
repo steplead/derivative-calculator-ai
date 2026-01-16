@@ -1,12 +1,13 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { trackPath } from "@/utils/path-tracker";
+import { performSecurityCheck } from "@/utils/security";
 
 export const runtime = 'experimental-edge';
 
 const locales = ["es", "pt"];
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
 
     // Track request path for traffic analysis (async, non-blocking)
@@ -20,6 +21,37 @@ export function middleware(request: NextRequest) {
         trackPath(pathname).catch(err => {
             console.error('[MIDDLEWARE] Error tracking path:', err);
         });
+    }
+
+    // AGGRESSIVE: Apply rate limiting to page requests to prevent quota abuse
+    // Since main traffic source is page visits (not API), we need to limit page access too
+    // Use a more lenient limit for pages (5 req/min) vs API (1 req/min)
+    if (!pathname.startsWith('/api/') && !pathname.startsWith('/_next/')) {
+        const searchParams = new URLSearchParams();
+        const securityResult = await performSecurityCheck(
+            request.headers,
+            searchParams,
+            pathname,
+            {
+                rateLimit: 5, // 5 req/min for pages (more lenient than API)
+                rateWindow: 60,
+            }
+        );
+
+        if (!securityResult.success) {
+            // Track blocked response
+            trackPath(pathname, securityResult.blocked ? 403 : 429).catch(() => {});
+            
+            return NextResponse.json(
+                { error: securityResult.error },
+                {
+                    status: securityResult.blocked ? 403 : 429,
+                    headers: securityResult.retryAfter ? {
+                        'Retry-After': securityResult.retryAfter.toString()
+                    } : undefined
+                }
+            );
+        }
     }
 
     // Check if path starts with a locale

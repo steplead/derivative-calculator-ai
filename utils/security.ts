@@ -35,18 +35,18 @@ interface AbuseScoreEntry {
 // Configuration
 const SECURITY_CONFIG = {
     // Global quota: maximum requests per day for entire system
-    // OPTIMIZED: Reduced to 70k/day (70% of free tier, 30% safety margin) - FORCE COMPLIANCE
+    // AGGRESSIVE: Reduced to 50k/day (50% of free tier, 50% safety margin) - FORCE COMPLIANCE
     GLOBAL_QUOTA: {
-        DAILY_LIMIT: 70000,       // 70k requests/day (70% of free tier, 30% safety margin) - FORCE COMPLIANCE
-        HOURLY_LIMIT: 2917,       // 70k / 24 hours = 2,917 requests/hour (rounded)
+        DAILY_LIMIT: 50000,       // 50k requests/day (50% of free tier, 50% safety margin) - FORCE COMPLIANCE
+        HOURLY_LIMIT: 2083,       // 50k / 24 hours = 2,083 requests/hour (rounded)
     },
 
     // Rate limiting: requests per window
-    // BALANCED: Allow reasonable usage while preventing abuse
+    // AGGRESSIVE: Drastically reduced to prevent quota abuse
     RATE_LIMIT: {
-        DEFAULT_LIMIT: 10,        // 10 req/min (allows legitimate calculator usage)
+        DEFAULT_LIMIT: 1,         // 1 req/min (aggressive limit to prevent abuse)
         DEFAULT_WINDOW: 60,       // seconds
-        STRICT_LIMIT: 3,          // For suspicious IPs (stricter enforcement)
+        STRICT_LIMIT: 1,          // For suspicious IPs (same as default)
         STRICT_WINDOW: 60,        // seconds
     },
 

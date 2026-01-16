@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { trackPath } from "@/utils/path-tracker";
 
 export const runtime = 'experimental-edge';
 
@@ -7,6 +8,13 @@ const locales = ["es", "pt"];
 
 export function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
+
+    // Track request path for traffic analysis (async, non-blocking)
+    // This helps analyze traffic distribution since Cloudflare Log Explorer is paid
+    trackPath(pathname).catch(err => {
+        // Silently fail - don't break the request flow
+        console.error('[MIDDLEWARE] Error tracking path:', err);
+    });
 
     // Check if path starts with a locale
     const locale = locales.find(

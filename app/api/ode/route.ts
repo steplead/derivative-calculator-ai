@@ -5,6 +5,7 @@ import 'nerdamer/Calculus';
 import { OpenAI } from 'openai';
 import { getCachedExplanation, setCachedExplanation } from '@/utils/cache';
 import { performSecurityCheck } from '@/utils/security';
+import { trackPath } from '@/utils/path-tracker';
 
 export const runtime = 'edge';
 
@@ -13,7 +14,13 @@ export async function GET(req: NextRequest) {
     const equation = searchParams.get('equation');
     const includeAi = false; // EMERGENCY: AI completely disabled to reduce quota usage
 
+    // Track API path for traffic analysis (async, non-blocking)
+    trackPath('/api/ode', 200).catch(err => {
+        console.error('[API] Error tracking path:', err);
+    });
+
     if (!equation) {
+        trackPath('/api/ode', 400).catch(() => {});
         return NextResponse.json({ error: "No equation provided" }, { status: 400 });
     }
 
@@ -21,6 +28,7 @@ export async function GET(req: NextRequest) {
     const securityResult = await performSecurityCheck(req.headers, searchParams, '/api/ode');
 
     if (!securityResult.success) {
+        trackPath('/api/ode', securityResult.blocked ? 403 : 429).catch(() => {});
         return NextResponse.json(
             { error: securityResult.error },
             {

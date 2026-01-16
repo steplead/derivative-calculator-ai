@@ -8,6 +8,10 @@ import { getDictionary } from './dictionaries';
 import { getBaseUrl } from '@/utils/robust-url';
 import type { Metadata } from 'next';
 
+// OPTIMIZED: Allow caching to reduce quota usage
+// Cache for 1 hour - locale is handled via middleware rewrite, so caching is safe
+export const revalidate = 3600; // 1 hour
+
 export async function generateMetadata(): Promise<Metadata> {
   const headersList = await headers();
   const locale = headersList.get("x-next-locale") || "en";

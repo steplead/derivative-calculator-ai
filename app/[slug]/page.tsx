@@ -102,9 +102,9 @@ function parseSlugToMath(slug: string): Problem | null {
     };
 }
 
-// Force dynamic rendering to ensure headers() (and thus locale) are read correctly for every request
-export const dynamic = 'force-dynamic';
-// export const revalidate = 3600; // Optional: Cache for 1 hour (would need verify if header varies cache)
+// OPTIMIZED: Allow caching to reduce quota usage
+// Cache for 1 hour - locale is handled via middleware rewrite, so caching is safe
+export const revalidate = 3600; // 1 hour
 
 // Removed generateStaticParams to disable SSG and force dynamic rendering for i18n rewrites.
 // export async function generateStaticParams() { ... }

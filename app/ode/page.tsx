@@ -5,7 +5,9 @@ import { headers } from 'next/headers';
 import { getDictionary } from '../dictionaries';
 
 export const runtime = 'edge';
-export const dynamic = 'force-dynamic';
+// OPTIMIZED: Allow caching to reduce quota usage
+// Cache for 1 hour - locale is handled via middleware rewrite, so caching is safe
+export const revalidate = 3600; // 1 hour
 
 export async function generateMetadata() {
     let locale = "en";

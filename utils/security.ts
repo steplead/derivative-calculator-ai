@@ -42,11 +42,11 @@ const SECURITY_CONFIG = {
     },
 
     // Rate limiting: requests per window
-    // OPTIMIZED: Reduced from 2 to 1 req/min to reduce total traffic by ~50%
+    // BALANCED: Allow reasonable usage while preventing abuse
     RATE_LIMIT: {
-        DEFAULT_LIMIT: 1,         // 1 req/min (reduced from 2 to limit total quota usage by 50%)
+        DEFAULT_LIMIT: 10,        // 10 req/min (allows legitimate calculator usage)
         DEFAULT_WINDOW: 60,       // seconds
-        STRICT_LIMIT: 1,          // For suspicious IPs (stricter enforcement)
+        STRICT_LIMIT: 3,          // For suspicious IPs (stricter enforcement)
         STRICT_WINDOW: 60,        // seconds
     },
 

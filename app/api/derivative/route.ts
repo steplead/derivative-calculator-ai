@@ -210,13 +210,22 @@ You can verify this result by:
             }
         }
 
-        return NextResponse.json({
+        // CACHE OPTIMIZATION: Add cache headers to reduce Cloudflare quota usage
+        // Cache API responses for 5 minutes (same expression = same result)
+        // This allows Cloudflare to cache responses at edge, reducing origin requests
+        const response = NextResponse.json({
             solution: solutionLatex,
             solution_raw: solutionRaw,
             steps: stepsContent,
             ai_explanation: aiExplanation,
             _version: "v3.0-unified-security" // Unified security layer with IP blacklist
         });
+
+        // Set cache headers for Cloudflare edge caching
+        // Cache for 5 minutes - same expression = same result
+        response.headers.set('Cache-Control', 'public, s-maxage=300, max-age=300, stale-while-revalidate=600');
+        
+        return response;
 
     } catch (e: any) {
         return NextResponse.json({ error: `Calculation error: ${e.message}` }, { status: 500 });

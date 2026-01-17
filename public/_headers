@@ -6,6 +6,11 @@ Referrer-Policy: strict-origin-when-cross-origin
 Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com www.google-analytics.com; script-src-attr 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://challenges.cloudflare.com https://fonts.googleapis.com; img-src 'self' data: blob: https://challenges.cloudflare.com; font-src 'self' data: https://challenges.cloudflare.com https://fonts.gstatic.com; connect-src 'self' https://challenges.cloudflare.com https://www.google-analytics.com; frame-src 'self' https://challenges.cloudflare.com; object-src 'none'; base-uri 'self'; form-action 'self';
 
 # Cache static assets for 1 year (reduces requests)
+# Next.js static assets (highest priority - most specific)
+/_next/static/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Static file extensions
 /*.png
   Cache-Control: public, max-age=31536000, immutable
 /*.jpg
@@ -22,6 +27,16 @@ Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' '
   Cache-Control: public, max-age=31536000, immutable
 /*.js
   Cache-Control: public, max-age=31536000, immutable
+/*.woff
+  Cache-Control: public, max-age=31536000, immutable
+/*.woff2
+  Cache-Control: public, max-age=31536000, immutable
+/*.ttf
+  Cache-Control: public, max-age=31536000, immutable
+/*.eot
+  Cache-Control: public, max-age=31536000, immutable
+
+# JSON and XML files (shorter cache for dynamic content)
 /*.json
   Cache-Control: public, max-age=86400
 /*.xml

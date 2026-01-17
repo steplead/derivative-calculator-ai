@@ -132,12 +132,18 @@ export async function GET(req: NextRequest) {
             ];
         }
 
-        return NextResponse.json({
+        // CACHE OPTIMIZATION: Add cache headers to reduce Cloudflare quota usage
+        const response = NextResponse.json({
             solution: solutionLatex,
             solution_raw: solutionRaw,
             steps: stepsContent,
             ai_explanation: aiExplanation
         });
+
+        // Set cache headers for Cloudflare edge caching (5 minutes)
+        response.headers.set('Cache-Control', 'public, s-maxage=300, max-age=300, stale-while-revalidate=600');
+        
+        return response;
 
     } catch (e: any) {
         return NextResponse.json({ error: `Calculation error: ${e.message}` }, { status: 500 });

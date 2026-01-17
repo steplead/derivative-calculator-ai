@@ -43,38 +43,36 @@ export default async function Home() {
     return <div className="p-20 text-center">System initialization... (Dictionary missing)</div>;
   }
 
-  // OPTIMIZED: Use static data to reduce processing time
-  // Fetch popular problems from static JSON file first (faster)
+  // OPTIMIZED: Parallel fetch to reduce processing time
+  // Fetch from both static JSON and API in parallel, use whichever responds first
   const baseUrl = getBaseUrl();
   let popularProblems = [];
 
-  // FALLBACK: Use local data first (faster than API)
-  try {
-    const fallbackRes = await fetch(`${baseUrl}/problems.json`, {
-      cache: 'force-cache',
-      // @ts-ignore
-      next: { revalidate: 3600 }
-    });
-    if (fallbackRes.ok) {
-      const problemsData = await fallbackRes.json();
-      popularProblems = (problemsData as any[]).slice(0, 20);
-    }
-  } catch (e) {
-    console.error("Static fallback failed:", e);
-  }
-
-  // SAFE FETCH: Only use API if static data failed
-  if ((!popularProblems || popularProblems.length === 0) && baseUrl) {
+  if (baseUrl) {
     try {
-      const res = await fetch(`${baseUrl}/api/problems?limit=20`, {
-        cache: 'force-cache',
-        // @ts-ignore
-        next: { revalidate: 3600 }
-      });
+      // PARALLEL: Fetch both static data and API simultaneously
+      const [staticRes, apiRes] = await Promise.allSettled([
+        fetch(`${baseUrl}/problems.json`, {
+          cache: 'force-cache',
+          // @ts-ignore
+          next: { revalidate: 3600 }
+        }),
+        fetch(`${baseUrl}/api/problems?limit=20`, {
+          cache: 'force-cache',
+          // @ts-ignore
+          next: { revalidate: 3600 }
+        })
+      ]);
 
-      const contentType = res.headers.get("content-type");
-      if (res.ok && contentType && contentType.includes("application/json")) {
-        popularProblems = await res.json();
+      // Use static data if available (faster), otherwise use API
+      if (staticRes.status === 'fulfilled' && staticRes.value.ok) {
+        const problemsData = await staticRes.value.json();
+        popularProblems = (problemsData as any[]).slice(0, 20);
+      } else if (apiRes.status === 'fulfilled' && apiRes.value.ok) {
+        const contentType = apiRes.value.headers.get("content-type");
+        if (contentType && contentType.includes("application/json")) {
+          popularProblems = await apiRes.value.json();
+        }
       }
     } catch (e) {
       console.error("Failed to fetch popular problems:", e);

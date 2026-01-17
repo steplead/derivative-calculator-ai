@@ -280,75 +280,93 @@ export default async function ProblemPage({ params }: { params: { slug: string }
     let relatedProblems: Problem[] = [];
 
     try {
-        // OPTIMIZED: Use static data first (faster than API/D1)
-        // STATIC FALLBACK - Try first for better performance
-        if (baseUrl) {
-            try {
-                const fallbackRes = await fetch(`${baseUrl}/problems.json`, {
-                    cache: 'force-cache',
-                    // @ts-ignore
-                    next: { revalidate: 3600 }
-                });
-                if (fallbackRes.ok) {
-                    const problemsData = await fallbackRes.json();
-                    if (Array.isArray(problemsData)) {
-                        if (!problem) {
-                            problem = problemsData.find(p => p.slug === slug) || null;
-                        }
-                        if (relatedProblems.length === 0) {
-                            relatedProblems = problemsData
-                                .filter(p => p.slug !== slug)
-                                .sort(() => 0.5 - Math.random())
-                                .slice(0, 10);
-                        }
-                    }
-                }
-            } catch (e) {
-                console.error("Static fallback failed:", e);
-            }
-        }
+        // OPTIMIZED: Parallel fetch from all data sources to minimize processing time
+        // Fetch from static JSON, API, and D1 simultaneously, use fastest available result
+        const context = getRequestContext();
+        // @ts-ignore
+        const db = context?.env?.DB;
 
-        // D1 DIRECT LOOKUP (Only if static data failed)
-        if ((!problem || relatedProblems.length === 0)) {
-            try {
-                const context = getRequestContext();
+        // PARALLEL: Fetch from all sources simultaneously
+        const [staticRes, apiProbRes, apiAllRes, d1Problem, d1Related] = await Promise.allSettled([
+            // Static JSON file (fastest)
+            baseUrl ? fetch(`${baseUrl}/problems.json`, {
+                cache: 'force-cache',
                 // @ts-ignore
-                const db = context?.env?.DB;
-                if (db) {
-                    if (!problem) {
-                        problem = await db.prepare("SELECT * FROM problems WHERE slug = ?").bind(slug).first();
+                next: { revalidate: 3600 }
+            }) : Promise.reject('No baseUrl'),
+            // API problem endpoint
+            baseUrl ? fetch(`${baseUrl}/api/problem/${slug}`, {
+                cache: 'force-cache',
+                // @ts-ignore
+                next: { revalidate: 3600 }
+            }) : Promise.reject('No baseUrl'),
+            // API all problems endpoint
+            baseUrl ? fetch(`${baseUrl}/api/problems?limit=50`, {
+                cache: 'force-cache',
+                // @ts-ignore
+                next: { revalidate: 3600 }
+            }) : Promise.reject('No baseUrl'),
+            // D1 problem query
+            (async () => {
+                try {
+                    if (db) {
+                        return await db.prepare("SELECT * FROM problems WHERE slug = ?").bind(slug).first();
                     }
-                    if (relatedProblems.length === 0) {
-                        const { results } = await db.prepare("SELECT * FROM problems WHERE slug != ? ORDER BY RANDOM() LIMIT 10").bind(slug).all();
-                        if (Array.isArray(results)) relatedProblems = results;
-                    }
+                } catch (e) {
+                    return null;
                 }
-            } catch (e) {
-                console.error("D1 Resilience Fetch Failed:", e);
+            })(),
+            // D1 related problems query
+            (async () => {
+                try {
+                    if (db) {
+                        const { results } = await db.prepare("SELECT * FROM problems WHERE slug != ? ORDER BY RANDOM() LIMIT 10").bind(slug).all();
+                        return Array.isArray(results) ? results : [];
+                    }
+                } catch (e) {
+                    return [];
+                }
+            })()
+        ]);
+
+        // Process results in priority order: static > D1 > API
+        // Problem
+        if (!problem) {
+            if (staticRes.status === 'fulfilled' && staticRes.value.ok) {
+                const problemsData = await staticRes.value.json();
+                if (Array.isArray(problemsData)) {
+                    problem = problemsData.find(p => p.slug === slug) || null;
+                }
+            }
+            if (!problem && d1Problem.status === 'fulfilled' && d1Problem.value) {
+                problem = d1Problem.value;
+            }
+            if (!problem && apiProbRes.status === 'fulfilled' && apiProbRes.value.ok) {
+                const contentType = apiProbRes.value.headers.get("content-type");
+                if (contentType && contentType.includes("application/json")) {
+                    problem = await apiProbRes.value.json();
+                }
             }
         }
 
-        // API FALLBACK (Only if static and D1 failed)
-        if ((!problem || relatedProblems.length === 0) && baseUrl) {
-            try {
-                const [probRes, allRes] = await Promise.all([
-                    fetch(`${baseUrl}/api/problem/${slug}`, {
-                        cache: 'force-cache',
-                        // @ts-ignore
-                        next: { revalidate: 3600 }
-                    }),
-                    fetch(`${baseUrl}/api/problems?limit=50`, {
-                        cache: 'force-cache',
-                        // @ts-ignore
-                        next: { revalidate: 3600 }
-                    })
-                ]);
-
-                if (probRes.ok && probRes.headers.get("content-type")?.includes("application/json")) {
-                    problem = await probRes.json();
+        // Related problems
+        if (relatedProblems.length === 0) {
+            if (staticRes.status === 'fulfilled' && staticRes.value.ok) {
+                const problemsData = await staticRes.value.json();
+                if (Array.isArray(problemsData)) {
+                    relatedProblems = problemsData
+                        .filter(p => p.slug !== slug)
+                        .sort(() => 0.5 - Math.random())
+                        .slice(0, 10);
                 }
-                if (allRes.ok && allRes.headers.get("content-type")?.includes("application/json")) {
-                    const allProblems = await allRes.json();
+            }
+            if (relatedProblems.length === 0 && d1Related.status === 'fulfilled' && Array.isArray(d1Related.value)) {
+                relatedProblems = d1Related.value;
+            }
+            if (relatedProblems.length === 0 && apiAllRes.status === 'fulfilled' && apiAllRes.value.ok) {
+                const contentType = apiAllRes.value.headers.get("content-type");
+                if (contentType && contentType.includes("application/json")) {
+                    const allProblems = await apiAllRes.value.json();
                     if (Array.isArray(allProblems)) {
                         relatedProblems = allProblems
                             .filter((p: any) => p && p.slug !== slug)
@@ -356,8 +374,6 @@ export default async function ProblemPage({ params }: { params: { slug: string }
                             .slice(0, 10);
                     }
                 }
-            } catch (e) {
-                console.error("Fetch failed in ProblemPage:", e);
             }
         }
 

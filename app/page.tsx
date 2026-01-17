@@ -43,13 +43,28 @@ export default async function Home() {
     return <div className="p-20 text-center">System initialization... (Dictionary missing)</div>;
   }
 
-  // Fetch popular problems from API instead of local JSON
+  // OPTIMIZED: Use static data to reduce processing time
+  // Fetch popular problems from static JSON file first (faster)
   const baseUrl = getBaseUrl();
-
   let popularProblems = [];
 
-  // SAFE FETCH: Verification before parsing JSON
-  if (baseUrl) {
+  // FALLBACK: Use local data first (faster than API)
+  try {
+    const fallbackRes = await fetch(`${baseUrl}/problems.json`, {
+      cache: 'force-cache',
+      // @ts-ignore
+      next: { revalidate: 3600 }
+    });
+    if (fallbackRes.ok) {
+      const problemsData = await fallbackRes.json();
+      popularProblems = (problemsData as any[]).slice(0, 20);
+    }
+  } catch (e) {
+    console.error("Static fallback failed:", e);
+  }
+
+  // SAFE FETCH: Only use API if static data failed
+  if ((!popularProblems || popularProblems.length === 0) && baseUrl) {
     try {
       const res = await fetch(`${baseUrl}/api/problems?limit=20`, {
         cache: 'force-cache',
@@ -60,25 +75,9 @@ export default async function Home() {
       const contentType = res.headers.get("content-type");
       if (res.ok && contentType && contentType.includes("application/json")) {
         popularProblems = await res.json();
-      } else {
-        console.warn("Backend returned non-JSON response, using local fallback.");
       }
     } catch (e) {
       console.error("Failed to fetch popular problems:", e);
-    }
-  }
-
-  // FALLBACK: Use local data if API failed or returned HTML
-  if (!popularProblems || popularProblems.length === 0) {
-    try {
-      // Fetch from public/ directory instead of bundling it
-      const fallbackRes = await fetch(`${baseUrl}/problems.json`);
-      if (fallbackRes.ok) {
-        const problemsData = await fallbackRes.json();
-        popularProblems = (problemsData as any[]).slice(0, 20);
-      }
-    } catch (e) {
-      console.error("Static fallback failed:", e);
     }
   }
 

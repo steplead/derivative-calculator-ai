@@ -193,7 +193,8 @@ export default function Calculator({ initialEquation = '', initialLimitTo = '0',
                     <button
                         onClick={() => handleCalculate()}
                         disabled={loading}
-                        className="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed min-w-[120px]"
+                        className="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed min-w-[120px] h-[52px]"
+                        style={{ minHeight: '52px' }}
                     >
                         {getButtonText()}
                     </button>

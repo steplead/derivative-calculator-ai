@@ -280,7 +280,56 @@ export default async function ProblemPage({ params }: { params: { slug: string }
     let relatedProblems: Problem[] = [];
 
     try {
+        // OPTIMIZED: Use static data first (faster than API/D1)
+        // STATIC FALLBACK - Try first for better performance
         if (baseUrl) {
+            try {
+                const fallbackRes = await fetch(`${baseUrl}/problems.json`, {
+                    cache: 'force-cache',
+                    // @ts-ignore
+                    next: { revalidate: 3600 }
+                });
+                if (fallbackRes.ok) {
+                    const problemsData = await fallbackRes.json();
+                    if (Array.isArray(problemsData)) {
+                        if (!problem) {
+                            problem = problemsData.find(p => p.slug === slug) || null;
+                        }
+                        if (relatedProblems.length === 0) {
+                            relatedProblems = problemsData
+                                .filter(p => p.slug !== slug)
+                                .sort(() => 0.5 - Math.random())
+                                .slice(0, 10);
+                        }
+                    }
+                }
+            } catch (e) {
+                console.error("Static fallback failed:", e);
+            }
+        }
+
+        // D1 DIRECT LOOKUP (Only if static data failed)
+        if ((!problem || relatedProblems.length === 0)) {
+            try {
+                const context = getRequestContext();
+                // @ts-ignore
+                const db = context?.env?.DB;
+                if (db) {
+                    if (!problem) {
+                        problem = await db.prepare("SELECT * FROM problems WHERE slug = ?").bind(slug).first();
+                    }
+                    if (relatedProblems.length === 0) {
+                        const { results } = await db.prepare("SELECT * FROM problems WHERE slug != ? ORDER BY RANDOM() LIMIT 10").bind(slug).all();
+                        if (Array.isArray(results)) relatedProblems = results;
+                    }
+                }
+            } catch (e) {
+                console.error("D1 Resilience Fetch Failed:", e);
+            }
+        }
+
+        // API FALLBACK (Only if static and D1 failed)
+        if ((!problem || relatedProblems.length === 0) && baseUrl) {
             try {
                 const [probRes, allRes] = await Promise.all([
                     fetch(`${baseUrl}/api/problem/${slug}`, {
@@ -309,49 +358,6 @@ export default async function ProblemPage({ params }: { params: { slug: string }
                 }
             } catch (e) {
                 console.error("Fetch failed in ProblemPage:", e);
-            }
-        }
-
-        // D1 DIRECT LOOKUP (Hybrid Performance Resilience)
-        if (!problem || relatedProblems.length === 0) {
-            try {
-                const context = getRequestContext();
-                // @ts-ignore
-                const db = context?.env?.DB;
-                if (db) {
-                    if (!problem) {
-                        problem = await db.prepare("SELECT * FROM problems WHERE slug = ?").bind(slug).first();
-                    }
-                    if (relatedProblems.length === 0) {
-                        const { results } = await db.prepare("SELECT * FROM problems WHERE slug != ? ORDER BY RANDOM() LIMIT 10").bind(slug).all();
-                        if (Array.isArray(results)) relatedProblems = results;
-                    }
-                }
-            } catch (e) {
-                console.error("D1 Resilience Fetch Failed:", e);
-            }
-        }
-
-        // STATIC FALLBACK
-        if (!problem || relatedProblems.length === 0) {
-            try {
-                const fallbackRes = await fetch(`${baseUrl}/problems.json`);
-                if (fallbackRes.ok) {
-                    const problemsData = await fallbackRes.json();
-                    if (Array.isArray(problemsData)) {
-                        if (!problem) {
-                            problem = problemsData.find(p => p.slug === slug) || null;
-                        }
-                        if (relatedProblems.length === 0) {
-                            relatedProblems = problemsData
-                                .filter(p => p.slug !== slug)
-                                .sort(() => 0.5 - Math.random())
-                                .slice(0, 4);
-                        }
-                    }
-                }
-            } catch (e) {
-                console.error("Static fallback failed:", e);
             }
         }
 

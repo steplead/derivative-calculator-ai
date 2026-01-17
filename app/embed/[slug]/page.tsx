@@ -13,17 +13,7 @@ import { NextResponse } from 'next/server';
 
 export const runtime = 'edge';
 
-interface PageProps {
-    params: {
-        slug: string;
-    };
-    searchParams: {
-        theme?: string;
-        preview?: string;
-    };
-}
-
-export async function GET(request: Request) {
+export async function GET(_request: Request) {
     // Permanently block all embed requests
     // Return 403 with long-term caching to minimize quota usage
     return new NextResponse('Embed widget has been permanently disabled.', {

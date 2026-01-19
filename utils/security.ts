@@ -35,10 +35,11 @@ interface AbuseScoreEntry {
 // Configuration
 const SECURITY_CONFIG = {
     // Global quota: maximum requests per day for entire system
-    // AGGRESSIVE: Reduced to 50k/day (50% of free tier, 50% safety margin) - FORCE COMPLIANCE
+    // ULTRA AGGRESSIVE: Reduced to 30k/day (30% of free tier, 70% safety margin) - FORCE COMPLIANCE
+    // This ensures we stay well below the 100k/day limit even with spikes
     GLOBAL_QUOTA: {
-        DAILY_LIMIT: 50000,       // 50k requests/day (50% of free tier, 50% safety margin) - FORCE COMPLIANCE
-        HOURLY_LIMIT: 2083,       // 50k / 24 hours = 2,083 requests/hour (rounded)
+        DAILY_LIMIT: 30000,       // 30k requests/day (30% of free tier, 70% safety margin) - ULTRA AGGRESSIVE
+        HOURLY_LIMIT: 1250,       // 30k / 24 hours = 1,250 requests/hour (rounded)
     },
 
     // Rate limiting: requests per window

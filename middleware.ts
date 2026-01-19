@@ -10,6 +10,37 @@ const locales = ["es", "pt"];
 export async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
 
+    // ULTRA AGGRESSIVE: Early blocking before any processing to reduce quota usage
+    // Block suspicious requests at the edge, before they consume Worker resources
+    const userAgent = request.headers.get('user-agent') || '';
+    const referer = request.headers.get('referer') || '';
+
+    // Block requests without User-Agent (almost always bots)
+    if (!userAgent || userAgent.trim() === '') {
+        return NextResponse.json(
+            { error: 'Access denied. User-Agent required.' },
+            { status: 403 }
+        );
+    }
+
+    // Block suspicious User-Agent patterns (common bots/crawlers)
+    const suspiciousPatterns = ['bot', 'crawler', 'spider', 'scraper', 'python', 'curl', 'wget', 'http', 'java', 'go-http'];
+    const lowerUA = userAgent.toLowerCase();
+    if (suspiciousPatterns.some(pattern => lowerUA.includes(pattern))) {
+        return NextResponse.json(
+            { error: 'Access denied. Automated requests not allowed.' },
+            { status: 403 }
+        );
+    }
+
+    // Block API requests without proper Referer (direct API access, likely abuse)
+    if (pathname.startsWith('/api/') && !referer.includes('derivativecalculatorai.com')) {
+        return NextResponse.json(
+            { error: 'Access denied. API requests must come from the website.' },
+            { status: 403 }
+        );
+    }
+
     // Track request path for traffic analysis (async, non-blocking)
     // This helps analyze traffic distribution since Cloudflare Log Explorer is paid
     // NOTE: Track embed requests separately to monitor widget abuse
@@ -80,14 +111,31 @@ export async function middleware(request: NextRequest) {
         const requestHeaders = new Headers(request.headers);
         requestHeaders.set("x-next-locale", locale);
 
-        return NextResponse.rewrite(new URL(newPath, request.url), {
+        const response = NextResponse.rewrite(new URL(newPath, request.url), {
             request: {
                 headers: requestHeaders,
             },
         });
+
+        // CACHE OPTIMIZATION: Add cache headers for page requests
+        // This allows Cloudflare Page Rules to cache pages even if Next.js sets no-cache
+        // Cache for 2 hours (7200 seconds) to match Page Rules Edge Cache TTL
+        if (!pathname.startsWith('/api/') && !pathname.startsWith('/_next/')) {
+            response.headers.set('Cache-Control', 'public, s-maxage=7200, max-age=3600, stale-while-revalidate=86400');
+        }
+
+        return response;
     }
 
-    return NextResponse.next();
+    // CACHE OPTIMIZATION: Add cache headers for page requests
+    // This allows Cloudflare Page Rules to cache pages even if Next.js sets no-cache
+    // Cache for 2 hours (7200 seconds) to match Page Rules Edge Cache TTL
+    const response = NextResponse.next();
+    if (!pathname.startsWith('/api/') && !pathname.startsWith('/_next/')) {
+        response.headers.set('Cache-Control', 'public, s-maxage=7200, max-age=3600, stale-while-revalidate=86400');
+    }
+
+    return response;
 }
 
 export const config = {

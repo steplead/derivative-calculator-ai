@@ -81,11 +81,10 @@ export async function middleware(request: NextRequest) {
         });
     }
 
-    // Rate limiting for page requests (NOT API — API routes apply their own limits).
-    // Tuned to be friendly to real users (who click several links per minute) while
-    // still throttling scrapers. Previous value of 1 req/min locked out normal users.
-    // Skip security check for /embed/ — the route handler returns a cached 403
-    // immediately, so running D1 rate-limit queries here only wastes quota.
+    // Rate limiting for page requests only (NOT API, NOT static assets, NOT /embed/).
+    // Static assets are excluded at the matcher level so they never hit D1.
+    // API routes apply their own limits inside their handlers.
+    // /embed/ route returns a cached 403 immediately, so skip D1 to save quota.
     if (!pathname.startsWith('/api/') && !pathname.startsWith('/_next/') && !pathname.startsWith('/embed/')) {
         const searchParams = new URLSearchParams();
         const securityResult = await performSecurityCheck(
@@ -159,7 +158,10 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
     matcher: [
-        // Match all paths except static files, api routes, image optimization files, and common static assets
-        '/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|json)$).*)',
+        // Match all paths EXCEPT: api routes, all _next/* (static, chunks, image),
+        // favicon, and common static asset extensions. Previously only excluding
+        // _next/static|_next/image caused /_next/static/chunks/*.js (page JS)
+        // to run through middleware → D1 rate limit → 429 on CSS/JS → broken layout.
+        '/((?!api|_next|favicon.ico|robots.txt|sitemap.xml|manifest.json|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|json|txt|xml|css|js|map|woff|woff2|ttf|eot)$).*)',
     ],
 };

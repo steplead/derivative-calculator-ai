@@ -84,7 +84,9 @@ export async function middleware(request: NextRequest) {
     // Rate limiting for page requests (NOT API — API routes apply their own limits).
     // Tuned to be friendly to real users (who click several links per minute) while
     // still throttling scrapers. Previous value of 1 req/min locked out normal users.
-    if (!pathname.startsWith('/api/') && !pathname.startsWith('/_next/')) {
+    // Skip security check for /embed/ — the route handler returns a cached 403
+    // immediately, so running D1 rate-limit queries here only wastes quota.
+    if (!pathname.startsWith('/api/') && !pathname.startsWith('/_next/') && !pathname.startsWith('/embed/')) {
         const searchParams = new URLSearchParams();
         const securityResult = await performSecurityCheck(
             request.headers,

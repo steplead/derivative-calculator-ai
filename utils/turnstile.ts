@@ -19,17 +19,8 @@ export async function verifyTurnstileToken(
 
     const secretKey = process.env.TURNSTILE_SECRET_KEY;
 
-    // eslint-disable-next-line no-console
-    console.log('[TURNSTILE_VERIFY] Starting verification...', {
-        hasToken: !!token,
-        tokenLength: token?.length,
-        hasSecretKey: !!secretKey,
-        remoteIp: remoteIp || 'none'
-    });
-
     if (!secretKey) {
         // Turnstile not configured - fail open for development
-        console.error('[TURNSTILE_VERIFY] TURNSTILE_SECRET_KEY not configured in environment');
         return { success: false, error: 'Server configuration error: TURNSTILE_SECRET_KEY not set' };
     }
 
@@ -38,8 +29,6 @@ export async function verifyTurnstileToken(
     }
 
     try {
-              // eslint-disable-next-line no-console
-        console.log('[TURNSTILE_VERIFY] Sending request to Cloudflare...');
         const response = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
             method: 'POST',
             headers: {
@@ -54,28 +43,15 @@ export async function verifyTurnstileToken(
 
         const result: TurnstileResponse = await response.json();
 
-              // eslint-disable-next-line no-console
-            console.log('[TURNSTILE_VERIFY] Cloudflare response:', {
-            success: result.success,
-            errorCodes: result['error-codes'],
-            challengeTs: result.challenge_ts,
-            hostname: result.hostname,
-            httpStatus: response.status
-        });
-
         if (result.success) {
-              // eslint-disable-next-line no-console
-                console.log('[TURNSTILE_VERIFY] ✓ Token verified successfully');
             return { success: true };
         } else {
-            console.error('[TURNSTILE_VERIFY] ✗ Token verification failed:', result['error-codes']);
             return {
                 success: false,
                 error: result['error-codes']?.join(', ') || 'Verification failed'
             };
         }
     } catch (error) {
-        console.error('[TURNSTILE_VERIFY] Network error during verification:', error);
         // Fail open on network errors
         return { success: true };
     }
@@ -84,6 +60,12 @@ export async function verifyTurnstileToken(
 /**
  * Check if request looks like a legitimate browser
  * Enhanced detection with multiple signals
+ *
+ * IMPORTANT: We intentionally do NOT block generic "bot"/"crawler"/"spider"
+ * substrings here because legitimate search engine crawlers (Googlebot,
+ * Bingbot, YandexBot, Baiduspider, DuckDuckBot, etc.) contain those words.
+ * Blocking them would destroy SEO indexing. Only block known scripted
+ * abuse tools and headless automation frameworks.
  */
 export function looksLikeLegitimateBrowser(
     userAgent: string | null,
@@ -91,16 +73,39 @@ export function looksLikeLegitimateBrowser(
 ): boolean {
     if (!userAgent) return false;
 
-    // Block common bot/crawler patterns
-    const botPatterns = [
-        /bot/i, /crawler/i, /spider/i, /scraper/i,
+    // Whitelist: known legitimate search engine crawlers (always allow)
+    const SEARCH_ENGINE_BOTS = [
+        /Googlebot/i,
+        /Bingbot/i,
+        /Slurp/i,           // Yahoo
+        /DuckDuckBot/i,
+        /Baiduspider/i,
+        /YandexBot/i,
+        /facebookexternalhit/i,
+        /Twitterbot/i,
+        /LinkedInBot/i,
+        /Applebot/i,
+        /Bytespider/i,
+        /AhrefsBot/i,
+        /SemrushBot/i,
+        /MJ12bot/i,
+    ];
+    if (SEARCH_ENGINE_BOTS.some(pattern => pattern.test(userAgent))) {
+        return true;
+    }
+
+    // Block ONLY known scripted abuse tools and headless automation.
+    // NOTE: do NOT add generic patterns like /http/i, /client/i, /tool/i,
+    // /library/i — they are too broad and cause false positives on legit
+    // browser UAs and embedded webviews.
+    const abusePatterns = [
         /curl/i, /wget/i, /python/i, /node/i, /java/i,
         /headless/i, /phantom/i, /selenium/i, /puppeteer/i,
-        /http/i, /client/i, /library/i, /tool/i,
-        /go-http/i, /okhttp/i, /apache/i, /requests/i,
+        /go-http/i, /okhttp/i, /apache/i, /python-requests/i,
+        /requests\//i, /httpclient/i, /scrapy/i, /httpx\//i,
     ];
 
-    for (const pattern of botPatterns) {
+    for (const pattern of abusePatterns) {
         if (pattern.test(userAgent)) return false;
     }
 
@@ -111,7 +116,7 @@ export function looksLikeLegitimateBrowser(
     ];
 
     const hasBrowserUA = browserPatterns.some(pattern => pattern.test(userAgent));
-    
+
     if (!hasBrowserUA) return false;
 
     // Additional checks if headers are provided

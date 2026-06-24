@@ -151,12 +151,10 @@ export function looksLikeLegitimateBrowser(
         const acceptLanguage = getHeader('accept-language');
         const hasAcceptLanguage = acceptLanguage && acceptLanguage.length >= 2;
 
-        // Check for suspicious Referer patterns
-        const referer = getHeader('referer');
-        if (referer && /^(http:\/\/|https:\/\/)[^\/]+\/?$/.test(referer)) {
-            // Suspicious: just domain without path
-            return false;
-        }
+        // Referer check removed: blocking root-domain referers like
+        // "https://derivativecalculatorai.com/" was a false positive that
+        // blocked legitimate same-site navigation (homepage → API calls).
+        // Referer is not a reliable bot signal.
 
         // If Accept header is too minimal and no Accept-Language, likely a bot
         if (!hasDetailedAccept && !hasAcceptLanguage) {
@@ -171,9 +169,10 @@ export function looksLikeLegitimateBrowser(
         const secChUa = getHeader('sec-ch-ua');
         const _secChUaPlatform = getHeader('sec-ch-ua-platform');
 
-        // Modern browsers (Chrome 90+, Edge 90+, etc.) send Sec-Fetch-* headers
-        // If User-Agent claims to be a modern browser but lacks these headers, suspicious
-        const claimsModernBrowser = /chrome\/9[0-9]|edg\/9[0-9]|safari\/1[4-9]|firefox\/9[0-9]/i.test(userAgent);
+        // Modern browsers (Chrome 90+, Edge 90+, Safari 14+, Firefox 90+) send Sec-Fetch-* headers
+        // If User-Agent claims to be a modern browser but lacks these headers, suspicious.
+        // Regex matches version 90-999 (covers Chrome 90 through future Chrome 999+).
+        const claimsModernBrowser = /chrome\/[0-9]{2,}|edg\/[0-9]{2,}|safari\/1[4-9][0-9]|firefox\/[0-9]{2,}/i.test(userAgent);
         if (claimsModernBrowser && !secFetchMode && !secChUa) {
             // Modern browser UA but missing modern browser headers - likely spoofed
             return false;

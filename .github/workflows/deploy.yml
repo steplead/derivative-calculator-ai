@@ -34,14 +34,14 @@ jobs:
           NEXT_PUBLIC_SITE_URL: https://derivativecalculatorai.com
 
       - name: Build for Cloudflare Pages
+        # Produces .vercel/output/static (the Pages deployment artifact)
         run: npx @cloudflare/next-on-pages
 
       - name: Deploy to Cloudflare Pages
-        uses: cloudflare/pages-action@v1
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: derivative-calculator-ai
-          directory: .vercel/output/static
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          wranglerVersion: '3.57.1'
+        # Replaced deprecated cloudflare/pages-action@v1 with the official
+        # `wrangler pages deploy` command (Cloudflare's current recommendation).
+        # This gives clearer error output and native wrangler 3.x support.
+        run: npx wrangler@latest pages deploy .vercel/output/static --project-name=derivative-calculator-ai --branch=main
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

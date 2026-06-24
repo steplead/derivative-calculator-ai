@@ -1,12 +1,13 @@
 import Calculator from '@/components/Calculator';
 import DynamicRecommendations from '@/components/DynamicRecommendations';
-export const runtime = 'edge';
 import Link from 'next/link';
 import { Suspense } from 'react';
 import { headers } from 'next/headers';
 import { getDictionary } from './dictionaries';
 import { getBaseUrl } from '@/utils/robust-url';
 import type { Metadata } from 'next';
+
+export const runtime = 'edge';
 
 // OPTIMIZED: Allow caching to reduce quota usage
 // Cache for 1 hour - locale is handled via middleware rewrite, so caching is safe
@@ -54,12 +55,10 @@ export default async function Home() {
       const [staticRes, apiRes] = await Promise.allSettled([
         fetch(`${baseUrl}/problems.json`, {
           cache: 'force-cache',
-          // @ts-ignore
           next: { revalidate: 3600 }
         }),
         fetch(`${baseUrl}/api/problems?limit=20`, {
           cache: 'force-cache',
-          // @ts-ignore
           next: { revalidate: 3600 }
         })
       ]);

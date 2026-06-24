@@ -43,11 +43,12 @@ const SECURITY_CONFIG = {
     },
 
     // Rate limiting: requests per window
-    // AGGRESSIVE: Drastically reduced to prevent quota abuse
+    // Tuned to be friendly to real users (who click several links per minute)
+    // while still throttling scrapers. Pages override this to 30/min; APIs use stricter values.
     RATE_LIMIT: {
-        DEFAULT_LIMIT: 1,         // 1 req/min (aggressive limit to prevent abuse)
+        DEFAULT_LIMIT: 20,        // 20 req/min default (human-friendly)
         DEFAULT_WINDOW: 60,       // seconds
-        STRICT_LIMIT: 1,          // For suspicious IPs (same as default)
+        STRICT_LIMIT: 5,          // For suspicious IPs
         STRICT_WINDOW: 60,        // seconds
     },
 
@@ -297,17 +298,10 @@ export async function performSecurityCheck(
     const env = getRequestContext()?.env as any;
     const skipSecurity = env?.SKIP_SECURITY === 'true';
 
-    // eslint-disable-next-line no-console
-    console.log(`[SECURITY_DIAGNOSIS] IP: ${ip} | SKIP_SECURITY env var: ${env?.SKIP_SECURITY || 'UNDEFINED'} | skipSecurity: ${skipSecurity}`);
-
     if (skipSecurity) {
-        console.warn(`[SECURITY_BYPASS] ⚠️ SECURITY DISABLED - Skipping all checks for IP: ${ip}`);
+        console.warn(`[SECURITY_BYPASS] Security disabled for IP: ${ip}`);
         return { success: true };
     }
-
-    // Log Turnstile token status
-    // eslint-disable-next-line no-console
-    console.log(`[SECURITY_CHECK] IP: ${ip} | Endpoint: ${endpoint} | Turnstile Token: ${turnstileToken ? 'PRESENT (length: ' + turnstileToken.length + ')' : 'MISSING'}`);
 
     // Get D1 database
     // @ts-ignore - Cloudflare Workers D1 binding
@@ -321,11 +315,14 @@ export async function performSecurityCheck(
 
     // ========== 1. Host Check (SIMPLIFIED - Only check allowed domains) ==========
 
+    // NOTE: Real production domain is `derivativecalculatorai.com` (no hyphens).
+    // Previous list incorrectly included hyphenated variants which never match.
     const allowedHosts = [
-        'derivative-calculator-ai.com',
-        'www.derivative-calculator-ai.com',
         'derivativecalculatorai.com',
-        'localhost', // For local development
+        'www.derivativecalculatorai.com',
+        'localhost',
+        '127.0.0.1',
+        '0.0.0.0',
     ];
 
     const isAllowedHost = allowedHosts.some(h => host === h || host.endsWith('.' + h));
@@ -394,8 +391,6 @@ export async function performSecurityCheck(
                 VALUES (?, ?, ?, ?, ?)
             `).bind(ip, now + 30, 'turnstile_verified', 0, now).run();
 
-            // eslint-disable-next-line no-console
-            console.log(`[TURNSTILE_SUCCESS] IP ${ip} verified for 30 seconds`);
             return { success: true };
         } else {
             // Check if this IP was recently verified via Turnstile (within 30 seconds)
@@ -404,8 +399,6 @@ export async function performSecurityCheck(
             ).bind(ip, Math.floor(Date.now() / 1000)).first() as any;
 
             if (recentVerification) {
-                // eslint-disable-next-line no-console
-                console.log(`[TURNSTILE_CACHED] IP ${ip} using cached verification (${Math.ceil(recentVerification.blocked_until - Date.now()/1000)}s remaining)`);
                 return { success: true };
             }
 
@@ -422,8 +415,6 @@ export async function performSecurityCheck(
         ).bind(ip, Math.floor(Date.now() / 1000)).first() as any;
 
         if (recentVerification) {
-            // eslint-disable-next-line no-console
-            console.log(`[TURNSTILE_CACHED] IP ${ip} using cached verification, no token provided (${Math.ceil(recentVerification.blocked_until - Date.now()/1000)}s remaining)`);
             return { success: true };
         }
 

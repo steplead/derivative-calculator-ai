@@ -56,10 +56,8 @@ export async function getCachedExplanation(key: string): Promise<string | null> 
         const value = await redis.get<string>(`explanation:${key}`);
         if (value) {
             cacheHits++;
-            console.log(`✅ CACHE HIT: ${key} | Metrics: ${getCacheMetrics().hitRate} hit rate | Saved: $0.00017`);
         } else {
             cacheMisses++;
-            console.log(`❌ CACHE MISS: ${key} | Metrics: ${getCacheMetrics().hitRate} hit rate`);
         }
         return value;
     } catch (e) {
@@ -73,7 +71,6 @@ export async function setCachedExplanation(key: string, value: string, ttl: numb
     if (!redis) return;
     try {
         await redis.set(`explanation:${key}`, value, { ex: ttl });
-        console.log(`💾 CACHED: ${key} | TTL: ${ttl}s (${(ttl / 86400).toFixed(1)} days)`);
     } catch (e) {
         console.error("Redis Set Error:", e);
     }

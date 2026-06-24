@@ -12,7 +12,8 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const expression = searchParams.get('equation');
     const target = searchParams.get('to') || '0';
-    const includeAi = false; // EMERGENCY: AI completely disabled to reduce quota usage
+    // AI explanation enabled when an API key is configured (see derivative route for rationale).
+    const includeAi = !!process.env.OPENROUTER_API_KEY;
 
     // Track API path for traffic analysis (async, non-blocking)
     trackPath('/api/limit', 200).catch(err => {
@@ -48,13 +49,12 @@ export async function GET(req: NextRequest) {
         );
     }
 
-    // Heuristic Check: Ensure it doesn't look like a descriptive sentence/slug
-    const hasMultipleHyphens = (expression.match(/-/g) || []).length > 2;
+    // Heuristic Check: reject descriptive slugs/sentences, accept real math.
+    const looksLikeDescriptive = /[a-zA-Z]{4,}-[a-zA-Z]{4,}-[a-zA-Z]{4,}/.test(expression);
     const hasMathSymbols = /[\+\*\/\^\(\)=]/.test(expression);
-    const looksLikeDescriptive = /[a-zA-Z]{4,}-[a-zA-Z]{4,}/.test(expression);
-    const looksLikeMath = hasMathSymbols || (expression.length < 15 && !looksLikeDescriptive);
+    const looksLikeMath = hasMathSymbols || /^[a-zA-Z0-9_\^\(\)\+\-\*\/\.\s]+$/.test(expression);
 
-    if (hasMultipleHyphens || !looksLikeMath) {
+    if (looksLikeDescriptive || !looksLikeMath) {
         return NextResponse.json({ error: "Invalid mathematical expression" }, { status: 400 });
     }
 

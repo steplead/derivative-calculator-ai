@@ -12,7 +12,8 @@ export const runtime = 'edge';
 export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const equation = searchParams.get('equation');
-    const includeAi = false; // EMERGENCY: AI completely disabled to reduce quota usage
+    // AI explanation enabled when an API key is configured (see derivative route for rationale).
+    const includeAi = !!process.env.OPENROUTER_API_KEY;
 
     // Track API path for traffic analysis (async, non-blocking)
     trackPath('/api/ode', 200).catch(err => {
@@ -48,14 +49,13 @@ export async function GET(req: NextRequest) {
         );
     }
 
-    // Heuristic Check for ODE format
-    const hasMultipleHyphens = (equation.match(/-/g) || []).length > 2;
+    // Heuristic Check for ODE format: reject descriptive slugs, accept math.
     const hasMathSymbols = /[\+\*\/\^\(\)=]/.test(equation);
     const hasODENotation = /y['']|^dy\/dx/.test(equation);
-    const looksLikeDescriptive = /[a-zA-Z]{4,}-[a-zA-Z]{4,}/.test(equation);
-    const looksLikeMath = hasMathSymbols || hasODENotation || (equation.length < 20 && !looksLikeDescriptive);
+    const looksLikeDescriptive = /[a-zA-Z]{4,}-[a-zA-Z]{4,}-[a-zA-Z]{4,}/.test(equation);
+    const looksLikeMath = hasMathSymbols || hasODENotation || /^[a-zA-Z0-9_\^\(\)\+\-\*\/\.\s'']+$/.test(equation);
 
-    if (hasMultipleHyphens || !looksLikeMath || equation.length > 200) {
+    if (looksLikeDescriptive || !looksLikeMath) {
         return NextResponse.json({ error: "Invalid ODE expression" }, { status: 400 });
     }
 

@@ -11,7 +11,11 @@ export const runtime = 'edge';
 export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const expression = searchParams.get('equation');
-    const includeAi = false; // EMERGENCY: AI completely disabled to reduce quota usage
+    // AI explanation is enabled when an API key is configured.
+    // Previously hardcoded to false ("EMERGENCY"), which removed the product's
+    // core step-by-step value. Now controlled by environment so it works in
+    // production and degrades gracefully when no key is set.
+    const includeAi = !!process.env.OPENROUTER_API_KEY;
 
     // Track API path for traffic analysis (async, non-blocking)
     trackPath('/api/derivative', 200).catch(err => {
@@ -51,14 +55,15 @@ export async function GET(req: NextRequest) {
         );
     }
 
-    // Heuristic Check: Ensure it doesn't look like a descriptive sentence/slug
-    const hasMultipleHyphens = (expression.match(/-/g) || []).length > 2;
-    // Math usually contains symbols, or no hyphens if it's a single variable
+    // Heuristic Check: reject descriptive slugs/sentences, accept real math.
+    // NOTE: Hyphens are legitimate minus operators, so we do NOT reject on
+    // hyphen count. We reject only when the input looks like a URL slug
+    // (long word-hyphen-word-hyphen-word pattern with no math operators).
+    const looksLikeDescriptive = /[a-zA-Z]{4,}-[a-zA-Z]{4,}-[a-zA-Z]{4,}/.test(expression);
     const hasMathSymbols = /[\+\*\/\^\(\)=]/.test(expression);
-    const looksLikeDescriptive = /[a-zA-Z]{4,}-[a-zA-Z]{4,}/.test(expression); // e.g. "derivative-of"
-    const looksLikeMath = hasMathSymbols || (expression.length < 15 && !looksLikeDescriptive);
+    const looksLikeMath = hasMathSymbols || /^[a-zA-Z0-9_\^\(\)\+\-\*\/\.\s]+$/.test(expression);
 
-    if (hasMultipleHyphens || !looksLikeMath || expression.length > 100) {
+    if (looksLikeDescriptive || !looksLikeMath) {
         return NextResponse.json({ error: "Invalid mathematical expression" }, { status: 400 });
     }
 

@@ -1,9 +1,0 @@
-{
-    "rewrites": [
-        {
-            "source": "/api/(.*)",
-            "destination": "/api/index.py"
-        }
-    ],
-    "installCommand": "npm install --legacy-peer-deps && pip install -r requirements.txt"
-}

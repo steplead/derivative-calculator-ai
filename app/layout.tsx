@@ -82,7 +82,7 @@ export default async function RootLayout({
       <body className={`${inter.className} min-h-screen bg-white dark:bg-[#0a0a0a] text-gray-900 dark:text-gray-100 flex flex-col`}>
         <TurnstileProvider>
           <Navbar dict={dict} />
-          <main className="flex-grow w-full max-w-[80rem] mx-auto px-4 sm:px-6 lg:px-8">
+          <main className="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             {children}
           </main>
           <Footer wikiTopics={wikiTopics} problems={popularProblems} locale={locale} />

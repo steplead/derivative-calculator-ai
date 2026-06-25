@@ -38,3 +38,4 @@
 2. `npm run build` — Next.js 生产构建
 3. `npm run pages:build` — @cloudflare/next-on-pages 部署产物构建
 - 三者全过才可 push 上线。
+- **额外检查**：如果用了 Tailwind 任意值（如 `max-w-[80rem]`），确认构建后的 CSS 文件中确实生成了该类。Tailwind v4 可能不生成未在 content 中扫描到的任意值类，导致样式丢失。优先使用标准 utility 类（如 `max-w-7xl`）。

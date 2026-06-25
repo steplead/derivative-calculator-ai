@@ -426,39 +426,30 @@ export async function performSecurityCheck(
     }
     // If Turnstile not provided and not required, continue to other checks
 
-    // ========== 3. Bot Detection (RE-ENABLED with lenient threshold) ==========
-    // Helps reduce bot traffic while minimizing false positives
+    // ========== 3. Bot Detection ==========
+    // looksLikeLegitimateBrowser() has been fixed to not produce false positives
+    // (removed Accept: */* check, referer check, fixed Chrome version regex).
+    // The abuse scoring system below was accumulating false-positive scores from
+    // the old buggy version, blocking real users for hours even after the fix.
+    // Since the root cause (false positives) is fixed, we skip abuse scoring
+    // entirely. Rate limiting (step 4) is sufficient for abuse prevention.
     const { looksLikeLegitimateBrowser } = await import('./turnstile');
     const isLegitimateBrowser = looksLikeLegitimateBrowser(_userAgent, headers);
 
     if (!isLegitimateBrowser) {
-        // OPTIMIZED: Increased penalty to block bots faster
-        const score = await _getAndUpdateAbuseScore(db, ip, 20); // Increased from 15 to 20 (faster accumulation)
-        console.warn(`[BOT_SUSPICIOUS] IP: ${ip} | UA: ${_userAgent} | Endpoint: ${endpoint} | Score: ${score}`);
-
-        // OPTIMIZED: Lowered threshold to 30 to block faster (3 suspicious requests = block)
-        if (score >= SECURITY_CONFIG.ABUSE_SCORING.BLOCK_THRESHOLD) {
-            await _blockIp(db, ip, 'Automated bot pattern detected', 1);
+        // Only block scripted tools (curl, python, etc.) that middleware didn't catch.
+        // These are already filtered by middleware UA patterns, so reaching here
+        // means the UA passed middleware but failed browser fingerprinting.
+        // Apply strict rate limit instead of outright block to avoid false positives.
+        const limit = SECURITY_CONFIG.RATE_LIMIT.STRICT_LIMIT; // 5 req/min
+        const window = SECURITY_CONFIG.RATE_LIMIT.STRICT_WINDOW; // 60s
+        const result = await checkD1RateLimitWithStrictMode(db, ip, limit, window);
+        if (!result.success) {
             return {
                 success: false,
-                error: 'Access denied. Please use a web browser.',
-                blocked: true,
+                error: 'Too many requests. Please slow down.',
+                retryAfter: Math.ceil((result.resetTime - Date.now()) / 1000),
             };
-        }
-
-        // For moderate scores, apply strict rate limiting
-        if (score >= 15) {
-            const limit = SECURITY_CONFIG.RATE_LIMIT.STRICT_LIMIT; // 1 req/min
-            const window = SECURITY_CONFIG.RATE_LIMIT.STRICT_WINDOW; // 60s
-
-            const result = await checkD1RateLimitWithStrictMode(db, ip, limit, window);
-            if (!result.success) {
-                return {
-                    success: false,
-                    error: 'Too many requests. Please slow down.',
-                    retryAfter: Math.ceil((result.resetTime - Date.now()) / 1000),
-                };
-            }
         }
     }
 

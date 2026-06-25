@@ -134,10 +134,10 @@ export function looksLikeLegitimateBrowser(
             return false; // Bots often don't send Accept header
         }
 
-        // Check for suspicious Accept patterns
-        if (/^\*\/\*$/.test(accept.trim())) {
-            return false; // Some bots send "*/*" only
-        }
+        // NOTE: Do NOT reject "*/*" as bot-like — modern browsers send
+        // Accept: */* by default for fetch() API calls.  This is perfectly
+        // normal and rejecting it caused every real user to be blocked after 2
+        // clicks (abuse score >= 30).
 
         // Check Accept header quality - browsers send detailed Accept headers
         // Bots often send minimal Accept headers

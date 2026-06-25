@@ -18,10 +18,14 @@
 - **rate limit 不要设 1 req/min**：会锁死正常用户。页面 30 req/min，API 20 req/min 是合理基线。
 - **不要每请求 console.log 诊断信息**：浪费 Cloudflare 免费配额，且可能泄露 IP。包括 turnstile.ts 的验证日志也要去掉。
 - **/embed/ 路径在 middleware 中跳过 D1 rate limit 检查**：route handler 直接返回 cached 403，跑 D1 查询只浪费配额。
+- **middleware matcher 必须排除所有 `_next/*` 路径**：不能只排除 `_next/static|_next/image`。Next.js 页面 JS 从 `/_next/static/chunks/*.js` 加载，如果 matcher 不排除这些路径，它们会经过 middleware → D1 rate limit → 429 → CSS/JS 加载失败 → 版面错乱。正确 matcher：`'/((?!api|_next|favicon.ico|robots.txt|sitemap.xml|manifest.json|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|json|txt|xml|css|js|map|woff|woff2|ttf|eot)$).*)'`
+- **不要在 looksLikeLegitimateBrowser() 里检查 referer 是否为"纯域名"**：`https://derivativecalculatorai.com/`（首页 URL）是完全合法的 referer，把它判定为"suspicious"会导致真实用户从首页发起 API 请求时被 403 封禁。referer 不是可靠的 bot 检测信号。
+- **abuse 评分系统很激进**：`looksLikeLegitimateBrowser` 返回 false 时每次加 20 分，≥30 分就 403 封禁。任何误判 2 次就封 IP。确保 `looksLikeLegitimateBrowser` 不产生 false positive 至关重要。
 
 ## Cloudflare 控制台关键约定
 - **不要启用 Bot Fight Mode / Super Bot Fight Mode**：会拦截所有非浏览器 UA，包括 Googlebot，且用 JS Challenge 拦截 curl。防滥用改用 Cloudflare Rate Limiting Rules（边缘层、不消耗 Workers 配额）。
 - **不要在 Custom Security Rules 里写 Block Known Bots / Block No Referer**：Block Known Bots 杀 SEO；Block No Referer 拦截所有直接访问首页的用户（820 次误伤记录）。
+- **不要在 Cloudflare Rate Limiting Rules 里写 "URI Path contains /"**：这会匹配所有请求（包括 JS/CSS 静态资源），浏览器并行加载 10+ 个 JS chunk 时全部被 429 拦截 → JavaScript 不加载 → 按钮点击无反应。应用层 D1 rate limit（30/min 页面, 20/min API）已足够防滥用，不需要 Cloudflare 边缘限流规则。
 - 防嵌入滥用的正确做法：代码层 middleware 的 API referer 检查 + /embed/ 返回 cached 403，不需要 Cloudflare WAF 规则。
 
 ## Git 推送坑

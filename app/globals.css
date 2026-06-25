@@ -1,6 +1,10 @@
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Tailwind v4: specify content source paths for class scanning */
+@source "../components/**/*.{js,ts,jsx,tsx}";
+@source "../app/**/*.{js,ts,jsx,tsx}";
+
 :root {
   --background: #ffffff;
   --foreground: #171717;

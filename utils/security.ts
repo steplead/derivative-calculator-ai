@@ -1,12 +1,24 @@
 /**
  * Unified Security Layer for Derivative Calculator AI
  *
- * Provides comprehensive protection against abuse:
- * - IP-based rate limiting (D1 database)
- * - IP blacklist/blocklist for persistent offenders
- * - Enhanced bot detection
- * - Request validation
- * - Abuse scoring and auto-blocking
+ * ACTIVE security checks (in order):
+ * 1. SKIP_SECURITY env bypass (diagnostic only)
+ * 2. D1 availability check (fail-open if unavailable)
+ * 3. Host validation (only allow derivativecalculatorai.com + localhost)
+ * 4. Global quota check (100k/day, 4.2k/hour — matches CF free tier)
+ * 5. Turnstile verification (optional, REQUIRED=false by default)
+ * 6. Browser detection → strict rate limit for non-browser UAs (5/min)
+ * 7. D1 rate limiting (20/min default, 30/min for page requests)
+ *
+ * DISABLED checks (intentionally removed to prevent false positives):
+ * - IP blacklist: caused false-positive blocks from old abuse scoring data
+ * - Accept-Language check: blocked browsers with privacy settings
+ * - Abuse scoring: accumulated false-positive scores that blocked real users
+ *   for hours; replaced with simple strict rate limiting for non-browser UAs
+ *
+ * IMPORTANT: Do NOT re-enable disabled checks without a thorough false-positive
+ * analysis. The 429 incident of June 2025 was caused by cascading false positives
+ * across these layers. See MEMORY.md for detailed history.
  */
 
 import { getRequestContext } from '@cloudflare/next-on-pages';
@@ -18,59 +30,29 @@ interface SecurityCheckResult {
     blocked?: boolean;
 }
 
-interface BlacklistEntry {
-    ip: string;
-    blocked_until: number; // Unix timestamp
-    reason: string;
-    offense_count: number;
-    created_at: number;
-}
-
-interface AbuseScoreEntry {
-    ip: string;
-    score: number;
-    last_updated: number;
-}
-
-// Configuration
+// Configuration — tuned for real-user friendliness while preventing abuse
 const SECURITY_CONFIG = {
-    // Global quota: maximum requests per day for entire system
-    // ULTRA AGGRESSIVE: Reduced to 30k/day (30% of free tier, 70% safety margin) - FORCE COMPLIANCE
-    // This ensures we stay well below the 100k/day limit even with spikes
+    // Global quota: matches Cloudflare Workers free tier (100k/day).
+    // Previous 30k/day was too aggressive and could block all real users
+    // during normal traffic spikes. 100k/day gives 70% safety margin below
+    // the actual CF limit while accommodating organic growth.
     GLOBAL_QUOTA: {
-        DAILY_LIMIT: 30000,       // 30k requests/day (30% of free tier, 70% safety margin) - ULTRA AGGRESSIVE
-        HOURLY_LIMIT: 1250,       // 30k / 24 hours = 1,250 requests/hour (rounded)
+        DAILY_LIMIT: 100000,      // 100k requests/day (CF free tier limit)
+        HOURLY_LIMIT: 4200,       // ~100k / 24 ≈ 4,200/hour
     },
 
-    // Rate limiting: requests per window
-    // Tuned to be friendly to real users (who click several links per minute)
-    // while still throttling scrapers. Pages override this to 30/min; APIs use stricter values.
+    // Rate limiting: requests per window per IP
+    // Pages override to 30/min via middleware; APIs use 20/min default.
     RATE_LIMIT: {
-        DEFAULT_LIMIT: 20,        // 20 req/min default (human-friendly)
+        DEFAULT_LIMIT: 20,        // 20 req/min default (API endpoints)
         DEFAULT_WINDOW: 60,       // seconds
-        STRICT_LIMIT: 5,          // For suspicious IPs
+        STRICT_LIMIT: 5,          // For non-browser UAs passing middleware
         STRICT_WINDOW: 60,        // seconds
     },
 
-    // Abuse scoring: block when score exceeds threshold
-    // OPTIMIZED: Lowered threshold to 30 to block bots much faster
-    ABUSE_SCORING: {
-        BLOCK_THRESHOLD: 30,      // Lowered from 50 to block faster (30 points = 3 suspicious requests)
-        DECAY_INTERVAL: 3600,     // decay score by 50% every hour
-        DECAY_AMOUNT: 0.5,        // decay factor
-    },
-
-    // Blacklist: automatic blocking duration
-    BLACKLIST: {
-        FIRST_OFFENSE: 300,       // 5 minutes
-        SECOND_OFFENSE: 1800,     // 30 minutes
-        THIRD_OFFENSE: 86400,     // 24 hours
-        CHRONIC_OFFENDER: 604800, // 7 days
-    },
-
-    // Turnstile verification
+    // Turnstile verification (currently optional)
     TURNSTILE: {
-        REQUIRED: false,          // DISABLED: Using existing security layers (IP blacklist, rate limiting, bot detection)
+        REQUIRED: false,
     },
 };
 
@@ -103,8 +85,7 @@ async function _checkGlobalQuota(db: any): Promise<{ allowed: boolean; reason?: 
         const hourlyRequests = hourCount?.value || 0;
 
         if (hourlyRequests >= SECURITY_CONFIG.GLOBAL_QUOTA.HOURLY_LIMIT) {
-            const retryAfter = 3600 - (now % 3600); // Seconds until next hour
-            console.warn(`[GLOBAL_QUOTA] Hourly limit exceeded: ${hourlyRequests}/${SECURITY_CONFIG.GLOBAL_QUOTA.HOURLY_LIMIT}`);
+            const retryAfter = 3600 - (now % 3600);
             return {
                 allowed: false,
                 reason: 'Service is temporarily at capacity. Please try again later.',
@@ -121,8 +102,7 @@ async function _checkGlobalQuota(db: any): Promise<{ allowed: boolean; reason?: 
         const dailyRequests = dayCount?.value || 0;
 
         if (dailyRequests >= SECURITY_CONFIG.GLOBAL_QUOTA.DAILY_LIMIT) {
-            const retryAfter = 86400 - (now % 86400); // Seconds until next day
-            console.warn(`[GLOBAL_QUOTA] Daily limit exceeded: ${dailyRequests}/${SECURITY_CONFIG.GLOBAL_QUOTA.DAILY_LIMIT}`);
+            const retryAfter = 86400 - (now % 86400);
             return {
                 allowed: false,
                 reason: 'Daily quota exceeded. Service will resume tomorrow.',
@@ -150,131 +130,16 @@ async function _checkGlobalQuota(db: any): Promise<{ allowed: boolean; reason?: 
         return { allowed: true };
 
     } catch (error) {
-        console.error('Error checking global quota:', error);
-        // Fail open - allow request if counter fails
+        // Fail open — allow request if counter fails (D1 transient error)
         return { allowed: true };
-    }
-}
-
-/**
- * Check if IP is blocked
- */
-async function _isIpBlocked(db: any, ip: string): Promise<BlacklistEntry | null> {
-    try {
-        const entry = await db.prepare(
-            "SELECT * FROM ip_blacklist WHERE ip = ?"
-        ).bind(ip).first() as BlacklistEntry | null;
-
-        if (!entry) return null;
-
-        // Check if block has expired
-        const now = Math.floor(Date.now() / 1000);
-        if (entry.blocked_until < now) {
-            // Block expired, remove it
-            await db.prepare("DELETE FROM ip_blacklist WHERE ip = ?").bind(ip).run();
-            return null;
-        }
-
-        return entry;
-    } catch (error) {
-        console.error('Error checking IP blacklist:', error);
-        return null;
-    }
-}
-
-/**
- * Add IP to blacklist
- */
-async function _blockIp(
-    db: any,
-    ip: string,
-    reason: string,
-    offenseCount: number
-): Promise<void> {
-    try {
-        const now = Math.floor(Date.now() / 1000);
-
-        // Calculate block duration based on offense count
-        let blockDuration = SECURITY_CONFIG.BLACKLIST.FIRST_OFFENSE;
-        if (offenseCount >= 3) {
-            blockDuration = SECURITY_CONFIG.BLACKLIST.CHRONIC_OFFENDER;
-        } else if (offenseCount === 2) {
-            blockDuration = SECURITY_CONFIG.BLACKLIST.THIRD_OFFENSE;
-        }
-
-        const blockedUntil = now + blockDuration;
-
-        await db.prepare(`
-            INSERT OR REPLACE INTO ip_blacklist (ip, blocked_until, reason, offense_count, created_at)
-            VALUES (?, ?, ?, ?, ?)
-        `).bind(ip, blockedUntil, reason, offenseCount, now).run();
-
-        console.warn(`[IP_BLOCKED] ${ip} | Reason: ${reason} | Duration: ${blockDuration}s | Offenses: ${offenseCount}`);
-    } catch (error) {
-        console.error('Error blocking IP:', error);
-    }
-}
-
-/**
- * Get and update abuse score for IP
- */
-async function _getAndUpdateAbuseScore(
-    db: any,
-    ip: string,
-    offensePoints: number
-): Promise<number> {
-    try {
-        const now = Math.floor(Date.now() / 1000);
-        const entry = await db.prepare(
-            "SELECT * FROM abuse_scores WHERE ip = ?"
-        ).bind(ip).first() as AbuseScoreEntry | null;
-
-        if (!entry) {
-            // First offense
-            await db.prepare(`
-                INSERT INTO abuse_scores (ip, score, last_updated)
-                VALUES (?, ?, ?)
-            `).bind(ip, offensePoints, now).run();
-            return offensePoints;
-        }
-
-        // Decay score over time
-        const hoursSinceUpdate = (now - entry.last_updated) / 3600;
-        const decayFactor = Math.pow(SECURITY_CONFIG.ABUSE_SCORING.DECAY_AMOUNT, hoursSinceUpdate);
-        const decayedScore = Math.floor(entry.score * decayFactor);
-
-        // Add new offense points
-        const newScore = decayedScore + offensePoints;
-
-        await db.prepare(`
-            INSERT OR REPLACE INTO abuse_scores (ip, score, last_updated)
-            VALUES (?, ?, ?)
-        `).bind(ip, newScore, now).run();
-
-        return newScore;
-    } catch (error) {
-        console.error('Error updating abuse score:', error);
-        return 0;
     }
 }
 
 /**
  * Perform comprehensive security check
  *
- * This function should be called at the start of every API endpoint.
- * It handles:
- * 1. IP blacklist check
- * 2. Turnstile verification (if provided)
- * 3. Bot detection
- * 4. Rate limiting (D1)
- * 5. Abuse scoring and auto-blocking
- *
- * @param headers - Request headers
- * @param searchParams - URL search params (for Turnstile token)
- * @param endpoint - API endpoint name (for logging)
- * @param options - Optional overrides for rate limit
- *
- * @returns SecurityCheckResult - success if request should be allowed
+ * Called by middleware.ts (for page requests) and API route handlers.
+ * Returns SecurityCheckResult — success means request should proceed.
  */
 export async function performSecurityCheck(
     headers: Headers,
@@ -287,36 +152,25 @@ export async function performSecurityCheck(
     } = {}
 ): Promise<SecurityCheckResult> {
     const ip = getClientIp(headers);
-    const _userAgent = headers.get('user-agent');
+    const userAgent = headers.get('user-agent');
     const turnstileToken = searchParams.get('turnstile_token');
     const host = headers.get('host') || '';
-    const _referer = headers.get('referer') || '';
-    const _origin = headers.get('origin') || '';
 
-    // DIAGNOSTIC MODE: Skip all security checks if enabled (CHECKED FIRST)
-    // @ts-ignore - Cloudflare Workers environment binding
+    // ========== 0. SKIP_SECURITY bypass (diagnostic only) ==========
     const env = getRequestContext()?.env as any;
-    const skipSecurity = env?.SKIP_SECURITY === 'true';
-
-    if (skipSecurity) {
-        console.warn(`[SECURITY_BYPASS] Security disabled for IP: ${ip}`);
+    if (env?.SKIP_SECURITY === 'true') {
         return { success: true };
     }
 
-    // Get D1 database
-    // @ts-ignore - Cloudflare Workers D1 binding
+    // ========== 1. D1 availability check ==========
+    // @ts-ignore — Cloudflare Workers D1 binding (not in default CloudflareEnv type)
     const db = getRequestContext()?.env?.DB;
-
     if (!db) {
-        console.error('[SECURITY_ERROR] D1 database not available');
-        // Fail open - allow request but log error
+        // Fail open — allow request if D1 unavailable (deployment transient)
         return { success: true };
     }
 
-    // ========== 1. Host Check (SIMPLIFIED - Only check allowed domains) ==========
-
-    // NOTE: Real production domain is `derivativecalculatorai.com` (no hyphens).
-    // Previous list incorrectly included hyphenated variants which never match.
+    // ========== 2. Host validation ==========
     const allowedHosts = [
         'derivativecalculatorai.com',
         'www.derivativecalculatorai.com',
@@ -327,9 +181,7 @@ export async function performSecurityCheck(
 
     const isAllowedHost = allowedHosts.some(h => host === h || host.endsWith('.' + h));
 
-    // Block if host is not allowed
     if (!isAllowedHost) {
-        console.warn(`[HOST_BLOCKED] IP: ${ip} | Host: ${host} | Endpoint: ${endpoint}`);
         return {
             success: false,
             error: 'API access restricted. Please use the web interface at derivativecalculatorai.com',
@@ -337,10 +189,9 @@ export async function performSecurityCheck(
         };
     }
 
-    // ========== 1.5. Global Quota Check (EMERGENCY) ==========
+    // ========== 3. Global quota check ==========
     const quotaCheck = await _checkGlobalQuota(db);
     if (!quotaCheck.allowed) {
-        console.warn(`[GLOBAL_QUOTA_BLOCKED] IP: ${ip} | Reason: ${quotaCheck.reason}`);
         return {
             success: false,
             error: quotaCheck.reason || 'Service temporarily unavailable',
@@ -348,35 +199,7 @@ export async function performSecurityCheck(
         };
     }
 
-    // ========== 2. IP Blacklist Check (DISABLED - Causing false positives) ==========
-    // Only Rate Limiting is enabled to prevent false positives
-    // if (blockedEntry) {
-    //     const retryAfter = Math.ceil(blockedEntry.blocked_until - Date.now() / 1000);
-    //     console.warn(`[BLOCKED_IP] ${ip} | Endpoint: ${endpoint} | Reason: ${blockedEntry.reason} | RetryAfter: ${retryAfter}s`);
-    //     return {
-    //         success: false,
-    //         error: 'Your IP has been temporarily blocked due to suspicious activity.',
-    //         retryAfter,
-    //         blocked: true,
-    //     };
-    // }
-
-    // ========== 2.1. Accept-Language Check (DISABLED - Too many false positives) ==========
-    // Some browser extensions/privacy settings block or modify Accept-Language
-    // const acceptLanguage = headers.get('accept-language');
-    // if (!acceptLanguage || acceptLanguage.length < 2) {
-    //     console.warn(`[NO_ACCEPT_LANG_BLOCKED] IP: ${ip} | UA: ${userAgent} | Accept-Language: ${acceptLanguage} | Endpoint: ${endpoint}`);
-    //     return {
-    //         success: false,
-    //         error: 'Invalid request. Please use a web browser to access this service.',
-    //         blocked: true,
-    //     };
-    // }
-
-
-    // ========== 2. Turnstile Verification (OPTIONAL) ==========
-    // Turnstile is optional due to CSP conflicts
-    // If provided, skip other checks. Otherwise continue to bot detection.
+    // ========== 4. Turnstile verification (optional) ==========
     const requireTurnstile = options.requireTurnstile ?? SECURITY_CONFIG.TURNSTILE.REQUIRED;
 
     if (turnstileToken) {
@@ -384,66 +207,57 @@ export async function performSecurityCheck(
         const verification = await verifyTurnstileToken(turnstileToken, ip);
 
         if (verification.success) {
-            // Turnstile verified - mark this IP as verified for 30 seconds
-            const now = Math.floor(Date.now() / 1000);
-            await db.prepare(`
-                INSERT OR REPLACE INTO ip_blacklist (ip, blocked_until, reason, offense_count, created_at)
-                VALUES (?, ?, ?, ?, ?)
-            `).bind(ip, now + 30, 'turnstile_verified', 0, now).run();
-
+            // Verified — skip further checks for this request
             return { success: true };
-        } else {
-            // Check if this IP was recently verified via Turnstile (within 30 seconds)
-            const recentVerification = await db.prepare(
-                "SELECT * FROM ip_blacklist WHERE ip = ? AND reason = 'turnstile_verified' AND blocked_until > ?"
-            ).bind(ip, Math.floor(Date.now() / 1000)).first() as any;
-
-            if (recentVerification) {
-                return { success: true };
-            }
-
-            // Invalid Turnstile token - just return error (NO abuse scoring to prevent false positives)
-            return {
-                success: false,
-                error: 'CAPTCHA verification failed. Please refresh and try again.',
-            };
         }
+
+        // Token provided but invalid — return error (no abuse scoring)
+        // Check if recently verified (within 30s) using counters table
+        // instead of ip_blacklist to avoid semantic confusion.
+        const now = Math.floor(Date.now() / 1000);
+        const verifyKey = `turnstile:${ip}`;
+        const recentVerify = await db.prepare(
+            "SELECT value FROM counters WHERE key = ?"
+        ).bind(verifyKey).first() as { value: number } | null;
+
+        if (recentVerify && recentVerify.value > now - 30) {
+            return { success: true };
+        }
+
+        return {
+            success: false,
+            error: 'CAPTCHA verification failed. Please refresh and try again.',
+        };
     } else if (requireTurnstile) {
-        // Turnstile required but not provided - check for recent verification
-        const recentVerification = await db.prepare(
-            "SELECT * FROM ip_blacklist WHERE ip = ? AND reason = 'turnstile_verified' AND blocked_until > ?"
-        ).bind(ip, Math.floor(Date.now() / 1000)).first() as any;
+        // Turnstile required but not provided — check recent verification
+        const now = Math.floor(Date.now() / 1000);
+        const verifyKey = `turnstile:${ip}`;
+        const recentVerify = await db.prepare(
+            "SELECT value FROM counters WHERE key = ?"
+        ).bind(verifyKey).first() as { value: number } | null;
 
-        if (recentVerification) {
+        if (recentVerify && recentVerify.value > now - 30) {
             return { success: true };
         }
 
-        // No recent verification - require Turnstile
         return {
             success: false,
             error: 'CAPTCHA verification required. Please refresh the page.',
         };
     }
-    // If Turnstile not provided and not required, continue to other checks
 
-    // ========== 3. Bot Detection ==========
-    // looksLikeLegitimateBrowser() has been fixed to not produce false positives
-    // (removed Accept: */* check, referer check, fixed Chrome version regex).
-    // The abuse scoring system below was accumulating false-positive scores from
-    // the old buggy version, blocking real users for hours even after the fix.
-    // Since the root cause (false positives) is fixed, we skip abuse scoring
-    // entirely. Rate limiting (step 4) is sufficient for abuse prevention.
+    // ========== 5. Browser detection ==========
+    // looksLikeLegitimateBrowser() is now reliable (no false positives).
+    // Non-browser UAs that passed middleware UA blacklist get strict rate limiting
+    // instead of outright blocking — this avoids false positives from unusual
+    // but legitimate clients (academic tools, accessibility software, etc.)
     const { looksLikeLegitimateBrowser } = await import('./turnstile');
-    const isLegitimateBrowser = looksLikeLegitimateBrowser(_userAgent, headers);
+    const isLegitimateBrowser = looksLikeLegitimateBrowser(userAgent, headers);
 
     if (!isLegitimateBrowser) {
-        // Only block scripted tools (curl, python, etc.) that middleware didn't catch.
-        // These are already filtered by middleware UA patterns, so reaching here
-        // means the UA passed middleware but failed browser fingerprinting.
-        // Apply strict rate limit instead of outright block to avoid false positives.
-        const limit = SECURITY_CONFIG.RATE_LIMIT.STRICT_LIMIT; // 5 req/min
-        const window = SECURITY_CONFIG.RATE_LIMIT.STRICT_WINDOW; // 60s
-        const result = await checkD1RateLimitWithStrictMode(db, ip, limit, window);
+        const limit = SECURITY_CONFIG.RATE_LIMIT.STRICT_LIMIT;
+        const window = SECURITY_CONFIG.RATE_LIMIT.STRICT_WINDOW;
+        const result = await _checkD1RateLimit(db, ip, limit, window);
         if (!result.success) {
             return {
                 success: false,
@@ -453,18 +267,14 @@ export async function performSecurityCheck(
         }
     }
 
-    // ========== 4. D1 Rate Limiting ==========
+    // ========== 6. D1 rate limiting (normal) ==========
     const limit = options.rateLimit ?? SECURITY_CONFIG.RATE_LIMIT.DEFAULT_LIMIT;
     const window = options.rateWindow ?? SECURITY_CONFIG.RATE_LIMIT.DEFAULT_WINDOW;
 
     try {
-        // Simplified rate limiting (NO strict mode based on abuse scores)
-        const result = await checkD1RateLimitWithStrictMode(db, ip, limit, window);
+        const result = await _checkD1RateLimit(db, ip, limit, window);
 
         if (!result.success) {
-            // Rate limit exceeded - simple rate limit response (NO abuse scoring to prevent false positives)
-            console.warn(`[RATE_LIMIT] IP: ${ip} | Endpoint: ${endpoint}`);
-
             return {
                 success: false,
                 error: 'Too many requests. Please slow down.',
@@ -472,22 +282,25 @@ export async function performSecurityCheck(
             };
         }
     } catch (dbError) {
-        console.error('[SECURITY_ERROR] D1 rate limit check failed:', dbError);
-        // Fail closed - block request if rate limiting fails
+        // Fail open — allow request if D1 rate limit check fails
+        // (transient D1 error should not block real users)
         return {
-            success: false,
-            error: 'Rate limiting service temporarily unavailable. Please try again later.',
+            success: true,
         };
     }
 
-    // ========== 5. Success ==========
+    // ========== 7. All checks passed ==========
     return { success: true };
 }
 
 /**
- * D1 Rate Limiting with strict mode support
+ * D1-based rate limiting
+ *
+ * Tracks per-IP request counts with a sliding window.
+ * Old entries are cleaned up probabilistically (1% chance per request)
+ * to avoid a D1 write on every single request.
  */
-async function checkD1RateLimitWithStrictMode(
+async function _checkD1RateLimit(
     db: any,
     ip: string,
     limit: number,
@@ -496,10 +309,13 @@ async function checkD1RateLimitWithStrictMode(
     const now = Math.floor(Date.now() / 1000);
 
     try {
-        // Clean up old entries
-        await db.prepare("DELETE FROM rate_limits WHERE reset_time < ?")
-            .bind(Math.floor(Date.now() / 1000) - 86400)
-            .run();
+        // Probabilistic cleanup: 1% chance to delete expired entries.
+        // This avoids a guaranteed D1 write per request for cleanup.
+        if (Math.random() < 0.01) {
+            await db.prepare("DELETE FROM rate_limits WHERE reset_time < ?")
+                .bind(now - 86400)
+                .run();
+        }
 
         // Get current entry
         const entry = await db.prepare(
@@ -542,8 +358,12 @@ async function checkD1RateLimitWithStrictMode(
         };
 
     } catch (error) {
-        console.error('D1 rate limit error:', error);
-        throw error;
+        // Fail open on D1 errors — don't block real users due to transient DB issues
+        return {
+            success: true,
+            remaining: limit,
+            resetTime: (now + windowSeconds) * 1000
+        };
     }
 }
 

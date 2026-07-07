@@ -5,10 +5,16 @@
  * 1. SKIP_SECURITY env bypass (diagnostic only)
  * 2. D1 availability check (fail-open if unavailable)
  * 3. Host validation (only allow derivativecalculatorai.com + localhost)
- * 4. Global quota check (100k/day, 4.2k/hour — matches CF free tier)
- * 5. Turnstile verification (optional, REQUIRED=false by default)
- * 6. Browser detection → strict rate limit for non-browser UAs (5/min)
- * 7. D1 rate limiting (20/min default, 30/min for page requests)
+ * 4. UA blacklist (block scripted HTTP clients: curl, python-requests, wget, etc.)
+ * 5. Empty UA rejection (block requests without User-Agent)
+ * 6. Global quota check (100k/day, 4.2k/hour — matches CF free tier)
+ * 7. Turnstile verification (optional, REQUIRED=false by default)
+ * 8. Browser detection → strict rate limit for non-browser UAs (5/min)
+ * 9. D1 rate limiting (20/min default, 30/min for page requests)
+ *
+ * NOTE: Checks 4-5 also exist in middleware.ts but only cover PAGE requests
+ * (not /api/). Here they cover API route handlers as well, closing the gap
+ * identified in Phase 1.6 (R2/R3).
  *
  * DISABLED checks (intentionally removed to prevent false positives):
  * - IP blacklist: caused false-positive blocks from old abuse scoring data
@@ -189,7 +195,30 @@ export async function performSecurityCheck(
         };
     }
 
-    // ========== 3. Global quota check ==========
+    // ========== 3. UA blacklist (mirrors middleware.ts ABUSE_UA_PATTERNS) ==========
+    // Middleware matcher excludes /api/ routes, so UA blacklist only applies to
+    // page requests. API handlers must apply it themselves. This closes the gap
+    // identified in Phase 1.6 (R2: middleware UA blacklist doesn't cover API).
+    const ABUSE_UA_PATTERNS = ['python-requests', 'python/', 'curl/', 'wget/', 'go-http-client', 'java/', 'scrapy', 'httpx/'];
+
+    if (!userAgent || userAgent.trim() === '') {
+        return {
+            success: false,
+            error: 'Access denied. User-Agent required.',
+            blocked: true,
+        };
+    }
+
+    const lowerUA = userAgent.toLowerCase();
+    if (ABUSE_UA_PATTERNS.some(pattern => lowerUA.includes(pattern))) {
+        return {
+            success: false,
+            error: 'Access denied. Automated requests not allowed.',
+            blocked: true,
+        };
+    }
+
+    // ========== 4. Global quota check ==========
     const quotaCheck = await _checkGlobalQuota(db);
     if (!quotaCheck.allowed) {
         return {
@@ -199,7 +228,7 @@ export async function performSecurityCheck(
         };
     }
 
-    // ========== 4. Turnstile verification (optional) ==========
+    // ========== 5. Turnstile verification (optional) ==========
     const requireTurnstile = options.requireTurnstile ?? SECURITY_CONFIG.TURNSTILE.REQUIRED;
 
     if (turnstileToken) {
@@ -246,7 +275,7 @@ export async function performSecurityCheck(
         };
     }
 
-    // ========== 5. Browser detection ==========
+    // ========== 6. Browser detection ==========
     // looksLikeLegitimateBrowser() is now reliable (no false positives).
     // Non-browser UAs that passed middleware UA blacklist get strict rate limiting
     // instead of outright blocking — this avoids false positives from unusual
@@ -267,7 +296,7 @@ export async function performSecurityCheck(
         }
     }
 
-    // ========== 6. D1 rate limiting (normal) ==========
+    // ========== 7. D1 rate limiting (normal) ==========
     const limit = options.rateLimit ?? SECURITY_CONFIG.RATE_LIMIT.DEFAULT_LIMIT;
     const window = options.rateWindow ?? SECURITY_CONFIG.RATE_LIMIT.DEFAULT_WINDOW;
 
@@ -289,7 +318,7 @@ export async function performSecurityCheck(
         };
     }
 
-    // ========== 7. All checks passed ==========
+    // ========== 8. All checks passed ==========
     return { success: true };
 }
 

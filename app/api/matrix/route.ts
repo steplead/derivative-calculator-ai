@@ -92,9 +92,12 @@ export async function POST(req: NextRequest) {
             { error: securityResult.error },
             {
                 status: securityResult.blocked ? 403 : 429,
-                headers: securityResult.retryAfter ? {
-                    'Retry-After': securityResult.retryAfter.toString()
-                } : undefined
+                headers: {
+                    'Cache-Control': 'no-store',
+                    ...(securityResult.retryAfter ? {
+                        'Retry-After': securityResult.retryAfter.toString()
+                    } : {})
+                }
             }
         );
     }
@@ -104,7 +107,7 @@ export async function POST(req: NextRequest) {
         const { matrix: matrixData, operation } = body;
 
         if (!matrixData) {
-            return NextResponse.json({ error: "No matrix data provided" }, { status: 400 });
+            return NextResponse.json({ error: "No matrix data provided" }, { status: 400, headers: { 'Cache-Control': 'no-store' } });
         }
 
         // Request size validation (limit matrix size to prevent DoS)
@@ -112,7 +115,7 @@ export async function POST(req: NextRequest) {
         if (totalElements > 100) {
             return NextResponse.json(
                 { error: "Matrix too large. Maximum 100 elements." },
-                { status: 400 }
+                { status: 400, headers: { 'Cache-Control': 'no-store' } }
             );
         }
 
@@ -126,25 +129,25 @@ export async function POST(req: NextRequest) {
         let stepsContent = "Step-by-step unavailable.";
 
         if (operation === 'determinant') {
-            if (rows !== cols) return NextResponse.json({ error: "Square matrix required" }, { status: 400 });
+            if (rows !== cols) return NextResponse.json({ error: "Square matrix required" }, { status: 400, headers: { 'Cache-Control': 'no-store' } });
             const det = math.det(M);
             // Format to avoid long floats (e.g. 3.00000004)
             result = math.format(det, { precision: 14 });
             stepsContent = `Calculated Determinant: $$ ${result} $$`;
         }
         else if (operation === 'inverse') {
-            if (rows !== cols) return NextResponse.json({ error: "Square matrix required" }, { status: 400 });
+            if (rows !== cols) return NextResponse.json({ error: "Square matrix required" }, { status: 400, headers: { 'Cache-Control': 'no-store' } });
             try {
                 const det = math.det(M);
                 if (math.abs(det) < 1e-10) {
-                    return NextResponse.json({ error: "Cannot calculate inverse: Determinant is 0 (Matrix is Singular)" }, { status: 400 });
+                    return NextResponse.json({ error: "Cannot calculate inverse: Determinant is 0 (Matrix is Singular)" }, { status: 400, headers: { 'Cache-Control': 'no-store' } });
                 }
                 const inv = math.inv(M);
                 // @ts-ignore
                 result = math.parse(inv.toString()).toTex();
                 stepsContent = `Calculated Inverse: $$ ${result} $$`;
             } catch (e: any) {
-                return NextResponse.json({ error: `Inversion failed: ${e.message}` }, { status: 400 });
+                return NextResponse.json({ error: `Inversion failed: ${e.message}` }, { status: 400, headers: { 'Cache-Control': 'no-store' } });
             }
         }
         else if (operation === 'transpose') {
@@ -165,7 +168,7 @@ export async function POST(req: NextRequest) {
             stepsContent = `Calculated Rank: $$ ${result} $$`;
         }
         else if (operation === 'eigenvals') {
-            if (rows !== cols) return NextResponse.json({ error: "Square matrix required" }, { status: 400 });
+            if (rows !== cols) return NextResponse.json({ error: "Square matrix required" }, { status: 400, headers: { 'Cache-Control': 'no-store' } });
             try {
                 // @ts-ignore
                 const eigs = math.eigs(M);
@@ -184,21 +187,22 @@ export async function POST(req: NextRequest) {
                 stepsContent = `Calculated Eigenvalues: $$ \\lambda = [${valStr}] $$`;
 
             } catch (e: any) {
-                return NextResponse.json({ error: `Eigenvalue calculation failed: ${e.message}` }, { status: 500 });
+                return NextResponse.json({ error: `Eigenvalue calculation failed: ${e.message}` }, { status: 500, headers: { 'Cache-Control': 'no-store' } });
             }
         }
         else {
-            return NextResponse.json({ error: `Unknown operation: ${operation}` }, { status: 400 });
+            return NextResponse.json({ error: `Unknown operation: ${operation}` }, { status: 400, headers: { 'Cache-Control': 'no-store' } });
         }
 
+        // SECURITY: All API responses use private, no-store
         return NextResponse.json({
-            solution: result, // Latex formatted result where applicable
+            solution: result,
             solution_raw: result,
             steps: stepsContent,
             ai_explanation: "Matrix functionality ported to TypeScript."
-        });
+        }, { headers: { 'Cache-Control': 'private, no-store' } });
 
     } catch (e: any) {
-        return NextResponse.json({ error: `Calculation error: ${e.message}` }, { status: 500 });
+        return NextResponse.json({ error: `Calculation error: ${e.message}` }, { status: 500, headers: { 'Cache-Control': 'no-store' } });
     }
 }

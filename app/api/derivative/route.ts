@@ -220,19 +220,16 @@ You can verify this result by:
 
         // SECURITY: All API responses must use private, no-store to prevent
         // Cloudflare edge caching. Cached API responses bypass security checks
-        // (rate limit, UA blacklist, global quota), creating a 5-minute window
-        // where abusers get free unlimited access. See Phase 1.6 R1.
-        const response = NextResponse.json({
+        // (rate limit, UA blacklist, global quota). See Phase 1.6 R1.
+        // Pass headers in constructor (not .headers.set()) because CF Pages
+        // overrides headers set after response creation.
+        return NextResponse.json({
             solution: solutionLatex,
             solution_raw: solutionRaw,
             steps: stepsContent,
             ai_explanation: aiExplanation,
-            _version: "v3.1-cache-no-store" // Cache policy changed from s-maxage=300 to no-store
-        });
-
-        response.headers.set('Cache-Control', 'private, no-store');
-        
-        return response;
+            _version: "v3.1-cache-no-store"
+        }, { headers: { 'Cache-Control': 'private, no-store' } });
 
     } catch (e: any) {
         return NextResponse.json({ error: `Calculation error: ${e.message}` }, { status: 500, headers: { 'Cache-Control': 'no-store' } });

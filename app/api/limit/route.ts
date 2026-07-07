@@ -121,17 +121,14 @@ export async function GET(req: NextRequest) {
         }
 
         // SECURITY: private, no-store — prevents Cloudflare edge caching that
-        // bypasses security checks. See Phase 1.6 R1 for details.
-        const response = NextResponse.json({
+        // bypasses security checks. Pass headers in constructor because CF Pages
+        // overrides headers set after response creation. See Phase 1.6 R1.
+        return NextResponse.json({
             solution: solutionLatex,
             solution_raw: solutionRaw,
             steps: stepsContent,
             ai_explanation: aiExplanation
-        });
-
-        response.headers.set('Cache-Control', 'private, no-store');
-        
-        return response;
+        }, { headers: { 'Cache-Control': 'private, no-store' } });
 
     } catch (e: any) {
         return NextResponse.json({ error: `Calculation error: ${e.message}` }, { status: 500, headers: { 'Cache-Control': 'no-store' } });

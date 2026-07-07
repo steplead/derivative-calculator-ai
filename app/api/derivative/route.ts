@@ -25,7 +25,7 @@ export async function GET(req: NextRequest) {
     if (!expression) {
         // Track error response
         trackPath('/api/derivative', 400).catch(() => {});
-        return NextResponse.json({ error: "No equation provided" }, { status: 400 });
+        return NextResponse.json({ error: "No equation provided" }, { status: 400, headers: { 'Cache-Control': 'no-store' } });
     }
 
     // Unified Security Check (Rate limiting, Bot detection, IP blacklist, Strict Referer check)
@@ -38,11 +38,14 @@ export async function GET(req: NextRequest) {
             { error: securityResult.error },
             {
                 status: securityResult.blocked ? 403 : 429,
-                headers: securityResult.retryAfter ? {
-                    'Retry-After': String(securityResult.retryAfter),
-                    'X-RateLimit-Limit': '20',
-                    'X-RateLimit-Remaining': '0',
-                } : undefined
+                headers: {
+                    'Cache-Control': 'no-store',
+                    ...(securityResult.retryAfter ? {
+                        'Retry-After': String(securityResult.retryAfter),
+                        'X-RateLimit-Limit': '20',
+                        'X-RateLimit-Remaining': '0',
+                    } : {})
+                }
             }
         );
     }
@@ -51,7 +54,7 @@ export async function GET(req: NextRequest) {
     if (expression.length > 200) {
         return NextResponse.json(
             { error: "Expression too long. Maximum 200 characters." },
-            { status: 400 }
+            { status: 400, headers: { 'Cache-Control': 'no-store' } }
         );
     }
 
@@ -64,7 +67,7 @@ export async function GET(req: NextRequest) {
     const looksLikeMath = hasMathSymbols || /^[a-zA-Z0-9_\^\(\)\+\-\*\/\.\s]+$/.test(expression);
 
     if (looksLikeDescriptive || !looksLikeMath) {
-        return NextResponse.json({ error: "Invalid mathematical expression" }, { status: 400 });
+        return NextResponse.json({ error: "Invalid mathematical expression" }, { status: 400, headers: { 'Cache-Control': 'no-store' } });
     }
 
     try {
@@ -215,24 +218,23 @@ You can verify this result by:
             }
         }
 
-        // CACHE OPTIMIZATION: Add cache headers to reduce Cloudflare quota usage
-        // Cache API responses for 5 minutes (same expression = same result)
-        // This allows Cloudflare to cache responses at edge, reducing origin requests
+        // SECURITY: All API responses must use private, no-store to prevent
+        // Cloudflare edge caching. Cached API responses bypass security checks
+        // (rate limit, UA blacklist, global quota), creating a 5-minute window
+        // where abusers get free unlimited access. See Phase 1.6 R1.
         const response = NextResponse.json({
             solution: solutionLatex,
             solution_raw: solutionRaw,
             steps: stepsContent,
             ai_explanation: aiExplanation,
-            _version: "v3.0-unified-security" // Unified security layer with IP blacklist
+            _version: "v3.1-cache-no-store" // Cache policy changed from s-maxage=300 to no-store
         });
 
-        // Set cache headers for Cloudflare edge caching
-        // Cache for 5 minutes - same expression = same result
-        response.headers.set('Cache-Control', 'public, s-maxage=300, max-age=300, stale-while-revalidate=600');
+        response.headers.set('Cache-Control', 'private, no-store');
         
         return response;
 
     } catch (e: any) {
-        return NextResponse.json({ error: `Calculation error: ${e.message}` }, { status: 500 });
+        return NextResponse.json({ error: `Calculation error: ${e.message}` }, { status: 500, headers: { 'Cache-Control': 'no-store' } });
     }
 }

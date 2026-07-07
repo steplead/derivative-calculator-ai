@@ -36,7 +36,7 @@ export async function middleware(request: NextRequest) {
     if (!userAgent || userAgent.trim() === '') {
         return NextResponse.json(
             { error: 'Access denied. User-Agent required.' },
-            { status: 403 }
+            { status: 403, headers: { 'Cache-Control': 'no-store' } }
         );
     }
 
@@ -45,7 +45,7 @@ export async function middleware(request: NextRequest) {
     if (ABUSE_UA_PATTERNS.some(pattern => lowerUA.includes(pattern))) {
         return NextResponse.json(
             { error: 'Access denied. Automated requests not allowed.' },
-            { status: 403 }
+            { status: 403, headers: { 'Cache-Control': 'no-store' } }
         );
     }
 
@@ -65,7 +65,7 @@ export async function middleware(request: NextRequest) {
         if (!isSameSite && !hostAllowed) {
             return NextResponse.json(
                 { error: 'Access denied. API requests must come from the website.' },
-                { status: 403 }
+                { status: 403, headers: { 'Cache-Control': 'no-store' } }
             );
         }
     }
@@ -104,9 +104,12 @@ export async function middleware(request: NextRequest) {
                 { error: securityResult.error },
                 {
                     status: securityResult.blocked ? 403 : 429,
-                    headers: securityResult.retryAfter ? {
-                        'Retry-After': securityResult.retryAfter.toString()
-                    } : undefined
+                    headers: {
+                        'Cache-Control': 'no-store',
+                        ...(securityResult.retryAfter ? {
+                            'Retry-After': securityResult.retryAfter.toString()
+                        } : {})
+                    }
                 }
             );
         }

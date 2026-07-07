@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
 
     if (!expression) {
         trackPath('/api/integral', 400).catch(() => {});
-        return NextResponse.json({ error: "No equation provided" }, { status: 400 });
+        return NextResponse.json({ error: "No equation provided" }, { status: 400, headers: { 'Cache-Control': 'no-store' } });
     }
 
     // Unified Security Check (Rate limiting, Bot detection, IP blacklist)
@@ -33,9 +33,12 @@ export async function GET(req: NextRequest) {
             { error: securityResult.error },
             {
                 status: securityResult.blocked ? 403 : 429,
-                headers: securityResult.retryAfter ? {
-                    'Retry-After': securityResult.retryAfter.toString()
-                } : undefined
+                headers: {
+                    'Cache-Control': 'no-store',
+                    ...(securityResult.retryAfter ? {
+                        'Retry-After': securityResult.retryAfter.toString()
+                    } : {})
+                }
             }
         );
     }
@@ -44,7 +47,7 @@ export async function GET(req: NextRequest) {
     if (expression.length > 200) {
         return NextResponse.json(
             { error: "Expression too long. Maximum 200 characters." },
-            { status: 400 }
+            { status: 400, headers: { 'Cache-Control': 'no-store' } }
         );
     }
 
@@ -54,7 +57,7 @@ export async function GET(req: NextRequest) {
     const looksLikeMath = hasMathSymbols || /^[a-zA-Z0-9_\^\(\)\+\-\*\/\.\s]+$/.test(expression);
 
     if (looksLikeDescriptive || !looksLikeMath) {
-        return NextResponse.json({ error: "Invalid mathematical expression" }, { status: 400 });
+        return NextResponse.json({ error: "Invalid mathematical expression" }, { status: 400, headers: { 'Cache-Control': 'no-store' } });
     }
 
     try {
@@ -116,7 +119,8 @@ export async function GET(req: NextRequest) {
             }
         }
 
-        // CACHE OPTIMIZATION: Add cache headers to reduce Cloudflare quota usage
+        // SECURITY: private, no-store — prevents Cloudflare edge caching that
+        // bypasses security checks. See Phase 1.6 R1 for details.
         const response = NextResponse.json({
             solution: solutionLatex,
             solution_raw: solutionRaw,
@@ -124,12 +128,11 @@ export async function GET(req: NextRequest) {
             ai_explanation: aiExplanation
         });
 
-        // Set cache headers for Cloudflare edge caching (5 minutes)
-        response.headers.set('Cache-Control', 'public, s-maxage=300, max-age=300, stale-while-revalidate=600');
+        response.headers.set('Cache-Control', 'private, no-store');
         
         return response;
 
     } catch (e: any) {
-        return NextResponse.json({ error: `Calculation error: ${e.message}` }, { status: 500 });
+        return NextResponse.json({ error: `Calculation error: ${e.message}` }, { status: 500, headers: { 'Cache-Control': 'no-store' } });
     }
 }

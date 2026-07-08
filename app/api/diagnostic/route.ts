@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getRequestContext } from '@cloudflare/next-on-pages';
 import { isAdminRequest } from '@/utils/admin-auth';
+import { sanitizeHeaders, adminResponseHeaders } from '@/utils/monitoring-sanitize';
 
 export const runtime = 'edge';
 
@@ -9,7 +10,7 @@ export async function GET(request: NextRequest) {
     if (!isAdminRequest(request.headers)) {
         return NextResponse.json({
             error: 'Unauthorized. Admin access required.',
-        }, { status: 401 });
+        }, { status: 401, headers: adminResponseHeaders() });
     }
 
     try {
@@ -19,28 +20,27 @@ export async function GET(request: NextRequest) {
         const diagnostic = {
             timestamp: new Date().toISOString(),
             environment: {
-                SKIP_SECURITY: env?.SKIP_SECURITY || 'UNDEFINED',
+                // Only output boolean presence flags — never env var values
                 hasDB: !!env?.DB,
-                DB_name: env?.DB?.constructor?.name || 'NONE',
+                hasRedis: !!env?.UPSTASH_REDIS_REST_URL,
+                hasOpenRouter: !!env?.OPENROUTER_API_KEY,
+                skipSecurity: env?.SKIP_SECURITY === 'true',
             },
             request: {
                 method: request.method,
-                url: request.url,
-                headers: Object.fromEntries(request.headers.entries()),
+                host: request.headers.get('host') || 'unknown',
+                // Sanitized headers — no IP, no raw UA, no auth tokens
+                headers: sanitizeHeaders(request.headers),
             },
         };
 
         return NextResponse.json(diagnostic, {
             status: 200,
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',
-            },
+            headers: adminResponseHeaders(),
         });
     } catch (error) {
         return NextResponse.json({
             error: 'Diagnostic failed',
-            message: error instanceof Error ? error.message : String(error),
-        }, { status: 500 });
+        }, { status: 500, headers: adminResponseHeaders() });
     }
 }

@@ -1,6 +1,7 @@
 import { NextResponse, NextRequest } from 'next/server';
 import { getCacheMetrics } from '@/utils/cache';
 import { isAdminRequest } from '@/utils/admin-auth';
+import { adminResponseHeaders } from '@/utils/monitoring-sanitize';
 
 export const runtime = 'edge';
 
@@ -9,7 +10,7 @@ export async function GET(request: NextRequest) {
     if (!isAdminRequest(request.headers)) {
         return NextResponse.json({
             error: 'Unauthorized. Admin access required.',
-        }, { status: 401 });
+        }, { status: 401, headers: adminResponseHeaders() });
     }
     const metrics = getCacheMetrics();
 
@@ -30,5 +31,5 @@ export async function GET(request: NextRequest) {
         health: warnings.length === 0 ? 'healthy' : 'warning',
         warnings,
         note: "Metrics reset on server restart. For production, consider persistent metrics."
-    });
+    }, { headers: adminResponseHeaders() });
 }

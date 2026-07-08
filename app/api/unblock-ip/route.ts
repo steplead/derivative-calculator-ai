@@ -1,59 +1,29 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { getRequestContext } from '@cloudflare/next-on-pages';
-import { isAdminRequest } from '@/utils/admin-auth';
+/**
+ * /api/unblock-ip — DEPRECATED stub
+ *
+ * This endpoint has been moved to /api/admin/unblock-ip for security.
+ * The old endpoint no longer performs any D1 operations.
+ * Returns 410 Gone with a pointer to the new location.
+ *
+ * SECURITY: no-store, no token exposure, no D1 writes.
+ */
+
+import { NextResponse } from 'next/server';
+import { adminResponseHeaders } from '@/utils/monitoring-sanitize';
 
 export const runtime = 'edge';
 
-export async function GET(request: NextRequest) {
-    // SECURITY: Require admin authentication
-    if (!isAdminRequest(request.headers)) {
-        return NextResponse.json({
-            error: 'Unauthorized. Admin access required.',
-        }, { status: 401 });
-    }
+export async function GET() {
+    return NextResponse.json({
+        error: 'This endpoint has been deprecated and removed.',
+        migration: 'Use /api/admin/unblock-ip with proper admin authentication instead.',
+        documentation: 'Requires Authorization: Bearer <ADMIN_MONITORING_TOKEN>.',
+    }, { status: 410, headers: adminResponseHeaders() });
+}
 
-    try {
-        const { searchParams } = new URL(request.url);
-        const ipToUnblock = searchParams.get('ip');
-
-        if (!ipToUnblock) {
-            return NextResponse.json({
-                error: 'Missing IP parameter',
-                usage: '/api/unblock-ip?ip=YOUR_IP_ADDRESS'
-            }, { status: 400 });
-        }
-
-        // @ts-ignore - Cloudflare Workers environment binding
-        const env = getRequestContext()?.env as any;
-        const db = env?.DB;
-
-        if (!db) {
-            return NextResponse.json({ error: 'Database not available' }, { status: 500 });
-        }
-
-        // Delete from blacklist
-        await db.prepare("DELETE FROM ip_blacklist WHERE ip = ?").bind(ipToUnblock).run();
-
-        // Reset abuse score
-        await db.prepare("DELETE FROM abuse_scores WHERE ip = ?").bind(ipToUnblock).run();
-
-        // Reset rate limit
-        await db.prepare("DELETE FROM rate_limits WHERE ip = ?").bind(ipToUnblock).run();
-
-        return NextResponse.json({
-            success: true,
-            message: `IP ${ipToUnblock} has been unblocked`,
-            timestamp: new Date().toISOString()
-        }, {
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',
-            },
-        });
-    } catch (error) {
-        return NextResponse.json({
-            error: 'Failed to unblock IP',
-            message: error instanceof Error ? error.message : String(error),
-        }, { status: 500 });
-    }
+export async function POST() {
+    return NextResponse.json({
+        error: 'This endpoint has been deprecated and removed.',
+        migration: 'Use /api/admin/unblock-ip with proper admin authentication instead.',
+    }, { status: 410, headers: adminResponseHeaders() });
 }

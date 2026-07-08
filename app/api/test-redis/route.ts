@@ -1,6 +1,7 @@
 import { NextResponse, NextRequest } from 'next/server';
 import { redis, ratelimit } from '@/utils/cache';
 import { isAdminRequest } from '@/utils/admin-auth';
+import { adminResponseHeaders } from '@/utils/monitoring-sanitize';
 
 export const runtime = 'edge';
 
@@ -9,7 +10,7 @@ export async function GET(request: NextRequest) {
     if (!isAdminRequest(request.headers)) {
         return NextResponse.json({
             error: 'Unauthorized. Admin access required.',
-        }, { status: 401 });
+        }, { status: 401, headers: adminResponseHeaders() });
     }
     const results: Record<string, any> = {
         timestamp: new Date().toISOString(),
@@ -21,7 +22,7 @@ export async function GET(request: NextRequest) {
         env_check: {},
     };
 
-    // Check environment variables
+    // Check environment variables — only boolean presence flags, never values
     results.env_check = {
         UPSTASH_REDIS_REST_URL: !!process.env.UPSTASH_REDIS_REST_URL,
         UPSTASH_REDIS_REST_TOKEN: !!process.env.UPSTASH_REDIS_REST_TOKEN,
@@ -75,8 +76,6 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(results, {
         status: 200,
-        headers: {
-            'Cache-Control': 'no-store, must-revalidate',
-        },
+        headers: adminResponseHeaders(),
     });
 }

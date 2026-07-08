@@ -7,6 +7,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { isAdminRequest } from '@/utils/admin-auth';
+import { adminResponseHeaders } from '@/utils/monitoring-sanitize';
 import { getRequestContext } from '@cloudflare/next-on-pages';
 
 export const runtime = 'edge';
@@ -24,7 +25,7 @@ export async function GET(request: NextRequest) {
     if (!isAdminRequest(request.headers)) {
         return NextResponse.json({
             error: 'Unauthorized. Admin access required.',
-        }, { status: 401 });
+        }, { status: 401, headers: adminResponseHeaders() });
     }
 
     try {
@@ -35,7 +36,7 @@ export async function GET(request: NextRequest) {
         if (!db) {
             return NextResponse.json({
                 error: 'Database not available',
-            }, { status: 500 });
+            }, { status: 500, headers: adminResponseHeaders() });
         }
 
         const now = Math.floor(Date.now() / 1000);
@@ -158,15 +159,11 @@ export async function GET(request: NextRequest) {
             period_hours: 24,
             analysis,
         }, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers: adminResponseHeaders(),
         });
     } catch (error) {
-        console.error('[TRAFFIC_ANALYSIS] Error:', error);
         return NextResponse.json({
             error: 'Failed to analyze traffic',
-            message: error instanceof Error ? error.message : String(error),
-        }, { status: 500 });
+        }, { status: 500, headers: adminResponseHeaders() });
     }
 }

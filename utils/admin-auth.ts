@@ -1,46 +1,69 @@
 /**
  * Admin Authentication Utility
- * 
- * Protects sensitive admin endpoints from unauthorized access
+ *
+ * Protects sensitive admin endpoints from unauthorized access.
+ *
+ * SECURITY POLICY (2026-07-08): Only Bearer token authentication is supported.
+ * No API Key header, no IP whitelist, no expanded auth surface.
+ *
+ * Required environment variable:
+ *   ADMIN_MONITORING_TOKEN — shared secret for admin endpoint access
+ *
+ * Production behavior:
+ *   - If ADMIN_MONITORING_TOKEN is missing → deny all requests (fail closed)
+ *   - No fallback auth methods
+ *
+ * Development behavior:
+ *   - If ADMIN_MONITORING_TOKEN is missing → allow localhost for convenience
+ *   - This is dev/test only; production must always have the token set
  */
-
-import { getClientIp } from './security';
 
 /**
- * Check if request is from an authorized admin
- * 
- * Supports two methods:
- * 1. API Key authentication (via X-Admin-API-Key header)
- * 2. IP whitelist (via ADMIN_IPS environment variable)
+ * Check if request is from an authorized admin.
+ *
+ * ONLY Bearer token auth is supported. No other auth methods.
+ *
+ * @returns true if authorized, false if denied
  */
 export function isAdminRequest(headers: Headers): boolean {
-    // Method 1: Check API Key
-    const apiKey = headers.get('x-admin-api-key');
-    const validKey = process.env.ADMIN_API_KEY;
-    
-    if (apiKey && validKey && apiKey === validKey) {
-        return true;
+    // --- Bearer token auth (the ONLY auth method) ---
+    const authorization = headers.get('authorization');
+    const monitoringToken = process.env.ADMIN_MONITORING_TOKEN;
+
+    if (authorization && monitoringToken) {
+        const match = authorization.match(/^Bearer\s+(.+)$/i);
+        if (match && match[1] === monitoringToken) {
+            return true;
+        }
     }
-    
-    // Method 2: Check IP whitelist
-    const ip = getClientIp(headers);
-    const adminIps = (process.env.ADMIN_IPS || '').split(',').map(ip => ip.trim()).filter(ip => ip.length > 0);
-    
-    if (adminIps.length > 0 && adminIps.includes(ip)) {
-        return true;
-    }
-    
-    // Method 3: Check if in production (disable admin endpoints in production if no auth configured)
+
+    // --- Production: fail closed if no token configured ---
     const isProduction = process.env.NODE_ENV === 'production';
-    if (isProduction && !validKey && adminIps.length === 0) {
-        // No admin auth configured in production - deny access
+    if (isProduction) {
+        // No fallback auth. No IP whitelist. No API key header.
+        // If Bearer token didn't match (or wasn't provided), deny.
         return false;
     }
-    
-    // Development mode: allow localhost
-    if (!isProduction && (ip === '127.0.0.1' || ip === '::1' || ip === 'localhost')) {
-        return true;
+
+    // --- Development/test only: allow localhost when no token is set ---
+    if (!monitoringToken) {
+        const ip = getClientIp(headers);
+        if (ip === '127.0.0.1' || ip === '::1' || ip === 'localhost') {
+            return true;
+        }
     }
-    
+
     return false;
+}
+
+/**
+ * Get client IP from headers (minimal helper to avoid circular import).
+ * Only used for dev/test localhost check — never used for auth in production.
+ */
+function getClientIp(headers: Headers): string {
+    const cfIp = headers.get('cf-connecting-ip');
+    if (cfIp) return cfIp;
+    const xff = headers.get('x-forwarded-for');
+    if (xff) return xff.split(',')[0].trim();
+    return 'unknown';
 }

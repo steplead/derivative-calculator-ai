@@ -1,22 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getRequestContext } from '@cloudflare/next-on-pages';
 import { isAdminRequest } from '@/utils/admin-auth';
+import { hashIp, adminResponseHeaders, assertSaltOrFailClosed } from '@/utils/monitoring-sanitize';
 
 export const runtime = 'edge';
 
-interface IpStats {
-    ip: string;
-    count: number;
-    reset_time: number;
-    isBlocked: boolean;
-}
-
 export async function GET(_request: NextRequest) {
-    // SECURITY: Require admin authentication
+    // SECURITY: Require admin authentication (Bearer token only)
     if (!isAdminRequest(_request.headers)) {
         return NextResponse.json({
             error: 'Unauthorized. Admin access required.',
-        }, { status: 401 });
+        }, { status: 401, headers: adminResponseHeaders() });
+    }
+
+    // SECURITY: Fail closed if MONITORING_HASH_SALT is missing in production
+    const saltFail = assertSaltOrFailClosed();
+    if (saltFail) {
+        return NextResponse.json(saltFail.body, {
+            status: saltFail.status,
+            headers: { ...adminResponseHeaders(), ...saltFail.headers },
+        });
     }
 
     try {
@@ -27,7 +30,7 @@ export async function GET(_request: NextRequest) {
         if (!db) {
             return NextResponse.json({
                 error: 'Database not available',
-            }, { status: 500 });
+            }, { status: 500, headers: adminResponseHeaders() });
         }
 
         // Get all rate limit entries (active IPs in current window)
@@ -35,9 +38,9 @@ export async function GET(_request: NextRequest) {
             "SELECT * FROM rate_limits ORDER BY count DESC LIMIT 50"
         ).all() as any;
 
-        // Get all blocked IPs
+        // Get all blocked IPs — reason omitted (may contain UA info)
         const blockedIps = await db.prepare(
-            "SELECT ip, reason, blocked_until, offense_count FROM ip_blacklist"
+            "SELECT ip, blocked_until, offense_count FROM ip_blacklist"
         ).all() as any;
 
         // Get abuse scores
@@ -47,24 +50,24 @@ export async function GET(_request: NextRequest) {
 
         const now = Math.floor(Date.now() / 1000);
 
-        // Combine data
-        const ipStats: IpStats[] = (rateLimits.results || []).map((entry: any) => {
+        // Hash all IPs async (HMAC-SHA256 + salt)
+        const ipStats = await Promise.all((rateLimits.results || []).map(async (entry: any) => {
             const blocked = (blockedIps.results || []).find((b: any) => b.ip === entry.ip);
             return {
-                ip: entry.ip,
-                count: entry.count,
-                reset_time: entry.reset_time,
+                ipHash: await hashIp(entry.ip),
+                count: entry.count as number,
+                reset_time: entry.reset_time as number,
                 isBlocked: !!blocked && blocked.blocked_until > now,
             };
-        });
+        }));
 
         // Calculate statistics
-        const totalRequests = ipStats.reduce((sum, ip) => sum + ip.count, 0);
+        const totalRequests = ipStats.reduce((sum: number, ip: { count: number }) => sum + ip.count, 0);
         const activeIps = ipStats.length;
         const blockedIpsCount = (blockedIps.results || []).filter((b: any) => b.blocked_until > now).length;
 
         // Identify suspicious IPs (high request count)
-        const suspiciousIps = ipStats.filter(ip => ip.count > 10);
+        const suspiciousIps = ipStats.filter((ip: { count: number }) => ip.count > 10);
 
         return NextResponse.json({
             timestamp: new Date().toISOString(),
@@ -75,31 +78,27 @@ export async function GET(_request: NextRequest) {
                 suspiciousIps: suspiciousIps.length,
             },
             topIps: ipStats.slice(0, 20),
-            blockedIps: (blockedIps.results || [])
+            blockedIps: await Promise.all((blockedIps.results || [])
                 .filter((b: any) => b.blocked_until > now)
-                .map((b: any) => ({
-                    ip: b.ip,
-                    reason: b.reason,
+                .map(async (b: any) => ({
+                    ipHash: await hashIp(b.ip),
+                    // reason omitted — may contain raw UA strings
                     blockedUntil: new Date(b.blocked_until * 1000).toISOString(),
                     offenseCount: b.offense_count,
-                })),
-            highAbuseScoreIps: (abuseScores.results || [])
+                }))),
+            highAbuseScoreIps: await Promise.all((abuseScores.results || [])
                 .filter((s: any) => s.score > 30)
-                .map((s: any) => ({
-                    ip: s.ip,
+                .map(async (s: any) => ({
+                    ipHash: await hashIp(s.ip),
                     score: s.score,
                     lastUpdated: new Date(s.last_updated * 1000).toISOString(),
-                })),
+                }))),
         }, {
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',
-            },
+            headers: adminResponseHeaders(),
         });
     } catch (error) {
         return NextResponse.json({
             error: 'Failed to fetch IP stats',
-            message: error instanceof Error ? error.message : String(error),
-        }, { status: 500 });
+        }, { status: 500, headers: adminResponseHeaders() });
     }
 }

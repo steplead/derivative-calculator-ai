@@ -294,9 +294,8 @@ describe('GET /api/integral', () => {
 
   test('AI retry exhaustion uses extractRealContent fallback', async () => {
     setupNerdamer('x^3/3');
-    // Fail all 3 attempts (initial + 2 retries)
+    // Fail all 2 attempts (initial + 1 retry = maxRetries=1)
     mockCompletionsCreate
-      .mockRejectedValueOnce(new Error('timeout'))
       .mockRejectedValueOnce(new Error('timeout'))
       .mockRejectedValueOnce(new Error('timeout'));
 
@@ -322,8 +321,8 @@ describe('GET /api/integral', () => {
     // extractRealContent was called for the fallback (second call with no AI content)
     expect(mockExtractReal).toHaveBeenCalled();
 
-    // AI was attempted with retries
-    expect(mockCompletionsCreate).toHaveBeenCalledTimes(3);
+    // AI was attempted with retries (initial + 1 retry = 2 total)
+    expect(mockCompletionsCreate).toHaveBeenCalledTimes(2);
   });
 
   // ---- Redis cache HIT ----

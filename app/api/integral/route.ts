@@ -93,7 +93,7 @@ export async function GET(req: NextRequest) {
                 stepsContent = aiData.steps;
             } else if (apiKey) {
                 let retryCount = 0;
-                const maxRetries = 2;
+                const maxRetries = 1; // 2 attempts max (initial + 1 retry), worst case ~17s
                 let aiContent = null;
                 let lastError = null;
 
@@ -178,7 +178,7 @@ Output Format (strict JSON):
                         console.error(`Integral AI Attempt ${retryCount}/${maxRetries + 1} failed:`, aiError.message);
 
                         if (retryCount <= maxRetries) {
-                            // Exponential backoff: 1s, 2s
+                            // Exponential backoff: 1s
                             await new Promise(resolve => setTimeout(resolve, retryCount * 1000));
                         }
                     }

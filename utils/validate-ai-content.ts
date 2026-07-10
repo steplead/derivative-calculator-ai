@@ -188,8 +188,8 @@ Based on the function type, we select the appropriate calculus technique.
 
 **Step 3: Systematic Application**
 Apply the chosen method step-by-step:
-\\[\\text{{Original: }} {expression}\\]
-\\[\\text{{Result: }} {result}\\]
+\\[\\text{{Original: }} ${expression}\\]
+\\[\\text{{Result: }} ${result}\\]
 
 **Step 4: Simplification**
 Express the result in its simplest mathematical form.

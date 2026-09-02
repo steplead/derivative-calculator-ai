@@ -3,6 +3,7 @@ export const runtime = 'edge';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getBaseUrl } from '@/utils/robust-url';
+import { loadStaticProblemsSafe, filterByType } from '@/lib/problems-source';
 import type { Metadata } from 'next';
 
 export async function generateMetadata({ params }: { params: { type: string } }): Promise<Metadata> {
@@ -47,42 +48,23 @@ export default async function ProblemsByTypePage({ params }: { params: { type: s
     notFound();
   }
 
-  let allProblems: any[] = [];
+  // RC-8 FIX: shared plain-fetch loader. The previous `cache: 'force-cache'` +
+  // `next: { revalidate }` fetch never returned data here, so this page
+  // rendered with ZERO problems.
+  let allProblems: any[] = await loadStaticProblemsSafe();
 
-  if (baseUrl) {
-    // RC-6 FIX: prefer static problems.json (same reliable path as /directory).
+  if (allProblems.length === 0 && baseUrl) {
     try {
-      const staticRes = await fetch(`${baseUrl}/problems.json`, {
-        cache: 'force-cache',
-        // @ts-ignore
-        next: { revalidate: 3600 }
-      });
-      if (staticRes.ok && staticRes.headers.get("content-type")?.includes("application/json")) {
-        allProblems = await staticRes.json();
+      const res = await fetch(`${baseUrl}/api/problems?limit=1000`);
+      if (res.ok && res.headers.get("content-type")?.includes("application/json")) {
+        allProblems = await res.json();
       }
     } catch (e) {
-      console.error("Failed to fetch static problems:", e);
-    }
-
-    if (allProblems.length === 0) {
-      try {
-        const res = await fetch(`${baseUrl}/api/problems?limit=1000`, {
-          cache: 'force-cache',
-          // @ts-ignore
-          next: { revalidate: 3600 }
-        });
-        if (res.ok && res.headers.get("content-type")?.includes("application/json")) {
-          allProblems = await res.json();
-        }
-      } catch (e) {
-        console.error("Failed to fetch problems:", e);
-      }
+      console.error("Failed to fetch problems:", e);
     }
   }
 
-  const filteredProblems = type === 'derivative'
-    ? allProblems.filter((p: any) => !p.type || p.type === 'derivative')
-    : allProblems.filter((p: any) => p.type === type);
+  const filteredProblems = filterByType(allProblems, type);
 
   const typeNames: Record<string, string> = {
     derivative: 'Derivatives',

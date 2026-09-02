@@ -7,6 +7,7 @@ import { GoogleAnalytics } from '@next/third-parties/google';
 import Footer from "@/components/Footer";
 import { headers } from 'next/headers';
 import { getBaseUrl } from '@/utils/robust-url';
+import { loadStaticProblemsSafe } from '@/lib/problems-source';
 import { TurnstileProvider } from "@/components/TurnstileProvider";
 
 const inter = Inter({ subsets: ['latin'] });
@@ -59,22 +60,26 @@ export default async function RootLayout({
   const dict = getDictionary(locale);
   const baseUrl = getBaseUrl();
 
-  let wikiTopics = [];
-  let popularProblems = [];
+  let wikiTopics: any[] = [];
+  let popularProblems: any[] = [];
 
-  // Fetch global data for footer (shuffled on every request in Edge)
-  if (baseUrl) {
-    try {
-      const [wikiRes, probRes] = await Promise.all([
-        fetch(`${baseUrl}/wiki.json`, { cache: 'force-cache', next: { revalidate: 3600 } }),
-        fetch(`${baseUrl}/api/problems?limit=100`, { cache: 'force-cache', next: { revalidate: 3600 } })
-      ]);
-
-      if (wikiRes.ok) wikiTopics = await wikiRes.json();
-      if (probRes.ok) popularProblems = await probRes.json();
-    } catch (e) {
-      console.error("Global layout fetch failed:", e);
-    }
+  // Fetch global data for footer.
+  //
+  // RC-8 FIX: this layout runs on EVERY page view. It used to issue
+  // `/api/problems?limit=100` (100 D1 rows read per page view, on the whole
+  // site) and both fetches used `cache: 'force-cache'` + `next: { revalidate }`,
+  // which never returns data on Cloudflare Pages. The footer therefore rendered
+  // empty AND burned D1 quota on every single request.
+  // The footer now reads the memoised static library (0 D1 rows).
+  try {
+    const [wikiRes, problems] = await Promise.all([
+      fetch(`${baseUrl}/wiki.json`),
+      loadStaticProblemsSafe(),
+    ]);
+    if (wikiRes.ok) wikiTopics = await wikiRes.json();
+    popularProblems = problems.slice(0, 100);
+  } catch (e) {
+    console.error("Global layout fetch failed:", e);
   }
 
   return (

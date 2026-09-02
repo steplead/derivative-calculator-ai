@@ -2,6 +2,7 @@ import { headers } from 'next/headers';
 export const runtime = 'edge';
 import Link from 'next/link';
 import { getBaseUrl } from '@/utils/robust-url';
+import { loadStaticProblemsSafe, filterByType } from '@/lib/problems-source';
 import type { Metadata } from 'next';
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -35,47 +36,28 @@ export default async function ProblemsPage() {
   const locale = headersList.get("x-next-locale") || "en";
   const baseUrl = getBaseUrl();
 
-  let allProblems: any[] = [];
+  // RC-8 FIX: use the shared plain-fetch loader. The previous
+  // `fetch(url, { cache: 'force-cache', next: { revalidate: 3600 } })` never
+  // returned data on this platform, so this page rendered with ZERO problems.
+  let allProblems: any[] = await loadStaticProblemsSafe();
 
-  if (baseUrl) {
-    // RC-6 FIX: prefer the static problems.json (same reliable path as /directory).
-    // The D1-backed /api/problems caps at 100 rows and can return empty during
-    // SSR, so it can never be the primary source for the full library page.
+  // Only if the static library is unreachable, fall back to the API.
+  if (allProblems.length === 0 && baseUrl) {
     try {
-      const staticRes = await fetch(`${baseUrl}/problems.json`, {
-        cache: 'force-cache',
-        // @ts-ignore
-        next: { revalidate: 3600 }
-      });
-      if (staticRes.ok && staticRes.headers.get("content-type")?.includes("application/json")) {
-        allProblems = await staticRes.json();
+      const res = await fetch(`${baseUrl}/api/problems?limit=1000`);
+      if (res.ok && res.headers.get("content-type")?.includes("application/json")) {
+        allProblems = await res.json();
       }
     } catch (e) {
-      console.error("Failed to fetch static problems:", e);
-    }
-
-    // Only if static data is unavailable, fall back to the API.
-    if (allProblems.length === 0) {
-      try {
-        const res = await fetch(`${baseUrl}/api/problems?limit=1000`, {
-          cache: 'force-cache',
-          // @ts-ignore
-          next: { revalidate: 3600 }
-        });
-        if (res.ok && res.headers.get("content-type")?.includes("application/json")) {
-          allProblems = await res.json();
-        }
-      } catch (e) {
-        console.error("Failed to fetch problems:", e);
-      }
+      console.error("Failed to fetch problems:", e);
     }
   }
 
   const categorized = {
-    derivative: allProblems.filter((p: any) => !p.type || p.type === 'derivative'),
-    integral: allProblems.filter((p: any) => p.type === 'integral'),
-    limit: allProblems.filter((p: any) => p.type === 'limit'),
-    ode: allProblems.filter((p: any) => p.type === 'ode'),
+    derivative: filterByType(allProblems, 'derivative'),
+    integral: filterByType(allProblems, 'integral'),
+    limit: filterByType(allProblems, 'limit'),
+    ode: filterByType(allProblems, 'ode'),
   };
 
   return (

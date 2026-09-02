@@ -91,3 +91,53 @@ describe('calculateDerivative — steps are present and deterministic', () => {
     expect(() => calculateDerivative('')).toThrow();
   });
 });
+
+// ---------------------------------------------------------------------------
+// RC-4 follow-up: non-differentiable / mis-parsed functions must never publish
+// a wrong answer. Found by the sympy cross-check oracle (1085 PASS / 0 FAIL /
+// 3 UNKNOWN over all 1088 derivative pages).
+// ---------------------------------------------------------------------------
+describe('RC-4 hard cases — Abs(x) and floor(x)', () => {
+  it('Abs(x) normalises to abs(x) and differentiates to x/|x|', () => {
+    expect(normalizeExpression('Abs(x)')).toBe('abs(x)');
+    const r = calculateDerivative('Abs(x)');
+    expect(r.isValid).toBe(true);
+    // d/dx |x| = x/|x|  (== sign(x) for x != 0)
+    expect(r.solutionRaw.replace(/\s/g, '')).toBe('abs(x)^(-1)*x');
+  });
+
+  it('Abs(x) is NOT reported with the Power Rule', () => {
+    const r = calculateDerivative('Abs(x)');
+    expect(r.rule).not.toBe('Power Rule');
+    expect(r.rule.toLowerCase()).toContain('absolute');
+  });
+
+  it('abs(x) bare-symbol regression: result is never a lone word', () => {
+    const r = calculateDerivative('abs(x)');
+    expect(r.solutionRaw).not.toMatch(/^[A-Za-z]+$/);
+  });
+
+  it('floor(x) is non-differentiable — must be flagged invalid, not published', () => {
+    const r = calculateDerivative('floor(x)');
+    // nerdamer cannot differentiate floor(): it echoes an unevaluated diff form.
+    expect(r.isValid).toBe(false);
+  });
+
+  it('validateDerivativeResult rejects unevaluated diff() echoes', () => {
+    expect(validateDerivativeResult('floor(x)', 'diff(floor(x),x)')).toBe(false);
+    expect(validateDerivativeResult('floor(x)', '(floor(x), x, diff)')).toBe(false);
+  });
+
+  it('validateDerivativeResult rejects bare multi-letter symbols', () => {
+    expect(validateDerivativeResult('Abs(x)', 'Abs')).toBe(false);
+    expect(validateDerivativeResult('ln(x)', 'ln')).toBe(false);
+  });
+
+  it('validateDerivativeResult still accepts legitimate constants and vars', () => {
+    expect(validateDerivativeResult('x', '1')).toBe(true);
+    expect(validateDerivativeResult('e*x', 'e')).toBe(true);
+    expect(validateDerivativeResult('pi*x', 'pi')).toBe(true);
+    expect(validateDerivativeResult('x^2/2', 'x')).toBe(true);
+    expect(validateDerivativeResult('x^2', '2*x')).toBe(true);
+  });
+});

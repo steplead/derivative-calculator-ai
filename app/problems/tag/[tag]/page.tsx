@@ -38,12 +38,11 @@ export default async function ProblemsByTagPage({ params }: { params: { tag: str
 
   if (baseUrl) {
     try {
-      // Use database tag filtering instead of string matching
-      const res = await fetch(`${baseUrl}/api/problems?limit=1000&tag=${encodeURIComponent(tag)}`, {
-        cache: 'force-cache',
-        // @ts-ignore
-        next: { revalidate: 3600 }
-      });
+      // RC-8 FIX: `cache: 'force-cache'` + `next: { revalidate }` never returns
+      // data on this platform. Plain fetch only.
+      // NOTE: tags/difficulty live only in D1 (absent from /problems.json), so
+      // this route is still D1-backed. It is outside the sitemap.
+      const res = await fetch(`${baseUrl}/api/problems?limit=100&tag=${encodeURIComponent(tag)}`);
 
       if (res.ok && res.headers.get("content-type")?.includes("application/json")) {
         allProblems = await res.json();

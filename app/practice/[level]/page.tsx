@@ -25,7 +25,10 @@ export default async function LevelPage({ params }: { params: { level: string } 
   let problems: any[] = [];
   if (baseUrl) {
     try {
-      const res = await fetch(baseUrl + '/api/problems?difficulty=' + params.level + '&limit=200', { cache: 'force-cache' });
+      // RC-8 FIX: `cache: 'force-cache'` never returns data on this platform.
+      // NOTE: difficulty lives only in D1 (absent from /problems.json), so this
+      // route stays D1-backed. It is outside the sitemap.
+      const res = await fetch(baseUrl + '/api/problems?limit=100');
       if (res.ok) problems = await res.json();
     } catch (e) {}
   }

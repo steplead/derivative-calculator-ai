@@ -5,6 +5,7 @@ import { Suspense } from 'react';
 import { headers } from 'next/headers';
 import { getDictionary } from './dictionaries';
 import { getBaseUrl } from '@/utils/robust-url';
+import { loadStaticProblemsSafe } from '@/lib/problems-source';
 import type { Metadata } from 'next';
 
 export const runtime = 'edge';
@@ -49,29 +50,16 @@ export default async function Home() {
   const baseUrl = getBaseUrl();
   let popularProblems = [];
 
-  if (baseUrl) {
-    try {
-      // PARALLEL: Fetch both static data and API simultaneously
-      const [staticRes, apiRes] = await Promise.allSettled([
-        fetch(`${baseUrl}/problems.json`, {
-          cache: 'force-cache',
-          next: { revalidate: 3600 }
-        }),
-        fetch(`${baseUrl}/api/problems?limit=20`, {
-          cache: 'force-cache',
-          next: { revalidate: 3600 }
-        })
-      ]);
+  // RC-8 FIX: shared plain-fetch loader. As on every other page, the
+  // `cache: 'force-cache'` + `next: { revalidate }` fetch returned nothing
+  // here, so the homepage "popular problems" strip was always empty.
+  popularProblems = (await loadStaticProblemsSafe()).slice(0, 20);
 
-      // Use static data if available (faster), otherwise use API
-      if (staticRes.status === 'fulfilled' && staticRes.value.ok) {
-        const problemsData = await staticRes.value.json();
-        popularProblems = (problemsData as any[]).slice(0, 20);
-      } else if (apiRes.status === 'fulfilled' && apiRes.value.ok) {
-        const contentType = apiRes.value.headers.get("content-type");
-        if (contentType && contentType.includes("application/json")) {
-          popularProblems = await apiRes.value.json();
-        }
+  if (popularProblems.length === 0 && baseUrl) {
+    try {
+      const res = await fetch(`${baseUrl}/api/problems?limit=20`);
+      if (res.ok && res.headers.get("content-type")?.includes("application/json")) {
+        popularProblems = await res.json();
       }
     } catch (e) {
       console.error("Failed to fetch popular problems:", e);

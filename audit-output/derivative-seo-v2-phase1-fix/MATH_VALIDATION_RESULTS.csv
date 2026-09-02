@@ -1,0 +1,1089 @@
+slug,formula,category,engine_expression,solution_raw,rule,steps_count,is_valid,sympy_derivative,verdict,evidence
+derivative-of-x-squared,x^2,power,x^2,2*x,Power Rule,3,True,2*x,PASS,sympy simplify: difference is exactly 0
+derivative-of-sin-x,sin(x),trig,sin(x),cos(x),Trigonometric Rule,3,True,cos(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-cos-x,cos(x),trig,cos(x),-sin(x),Trigonometric Rule,3,True,-sin(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-tan-x,tan(x),trig,tan(x),sec(x)^2,Trigonometric Rule,3,True,tan(x)**2 + 1,PASS,sympy simplify: difference is exactly 0
+derivative-of-ln-x,ln(x),ln,log(x),x^(-1),Logarithmic Rule,3,True,1/x,PASS,sympy simplify: difference is exactly 0
+derivative-of-e-to-the-x,e^x,exponential,e^x,e^x,Exponential Rule,3,True,exp(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-1-over-x,1/x,quotient,1/x,-x^(-2),Quotient Rule,3,True,-1/x**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-sqrt-x,sqrt(x),other,sqrt(x),(1/2)*x^(-1/2),Power Rule,2,True,1/(2*sqrt(x)),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-cubed,x^3,power,x^3,3*x^2,Power Rule,3,True,3*x**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-log-x,log(x),log,log(x),x^(-1),Logarithmic Rule,3,True,1/x,PASS,sympy simplify: difference is exactly 0
+derivative-of-sec-x,sec(x),trig,sec(x),sec(x)*tan(x),Trigonometric Rule,3,True,tan(x)*sec(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-csc-x,csc(x),trig,csc(x),-cot(x)*csc(x),Trigonometric Rule,3,True,-cot(x)*csc(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-cot-x,cot(x),trig,cot(x),-csc(x)^2,Trigonometric Rule,3,True,-cot(x)**2 - 1,PASS,sympy simplify: difference is exactly 0
+derivative-of-arcsin-x,asin(x),inverse-trig,asin(x),sqrt(-x^2+1)^(-1),Power Rule,2,True,1/sqrt(1 - x**2),PASS,sympy simplify: difference is exactly 0
+derivative-of-arccos-x,acos(x),inverse-trig,acos(x),-sqrt(-x^2+1)^(-1),Power Rule,2,True,-1/sqrt(1 - x**2),PASS,sympy simplify: difference is exactly 0
+derivative-of-arctan-x,atan(x),inverse-trig,atan(x),(1+x^2)^(-1),Power Rule,2,True,1/(x**2 + 1),PASS,sympy simplify: difference is exactly 0
+derivative-of-2x,2*x,product,2*x,2,Product Rule,3,True,2,PASS,sympy simplify: difference is exactly 0
+derivative-of-3x-squared,3*x^2,product,3*x^2,6*x,Product Rule,3,True,6*x,PASS,sympy simplify: difference is exactly 0
+derivative-of-e-to-the-2x,exp(2*x),exponential,exp(2*x),2*e^(2*x),Product Rule,3,True,2*exp(2*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin-2x,sin(2*x),trig,sin(2*x),2*cos(2*x),Product Rule,3,True,2*cos(2*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-cos-2x,cos(2*x),trig,cos(2*x),-2*sin(2*x),Product Rule,3,True,-2*sin(2*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-ln-2x,ln(2*x),ln,log(2*x),x^(-1),Product Rule,3,True,1/x,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-to-the-4,x^4,power,x^4,4*x^3,Power Rule,3,True,4*x**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-5x,5*x,product,5*x,5,Product Rule,3,True,5,PASS,sympy simplify: difference is exactly 0
+derivative-of-minus-x,-x,other,-x,-1,Sum Rule,2,True,-1,PASS,sympy simplify: difference is exactly 0
+derivative-of-1-minus-x,1-x,other,1-x,-1,Sum Rule,2,True,-1,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-plus-1,x+1,other,x+1,1,Sum Rule,2,True,1,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-squared-plus-1,x^2+1,power,x^2+1,2*x,Power Rule,2,True,2*x,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-squared-minus-1,x^2-1,power,x^2-1,2*x,Power Rule,2,True,2*x,PASS,sympy simplify: difference is exactly 0
+derivative-of-1-over-x-squared,1/x^2,quotient,1/x^2,-2*x^(-3),Quotient Rule,3,True,-2/x**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-root-x,x^(1/2),quotient,x^(1/2),(1/2)*x^(-1/2),Quotient Rule,3,True,1/(2*sqrt(x)),PASS,sympy simplify: difference is exactly 0
+derivative-of-cbrt-x,x^(1/3),quotient,x^(1/3),(1/3)*x^(-2/3),Quotient Rule,3,True,1/(3*x**(2/3)),PASS,sympy simplify: difference is exactly 0
+derivative-of-pi,pi,other,pi,0,Power Rule,2,True,0,PASS,sympy simplify: difference is exactly 0
+derivative-of-constant,5,other,5,0,Power Rule,2,True,0,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-sin-x,x*sin(x),trig,x*sin(x),cos(x)*x+sin(x),Product Rule,3,True,x*cos(x) + sin(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-cos-x,x*cos(x),trig,x*cos(x),-sin(x)*x+cos(x),Product Rule,3,True,-x*sin(x) + cos(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-e-to-the-x,x*e^x,exponential,x*e^x,e^x+e^x*x,Product Rule,3,True,x*exp(x) + exp(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-ln-x,x*ln(x),ln,x*log(x),1+log(x),Product Rule,3,True,log(x) + 1,PASS,sympy simplify: difference is exactly 0
+derivative-of-sin-squared-x,sin(x)^2,trig,sin(x)^2,2*cos(x)*sin(x),Chain Rule,3,True,2*sin(x)*cos(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-cos-squared-x,cos(x)^2,trig,cos(x)^2,-2*cos(x)*sin(x),Chain Rule,3,True,-2*sin(x)*cos(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-tan-squared-x,tan(x)^2,trig,tan(x)^2,2*sec(x)^2*tan(x),Chain Rule,3,True,(2*tan(x)**2 + 2)*tan(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-to-the-minus-x,exp(-x),exponential,exp(-x),-e^(-x),Exponential Rule,3,True,-exp(-x),PASS,sympy simplify: difference is exactly 0
+derivative-of-2-to-the-x,2^x,exponential,2^x,2^x*log(2),Power Rule,2,True,2**x*log(2),PASS,sympy simplify: difference is exactly 0
+derivative-of-10-to-the-x,10^x,exponential,10^x,10^x*log(10),Power Rule,2,True,10**x*log(10),PASS,sympy simplify: difference is exactly 0
+derivative-of-sinh-x,sinh(x),trig,sinh(x),cosh(x),Power Rule,2,True,cosh(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-cosh-x,cosh(x),trig,cosh(x),sinh(x),Power Rule,2,True,sinh(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-tanh-x,tanh(x),trig,tanh(x),sech(x)^2,Power Rule,2,True,1 - tanh(x)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-abs-x,Abs(x),other,abs(x),abs(x)^(-1)*x,Absolute Value Rule,4,True,sign(x),PASS,numeric: agrees to 1e-25 at 50-digit precision on all sample points (simplify inconclusive)
+derivative-of-sign-x,sign(x),other,sign(x),0,Power Rule,2,True,2*DiracDelta(x),PASS,numeric: agrees to 1e-25 at 50-digit precision on all sample points (simplify inconclusive)
+derivative-of-floor-x,floor(x),other,floor(x),"diff(floor(x),x)",Power Rule,2,False,,UNKNOWN,engine flagged the result invalid (validateDerivativeResult)
+derivative-of-x-minus-to-minus-the-minus-2,x^2,power,x^2,2*x,Power Rule,3,True,2*x,PASS,sympy simplify: difference is exactly 0
+derivative-of-2x-minus-to-minus-the-minus-2,2*x^2,product,2*x^2,4*x,Product Rule,3,True,4*x,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-2-minus-minus-plus-minus-minus-x-minus-to-minus-the-minus-1,x^2 + x^1,power,x^2 + x^1,1+2*x,Power Rule,2,True,2*x + 1,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-2-minus-minus-minus-x,x^2 - x,power,x^2 - x,-1+2*x,Power Rule,2,True,2*x - 1,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-3,x^3,power,x^3,3*x^2,Power Rule,3,True,3*x**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-3x-minus-to-minus-the-minus-3,3*x^3,product,3*x^3,9*x^2,Product Rule,3,True,9*x**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-3-minus-minus-plus-minus-minus-x-minus-to-minus-the-minus-2,x^3 + x^2,power,x^3 + x^2,2*x+3*x^2,Power Rule,2,True,3*x**2 + 2*x,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-3-minus-minus-minus-x,x^3 - x,power,x^3 - x,-1+3*x^2,Power Rule,2,True,3*x**2 - 1,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-4,x^4,power,x^4,4*x^3,Power Rule,3,True,4*x**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-4x-minus-to-minus-the-minus-4,4*x^4,product,4*x^4,16*x^3,Product Rule,3,True,16*x**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-4-minus-minus-plus-minus-minus-x-minus-to-minus-the-minus-3,x^4 + x^3,power,x^4 + x^3,3*x^2+4*x^3,Power Rule,2,True,4*x**3 + 3*x**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-4-minus-minus-minus-x,x^4 - x,power,x^4 - x,-1+4*x^3,Power Rule,2,True,4*x**3 - 1,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-5,x^5,power,x^5,5*x^4,Power Rule,3,True,5*x**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-5x-minus-to-minus-the-minus-5,5*x^5,product,5*x^5,25*x^4,Product Rule,3,True,25*x**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-5-minus-minus-plus-minus-minus-x-minus-to-minus-the-minus-4,x^5 + x^4,power,x^5 + x^4,4*x^3+5*x^4,Power Rule,2,True,5*x**4 + 4*x**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-5-minus-minus-minus-x,x^5 - x,power,x^5 - x,-1+5*x^4,Power Rule,2,True,5*x**4 - 1,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-6,x^6,power,x^6,6*x^5,Power Rule,3,True,6*x**5,PASS,sympy simplify: difference is exactly 0
+derivative-of-6x-minus-to-minus-the-minus-6,6*x^6,product,6*x^6,36*x^5,Product Rule,3,True,36*x**5,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-6-minus-minus-plus-minus-minus-x-minus-to-minus-the-minus-5,x^6 + x^5,power,x^6 + x^5,5*x^4+6*x^5,Power Rule,2,True,6*x**5 + 5*x**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-6-minus-minus-minus-x,x^6 - x,power,x^6 - x,-1+6*x^5,Power Rule,2,True,6*x**5 - 1,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-7,x^7,power,x^7,7*x^6,Power Rule,3,True,7*x**6,PASS,sympy simplify: difference is exactly 0
+derivative-of-7x-minus-to-minus-the-minus-7,7*x^7,product,7*x^7,49*x^6,Product Rule,3,True,49*x**6,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-7-minus-minus-plus-minus-minus-x-minus-to-minus-the-minus-6,x^7 + x^6,power,x^7 + x^6,6*x^5+7*x^6,Power Rule,2,True,7*x**6 + 6*x**5,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-7-minus-minus-minus-x,x^7 - x,power,x^7 - x,-1+7*x^6,Power Rule,2,True,7*x**6 - 1,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-8,x^8,power,x^8,8*x^7,Power Rule,3,True,8*x**7,PASS,sympy simplify: difference is exactly 0
+derivative-of-8x-minus-to-minus-the-minus-8,8*x^8,product,8*x^8,64*x^7,Product Rule,3,True,64*x**7,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-8-minus-minus-plus-minus-minus-x-minus-to-minus-the-minus-7,x^8 + x^7,power,x^8 + x^7,7*x^6+8*x^7,Power Rule,2,True,8*x**7 + 7*x**6,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-8-minus-minus-minus-x,x^8 - x,power,x^8 - x,-1+8*x^7,Power Rule,2,True,8*x**7 - 1,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-9,x^9,power,x^9,9*x^8,Power Rule,3,True,9*x**8,PASS,sympy simplify: difference is exactly 0
+derivative-of-9x-minus-to-minus-the-minus-9,9*x^9,product,9*x^9,81*x^8,Product Rule,3,True,81*x**8,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-9-minus-minus-plus-minus-minus-x-minus-to-minus-the-minus-8,x^9 + x^8,power,x^9 + x^8,8*x^7+9*x^8,Power Rule,2,True,9*x**8 + 8*x**7,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-9-minus-minus-minus-x,x^9 - x,power,x^9 - x,-1+9*x^8,Power Rule,2,True,9*x**8 - 1,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-10,x^10,power,x^10,10*x^9,Power Rule,3,True,10*x**9,PASS,sympy simplify: difference is exactly 0
+derivative-of-10x-minus-to-minus-the-minus-10,10*x^10,product,10*x^10,100*x^9,Product Rule,3,True,100*x**9,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-10-minus-minus-plus-minus-minus-x-minus-to-minus-the-minus-9,x^10 + x^9,power,x^10 + x^9,10*x^9+9*x^8,Power Rule,2,True,10*x**9 + 9*x**8,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-10-minus-minus-minus-x,x^10 - x,power,x^10 - x,-1+10*x^9,Power Rule,2,True,10*x**9 - 1,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-11,x^11,power,x^11,11*x^10,Power Rule,3,True,11*x**10,PASS,sympy simplify: difference is exactly 0
+derivative-of-11x-minus-to-minus-the-minus-11,11*x^11,product,11*x^11,121*x^10,Product Rule,3,True,121*x**10,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-11-minus-minus-plus-minus-minus-x-minus-to-minus-the-minus-10,x^11 + x^10,power,x^11 + x^10,10*x^9+11*x^10,Power Rule,2,True,11*x**10 + 10*x**9,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-11-minus-minus-minus-x,x^11 - x,power,x^11 - x,-1+11*x^10,Power Rule,2,True,11*x**10 - 1,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-12,x^12,power,x^12,12*x^11,Power Rule,3,True,12*x**11,PASS,sympy simplify: difference is exactly 0
+derivative-of-12x-minus-to-minus-the-minus-12,12*x^12,product,12*x^12,144*x^11,Product Rule,3,True,144*x**11,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-12-minus-minus-plus-minus-minus-x-minus-to-minus-the-minus-11,x^12 + x^11,power,x^12 + x^11,11*x^10+12*x^11,Power Rule,2,True,12*x**11 + 11*x**10,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-12-minus-minus-minus-x,x^12 - x,power,x^12 - x,-1+12*x^11,Power Rule,2,True,12*x**11 - 1,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-13,x^13,power,x^13,13*x^12,Power Rule,3,True,13*x**12,PASS,sympy simplify: difference is exactly 0
+derivative-of-13x-minus-to-minus-the-minus-13,13*x^13,product,13*x^13,169*x^12,Product Rule,3,True,169*x**12,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-13-minus-minus-plus-minus-minus-x-minus-to-minus-the-minus-12,x^13 + x^12,power,x^13 + x^12,12*x^11+13*x^12,Power Rule,2,True,13*x**12 + 12*x**11,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-13-minus-minus-minus-x,x^13 - x,power,x^13 - x,-1+13*x^12,Power Rule,2,True,13*x**12 - 1,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-14,x^14,power,x^14,14*x^13,Power Rule,3,True,14*x**13,PASS,sympy simplify: difference is exactly 0
+derivative-of-14x-minus-to-minus-the-minus-14,14*x^14,product,14*x^14,196*x^13,Product Rule,3,True,196*x**13,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-14-minus-minus-plus-minus-minus-x-minus-to-minus-the-minus-13,x^14 + x^13,power,x^14 + x^13,13*x^12+14*x^13,Power Rule,2,True,14*x**13 + 13*x**12,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-14-minus-minus-minus-x,x^14 - x,power,x^14 - x,-1+14*x^13,Power Rule,2,True,14*x**13 - 1,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-15,x^15,power,x^15,15*x^14,Power Rule,3,True,15*x**14,PASS,sympy simplify: difference is exactly 0
+derivative-of-15x-minus-to-minus-the-minus-15,15*x^15,product,15*x^15,225*x^14,Product Rule,3,True,225*x**14,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-15-minus-minus-plus-minus-minus-x-minus-to-minus-the-minus-14,x^15 + x^14,power,x^15 + x^14,14*x^13+15*x^14,Power Rule,2,True,15*x**14 + 14*x**13,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-15-minus-minus-minus-x,x^15 - x,power,x^15 - x,-1+15*x^14,Power Rule,2,True,15*x**14 - 1,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-16,x^16,power,x^16,16*x^15,Power Rule,3,True,16*x**15,PASS,sympy simplify: difference is exactly 0
+derivative-of-16x-minus-to-minus-the-minus-16,16*x^16,product,16*x^16,256*x^15,Product Rule,3,True,256*x**15,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-16-minus-minus-plus-minus-minus-x-minus-to-minus-the-minus-15,x^16 + x^15,power,x^16 + x^15,15*x^14+16*x^15,Power Rule,2,True,16*x**15 + 15*x**14,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-16-minus-minus-minus-x,x^16 - x,power,x^16 - x,-1+16*x^15,Power Rule,2,True,16*x**15 - 1,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-17,x^17,power,x^17,17*x^16,Power Rule,3,True,17*x**16,PASS,sympy simplify: difference is exactly 0
+derivative-of-17x-minus-to-minus-the-minus-17,17*x^17,product,17*x^17,289*x^16,Product Rule,3,True,289*x**16,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-17-minus-minus-plus-minus-minus-x-minus-to-minus-the-minus-16,x^17 + x^16,power,x^17 + x^16,16*x^15+17*x^16,Power Rule,2,True,17*x**16 + 16*x**15,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-17-minus-minus-minus-x,x^17 - x,power,x^17 - x,-1+17*x^16,Power Rule,2,True,17*x**16 - 1,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-18,x^18,power,x^18,18*x^17,Power Rule,3,True,18*x**17,PASS,sympy simplify: difference is exactly 0
+derivative-of-18x-minus-to-minus-the-minus-18,18*x^18,product,18*x^18,324*x^17,Product Rule,3,True,324*x**17,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-18-minus-minus-plus-minus-minus-x-minus-to-minus-the-minus-17,x^18 + x^17,power,x^18 + x^17,17*x^16+18*x^17,Power Rule,2,True,18*x**17 + 17*x**16,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-18-minus-minus-minus-x,x^18 - x,power,x^18 - x,-1+18*x^17,Power Rule,2,True,18*x**17 - 1,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-19,x^19,power,x^19,19*x^18,Power Rule,3,True,19*x**18,PASS,sympy simplify: difference is exactly 0
+derivative-of-19x-minus-to-minus-the-minus-19,19*x^19,product,19*x^19,361*x^18,Product Rule,3,True,361*x**18,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-19-minus-minus-plus-minus-minus-x-minus-to-minus-the-minus-18,x^19 + x^18,power,x^19 + x^18,18*x^17+19*x^18,Power Rule,2,True,19*x**18 + 18*x**17,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-19-minus-minus-minus-x,x^19 - x,power,x^19 - x,-1+19*x^18,Power Rule,2,True,19*x**18 - 1,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-20,x^20,power,x^20,20*x^19,Power Rule,3,True,20*x**19,PASS,sympy simplify: difference is exactly 0
+derivative-of-20x-minus-to-minus-the-minus-20,20*x^20,product,20*x^20,400*x^19,Product Rule,3,True,400*x**19,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-20-minus-minus-plus-minus-minus-x-minus-to-minus-the-minus-19,x^20 + x^19,power,x^20 + x^19,19*x^18+20*x^19,Power Rule,2,True,20*x**19 + 19*x**18,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-20-minus-minus-minus-x,x^20 - x,power,x^20 - x,-1+20*x^19,Power Rule,2,True,20*x**19 - 1,PASS,sympy simplify: difference is exactly 0
+derivative-of-sin2x,sin(2*x),trig,sin(2*x),2*cos(2*x),Product Rule,3,True,2*cos(2*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-cos2x,cos(2*x),trig,cos(2*x),-2*sin(2*x),Product Rule,3,True,-2*sin(2*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-tan2x,tan(2*x),trig,tan(2*x),2*sec(2*x)^2,Product Rule,3,True,2*tan(2*x)**2 + 2,PASS,sympy simplify: difference is exactly 0
+derivative-of-2sinx,2*sin(x),trig,2*sin(x),2*cos(x),Product Rule,3,True,2*cos(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-2cosx,2*cos(x),trig,2*cos(x),-2*sin(x),Product Rule,3,True,-2*sin(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin3x,sin(3*x),trig,sin(3*x),3*cos(3*x),Product Rule,3,True,3*cos(3*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-cos3x,cos(3*x),trig,cos(3*x),-3*sin(3*x),Product Rule,3,True,-3*sin(3*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-tan3x,tan(3*x),trig,tan(3*x),3*sec(3*x)^2,Product Rule,3,True,3*tan(3*x)**2 + 3,PASS,sympy simplify: difference is exactly 0
+derivative-of-3sinx,3*sin(x),trig,3*sin(x),3*cos(x),Product Rule,3,True,3*cos(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-3cosx,3*cos(x),trig,3*cos(x),-3*sin(x),Product Rule,3,True,-3*sin(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin4x,sin(4*x),trig,sin(4*x),4*cos(4*x),Product Rule,3,True,4*cos(4*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-cos4x,cos(4*x),trig,cos(4*x),-4*sin(4*x),Product Rule,3,True,-4*sin(4*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-tan4x,tan(4*x),trig,tan(4*x),4*sec(4*x)^2,Product Rule,3,True,4*tan(4*x)**2 + 4,PASS,sympy simplify: difference is exactly 0
+derivative-of-4sinx,4*sin(x),trig,4*sin(x),4*cos(x),Product Rule,3,True,4*cos(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-4cosx,4*cos(x),trig,4*cos(x),-4*sin(x),Product Rule,3,True,-4*sin(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin5x,sin(5*x),trig,sin(5*x),5*cos(5*x),Product Rule,3,True,5*cos(5*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-cos5x,cos(5*x),trig,cos(5*x),-5*sin(5*x),Product Rule,3,True,-5*sin(5*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-tan5x,tan(5*x),trig,tan(5*x),5*sec(5*x)^2,Product Rule,3,True,5*tan(5*x)**2 + 5,PASS,sympy simplify: difference is exactly 0
+derivative-of-5sinx,5*sin(x),trig,5*sin(x),5*cos(x),Product Rule,3,True,5*cos(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-5cosx,5*cos(x),trig,5*cos(x),-5*sin(x),Product Rule,3,True,-5*sin(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin6x,sin(6*x),trig,sin(6*x),6*cos(6*x),Product Rule,3,True,6*cos(6*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-cos6x,cos(6*x),trig,cos(6*x),-6*sin(6*x),Product Rule,3,True,-6*sin(6*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-tan6x,tan(6*x),trig,tan(6*x),6*sec(6*x)^2,Product Rule,3,True,6*tan(6*x)**2 + 6,PASS,sympy simplify: difference is exactly 0
+derivative-of-6sinx,6*sin(x),trig,6*sin(x),6*cos(x),Product Rule,3,True,6*cos(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-6cosx,6*cos(x),trig,6*cos(x),-6*sin(x),Product Rule,3,True,-6*sin(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin7x,sin(7*x),trig,sin(7*x),7*cos(7*x),Product Rule,3,True,7*cos(7*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-cos7x,cos(7*x),trig,cos(7*x),-7*sin(7*x),Product Rule,3,True,-7*sin(7*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-tan7x,tan(7*x),trig,tan(7*x),7*sec(7*x)^2,Product Rule,3,True,7*tan(7*x)**2 + 7,PASS,sympy simplify: difference is exactly 0
+derivative-of-7sinx,7*sin(x),trig,7*sin(x),7*cos(x),Product Rule,3,True,7*cos(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-7cosx,7*cos(x),trig,7*cos(x),-7*sin(x),Product Rule,3,True,-7*sin(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin8x,sin(8*x),trig,sin(8*x),8*cos(8*x),Product Rule,3,True,8*cos(8*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-cos8x,cos(8*x),trig,cos(8*x),-8*sin(8*x),Product Rule,3,True,-8*sin(8*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-tan8x,tan(8*x),trig,tan(8*x),8*sec(8*x)^2,Product Rule,3,True,8*tan(8*x)**2 + 8,PASS,sympy simplify: difference is exactly 0
+derivative-of-8sinx,8*sin(x),trig,8*sin(x),8*cos(x),Product Rule,3,True,8*cos(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-8cosx,8*cos(x),trig,8*cos(x),-8*sin(x),Product Rule,3,True,-8*sin(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin9x,sin(9*x),trig,sin(9*x),9*cos(9*x),Product Rule,3,True,9*cos(9*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-cos9x,cos(9*x),trig,cos(9*x),-9*sin(9*x),Product Rule,3,True,-9*sin(9*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-tan9x,tan(9*x),trig,tan(9*x),9*sec(9*x)^2,Product Rule,3,True,9*tan(9*x)**2 + 9,PASS,sympy simplify: difference is exactly 0
+derivative-of-9sinx,9*sin(x),trig,9*sin(x),9*cos(x),Product Rule,3,True,9*cos(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-9cosx,9*cos(x),trig,9*cos(x),-9*sin(x),Product Rule,3,True,-9*sin(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin10x,sin(10*x),trig,sin(10*x),10*cos(10*x),Product Rule,3,True,10*cos(10*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-cos10x,cos(10*x),trig,cos(10*x),-10*sin(10*x),Product Rule,3,True,-10*sin(10*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-tan10x,tan(10*x),trig,tan(10*x),10*sec(10*x)^2,Product Rule,3,True,10*tan(10*x)**2 + 10,PASS,sympy simplify: difference is exactly 0
+derivative-of-10sinx,10*sin(x),trig,10*sin(x),10*cos(x),Product Rule,3,True,10*cos(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-10cosx,10*cos(x),trig,10*cos(x),-10*sin(x),Product Rule,3,True,-10*sin(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin11x,sin(11*x),trig,sin(11*x),11*cos(11*x),Product Rule,3,True,11*cos(11*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-cos11x,cos(11*x),trig,cos(11*x),-11*sin(11*x),Product Rule,3,True,-11*sin(11*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-tan11x,tan(11*x),trig,tan(11*x),11*sec(11*x)^2,Product Rule,3,True,11*tan(11*x)**2 + 11,PASS,sympy simplify: difference is exactly 0
+derivative-of-11sinx,11*sin(x),trig,11*sin(x),11*cos(x),Product Rule,3,True,11*cos(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-11cosx,11*cos(x),trig,11*cos(x),-11*sin(x),Product Rule,3,True,-11*sin(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin12x,sin(12*x),trig,sin(12*x),12*cos(12*x),Product Rule,3,True,12*cos(12*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-cos12x,cos(12*x),trig,cos(12*x),-12*sin(12*x),Product Rule,3,True,-12*sin(12*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-tan12x,tan(12*x),trig,tan(12*x),12*sec(12*x)^2,Product Rule,3,True,12*tan(12*x)**2 + 12,PASS,sympy simplify: difference is exactly 0
+derivative-of-12sinx,12*sin(x),trig,12*sin(x),12*cos(x),Product Rule,3,True,12*cos(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-12cosx,12*cos(x),trig,12*cos(x),-12*sin(x),Product Rule,3,True,-12*sin(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin13x,sin(13*x),trig,sin(13*x),13*cos(13*x),Product Rule,3,True,13*cos(13*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-cos13x,cos(13*x),trig,cos(13*x),-13*sin(13*x),Product Rule,3,True,-13*sin(13*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-tan13x,tan(13*x),trig,tan(13*x),13*sec(13*x)^2,Product Rule,3,True,13*tan(13*x)**2 + 13,PASS,sympy simplify: difference is exactly 0
+derivative-of-13sinx,13*sin(x),trig,13*sin(x),13*cos(x),Product Rule,3,True,13*cos(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-13cosx,13*cos(x),trig,13*cos(x),-13*sin(x),Product Rule,3,True,-13*sin(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin14x,sin(14*x),trig,sin(14*x),14*cos(14*x),Product Rule,3,True,14*cos(14*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-cos14x,cos(14*x),trig,cos(14*x),-14*sin(14*x),Product Rule,3,True,-14*sin(14*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-tan14x,tan(14*x),trig,tan(14*x),14*sec(14*x)^2,Product Rule,3,True,14*tan(14*x)**2 + 14,PASS,sympy simplify: difference is exactly 0
+derivative-of-14sinx,14*sin(x),trig,14*sin(x),14*cos(x),Product Rule,3,True,14*cos(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-14cosx,14*cos(x),trig,14*cos(x),-14*sin(x),Product Rule,3,True,-14*sin(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin15x,sin(15*x),trig,sin(15*x),15*cos(15*x),Product Rule,3,True,15*cos(15*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-cos15x,cos(15*x),trig,cos(15*x),-15*sin(15*x),Product Rule,3,True,-15*sin(15*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-tan15x,tan(15*x),trig,tan(15*x),15*sec(15*x)^2,Product Rule,3,True,15*tan(15*x)**2 + 15,PASS,sympy simplify: difference is exactly 0
+derivative-of-15sinx,15*sin(x),trig,15*sin(x),15*cos(x),Product Rule,3,True,15*cos(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-15cosx,15*cos(x),trig,15*cos(x),-15*sin(x),Product Rule,3,True,-15*sin(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-2x,e^(2*x),exponential,e^(2*x),2*e^(2*x),Product Rule,3,True,2*exp(2*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-2-minus-to-minus-the-minus-x,2^x,exponential,2^x,2^x*log(2),Power Rule,2,True,2**x*log(2),PASS,sympy simplify: difference is exactly 0
+derivative-of-xe-minus-to-minus-the-minus-2x,x*e^(2*x),exponential,x*e^(2*x),2*e^(2*x)*x+e^(2*x),Product Rule,3,True,2*x*exp(2*x) + exp(2*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-3x,e^(3*x),exponential,e^(3*x),3*e^(3*x),Product Rule,3,True,3*exp(3*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-3-minus-to-minus-the-minus-x,3^x,exponential,3^x,3^x*log(3),Power Rule,2,True,3**x*log(3),PASS,sympy simplify: difference is exactly 0
+derivative-of-xe-minus-to-minus-the-minus-3x,x*e^(3*x),exponential,x*e^(3*x),3*e^(3*x)*x+e^(3*x),Product Rule,3,True,3*x*exp(3*x) + exp(3*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-4x,e^(4*x),exponential,e^(4*x),4*e^(4*x),Product Rule,3,True,4*exp(4*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-4-minus-to-minus-the-minus-x,4^x,exponential,4^x,4^x*log(4),Power Rule,2,True,4**x*log(4),PASS,sympy simplify: difference is exactly 0
+derivative-of-xe-minus-to-minus-the-minus-4x,x*e^(4*x),exponential,x*e^(4*x),4*e^(4*x)*x+e^(4*x),Product Rule,3,True,4*x*exp(4*x) + exp(4*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-5x,e^(5*x),exponential,e^(5*x),5*e^(5*x),Product Rule,3,True,5*exp(5*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-5-minus-to-minus-the-minus-x,5^x,exponential,5^x,5^x*log(5),Power Rule,2,True,5**x*log(5),PASS,sympy simplify: difference is exactly 0
+derivative-of-xe-minus-to-minus-the-minus-5x,x*e^(5*x),exponential,x*e^(5*x),5*e^(5*x)*x+e^(5*x),Product Rule,3,True,5*x*exp(5*x) + exp(5*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-6x,e^(6*x),exponential,e^(6*x),6*e^(6*x),Product Rule,3,True,6*exp(6*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-6-minus-to-minus-the-minus-x,6^x,exponential,6^x,6^x*log(6),Power Rule,2,True,6**x*log(6),PASS,sympy simplify: difference is exactly 0
+derivative-of-xe-minus-to-minus-the-minus-6x,x*e^(6*x),exponential,x*e^(6*x),6*e^(6*x)*x+e^(6*x),Product Rule,3,True,6*x*exp(6*x) + exp(6*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-7x,e^(7*x),exponential,e^(7*x),7*e^(7*x),Product Rule,3,True,7*exp(7*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-7-minus-to-minus-the-minus-x,7^x,exponential,7^x,7^x*log(7),Power Rule,2,True,7**x*log(7),PASS,sympy simplify: difference is exactly 0
+derivative-of-xe-minus-to-minus-the-minus-7x,x*e^(7*x),exponential,x*e^(7*x),7*e^(7*x)*x+e^(7*x),Product Rule,3,True,7*x*exp(7*x) + exp(7*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-8x,e^(8*x),exponential,e^(8*x),8*e^(8*x),Product Rule,3,True,8*exp(8*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-8-minus-to-minus-the-minus-x,8^x,exponential,8^x,8^x*log(8),Power Rule,2,True,8**x*log(8),PASS,sympy simplify: difference is exactly 0
+derivative-of-xe-minus-to-minus-the-minus-8x,x*e^(8*x),exponential,x*e^(8*x),8*e^(8*x)*x+e^(8*x),Product Rule,3,True,8*x*exp(8*x) + exp(8*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-9x,e^(9*x),exponential,e^(9*x),9*e^(9*x),Product Rule,3,True,9*exp(9*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-9-minus-to-minus-the-minus-x,9^x,exponential,9^x,9^x*log(9),Power Rule,2,True,9**x*log(9),PASS,sympy simplify: difference is exactly 0
+derivative-of-xe-minus-to-minus-the-minus-9x,x*e^(9*x),exponential,x*e^(9*x),9*e^(9*x)*x+e^(9*x),Product Rule,3,True,9*x*exp(9*x) + exp(9*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-10x,e^(10*x),exponential,e^(10*x),10*e^(10*x),Product Rule,3,True,10*exp(10*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-10-minus-to-minus-the-minus-x,10^x,exponential,10^x,10^x*log(10),Power Rule,2,True,10**x*log(10),PASS,sympy simplify: difference is exactly 0
+derivative-of-xe-minus-to-minus-the-minus-10x,x*e^(10*x),exponential,x*e^(10*x),10*e^(10*x)*x+e^(10*x),Product Rule,3,True,10*x*exp(10*x) + exp(10*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-11x,e^(11*x),exponential,e^(11*x),11*e^(11*x),Product Rule,3,True,11*exp(11*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-11-minus-to-minus-the-minus-x,11^x,exponential,11^x,11^x*log(11),Power Rule,2,True,11**x*log(11),PASS,sympy simplify: difference is exactly 0
+derivative-of-xe-minus-to-minus-the-minus-11x,x*e^(11*x),exponential,x*e^(11*x),11*e^(11*x)*x+e^(11*x),Product Rule,3,True,11*x*exp(11*x) + exp(11*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-12x,e^(12*x),exponential,e^(12*x),12*e^(12*x),Product Rule,3,True,12*exp(12*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-12-minus-to-minus-the-minus-x,12^x,exponential,12^x,12^x*log(12),Power Rule,2,True,12**x*log(12),PASS,sympy simplify: difference is exactly 0
+derivative-of-xe-minus-to-minus-the-minus-12x,x*e^(12*x),exponential,x*e^(12*x),12*e^(12*x)*x+e^(12*x),Product Rule,3,True,12*x*exp(12*x) + exp(12*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-13x,e^(13*x),exponential,e^(13*x),13*e^(13*x),Product Rule,3,True,13*exp(13*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-13-minus-to-minus-the-minus-x,13^x,exponential,13^x,13^x*log(13),Power Rule,2,True,13**x*log(13),PASS,sympy simplify: difference is exactly 0
+derivative-of-xe-minus-to-minus-the-minus-13x,x*e^(13*x),exponential,x*e^(13*x),13*e^(13*x)*x+e^(13*x),Product Rule,3,True,13*x*exp(13*x) + exp(13*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-14x,e^(14*x),exponential,e^(14*x),14*e^(14*x),Product Rule,3,True,14*exp(14*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-14-minus-to-minus-the-minus-x,14^x,exponential,14^x,14^x*log(14),Power Rule,2,True,14**x*log(14),PASS,sympy simplify: difference is exactly 0
+derivative-of-xe-minus-to-minus-the-minus-14x,x*e^(14*x),exponential,x*e^(14*x),14*e^(14*x)*x+e^(14*x),Product Rule,3,True,14*x*exp(14*x) + exp(14*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-15x,e^(15*x),exponential,e^(15*x),15*e^(15*x),Product Rule,3,True,15*exp(15*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-15-minus-to-minus-the-minus-x,15^x,exponential,15^x,15^x*log(15),Power Rule,2,True,15**x*log(15),PASS,sympy simplify: difference is exactly 0
+derivative-of-xe-minus-to-minus-the-minus-15x,x*e^(15*x),exponential,x*e^(15*x),15*e^(15*x)*x+e^(15*x),Product Rule,3,True,15*x*exp(15*x) + exp(15*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-ln2x,ln(2*x),ln,log(2*x),x^(-1),Product Rule,3,True,1/x,PASS,sympy simplify: difference is exactly 0
+derivative-of-xln2x,x*ln(2*x),ln,x*log(2*x),1+log(2*x),Product Rule,3,True,log(2*x) + 1,PASS,sympy simplify: difference is exactly 0
+derivative-of-ln3x,ln(3*x),ln,log(3*x),x^(-1),Product Rule,3,True,1/x,PASS,sympy simplify: difference is exactly 0
+derivative-of-xln3x,x*ln(3*x),ln,x*log(3*x),1+log(3*x),Product Rule,3,True,log(3*x) + 1,PASS,sympy simplify: difference is exactly 0
+derivative-of-ln4x,ln(4*x),ln,log(4*x),x^(-1),Product Rule,3,True,1/x,PASS,sympy simplify: difference is exactly 0
+derivative-of-xln4x,x*ln(4*x),ln,x*log(4*x),1+log(4*x),Product Rule,3,True,log(4*x) + 1,PASS,sympy simplify: difference is exactly 0
+derivative-of-ln5x,ln(5*x),ln,log(5*x),x^(-1),Product Rule,3,True,1/x,PASS,sympy simplify: difference is exactly 0
+derivative-of-xln5x,x*ln(5*x),ln,x*log(5*x),1+log(5*x),Product Rule,3,True,log(5*x) + 1,PASS,sympy simplify: difference is exactly 0
+derivative-of-ln6x,ln(6*x),ln,log(6*x),x^(-1),Product Rule,3,True,1/x,PASS,sympy simplify: difference is exactly 0
+derivative-of-xln6x,x*ln(6*x),ln,x*log(6*x),1+log(6*x),Product Rule,3,True,log(6*x) + 1,PASS,sympy simplify: difference is exactly 0
+derivative-of-ln7x,ln(7*x),ln,log(7*x),x^(-1),Product Rule,3,True,1/x,PASS,sympy simplify: difference is exactly 0
+derivative-of-xln7x,x*ln(7*x),ln,x*log(7*x),1+log(7*x),Product Rule,3,True,log(7*x) + 1,PASS,sympy simplify: difference is exactly 0
+derivative-of-ln8x,ln(8*x),ln,log(8*x),x^(-1),Product Rule,3,True,1/x,PASS,sympy simplify: difference is exactly 0
+derivative-of-xln8x,x*ln(8*x),ln,x*log(8*x),1+log(8*x),Product Rule,3,True,log(8*x) + 1,PASS,sympy simplify: difference is exactly 0
+derivative-of-ln9x,ln(9*x),ln,log(9*x),x^(-1),Product Rule,3,True,1/x,PASS,sympy simplify: difference is exactly 0
+derivative-of-xln9x,x*ln(9*x),ln,x*log(9*x),1+log(9*x),Product Rule,3,True,log(9*x) + 1,PASS,sympy simplify: difference is exactly 0
+derivative-of-ln10x,ln(10*x),ln,log(10*x),x^(-1),Product Rule,3,True,1/x,PASS,sympy simplify: difference is exactly 0
+derivative-of-xln10x,x*ln(10*x),ln,x*log(10*x),1+log(10*x),Product Rule,3,True,log(10*x) + 1,PASS,sympy simplify: difference is exactly 0
+derivative-of-ln11x,ln(11*x),ln,log(11*x),x^(-1),Product Rule,3,True,1/x,PASS,sympy simplify: difference is exactly 0
+derivative-of-xln11x,x*ln(11*x),ln,x*log(11*x),1+log(11*x),Product Rule,3,True,log(11*x) + 1,PASS,sympy simplify: difference is exactly 0
+derivative-of-ln12x,ln(12*x),ln,log(12*x),x^(-1),Product Rule,3,True,1/x,PASS,sympy simplify: difference is exactly 0
+derivative-of-xln12x,x*ln(12*x),ln,x*log(12*x),1+log(12*x),Product Rule,3,True,log(12*x) + 1,PASS,sympy simplify: difference is exactly 0
+derivative-of-ln13x,ln(13*x),ln,log(13*x),x^(-1),Product Rule,3,True,1/x,PASS,sympy simplify: difference is exactly 0
+derivative-of-xln13x,x*ln(13*x),ln,x*log(13*x),1+log(13*x),Product Rule,3,True,log(13*x) + 1,PASS,sympy simplify: difference is exactly 0
+derivative-of-ln14x,ln(14*x),ln,log(14*x),x^(-1),Product Rule,3,True,1/x,PASS,sympy simplify: difference is exactly 0
+derivative-of-xln14x,x*ln(14*x),ln,x*log(14*x),1+log(14*x),Product Rule,3,True,log(14*x) + 1,PASS,sympy simplify: difference is exactly 0
+derivative-of-ln15x,ln(15*x),ln,log(15*x),x^(-1),Product Rule,3,True,1/x,PASS,sympy simplify: difference is exactly 0
+derivative-of-xln15x,x*ln(15*x),ln,x*log(15*x),1+log(15*x),Product Rule,3,True,log(15*x) + 1,PASS,sympy simplify: difference is exactly 0
+derivative-of-1-minus-over-minus-x-minus-to-minus-the-minus-2,1/x^2,quotient,1/x^2,-2*x^(-3),Quotient Rule,3,True,-2/x**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-2-minus-over-minus-x,2/x,quotient,2/x,-2*x^(-2),Quotient Rule,3,True,-2/x**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-1-minus-over-minus-x-minus-to-minus-the-minus-3,1/x^3,quotient,1/x^3,-3*x^(-4),Quotient Rule,3,True,-3/x**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-3-minus-over-minus-x,3/x,quotient,3/x,-3*x^(-2),Quotient Rule,3,True,-3/x**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-1-minus-over-minus-x-minus-to-minus-the-minus-4,1/x^4,quotient,1/x^4,-4*x^(-5),Quotient Rule,3,True,-4/x**5,PASS,sympy simplify: difference is exactly 0
+derivative-of-4-minus-over-minus-x,4/x,quotient,4/x,-4*x^(-2),Quotient Rule,3,True,-4/x**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-1-minus-over-minus-x-minus-to-minus-the-minus-5,1/x^5,quotient,1/x^5,-5*x^(-6),Quotient Rule,3,True,-5/x**6,PASS,sympy simplify: difference is exactly 0
+derivative-of-5-minus-over-minus-x,5/x,quotient,5/x,-5*x^(-2),Quotient Rule,3,True,-5/x**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-1-minus-over-minus-x-minus-to-minus-the-minus-6,1/x^6,quotient,1/x^6,-6*x^(-7),Quotient Rule,3,True,-6/x**7,PASS,sympy simplify: difference is exactly 0
+derivative-of-6-minus-over-minus-x,6/x,quotient,6/x,-6*x^(-2),Quotient Rule,3,True,-6/x**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-1-minus-over-minus-x-minus-to-minus-the-minus-7,1/x^7,quotient,1/x^7,-7*x^(-8),Quotient Rule,3,True,-7/x**8,PASS,sympy simplify: difference is exactly 0
+derivative-of-7-minus-over-minus-x,7/x,quotient,7/x,-7*x^(-2),Quotient Rule,3,True,-7/x**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-1-minus-over-minus-x-minus-to-minus-the-minus-8,1/x^8,quotient,1/x^8,-8*x^(-9),Quotient Rule,3,True,-8/x**9,PASS,sympy simplify: difference is exactly 0
+derivative-of-8-minus-over-minus-x,8/x,quotient,8/x,-8*x^(-2),Quotient Rule,3,True,-8/x**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-1-minus-over-minus-x-minus-to-minus-the-minus-9,1/x^9,quotient,1/x^9,-9*x^(-10),Quotient Rule,3,True,-9/x**10,PASS,sympy simplify: difference is exactly 0
+derivative-of-9-minus-over-minus-x,9/x,quotient,9/x,-9*x^(-2),Quotient Rule,3,True,-9/x**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-1-minus-over-minus-x-minus-to-minus-the-minus-10,1/x^10,quotient,1/x^10,-10*x^(-11),Quotient Rule,3,True,-10/x**11,PASS,sympy simplify: difference is exactly 0
+derivative-of-10-minus-over-minus-x,10/x,quotient,10/x,-10*x^(-2),Quotient Rule,3,True,-10/x**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-sqrt2x,sqrt(2*x),product,sqrt(2*x),(1/2)*sqrt(2)*x^(-1/2),Product Rule,3,True,sqrt(2)/(2*sqrt(x)),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-1-minus-over-minus-2,x^(1/2),quotient,x^(1/2),(1/2)*x^(-1/2),Quotient Rule,3,True,1/(2*sqrt(x)),PASS,sympy simplify: difference is exactly 0
+derivative-of-sqrt3x,sqrt(3*x),product,sqrt(3*x),(1/2)*sqrt(3)*x^(-1/2),Product Rule,3,True,sqrt(3)/(2*sqrt(x)),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-1-minus-over-minus-3,x^(1/3),quotient,x^(1/3),(1/3)*x^(-2/3),Quotient Rule,3,True,1/(3*x**(2/3)),PASS,sympy simplify: difference is exactly 0
+derivative-of-sqrt4x,sqrt(4*x),product,sqrt(4*x),x^(-1/2),Product Rule,3,True,1/sqrt(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-1-minus-over-minus-4,x^(1/4),quotient,x^(1/4),(1/4)*x^(-3/4),Quotient Rule,3,True,1/(4*x**(3/4)),PASS,sympy simplify: difference is exactly 0
+derivative-of-sqrt5x,sqrt(5*x),product,sqrt(5*x),(1/2)*sqrt(5)*x^(-1/2),Product Rule,3,True,sqrt(5)/(2*sqrt(x)),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-1-minus-over-minus-5,x^(1/5),quotient,x^(1/5),(1/5)*x^(-4/5),Quotient Rule,3,True,1/(5*x**(4/5)),PASS,sympy simplify: difference is exactly 0
+derivative-of-sqrt6x,sqrt(6*x),product,sqrt(6*x),(1/2)*sqrt(6)*x^(-1/2),Product Rule,3,True,sqrt(6)/(2*sqrt(x)),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-1-minus-over-minus-6,x^(1/6),quotient,x^(1/6),(1/6)*x^(-5/6),Quotient Rule,3,True,1/(6*x**(5/6)),PASS,sympy simplify: difference is exactly 0
+derivative-of-sqrt7x,sqrt(7*x),product,sqrt(7*x),(1/2)*sqrt(7)*x^(-1/2),Product Rule,3,True,sqrt(7)/(2*sqrt(x)),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-1-minus-over-minus-7,x^(1/7),quotient,x^(1/7),(1/7)*x^(-6/7),Quotient Rule,3,True,1/(7*x**(6/7)),PASS,sympy simplify: difference is exactly 0
+derivative-of-sqrt8x,sqrt(8*x),product,sqrt(8*x),sqrt(2)*x^(-1/2),Product Rule,3,True,sqrt(2)/sqrt(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-1-minus-over-minus-8,x^(1/8),quotient,x^(1/8),(1/8)*x^(-7/8),Quotient Rule,3,True,1/(8*x**(7/8)),PASS,sympy simplify: difference is exactly 0
+derivative-of-sqrt9x,sqrt(9*x),product,sqrt(9*x),(3/2)*x^(-1/2),Product Rule,3,True,3/(2*sqrt(x)),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-1-minus-over-minus-9,x^(1/9),quotient,x^(1/9),(1/9)*x^(-8/9),Quotient Rule,3,True,1/(9*x**(8/9)),PASS,sympy simplify: difference is exactly 0
+derivative-of-sqrt10x,sqrt(10*x),product,sqrt(10*x),(1/2)*sqrt(10)*x^(-1/2),Product Rule,3,True,sqrt(10)/(2*sqrt(x)),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-1-minus-over-minus-10,x^(1/10),quotient,x^(1/10),(1/10)*x^(-9/10),Quotient Rule,3,True,1/(10*x**(9/10)),PASS,sympy simplify: difference is exactly 0
+derivative-of-asin2x,asin(2*x),inverse-trig,asin(2*x),2*sqrt(-4*x^2+1)^(-1),Product Rule,3,True,2/sqrt(1 - 4*x**2),PASS,sympy simplify: difference is exactly 0
+derivative-of-atan2x,atan(2*x),inverse-trig,atan(2*x),2*(1+4*x^2)^(-1),Product Rule,3,True,2/(4*x**2 + 1),PASS,sympy simplify: difference is exactly 0
+derivative-of-asin3x,asin(3*x),inverse-trig,asin(3*x),3*sqrt(-9*x^2+1)^(-1),Product Rule,3,True,3/sqrt(1 - 9*x**2),PASS,sympy simplify: difference is exactly 0
+derivative-of-atan3x,atan(3*x),inverse-trig,atan(3*x),3*(1+9*x^2)^(-1),Product Rule,3,True,3/(9*x**2 + 1),PASS,sympy simplify: difference is exactly 0
+derivative-of-asin4x,asin(4*x),inverse-trig,asin(4*x),4*sqrt(-16*x^2+1)^(-1),Product Rule,3,True,4/sqrt(1 - 16*x**2),PASS,sympy simplify: difference is exactly 0
+derivative-of-atan4x,atan(4*x),inverse-trig,atan(4*x),4*(1+16*x^2)^(-1),Product Rule,3,True,4/(16*x**2 + 1),PASS,sympy simplify: difference is exactly 0
+derivative-of-asin5x,asin(5*x),inverse-trig,asin(5*x),5*sqrt(-25*x^2+1)^(-1),Product Rule,3,True,5/sqrt(1 - 25*x**2),PASS,sympy simplify: difference is exactly 0
+derivative-of-atan5x,atan(5*x),inverse-trig,atan(5*x),5*(1+25*x^2)^(-1),Product Rule,3,True,5/(25*x**2 + 1),PASS,sympy simplify: difference is exactly 0
+derivative-of-asin6x,asin(6*x),inverse-trig,asin(6*x),6*sqrt(-36*x^2+1)^(-1),Product Rule,3,True,6/sqrt(1 - 36*x**2),PASS,sympy simplify: difference is exactly 0
+derivative-of-atan6x,atan(6*x),inverse-trig,atan(6*x),6*(1+36*x^2)^(-1),Product Rule,3,True,6/(36*x**2 + 1),PASS,sympy simplify: difference is exactly 0
+derivative-of-asin7x,asin(7*x),inverse-trig,asin(7*x),7*sqrt(-49*x^2+1)^(-1),Product Rule,3,True,7/sqrt(1 - 49*x**2),PASS,sympy simplify: difference is exactly 0
+derivative-of-atan7x,atan(7*x),inverse-trig,atan(7*x),7*(1+49*x^2)^(-1),Product Rule,3,True,7/(49*x**2 + 1),PASS,sympy simplify: difference is exactly 0
+derivative-of-asin8x,asin(8*x),inverse-trig,asin(8*x),8*sqrt(-64*x^2+1)^(-1),Product Rule,3,True,8/sqrt(1 - 64*x**2),PASS,sympy simplify: difference is exactly 0
+derivative-of-atan8x,atan(8*x),inverse-trig,atan(8*x),8*(1+64*x^2)^(-1),Product Rule,3,True,8/(64*x**2 + 1),PASS,sympy simplify: difference is exactly 0
+derivative-of-asin9x,asin(9*x),inverse-trig,asin(9*x),9*sqrt(-81*x^2+1)^(-1),Product Rule,3,True,9/sqrt(1 - 81*x**2),PASS,sympy simplify: difference is exactly 0
+derivative-of-atan9x,atan(9*x),inverse-trig,atan(9*x),9*(1+81*x^2)^(-1),Product Rule,3,True,9/(81*x**2 + 1),PASS,sympy simplify: difference is exactly 0
+derivative-of-asin10x,asin(10*x),inverse-trig,asin(10*x),10*sqrt(-100*x^2+1)^(-1),Product Rule,3,True,10/sqrt(1 - 100*x**2),PASS,sympy simplify: difference is exactly 0
+derivative-of-atan10x,atan(10*x),inverse-trig,atan(10*x),10*(1+100*x^2)^(-1),Product Rule,3,True,10/(100*x**2 + 1),PASS,sympy simplify: difference is exactly 0
+derivative-of-sinh2x,sinh(2*x),trig,sinh(2*x),2*cosh(2*x),Product Rule,3,True,2*cosh(2*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-cosh2x,cosh(2*x),trig,cosh(2*x),2*sinh(2*x),Product Rule,3,True,2*sinh(2*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sinh3x,sinh(3*x),trig,sinh(3*x),3*cosh(3*x),Product Rule,3,True,3*cosh(3*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-cosh3x,cosh(3*x),trig,cosh(3*x),3*sinh(3*x),Product Rule,3,True,3*sinh(3*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sinh4x,sinh(4*x),trig,sinh(4*x),4*cosh(4*x),Product Rule,3,True,4*cosh(4*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-cosh4x,cosh(4*x),trig,cosh(4*x),4*sinh(4*x),Product Rule,3,True,4*sinh(4*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sinh5x,sinh(5*x),trig,sinh(5*x),5*cosh(5*x),Product Rule,3,True,5*cosh(5*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-cosh5x,cosh(5*x),trig,cosh(5*x),5*sinh(5*x),Product Rule,3,True,5*sinh(5*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sinh6x,sinh(6*x),trig,sinh(6*x),6*cosh(6*x),Product Rule,3,True,6*cosh(6*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-cosh6x,cosh(6*x),trig,cosh(6*x),6*sinh(6*x),Product Rule,3,True,6*sinh(6*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sinh7x,sinh(7*x),trig,sinh(7*x),7*cosh(7*x),Product Rule,3,True,7*cosh(7*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-cosh7x,cosh(7*x),trig,cosh(7*x),7*sinh(7*x),Product Rule,3,True,7*sinh(7*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sinh8x,sinh(8*x),trig,sinh(8*x),8*cosh(8*x),Product Rule,3,True,8*cosh(8*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-cosh8x,cosh(8*x),trig,cosh(8*x),8*sinh(8*x),Product Rule,3,True,8*sinh(8*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sinh9x,sinh(9*x),trig,sinh(9*x),9*cosh(9*x),Product Rule,3,True,9*cosh(9*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-cosh9x,cosh(9*x),trig,cosh(9*x),9*sinh(9*x),Product Rule,3,True,9*sinh(9*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sinh10x,sinh(10*x),trig,sinh(10*x),10*cosh(10*x),Product Rule,3,True,10*cosh(10*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-cosh10x,cosh(10*x),trig,cosh(10*x),10*sinh(10*x),Product Rule,3,True,10*sinh(10*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-2sinx,x^2*sin(x),trig,x^2*sin(x),2*sin(x)*x+cos(x)*x^2,Product Rule,3,True,x**2*cos(x) + 2*x*sin(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-2cosx,x^2*cos(x),trig,x^2*cos(x),-sin(x)*x^2+2*cos(x)*x,Product Rule,3,True,-x**2*sin(x) + 2*x*cos(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-2e-minus-to-minus-the-minus-x,x^2*e^x,exponential,x^2*e^x,2*e^x*x+e^x*x^2,Product Rule,3,True,x**2*exp(x) + 2*x*exp(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sinx-minus-over-minus-x-minus-to-minus-the-minus-2,sin(x)/x^2,trig,sin(x)/x^2,-2*sin(x)*x^(-3)+cos(x)*x^(-2),Quotient Rule,3,True,cos(x)/x**2 - 2*sin(x)/x**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-x-minus-over-minus-x-minus-to-minus-the-minus-2,e^x/x^2,exponential,e^x/x^2,-2*e^x*x^(-3)+e^x*x^(-2),Quotient Rule,3,True,exp(x)/x**2 - 2*exp(x)/x**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-3sinx,x^3*sin(x),trig,x^3*sin(x),3*sin(x)*x^2+cos(x)*x^3,Product Rule,3,True,x**3*cos(x) + 3*x**2*sin(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-3cosx,x^3*cos(x),trig,x^3*cos(x),-sin(x)*x^3+3*cos(x)*x^2,Product Rule,3,True,-x**3*sin(x) + 3*x**2*cos(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-3e-minus-to-minus-the-minus-x,x^3*e^x,exponential,x^3*e^x,3*e^x*x^2+e^x*x^3,Product Rule,3,True,x**3*exp(x) + 3*x**2*exp(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sinx-minus-over-minus-x-minus-to-minus-the-minus-3,sin(x)/x^3,trig,sin(x)/x^3,-3*sin(x)*x^(-4)+cos(x)*x^(-3),Quotient Rule,3,True,cos(x)/x**3 - 3*sin(x)/x**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-x-minus-over-minus-x-minus-to-minus-the-minus-3,e^x/x^3,exponential,e^x/x^3,-3*e^x*x^(-4)+e^x*x^(-3),Quotient Rule,3,True,exp(x)/x**3 - 3*exp(x)/x**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-4sinx,x^4*sin(x),trig,x^4*sin(x),4*sin(x)*x^3+cos(x)*x^4,Product Rule,3,True,x**4*cos(x) + 4*x**3*sin(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-4cosx,x^4*cos(x),trig,x^4*cos(x),-sin(x)*x^4+4*cos(x)*x^3,Product Rule,3,True,-x**4*sin(x) + 4*x**3*cos(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-4e-minus-to-minus-the-minus-x,x^4*e^x,exponential,x^4*e^x,4*e^x*x^3+e^x*x^4,Product Rule,3,True,x**4*exp(x) + 4*x**3*exp(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sinx-minus-over-minus-x-minus-to-minus-the-minus-4,sin(x)/x^4,trig,sin(x)/x^4,-4*sin(x)*x^(-5)+cos(x)*x^(-4),Quotient Rule,3,True,cos(x)/x**4 - 4*sin(x)/x**5,PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-x-minus-over-minus-x-minus-to-minus-the-minus-4,e^x/x^4,exponential,e^x/x^4,-4*e^x*x^(-5)+e^x*x^(-4),Quotient Rule,3,True,exp(x)/x**4 - 4*exp(x)/x**5,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-5sinx,x^5*sin(x),trig,x^5*sin(x),5*sin(x)*x^4+cos(x)*x^5,Product Rule,3,True,x**5*cos(x) + 5*x**4*sin(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-5cosx,x^5*cos(x),trig,x^5*cos(x),-sin(x)*x^5+5*cos(x)*x^4,Product Rule,3,True,-x**5*sin(x) + 5*x**4*cos(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-5e-minus-to-minus-the-minus-x,x^5*e^x,exponential,x^5*e^x,5*e^x*x^4+e^x*x^5,Product Rule,3,True,x**5*exp(x) + 5*x**4*exp(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sinx-minus-over-minus-x-minus-to-minus-the-minus-5,sin(x)/x^5,trig,sin(x)/x^5,-5*sin(x)*x^(-6)+cos(x)*x^(-5),Quotient Rule,3,True,cos(x)/x**5 - 5*sin(x)/x**6,PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-x-minus-over-minus-x-minus-to-minus-the-minus-5,e^x/x^5,exponential,e^x/x^5,-5*e^x*x^(-6)+e^x*x^(-5),Quotient Rule,3,True,exp(x)/x**5 - 5*exp(x)/x**6,PASS,sympy simplify: difference is exactly 0
+derivative-of-sin2x-minus-plus-minus-cos2x,sin(2*x)+cos(2*x),trig,sin(2*x)+cos(2*x),-2*sin(2*x)+2*cos(2*x),Product Rule,3,True,-2*sin(2*x) + 2*cos(2*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-2x-minus-plus-minus-x-minus-to-minus-the-minus-2,e^(2*x)+x^2,exponential,e^(2*x)+x^2,2*e^(2*x)+2*x,Product Rule,3,True,2*x + 2*exp(2*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin2x-minus-plus-minus-cos3x,sin(2*x)+cos(3*x),trig,sin(2*x)+cos(3*x),-3*sin(3*x)+2*cos(2*x),Product Rule,3,True,-3*sin(3*x) + 2*cos(2*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-2x-minus-plus-minus-x-minus-to-minus-the-minus-3,e^(2*x)+x^3,exponential,e^(2*x)+x^3,2*e^(2*x)+3*x^2,Product Rule,3,True,3*x**2 + 2*exp(2*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin2x-minus-plus-minus-cos4x,sin(2*x)+cos(4*x),trig,sin(2*x)+cos(4*x),-4*sin(4*x)+2*cos(2*x),Product Rule,3,True,-4*sin(4*x) + 2*cos(2*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-2x-minus-plus-minus-x-minus-to-minus-the-minus-4,e^(2*x)+x^4,exponential,e^(2*x)+x^4,2*e^(2*x)+4*x^3,Product Rule,3,True,4*x**3 + 2*exp(2*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin2x-minus-plus-minus-cos5x,sin(2*x)+cos(5*x),trig,sin(2*x)+cos(5*x),-5*sin(5*x)+2*cos(2*x),Product Rule,3,True,-5*sin(5*x) + 2*cos(2*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-2x-minus-plus-minus-x-minus-to-minus-the-minus-5,e^(2*x)+x^5,exponential,e^(2*x)+x^5,2*e^(2*x)+5*x^4,Product Rule,3,True,5*x**4 + 2*exp(2*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin3x-minus-plus-minus-cos2x,sin(3*x)+cos(2*x),trig,sin(3*x)+cos(2*x),-2*sin(2*x)+3*cos(3*x),Product Rule,3,True,-2*sin(2*x) + 3*cos(3*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-3x-minus-plus-minus-x-minus-to-minus-the-minus-2,e^(3*x)+x^2,exponential,e^(3*x)+x^2,2*x+3*e^(3*x),Product Rule,3,True,2*x + 3*exp(3*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin3x-minus-plus-minus-cos3x,sin(3*x)+cos(3*x),trig,sin(3*x)+cos(3*x),-3*sin(3*x)+3*cos(3*x),Product Rule,3,True,-3*sin(3*x) + 3*cos(3*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-3x-minus-plus-minus-x-minus-to-minus-the-minus-3,e^(3*x)+x^3,exponential,e^(3*x)+x^3,3*e^(3*x)+3*x^2,Product Rule,3,True,3*x**2 + 3*exp(3*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin3x-minus-plus-minus-cos4x,sin(3*x)+cos(4*x),trig,sin(3*x)+cos(4*x),-4*sin(4*x)+3*cos(3*x),Product Rule,3,True,-4*sin(4*x) + 3*cos(3*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-3x-minus-plus-minus-x-minus-to-minus-the-minus-4,e^(3*x)+x^4,exponential,e^(3*x)+x^4,3*e^(3*x)+4*x^3,Product Rule,3,True,4*x**3 + 3*exp(3*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin3x-minus-plus-minus-cos5x,sin(3*x)+cos(5*x),trig,sin(3*x)+cos(5*x),-5*sin(5*x)+3*cos(3*x),Product Rule,3,True,-5*sin(5*x) + 3*cos(3*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-3x-minus-plus-minus-x-minus-to-minus-the-minus-5,e^(3*x)+x^5,exponential,e^(3*x)+x^5,3*e^(3*x)+5*x^4,Product Rule,3,True,5*x**4 + 3*exp(3*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin4x-minus-plus-minus-cos2x,sin(4*x)+cos(2*x),trig,sin(4*x)+cos(2*x),-2*sin(2*x)+4*cos(4*x),Product Rule,3,True,-2*sin(2*x) + 4*cos(4*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-4x-minus-plus-minus-x-minus-to-minus-the-minus-2,e^(4*x)+x^2,exponential,e^(4*x)+x^2,2*x+4*e^(4*x),Product Rule,3,True,2*x + 4*exp(4*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin4x-minus-plus-minus-cos3x,sin(4*x)+cos(3*x),trig,sin(4*x)+cos(3*x),-3*sin(3*x)+4*cos(4*x),Product Rule,3,True,-3*sin(3*x) + 4*cos(4*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-4x-minus-plus-minus-x-minus-to-minus-the-minus-3,e^(4*x)+x^3,exponential,e^(4*x)+x^3,3*x^2+4*e^(4*x),Product Rule,3,True,3*x**2 + 4*exp(4*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin4x-minus-plus-minus-cos4x,sin(4*x)+cos(4*x),trig,sin(4*x)+cos(4*x),-4*sin(4*x)+4*cos(4*x),Product Rule,3,True,-4*sin(4*x) + 4*cos(4*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-4x-minus-plus-minus-x-minus-to-minus-the-minus-4,e^(4*x)+x^4,exponential,e^(4*x)+x^4,4*e^(4*x)+4*x^3,Product Rule,3,True,4*x**3 + 4*exp(4*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin4x-minus-plus-minus-cos5x,sin(4*x)+cos(5*x),trig,sin(4*x)+cos(5*x),-5*sin(5*x)+4*cos(4*x),Product Rule,3,True,-5*sin(5*x) + 4*cos(4*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-4x-minus-plus-minus-x-minus-to-minus-the-minus-5,e^(4*x)+x^5,exponential,e^(4*x)+x^5,4*e^(4*x)+5*x^4,Product Rule,3,True,5*x**4 + 4*exp(4*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin5x-minus-plus-minus-cos2x,sin(5*x)+cos(2*x),trig,sin(5*x)+cos(2*x),-2*sin(2*x)+5*cos(5*x),Product Rule,3,True,-2*sin(2*x) + 5*cos(5*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-5x-minus-plus-minus-x-minus-to-minus-the-minus-2,e^(5*x)+x^2,exponential,e^(5*x)+x^2,2*x+5*e^(5*x),Product Rule,3,True,2*x + 5*exp(5*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin5x-minus-plus-minus-cos3x,sin(5*x)+cos(3*x),trig,sin(5*x)+cos(3*x),-3*sin(3*x)+5*cos(5*x),Product Rule,3,True,-3*sin(3*x) + 5*cos(5*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-5x-minus-plus-minus-x-minus-to-minus-the-minus-3,e^(5*x)+x^3,exponential,e^(5*x)+x^3,3*x^2+5*e^(5*x),Product Rule,3,True,3*x**2 + 5*exp(5*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin5x-minus-plus-minus-cos4x,sin(5*x)+cos(4*x),trig,sin(5*x)+cos(4*x),-4*sin(4*x)+5*cos(5*x),Product Rule,3,True,-4*sin(4*x) + 5*cos(5*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-5x-minus-plus-minus-x-minus-to-minus-the-minus-4,e^(5*x)+x^4,exponential,e^(5*x)+x^4,4*x^3+5*e^(5*x),Product Rule,3,True,4*x**3 + 5*exp(5*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin5x-minus-plus-minus-cos5x,sin(5*x)+cos(5*x),trig,sin(5*x)+cos(5*x),-5*sin(5*x)+5*cos(5*x),Product Rule,3,True,-5*sin(5*x) + 5*cos(5*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-5x-minus-plus-minus-x-minus-to-minus-the-minus-5,e^(5*x)+x^5,exponential,e^(5*x)+x^5,5*e^(5*x)+5*x^4,Product Rule,3,True,5*x**4 + 5*exp(5*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin6x-minus-plus-minus-cos2x,sin(6*x)+cos(2*x),trig,sin(6*x)+cos(2*x),-2*sin(2*x)+6*cos(6*x),Product Rule,3,True,-2*sin(2*x) + 6*cos(6*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-6x-minus-plus-minus-x-minus-to-minus-the-minus-2,e^(6*x)+x^2,exponential,e^(6*x)+x^2,2*x+6*e^(6*x),Product Rule,3,True,2*x + 6*exp(6*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin6x-minus-plus-minus-cos3x,sin(6*x)+cos(3*x),trig,sin(6*x)+cos(3*x),-3*sin(3*x)+6*cos(6*x),Product Rule,3,True,-3*sin(3*x) + 6*cos(6*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-6x-minus-plus-minus-x-minus-to-minus-the-minus-3,e^(6*x)+x^3,exponential,e^(6*x)+x^3,3*x^2+6*e^(6*x),Product Rule,3,True,3*x**2 + 6*exp(6*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin6x-minus-plus-minus-cos4x,sin(6*x)+cos(4*x),trig,sin(6*x)+cos(4*x),-4*sin(4*x)+6*cos(6*x),Product Rule,3,True,-4*sin(4*x) + 6*cos(6*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-6x-minus-plus-minus-x-minus-to-minus-the-minus-4,e^(6*x)+x^4,exponential,e^(6*x)+x^4,4*x^3+6*e^(6*x),Product Rule,3,True,4*x**3 + 6*exp(6*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin6x-minus-plus-minus-cos5x,sin(6*x)+cos(5*x),trig,sin(6*x)+cos(5*x),-5*sin(5*x)+6*cos(6*x),Product Rule,3,True,-5*sin(5*x) + 6*cos(6*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-6x-minus-plus-minus-x-minus-to-minus-the-minus-5,e^(6*x)+x^5,exponential,e^(6*x)+x^5,5*x^4+6*e^(6*x),Product Rule,3,True,5*x**4 + 6*exp(6*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin7x-minus-plus-minus-cos2x,sin(7*x)+cos(2*x),trig,sin(7*x)+cos(2*x),-2*sin(2*x)+7*cos(7*x),Product Rule,3,True,-2*sin(2*x) + 7*cos(7*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-7x-minus-plus-minus-x-minus-to-minus-the-minus-2,e^(7*x)+x^2,exponential,e^(7*x)+x^2,2*x+7*e^(7*x),Product Rule,3,True,2*x + 7*exp(7*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin7x-minus-plus-minus-cos3x,sin(7*x)+cos(3*x),trig,sin(7*x)+cos(3*x),-3*sin(3*x)+7*cos(7*x),Product Rule,3,True,-3*sin(3*x) + 7*cos(7*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-7x-minus-plus-minus-x-minus-to-minus-the-minus-3,e^(7*x)+x^3,exponential,e^(7*x)+x^3,3*x^2+7*e^(7*x),Product Rule,3,True,3*x**2 + 7*exp(7*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin7x-minus-plus-minus-cos4x,sin(7*x)+cos(4*x),trig,sin(7*x)+cos(4*x),-4*sin(4*x)+7*cos(7*x),Product Rule,3,True,-4*sin(4*x) + 7*cos(7*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-7x-minus-plus-minus-x-minus-to-minus-the-minus-4,e^(7*x)+x^4,exponential,e^(7*x)+x^4,4*x^3+7*e^(7*x),Product Rule,3,True,4*x**3 + 7*exp(7*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin7x-minus-plus-minus-cos5x,sin(7*x)+cos(5*x),trig,sin(7*x)+cos(5*x),-5*sin(5*x)+7*cos(7*x),Product Rule,3,True,-5*sin(5*x) + 7*cos(7*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-7x-minus-plus-minus-x-minus-to-minus-the-minus-5,e^(7*x)+x^5,exponential,e^(7*x)+x^5,5*x^4+7*e^(7*x),Product Rule,3,True,5*x**4 + 7*exp(7*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin8x-minus-plus-minus-cos2x,sin(8*x)+cos(2*x),trig,sin(8*x)+cos(2*x),-2*sin(2*x)+8*cos(8*x),Product Rule,3,True,-2*sin(2*x) + 8*cos(8*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-8x-minus-plus-minus-x-minus-to-minus-the-minus-2,e^(8*x)+x^2,exponential,e^(8*x)+x^2,2*x+8*e^(8*x),Product Rule,3,True,2*x + 8*exp(8*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin8x-minus-plus-minus-cos3x,sin(8*x)+cos(3*x),trig,sin(8*x)+cos(3*x),-3*sin(3*x)+8*cos(8*x),Product Rule,3,True,-3*sin(3*x) + 8*cos(8*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-8x-minus-plus-minus-x-minus-to-minus-the-minus-3,e^(8*x)+x^3,exponential,e^(8*x)+x^3,3*x^2+8*e^(8*x),Product Rule,3,True,3*x**2 + 8*exp(8*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin8x-minus-plus-minus-cos4x,sin(8*x)+cos(4*x),trig,sin(8*x)+cos(4*x),-4*sin(4*x)+8*cos(8*x),Product Rule,3,True,-4*sin(4*x) + 8*cos(8*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-8x-minus-plus-minus-x-minus-to-minus-the-minus-4,e^(8*x)+x^4,exponential,e^(8*x)+x^4,4*x^3+8*e^(8*x),Product Rule,3,True,4*x**3 + 8*exp(8*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin8x-minus-plus-minus-cos5x,sin(8*x)+cos(5*x),trig,sin(8*x)+cos(5*x),-5*sin(5*x)+8*cos(8*x),Product Rule,3,True,-5*sin(5*x) + 8*cos(8*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-8x-minus-plus-minus-x-minus-to-minus-the-minus-5,e^(8*x)+x^5,exponential,e^(8*x)+x^5,5*x^4+8*e^(8*x),Product Rule,3,True,5*x**4 + 8*exp(8*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin9x-minus-plus-minus-cos2x,sin(9*x)+cos(2*x),trig,sin(9*x)+cos(2*x),-2*sin(2*x)+9*cos(9*x),Product Rule,3,True,-2*sin(2*x) + 9*cos(9*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-9x-minus-plus-minus-x-minus-to-minus-the-minus-2,e^(9*x)+x^2,exponential,e^(9*x)+x^2,2*x+9*e^(9*x),Product Rule,3,True,2*x + 9*exp(9*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin9x-minus-plus-minus-cos3x,sin(9*x)+cos(3*x),trig,sin(9*x)+cos(3*x),-3*sin(3*x)+9*cos(9*x),Product Rule,3,True,-3*sin(3*x) + 9*cos(9*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-9x-minus-plus-minus-x-minus-to-minus-the-minus-3,e^(9*x)+x^3,exponential,e^(9*x)+x^3,3*x^2+9*e^(9*x),Product Rule,3,True,3*x**2 + 9*exp(9*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin9x-minus-plus-minus-cos4x,sin(9*x)+cos(4*x),trig,sin(9*x)+cos(4*x),-4*sin(4*x)+9*cos(9*x),Product Rule,3,True,-4*sin(4*x) + 9*cos(9*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-9x-minus-plus-minus-x-minus-to-minus-the-minus-4,e^(9*x)+x^4,exponential,e^(9*x)+x^4,4*x^3+9*e^(9*x),Product Rule,3,True,4*x**3 + 9*exp(9*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin9x-minus-plus-minus-cos5x,sin(9*x)+cos(5*x),trig,sin(9*x)+cos(5*x),-5*sin(5*x)+9*cos(9*x),Product Rule,3,True,-5*sin(5*x) + 9*cos(9*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-9x-minus-plus-minus-x-minus-to-minus-the-minus-5,e^(9*x)+x^5,exponential,e^(9*x)+x^5,5*x^4+9*e^(9*x),Product Rule,3,True,5*x**4 + 9*exp(9*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin10x-minus-plus-minus-cos2x,sin(10*x)+cos(2*x),trig,sin(10*x)+cos(2*x),-2*sin(2*x)+10*cos(10*x),Product Rule,3,True,-2*sin(2*x) + 10*cos(10*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-10x-minus-plus-minus-x-minus-to-minus-the-minus-2,e^(10*x)+x^2,exponential,e^(10*x)+x^2,10*e^(10*x)+2*x,Product Rule,3,True,2*x + 10*exp(10*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin10x-minus-plus-minus-cos3x,sin(10*x)+cos(3*x),trig,sin(10*x)+cos(3*x),-3*sin(3*x)+10*cos(10*x),Product Rule,3,True,-3*sin(3*x) + 10*cos(10*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-10x-minus-plus-minus-x-minus-to-minus-the-minus-3,e^(10*x)+x^3,exponential,e^(10*x)+x^3,10*e^(10*x)+3*x^2,Product Rule,3,True,3*x**2 + 10*exp(10*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin10x-minus-plus-minus-cos4x,sin(10*x)+cos(4*x),trig,sin(10*x)+cos(4*x),-4*sin(4*x)+10*cos(10*x),Product Rule,3,True,-4*sin(4*x) + 10*cos(10*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-10x-minus-plus-minus-x-minus-to-minus-the-minus-4,e^(10*x)+x^4,exponential,e^(10*x)+x^4,10*e^(10*x)+4*x^3,Product Rule,3,True,4*x**3 + 10*exp(10*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin10x-minus-plus-minus-cos5x,sin(10*x)+cos(5*x),trig,sin(10*x)+cos(5*x),-5*sin(5*x)+10*cos(10*x),Product Rule,3,True,-5*sin(5*x) + 10*cos(10*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-10x-minus-plus-minus-x-minus-to-minus-the-minus-5,e^(10*x)+x^5,exponential,e^(10*x)+x^5,10*e^(10*x)+5*x^4,Product Rule,3,True,5*x**4 + 10*exp(10*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-2xsin2x,e^(2*x)*sin(2*x),trig,e^(2*x)*sin(2*x),2*cos(2*x)*e^(2*x)+2*e^(2*x)*sin(2*x),Product Rule,3,True,2*exp(2*x)*sin(2*x) + 2*exp(2*x)*cos(2*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-2xcos2x,e^(2*x)*cos(2*x),trig,e^(2*x)*cos(2*x),-2*e^(2*x)*sin(2*x)+2*cos(2*x)*e^(2*x),Product Rule,3,True,-2*exp(2*x)*sin(2*x) + 2*exp(2*x)*cos(2*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-2xsin3x,e^(2*x)*sin(3*x),trig,e^(2*x)*sin(3*x),2*e^(2*x)*sin(3*x)+3*cos(3*x)*e^(2*x),Product Rule,3,True,2*exp(2*x)*sin(3*x) + 3*exp(2*x)*cos(3*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-2xcos3x,e^(2*x)*cos(3*x),trig,e^(2*x)*cos(3*x),-3*e^(2*x)*sin(3*x)+2*cos(3*x)*e^(2*x),Product Rule,3,True,-3*exp(2*x)*sin(3*x) + 2*exp(2*x)*cos(3*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-2xsin4x,e^(2*x)*sin(4*x),trig,e^(2*x)*sin(4*x),2*e^(2*x)*sin(4*x)+4*cos(4*x)*e^(2*x),Product Rule,3,True,2*exp(2*x)*sin(4*x) + 4*exp(2*x)*cos(4*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-2xcos4x,e^(2*x)*cos(4*x),trig,e^(2*x)*cos(4*x),-4*e^(2*x)*sin(4*x)+2*cos(4*x)*e^(2*x),Product Rule,3,True,-4*exp(2*x)*sin(4*x) + 2*exp(2*x)*cos(4*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-2xsin5x,e^(2*x)*sin(5*x),trig,e^(2*x)*sin(5*x),2*e^(2*x)*sin(5*x)+5*cos(5*x)*e^(2*x),Product Rule,3,True,2*exp(2*x)*sin(5*x) + 5*exp(2*x)*cos(5*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-2xcos5x,e^(2*x)*cos(5*x),trig,e^(2*x)*cos(5*x),-5*e^(2*x)*sin(5*x)+2*cos(5*x)*e^(2*x),Product Rule,3,True,-5*exp(2*x)*sin(5*x) + 2*exp(2*x)*cos(5*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-3xsin2x,e^(3*x)*sin(2*x),trig,e^(3*x)*sin(2*x),2*cos(2*x)*e^(3*x)+3*e^(3*x)*sin(2*x),Product Rule,3,True,3*exp(3*x)*sin(2*x) + 2*exp(3*x)*cos(2*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-3xcos2x,e^(3*x)*cos(2*x),trig,e^(3*x)*cos(2*x),-2*e^(3*x)*sin(2*x)+3*cos(2*x)*e^(3*x),Product Rule,3,True,-2*exp(3*x)*sin(2*x) + 3*exp(3*x)*cos(2*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-3xsin3x,e^(3*x)*sin(3*x),trig,e^(3*x)*sin(3*x),3*cos(3*x)*e^(3*x)+3*e^(3*x)*sin(3*x),Product Rule,3,True,3*exp(3*x)*sin(3*x) + 3*exp(3*x)*cos(3*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-3xcos3x,e^(3*x)*cos(3*x),trig,e^(3*x)*cos(3*x),-3*e^(3*x)*sin(3*x)+3*cos(3*x)*e^(3*x),Product Rule,3,True,-3*exp(3*x)*sin(3*x) + 3*exp(3*x)*cos(3*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-3xsin4x,e^(3*x)*sin(4*x),trig,e^(3*x)*sin(4*x),3*e^(3*x)*sin(4*x)+4*cos(4*x)*e^(3*x),Product Rule,3,True,3*exp(3*x)*sin(4*x) + 4*exp(3*x)*cos(4*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-3xcos4x,e^(3*x)*cos(4*x),trig,e^(3*x)*cos(4*x),-4*e^(3*x)*sin(4*x)+3*cos(4*x)*e^(3*x),Product Rule,3,True,-4*exp(3*x)*sin(4*x) + 3*exp(3*x)*cos(4*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-3xsin5x,e^(3*x)*sin(5*x),trig,e^(3*x)*sin(5*x),3*e^(3*x)*sin(5*x)+5*cos(5*x)*e^(3*x),Product Rule,3,True,3*exp(3*x)*sin(5*x) + 5*exp(3*x)*cos(5*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-3xcos5x,e^(3*x)*cos(5*x),trig,e^(3*x)*cos(5*x),-5*e^(3*x)*sin(5*x)+3*cos(5*x)*e^(3*x),Product Rule,3,True,-5*exp(3*x)*sin(5*x) + 3*exp(3*x)*cos(5*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-4xsin2x,e^(4*x)*sin(2*x),trig,e^(4*x)*sin(2*x),2*cos(2*x)*e^(4*x)+4*e^(4*x)*sin(2*x),Product Rule,3,True,4*exp(4*x)*sin(2*x) + 2*exp(4*x)*cos(2*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-4xcos2x,e^(4*x)*cos(2*x),trig,e^(4*x)*cos(2*x),-2*e^(4*x)*sin(2*x)+4*cos(2*x)*e^(4*x),Product Rule,3,True,-2*exp(4*x)*sin(2*x) + 4*exp(4*x)*cos(2*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-4xsin3x,e^(4*x)*sin(3*x),trig,e^(4*x)*sin(3*x),3*cos(3*x)*e^(4*x)+4*e^(4*x)*sin(3*x),Product Rule,3,True,4*exp(4*x)*sin(3*x) + 3*exp(4*x)*cos(3*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-4xcos3x,e^(4*x)*cos(3*x),trig,e^(4*x)*cos(3*x),-3*e^(4*x)*sin(3*x)+4*cos(3*x)*e^(4*x),Product Rule,3,True,-3*exp(4*x)*sin(3*x) + 4*exp(4*x)*cos(3*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-4xsin4x,e^(4*x)*sin(4*x),trig,e^(4*x)*sin(4*x),4*cos(4*x)*e^(4*x)+4*e^(4*x)*sin(4*x),Product Rule,3,True,4*exp(4*x)*sin(4*x) + 4*exp(4*x)*cos(4*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-4xcos4x,e^(4*x)*cos(4*x),trig,e^(4*x)*cos(4*x),-4*e^(4*x)*sin(4*x)+4*cos(4*x)*e^(4*x),Product Rule,3,True,-4*exp(4*x)*sin(4*x) + 4*exp(4*x)*cos(4*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-4xsin5x,e^(4*x)*sin(5*x),trig,e^(4*x)*sin(5*x),4*e^(4*x)*sin(5*x)+5*cos(5*x)*e^(4*x),Product Rule,3,True,4*exp(4*x)*sin(5*x) + 5*exp(4*x)*cos(5*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-4xcos5x,e^(4*x)*cos(5*x),trig,e^(4*x)*cos(5*x),-5*e^(4*x)*sin(5*x)+4*cos(5*x)*e^(4*x),Product Rule,3,True,-5*exp(4*x)*sin(5*x) + 4*exp(4*x)*cos(5*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-5xsin2x,e^(5*x)*sin(2*x),trig,e^(5*x)*sin(2*x),2*cos(2*x)*e^(5*x)+5*e^(5*x)*sin(2*x),Product Rule,3,True,5*exp(5*x)*sin(2*x) + 2*exp(5*x)*cos(2*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-5xcos2x,e^(5*x)*cos(2*x),trig,e^(5*x)*cos(2*x),-2*e^(5*x)*sin(2*x)+5*cos(2*x)*e^(5*x),Product Rule,3,True,-2*exp(5*x)*sin(2*x) + 5*exp(5*x)*cos(2*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-5xsin3x,e^(5*x)*sin(3*x),trig,e^(5*x)*sin(3*x),3*cos(3*x)*e^(5*x)+5*e^(5*x)*sin(3*x),Product Rule,3,True,5*exp(5*x)*sin(3*x) + 3*exp(5*x)*cos(3*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-5xcos3x,e^(5*x)*cos(3*x),trig,e^(5*x)*cos(3*x),-3*e^(5*x)*sin(3*x)+5*cos(3*x)*e^(5*x),Product Rule,3,True,-3*exp(5*x)*sin(3*x) + 5*exp(5*x)*cos(3*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-5xsin4x,e^(5*x)*sin(4*x),trig,e^(5*x)*sin(4*x),4*cos(4*x)*e^(5*x)+5*e^(5*x)*sin(4*x),Product Rule,3,True,5*exp(5*x)*sin(4*x) + 4*exp(5*x)*cos(4*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-5xcos4x,e^(5*x)*cos(4*x),trig,e^(5*x)*cos(4*x),-4*e^(5*x)*sin(4*x)+5*cos(4*x)*e^(5*x),Product Rule,3,True,-4*exp(5*x)*sin(4*x) + 5*exp(5*x)*cos(4*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-5xsin5x,e^(5*x)*sin(5*x),trig,e^(5*x)*sin(5*x),5*cos(5*x)*e^(5*x)+5*e^(5*x)*sin(5*x),Product Rule,3,True,5*exp(5*x)*sin(5*x) + 5*exp(5*x)*cos(5*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-5xcos5x,e^(5*x)*cos(5*x),trig,e^(5*x)*cos(5*x),-5*e^(5*x)*sin(5*x)+5*cos(5*x)*e^(5*x),Product Rule,3,True,-5*exp(5*x)*sin(5*x) + 5*exp(5*x)*cos(5*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-6xsin2x,e^(6*x)*sin(2*x),trig,e^(6*x)*sin(2*x),2*cos(2*x)*e^(6*x)+6*e^(6*x)*sin(2*x),Product Rule,3,True,6*exp(6*x)*sin(2*x) + 2*exp(6*x)*cos(2*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-6xcos2x,e^(6*x)*cos(2*x),trig,e^(6*x)*cos(2*x),-2*e^(6*x)*sin(2*x)+6*cos(2*x)*e^(6*x),Product Rule,3,True,-2*exp(6*x)*sin(2*x) + 6*exp(6*x)*cos(2*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-6xsin3x,e^(6*x)*sin(3*x),trig,e^(6*x)*sin(3*x),3*cos(3*x)*e^(6*x)+6*e^(6*x)*sin(3*x),Product Rule,3,True,6*exp(6*x)*sin(3*x) + 3*exp(6*x)*cos(3*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-6xcos3x,e^(6*x)*cos(3*x),trig,e^(6*x)*cos(3*x),-3*e^(6*x)*sin(3*x)+6*cos(3*x)*e^(6*x),Product Rule,3,True,-3*exp(6*x)*sin(3*x) + 6*exp(6*x)*cos(3*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-6xsin4x,e^(6*x)*sin(4*x),trig,e^(6*x)*sin(4*x),4*cos(4*x)*e^(6*x)+6*e^(6*x)*sin(4*x),Product Rule,3,True,6*exp(6*x)*sin(4*x) + 4*exp(6*x)*cos(4*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-6xcos4x,e^(6*x)*cos(4*x),trig,e^(6*x)*cos(4*x),-4*e^(6*x)*sin(4*x)+6*cos(4*x)*e^(6*x),Product Rule,3,True,-4*exp(6*x)*sin(4*x) + 6*exp(6*x)*cos(4*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-6xsin5x,e^(6*x)*sin(5*x),trig,e^(6*x)*sin(5*x),5*cos(5*x)*e^(6*x)+6*e^(6*x)*sin(5*x),Product Rule,3,True,6*exp(6*x)*sin(5*x) + 5*exp(6*x)*cos(5*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-6xcos5x,e^(6*x)*cos(5*x),trig,e^(6*x)*cos(5*x),-5*e^(6*x)*sin(5*x)+6*cos(5*x)*e^(6*x),Product Rule,3,True,-5*exp(6*x)*sin(5*x) + 6*exp(6*x)*cos(5*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-7xsin2x,e^(7*x)*sin(2*x),trig,e^(7*x)*sin(2*x),2*cos(2*x)*e^(7*x)+7*e^(7*x)*sin(2*x),Product Rule,3,True,7*exp(7*x)*sin(2*x) + 2*exp(7*x)*cos(2*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-7xcos2x,e^(7*x)*cos(2*x),trig,e^(7*x)*cos(2*x),-2*e^(7*x)*sin(2*x)+7*cos(2*x)*e^(7*x),Product Rule,3,True,-2*exp(7*x)*sin(2*x) + 7*exp(7*x)*cos(2*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-7xsin3x,e^(7*x)*sin(3*x),trig,e^(7*x)*sin(3*x),3*cos(3*x)*e^(7*x)+7*e^(7*x)*sin(3*x),Product Rule,3,True,7*exp(7*x)*sin(3*x) + 3*exp(7*x)*cos(3*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-7xcos3x,e^(7*x)*cos(3*x),trig,e^(7*x)*cos(3*x),-3*e^(7*x)*sin(3*x)+7*cos(3*x)*e^(7*x),Product Rule,3,True,-3*exp(7*x)*sin(3*x) + 7*exp(7*x)*cos(3*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-7xsin4x,e^(7*x)*sin(4*x),trig,e^(7*x)*sin(4*x),4*cos(4*x)*e^(7*x)+7*e^(7*x)*sin(4*x),Product Rule,3,True,7*exp(7*x)*sin(4*x) + 4*exp(7*x)*cos(4*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-7xcos4x,e^(7*x)*cos(4*x),trig,e^(7*x)*cos(4*x),-4*e^(7*x)*sin(4*x)+7*cos(4*x)*e^(7*x),Product Rule,3,True,-4*exp(7*x)*sin(4*x) + 7*exp(7*x)*cos(4*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-7xsin5x,e^(7*x)*sin(5*x),trig,e^(7*x)*sin(5*x),5*cos(5*x)*e^(7*x)+7*e^(7*x)*sin(5*x),Product Rule,3,True,7*exp(7*x)*sin(5*x) + 5*exp(7*x)*cos(5*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-7xcos5x,e^(7*x)*cos(5*x),trig,e^(7*x)*cos(5*x),-5*e^(7*x)*sin(5*x)+7*cos(5*x)*e^(7*x),Product Rule,3,True,-5*exp(7*x)*sin(5*x) + 7*exp(7*x)*cos(5*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sinx-minus-to-minus-the-minus-2,sin(x^2),trig,sin(x^2),2*cos(x^2)*x,Chain Rule,3,True,2*x*cos(x**2),PASS,sympy simplify: difference is exactly 0
+derivative-of-cosx-minus-to-minus-the-minus-2,cos(x^2),trig,cos(x^2),-2*sin(x^2)*x,Chain Rule,3,True,-2*x*sin(x**2),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-x-minus-to-minus-the-minus-2,e^(x^2),exponential,e^(x^2),2*e^x^2*x,Exponential Rule,3,True,2*x*exp(x**2),PASS,sympy simplify: difference is exactly 0
+derivative-of-lnx-minus-to-minus-the-minus-2,ln(x^2),ln,log(x^2),2*x^(-1),Chain Rule,3,True,2/x,PASS,sympy simplify: difference is exactly 0
+derivative-of-sinx-minus-to-minus-the-minus-3,sin(x^3),trig,sin(x^3),3*cos(x^3)*x^2,Chain Rule,3,True,3*x**2*cos(x**3),PASS,sympy simplify: difference is exactly 0
+derivative-of-cosx-minus-to-minus-the-minus-3,cos(x^3),trig,cos(x^3),-3*sin(x^3)*x^2,Chain Rule,3,True,-3*x**2*sin(x**3),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-x-minus-to-minus-the-minus-3,e^(x^3),exponential,e^(x^3),3*e^x^3*x^2,Exponential Rule,3,True,3*x**2*exp(x**3),PASS,sympy simplify: difference is exactly 0
+derivative-of-lnx-minus-to-minus-the-minus-3,ln(x^3),ln,log(x^3),3*x^(-1),Chain Rule,3,True,3/x,PASS,sympy simplify: difference is exactly 0
+derivative-of-sinx-minus-to-minus-the-minus-4,sin(x^4),trig,sin(x^4),4*cos(x^4)*x^3,Chain Rule,3,True,4*x**3*cos(x**4),PASS,sympy simplify: difference is exactly 0
+derivative-of-cosx-minus-to-minus-the-minus-4,cos(x^4),trig,cos(x^4),-4*sin(x^4)*x^3,Chain Rule,3,True,-4*x**3*sin(x**4),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-x-minus-to-minus-the-minus-4,e^(x^4),exponential,e^(x^4),4*e^x^4*x^3,Exponential Rule,3,True,4*x**3*exp(x**4),PASS,sympy simplify: difference is exactly 0
+derivative-of-lnx-minus-to-minus-the-minus-4,ln(x^4),ln,log(x^4),4*x^(-1),Chain Rule,3,True,4/x,PASS,sympy simplify: difference is exactly 0
+derivative-of-sinx-minus-to-minus-the-minus-5,sin(x^5),trig,sin(x^5),5*cos(x^5)*x^4,Chain Rule,3,True,5*x**4*cos(x**5),PASS,sympy simplify: difference is exactly 0
+derivative-of-cosx-minus-to-minus-the-minus-5,cos(x^5),trig,cos(x^5),-5*sin(x^5)*x^4,Chain Rule,3,True,-5*x**4*sin(x**5),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-x-minus-to-minus-the-minus-5,e^(x^5),exponential,e^(x^5),5*e^x^5*x^4,Exponential Rule,3,True,5*x**4*exp(x**5),PASS,sympy simplify: difference is exactly 0
+derivative-of-lnx-minus-to-minus-the-minus-5,ln(x^5),ln,log(x^5),5*x^(-1),Chain Rule,3,True,5/x,PASS,sympy simplify: difference is exactly 0
+derivative-of-sinx-minus-to-minus-the-minus-6,sin(x^6),trig,sin(x^6),6*cos(x^6)*x^5,Chain Rule,3,True,6*x**5*cos(x**6),PASS,sympy simplify: difference is exactly 0
+derivative-of-cosx-minus-to-minus-the-minus-6,cos(x^6),trig,cos(x^6),-6*sin(x^6)*x^5,Chain Rule,3,True,-6*x**5*sin(x**6),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-x-minus-to-minus-the-minus-6,e^(x^6),exponential,e^(x^6),6*e^x^6*x^5,Exponential Rule,3,True,6*x**5*exp(x**6),PASS,sympy simplify: difference is exactly 0
+derivative-of-lnx-minus-to-minus-the-minus-6,ln(x^6),ln,log(x^6),6*x^(-1),Chain Rule,3,True,6/x,PASS,sympy simplify: difference is exactly 0
+derivative-of-sinx-minus-to-minus-the-minus-7,sin(x^7),trig,sin(x^7),7*cos(x^7)*x^6,Chain Rule,3,True,7*x**6*cos(x**7),PASS,sympy simplify: difference is exactly 0
+derivative-of-cosx-minus-to-minus-the-minus-7,cos(x^7),trig,cos(x^7),-7*sin(x^7)*x^6,Chain Rule,3,True,-7*x**6*sin(x**7),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-x-minus-to-minus-the-minus-7,e^(x^7),exponential,e^(x^7),7*e^x^7*x^6,Exponential Rule,3,True,7*x**6*exp(x**7),PASS,sympy simplify: difference is exactly 0
+derivative-of-lnx-minus-to-minus-the-minus-7,ln(x^7),ln,log(x^7),7*x^(-1),Chain Rule,3,True,7/x,PASS,sympy simplify: difference is exactly 0
+derivative-of-sinx-minus-to-minus-the-minus-8,sin(x^8),trig,sin(x^8),8*cos(x^8)*x^7,Chain Rule,3,True,8*x**7*cos(x**8),PASS,sympy simplify: difference is exactly 0
+derivative-of-cosx-minus-to-minus-the-minus-8,cos(x^8),trig,cos(x^8),-8*sin(x^8)*x^7,Chain Rule,3,True,-8*x**7*sin(x**8),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-x-minus-to-minus-the-minus-8,e^(x^8),exponential,e^(x^8),8*e^x^8*x^7,Exponential Rule,3,True,8*x**7*exp(x**8),PASS,sympy simplify: difference is exactly 0
+derivative-of-lnx-minus-to-minus-the-minus-8,ln(x^8),ln,log(x^8),8*x^(-1),Chain Rule,3,True,8/x,PASS,sympy simplify: difference is exactly 0
+derivative-of-sinx-minus-to-minus-the-minus-9,sin(x^9),trig,sin(x^9),9*cos(x^9)*x^8,Chain Rule,3,True,9*x**8*cos(x**9),PASS,sympy simplify: difference is exactly 0
+derivative-of-cosx-minus-to-minus-the-minus-9,cos(x^9),trig,cos(x^9),-9*sin(x^9)*x^8,Chain Rule,3,True,-9*x**8*sin(x**9),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-x-minus-to-minus-the-minus-9,e^(x^9),exponential,e^(x^9),9*e^x^9*x^8,Exponential Rule,3,True,9*x**8*exp(x**9),PASS,sympy simplify: difference is exactly 0
+derivative-of-lnx-minus-to-minus-the-minus-9,ln(x^9),ln,log(x^9),9*x^(-1),Chain Rule,3,True,9/x,PASS,sympy simplify: difference is exactly 0
+derivative-of-sinx-minus-to-minus-the-minus-10,sin(x^10),trig,sin(x^10),10*cos(x^10)*x^9,Chain Rule,3,True,10*x**9*cos(x**10),PASS,sympy simplify: difference is exactly 0
+derivative-of-cosx-minus-to-minus-the-minus-10,cos(x^10),trig,cos(x^10),-10*sin(x^10)*x^9,Chain Rule,3,True,-10*x**9*sin(x**10),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-x-minus-to-minus-the-minus-10,e^(x^10),exponential,e^(x^10),10*e^x^10*x^9,Exponential Rule,3,True,10*x**9*exp(x**10),PASS,sympy simplify: difference is exactly 0
+derivative-of-lnx-minus-to-minus-the-minus-10,ln(x^10),ln,log(x^10),10*x^(-1),Chain Rule,3,True,10/x,PASS,sympy simplify: difference is exactly 0
+derivative-of-lnsinx,ln(sin(x)),ln,log(sin(x)),cos(x)*sin(x)^(-1),Chain Rule,3,True,cos(x)/sin(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-lncosx,ln(cos(x)),ln,log(cos(x)),-cos(x)^(-1)*sin(x),Chain Rule,3,True,-sin(x)/cos(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-lntanx,ln(tan(x)),ln,log(tan(x)),sec(x)^2*tan(x)^(-1),Chain Rule,3,True,(tan(x)**2 + 1)/tan(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sinlnx,sin(ln(x)),ln,sin(log(x)),cos(log(x))*x^(-1),Chain Rule,3,True,cos(log(x))/x,PASS,sympy simplify: difference is exactly 0
+derivative-of-coslnx,cos(ln(x)),ln,cos(log(x)),-sin(log(x))*x^(-1),Chain Rule,3,True,-sin(log(x))/x,PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-sinx,e^(sin(x)),trig,e^(sin(x)),cos(x)*e^sin(x),Exponential Rule,3,True,exp(sin(x))*cos(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-cosx,e^(cos(x)),trig,e^(cos(x)),-e^cos(x)*sin(x),Exponential Rule,3,True,-exp(cos(x))*sin(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-3-minus-plus-minus-x-minus-to-minus-the-minus-2,x^3+x^2,power,x^3+x^2,2*x+3*x^2,Power Rule,2,True,3*x**2 + 2*x,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-3-minus-x-minus-to-minus-the-minus-2,x^3-x^2,power,x^3-x^2,-2*x+3*x^2,Power Rule,2,True,3*x**2 - 2*x,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-4-minus-plus-minus-x-minus-to-minus-the-minus-2,x^4+x^2,power,x^4+x^2,2*x+4*x^3,Power Rule,2,True,4*x**3 + 2*x,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-4-minus-x-minus-to-minus-the-minus-2,x^4-x^2,power,x^4-x^2,-2*x+4*x^3,Power Rule,2,True,4*x**3 - 2*x,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-4-minus-plus-minus-x-minus-to-minus-the-minus-3,x^4+x^3,power,x^4+x^3,3*x^2+4*x^3,Power Rule,2,True,4*x**3 + 3*x**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-4-minus-x-minus-to-minus-the-minus-3,x^4-x^3,power,x^4-x^3,-3*x^2+4*x^3,Power Rule,2,True,4*x**3 - 3*x**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-5-minus-plus-minus-x-minus-to-minus-the-minus-2,x^5+x^2,power,x^5+x^2,2*x+5*x^4,Power Rule,2,True,5*x**4 + 2*x,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-5-minus-x-minus-to-minus-the-minus-2,x^5-x^2,power,x^5-x^2,-2*x+5*x^4,Power Rule,2,True,5*x**4 - 2*x,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-5-minus-plus-minus-x-minus-to-minus-the-minus-3,x^5+x^3,power,x^5+x^3,3*x^2+5*x^4,Power Rule,2,True,5*x**4 + 3*x**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-5-minus-x-minus-to-minus-the-minus-3,x^5-x^3,power,x^5-x^3,-3*x^2+5*x^4,Power Rule,2,True,5*x**4 - 3*x**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-5-minus-plus-minus-x-minus-to-minus-the-minus-4,x^5+x^4,power,x^5+x^4,4*x^3+5*x^4,Power Rule,2,True,5*x**4 + 4*x**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-5-minus-x-minus-to-minus-the-minus-4,x^5-x^4,power,x^5-x^4,-4*x^3+5*x^4,Power Rule,2,True,5*x**4 - 4*x**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-6-minus-plus-minus-x-minus-to-minus-the-minus-2,x^6+x^2,power,x^6+x^2,2*x+6*x^5,Power Rule,2,True,6*x**5 + 2*x,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-6-minus-x-minus-to-minus-the-minus-2,x^6-x^2,power,x^6-x^2,-2*x+6*x^5,Power Rule,2,True,6*x**5 - 2*x,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-6-minus-plus-minus-x-minus-to-minus-the-minus-3,x^6+x^3,power,x^6+x^3,3*x^2+6*x^5,Power Rule,2,True,6*x**5 + 3*x**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-6-minus-x-minus-to-minus-the-minus-3,x^6-x^3,power,x^6-x^3,-3*x^2+6*x^5,Power Rule,2,True,6*x**5 - 3*x**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-6-minus-plus-minus-x-minus-to-minus-the-minus-4,x^6+x^4,power,x^6+x^4,4*x^3+6*x^5,Power Rule,2,True,6*x**5 + 4*x**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-6-minus-x-minus-to-minus-the-minus-4,x^6-x^4,power,x^6-x^4,-4*x^3+6*x^5,Power Rule,2,True,6*x**5 - 4*x**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-6-minus-plus-minus-x-minus-to-minus-the-minus-5,x^6+x^5,power,x^6+x^5,5*x^4+6*x^5,Power Rule,2,True,6*x**5 + 5*x**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-6-minus-x-minus-to-minus-the-minus-5,x^6-x^5,power,x^6-x^5,-5*x^4+6*x^5,Power Rule,2,True,6*x**5 - 5*x**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-7-minus-plus-minus-x-minus-to-minus-the-minus-2,x^7+x^2,power,x^7+x^2,2*x+7*x^6,Power Rule,2,True,7*x**6 + 2*x,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-7-minus-x-minus-to-minus-the-minus-2,x^7-x^2,power,x^7-x^2,-2*x+7*x^6,Power Rule,2,True,7*x**6 - 2*x,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-7-minus-plus-minus-x-minus-to-minus-the-minus-3,x^7+x^3,power,x^7+x^3,3*x^2+7*x^6,Power Rule,2,True,7*x**6 + 3*x**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-7-minus-x-minus-to-minus-the-minus-3,x^7-x^3,power,x^7-x^3,-3*x^2+7*x^6,Power Rule,2,True,7*x**6 - 3*x**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-7-minus-plus-minus-x-minus-to-minus-the-minus-4,x^7+x^4,power,x^7+x^4,4*x^3+7*x^6,Power Rule,2,True,7*x**6 + 4*x**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-7-minus-x-minus-to-minus-the-minus-4,x^7-x^4,power,x^7-x^4,-4*x^3+7*x^6,Power Rule,2,True,7*x**6 - 4*x**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-7-minus-plus-minus-x-minus-to-minus-the-minus-5,x^7+x^5,power,x^7+x^5,5*x^4+7*x^6,Power Rule,2,True,7*x**6 + 5*x**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-7-minus-x-minus-to-minus-the-minus-5,x^7-x^5,power,x^7-x^5,-5*x^4+7*x^6,Power Rule,2,True,7*x**6 - 5*x**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-7-minus-plus-minus-x-minus-to-minus-the-minus-6,x^7+x^6,power,x^7+x^6,6*x^5+7*x^6,Power Rule,2,True,7*x**6 + 6*x**5,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-7-minus-x-minus-to-minus-the-minus-6,x^7-x^6,power,x^7-x^6,-6*x^5+7*x^6,Power Rule,2,True,7*x**6 - 6*x**5,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-over-minus-x-minus-to-minus-the-minus-2-minus-plus-minus-1,x/(x^2+1),quotient,x/(x^2+1),(1+x^2)^(-1)-2*(1+x^2)^(-2)*x^2,Quotient Rule,3,True,-2*x**2/(x**2 + 1)**2 + 1/(x**2 + 1),PASS,sympy simplify: difference is exactly 0
+derivative-of-1-minus-over-minus-x-minus-to-minus-the-minus-1-minus-plus-minus-1,1/(x^1+1),quotient,1/(x^1+1),-(1+x)^(-2),Quotient Rule,3,True,-1/(x + 1)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-over-minus-x-minus-to-minus-the-minus-4-minus-plus-minus-1,x/(x^4+1),quotient,x/(x^4+1),(1+x^4)^(-1)-4*(1+x^4)^(-2)*x^4,Quotient Rule,3,True,-4*x**4/(x**4 + 1)**2 + 1/(x**4 + 1),PASS,sympy simplify: difference is exactly 0
+derivative-of-1-minus-over-minus-x-minus-to-minus-the-minus-2-minus-plus-minus-1,1/(x^2+1),quotient,1/(x^2+1),-2*(1+x^2)^(-2)*x,Quotient Rule,3,True,-2*x/(x**2 + 1)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-over-minus-x-minus-to-minus-the-minus-6-minus-plus-minus-1,x/(x^6+1),quotient,x/(x^6+1),(1+x^6)^(-1)-6*(1+x^6)^(-2)*x^6,Quotient Rule,3,True,-6*x**6/(x**6 + 1)**2 + 1/(x**6 + 1),PASS,sympy simplify: difference is exactly 0
+derivative-of-1-minus-over-minus-x-minus-to-minus-the-minus-3-minus-plus-minus-1,1/(x^3+1),quotient,1/(x^3+1),-3*(1+x^3)^(-2)*x^2,Quotient Rule,3,True,-3*x**2/(x**3 + 1)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-over-minus-x-minus-to-minus-the-minus-8-minus-plus-minus-1,x/(x^8+1),quotient,x/(x^8+1),(1+x^8)^(-1)-8*(1+x^8)^(-2)*x^8,Quotient Rule,3,True,-8*x**8/(x**8 + 1)**2 + 1/(x**8 + 1),PASS,sympy simplify: difference is exactly 0
+derivative-of-1-minus-over-minus-x-minus-to-minus-the-minus-4-minus-plus-minus-1,1/(x^4+1),quotient,1/(x^4+1),-4*(1+x^4)^(-2)*x^3,Quotient Rule,3,True,-4*x**3/(x**4 + 1)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-over-minus-x-minus-to-minus-the-minus-10-minus-plus-minus-1,x/(x^10+1),quotient,x/(x^10+1),(1+x^10)^(-1)-10*(1+x^10)^(-2)*x^10,Quotient Rule,3,True,-10*x**10/(x**10 + 1)**2 + 1/(x**10 + 1),PASS,sympy simplify: difference is exactly 0
+derivative-of-1-minus-over-minus-x-minus-to-minus-the-minus-5-minus-plus-minus-1,1/(x^5+1),quotient,1/(x^5+1),-5*(1+x^5)^(-2)*x^4,Quotient Rule,3,True,-5*x**4/(x**5 + 1)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-2asinx,x^2*asin(x),inverse-trig,x^2*asin(x),2*asin(x)*x+sqrt(-x^2+1)^(-1)*x^2,Product Rule,3,True,x**2/sqrt(1 - x**2) + 2*x*asin(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-2atanx,x^2*atan(x),inverse-trig,x^2*atan(x),(1+x^2)^(-1)*x^2+2*atan(x)*x,Product Rule,3,True,x**2/(x**2 + 1) + 2*x*atan(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-2sinhx,x^2*sinh(x),trig,x^2*sinh(x),2*sinh(x)*x+cosh(x)*x^2,Product Rule,3,True,x**2*cosh(x) + 2*x*sinh(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-2coshx,x^2*cosh(x),trig,x^2*cosh(x),2*cosh(x)*x+sinh(x)*x^2,Product Rule,3,True,x**2*sinh(x) + 2*x*cosh(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-3asinx,x^3*asin(x),inverse-trig,x^3*asin(x),3*asin(x)*x^2+sqrt(-x^2+1)^(-1)*x^3,Product Rule,3,True,x**3/sqrt(1 - x**2) + 3*x**2*asin(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-3atanx,x^3*atan(x),inverse-trig,x^3*atan(x),(1+x^2)^(-1)*x^3+3*atan(x)*x^2,Product Rule,3,True,x**3/(x**2 + 1) + 3*x**2*atan(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-3sinhx,x^3*sinh(x),trig,x^3*sinh(x),3*sinh(x)*x^2+cosh(x)*x^3,Product Rule,3,True,x**3*cosh(x) + 3*x**2*sinh(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-3coshx,x^3*cosh(x),trig,x^3*cosh(x),3*cosh(x)*x^2+sinh(x)*x^3,Product Rule,3,True,x**3*sinh(x) + 3*x**2*cosh(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-4asinx,x^4*asin(x),inverse-trig,x^4*asin(x),4*asin(x)*x^3+sqrt(-x^2+1)^(-1)*x^4,Product Rule,3,True,x**4/sqrt(1 - x**2) + 4*x**3*asin(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-4atanx,x^4*atan(x),inverse-trig,x^4*atan(x),(1+x^2)^(-1)*x^4+4*atan(x)*x^3,Product Rule,3,True,x**4/(x**2 + 1) + 4*x**3*atan(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-4sinhx,x^4*sinh(x),trig,x^4*sinh(x),4*sinh(x)*x^3+cosh(x)*x^4,Product Rule,3,True,x**4*cosh(x) + 4*x**3*sinh(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-4coshx,x^4*cosh(x),trig,x^4*cosh(x),4*cosh(x)*x^3+sinh(x)*x^4,Product Rule,3,True,x**4*sinh(x) + 4*x**3*cosh(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-5asinx,x^5*asin(x),inverse-trig,x^5*asin(x),5*asin(x)*x^4+sqrt(-x^2+1)^(-1)*x^5,Product Rule,3,True,x**5/sqrt(1 - x**2) + 5*x**4*asin(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-5atanx,x^5*atan(x),inverse-trig,x^5*atan(x),(1+x^2)^(-1)*x^5+5*atan(x)*x^4,Product Rule,3,True,x**5/(x**2 + 1) + 5*x**4*atan(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-5sinhx,x^5*sinh(x),trig,x^5*sinh(x),5*sinh(x)*x^4+cosh(x)*x^5,Product Rule,3,True,x**5*cosh(x) + 5*x**4*sinh(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-5coshx,x^5*cosh(x),trig,x^5*cosh(x),5*cosh(x)*x^4+sinh(x)*x^5,Product Rule,3,True,x**5*sinh(x) + 5*x**4*cosh(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-6asinx,x^6*asin(x),inverse-trig,x^6*asin(x),6*asin(x)*x^5+sqrt(-x^2+1)^(-1)*x^6,Product Rule,3,True,x**6/sqrt(1 - x**2) + 6*x**5*asin(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-6atanx,x^6*atan(x),inverse-trig,x^6*atan(x),(1+x^2)^(-1)*x^6+6*atan(x)*x^5,Product Rule,3,True,x**6/(x**2 + 1) + 6*x**5*atan(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-6sinhx,x^6*sinh(x),trig,x^6*sinh(x),6*sinh(x)*x^5+cosh(x)*x^6,Product Rule,3,True,x**6*cosh(x) + 6*x**5*sinh(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-6coshx,x^6*cosh(x),trig,x^6*cosh(x),6*cosh(x)*x^5+sinh(x)*x^6,Product Rule,3,True,x**6*sinh(x) + 6*x**5*cosh(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-7asinx,x^7*asin(x),inverse-trig,x^7*asin(x),7*asin(x)*x^6+sqrt(-x^2+1)^(-1)*x^7,Product Rule,3,True,x**7/sqrt(1 - x**2) + 7*x**6*asin(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-7atanx,x^7*atan(x),inverse-trig,x^7*atan(x),(1+x^2)^(-1)*x^7+7*atan(x)*x^6,Product Rule,3,True,x**7/(x**2 + 1) + 7*x**6*atan(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-7sinhx,x^7*sinh(x),trig,x^7*sinh(x),7*sinh(x)*x^6+cosh(x)*x^7,Product Rule,3,True,x**7*cosh(x) + 7*x**6*sinh(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-7coshx,x^7*cosh(x),trig,x^7*cosh(x),7*cosh(x)*x^6+sinh(x)*x^7,Product Rule,3,True,x**7*sinh(x) + 7*x**6*cosh(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-8asinx,x^8*asin(x),inverse-trig,x^8*asin(x),8*asin(x)*x^7+sqrt(-x^2+1)^(-1)*x^8,Product Rule,3,True,x**8/sqrt(1 - x**2) + 8*x**7*asin(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-8atanx,x^8*atan(x),inverse-trig,x^8*atan(x),(1+x^2)^(-1)*x^8+8*atan(x)*x^7,Product Rule,3,True,x**8/(x**2 + 1) + 8*x**7*atan(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-8sinhx,x^8*sinh(x),trig,x^8*sinh(x),8*sinh(x)*x^7+cosh(x)*x^8,Product Rule,3,True,x**8*cosh(x) + 8*x**7*sinh(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-8coshx,x^8*cosh(x),trig,x^8*cosh(x),8*cosh(x)*x^7+sinh(x)*x^8,Product Rule,3,True,x**8*sinh(x) + 8*x**7*cosh(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-9asinx,x^9*asin(x),inverse-trig,x^9*asin(x),9*asin(x)*x^8+sqrt(-x^2+1)^(-1)*x^9,Product Rule,3,True,x**9/sqrt(1 - x**2) + 9*x**8*asin(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-9atanx,x^9*atan(x),inverse-trig,x^9*atan(x),(1+x^2)^(-1)*x^9+9*atan(x)*x^8,Product Rule,3,True,x**9/(x**2 + 1) + 9*x**8*atan(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-9sinhx,x^9*sinh(x),trig,x^9*sinh(x),9*sinh(x)*x^8+cosh(x)*x^9,Product Rule,3,True,x**9*cosh(x) + 9*x**8*sinh(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-9coshx,x^9*cosh(x),trig,x^9*cosh(x),9*cosh(x)*x^8+sinh(x)*x^9,Product Rule,3,True,x**9*sinh(x) + 9*x**8*cosh(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-10asinx,x^10*asin(x),inverse-trig,x^10*asin(x),10*asin(x)*x^9+sqrt(-x^2+1)^(-1)*x^10,Product Rule,3,True,x**10/sqrt(1 - x**2) + 10*x**9*asin(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-10atanx,x^10*atan(x),inverse-trig,x^10*atan(x),(1+x^2)^(-1)*x^10+10*atan(x)*x^9,Product Rule,3,True,x**10/(x**2 + 1) + 10*x**9*atan(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-10sinhx,x^10*sinh(x),trig,x^10*sinh(x),10*sinh(x)*x^9+cosh(x)*x^10,Product Rule,3,True,x**10*cosh(x) + 10*x**9*sinh(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-10coshx,x^10*cosh(x),trig,x^10*cosh(x),10*cosh(x)*x^9+sinh(x)*x^10,Product Rule,3,True,x**10*sinh(x) + 10*x**9*cosh(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-2x-minus-plus-minus-1-minus-to-minus-the-minus-2,(2*x+1)^2,product,(2*x+1)^2,4*(1+2*x),Product Rule,3,True,8*x + 4,PASS,sympy simplify: difference is exactly 0
+derivative-of-2x-minus-1-minus-to-minus-the-minus-2,(2*x-1)^2,product,(2*x-1)^2,4*(-1+2*x),Product Rule,3,True,8*x - 4,PASS,sympy simplify: difference is exactly 0
+derivative-of-2x-minus-plus-minus-1-minus-to-minus-the-minus-3,(2*x+1)^3,product,(2*x+1)^3,6*(1+2*x)^2,Product Rule,3,True,6*(2*x + 1)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-2x-minus-1-minus-to-minus-the-minus-3,(2*x-1)^3,product,(2*x-1)^3,6*(-1+2*x)^2,Product Rule,3,True,6*(2*x - 1)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-2x-minus-plus-minus-1-minus-to-minus-the-minus-4,(2*x+1)^4,product,(2*x+1)^4,8*(1+2*x)^3,Product Rule,3,True,8*(2*x + 1)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-2x-minus-1-minus-to-minus-the-minus-4,(2*x-1)^4,product,(2*x-1)^4,8*(-1+2*x)^3,Product Rule,3,True,8*(2*x - 1)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-2x-minus-plus-minus-1-minus-to-minus-the-minus-5,(2*x+1)^5,product,(2*x+1)^5,10*(1+2*x)^4,Product Rule,3,True,10*(2*x + 1)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-2x-minus-1-minus-to-minus-the-minus-5,(2*x-1)^5,product,(2*x-1)^5,10*(-1+2*x)^4,Product Rule,3,True,10*(2*x - 1)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-2x-minus-plus-minus-2-minus-to-minus-the-minus-2,(2*x+2)^2,product,(2*x+2)^2,4*(2+2*x),Product Rule,3,True,8*x + 8,PASS,sympy simplify: difference is exactly 0
+derivative-of-2x-minus-2-minus-to-minus-the-minus-2,(2*x-2)^2,product,(2*x-2)^2,4*(-2+2*x),Product Rule,3,True,8*x - 8,PASS,sympy simplify: difference is exactly 0
+derivative-of-2x-minus-plus-minus-2-minus-to-minus-the-minus-3,(2*x+2)^3,product,(2*x+2)^3,6*(2+2*x)^2,Product Rule,3,True,6*(2*x + 2)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-2x-minus-2-minus-to-minus-the-minus-3,(2*x-2)^3,product,(2*x-2)^3,6*(-2+2*x)^2,Product Rule,3,True,6*(2*x - 2)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-2x-minus-plus-minus-2-minus-to-minus-the-minus-4,(2*x+2)^4,product,(2*x+2)^4,8*(2+2*x)^3,Product Rule,3,True,8*(2*x + 2)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-2x-minus-2-minus-to-minus-the-minus-4,(2*x-2)^4,product,(2*x-2)^4,8*(-2+2*x)^3,Product Rule,3,True,8*(2*x - 2)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-2x-minus-plus-minus-2-minus-to-minus-the-minus-5,(2*x+2)^5,product,(2*x+2)^5,10*(2+2*x)^4,Product Rule,3,True,10*(2*x + 2)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-2x-minus-2-minus-to-minus-the-minus-5,(2*x-2)^5,product,(2*x-2)^5,10*(-2+2*x)^4,Product Rule,3,True,10*(2*x - 2)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-2x-minus-plus-minus-3-minus-to-minus-the-minus-2,(2*x+3)^2,product,(2*x+3)^2,4*(2*x+3),Product Rule,3,True,8*x + 12,PASS,sympy simplify: difference is exactly 0
+derivative-of-2x-minus-3-minus-to-minus-the-minus-2,(2*x-3)^2,product,(2*x-3)^2,4*(-3+2*x),Product Rule,3,True,8*x - 12,PASS,sympy simplify: difference is exactly 0
+derivative-of-2x-minus-plus-minus-3-minus-to-minus-the-minus-3,(2*x+3)^3,product,(2*x+3)^3,6*(2*x+3)^2,Product Rule,3,True,6*(2*x + 3)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-2x-minus-3-minus-to-minus-the-minus-3,(2*x-3)^3,product,(2*x-3)^3,6*(-3+2*x)^2,Product Rule,3,True,6*(2*x - 3)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-2x-minus-plus-minus-3-minus-to-minus-the-minus-4,(2*x+3)^4,product,(2*x+3)^4,8*(2*x+3)^3,Product Rule,3,True,8*(2*x + 3)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-2x-minus-3-minus-to-minus-the-minus-4,(2*x-3)^4,product,(2*x-3)^4,8*(-3+2*x)^3,Product Rule,3,True,8*(2*x - 3)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-2x-minus-plus-minus-3-minus-to-minus-the-minus-5,(2*x+3)^5,product,(2*x+3)^5,10*(2*x+3)^4,Product Rule,3,True,10*(2*x + 3)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-2x-minus-3-minus-to-minus-the-minus-5,(2*x-3)^5,product,(2*x-3)^5,10*(-3+2*x)^4,Product Rule,3,True,10*(2*x - 3)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-2x-minus-plus-minus-4-minus-to-minus-the-minus-2,(2*x+4)^2,product,(2*x+4)^2,4*(2*x+4),Product Rule,3,True,8*x + 16,PASS,sympy simplify: difference is exactly 0
+derivative-of-2x-minus-4-minus-to-minus-the-minus-2,(2*x-4)^2,product,(2*x-4)^2,4*(-4+2*x),Product Rule,3,True,8*x - 16,PASS,sympy simplify: difference is exactly 0
+derivative-of-2x-minus-plus-minus-4-minus-to-minus-the-minus-3,(2*x+4)^3,product,(2*x+4)^3,6*(2*x+4)^2,Product Rule,3,True,6*(2*x + 4)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-2x-minus-4-minus-to-minus-the-minus-3,(2*x-4)^3,product,(2*x-4)^3,6*(-4+2*x)^2,Product Rule,3,True,6*(2*x - 4)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-2x-minus-plus-minus-4-minus-to-minus-the-minus-4,(2*x+4)^4,product,(2*x+4)^4,8*(2*x+4)^3,Product Rule,3,True,8*(2*x + 4)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-2x-minus-4-minus-to-minus-the-minus-4,(2*x-4)^4,product,(2*x-4)^4,8*(-4+2*x)^3,Product Rule,3,True,8*(2*x - 4)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-2x-minus-plus-minus-4-minus-to-minus-the-minus-5,(2*x+4)^5,product,(2*x+4)^5,10*(2*x+4)^4,Product Rule,3,True,10*(2*x + 4)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-2x-minus-4-minus-to-minus-the-minus-5,(2*x-4)^5,product,(2*x-4)^5,10*(-4+2*x)^4,Product Rule,3,True,10*(2*x - 4)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-2x-minus-plus-minus-5-minus-to-minus-the-minus-2,(2*x+5)^2,product,(2*x+5)^2,4*(2*x+5),Product Rule,3,True,8*x + 20,PASS,sympy simplify: difference is exactly 0
+derivative-of-2x-minus-5-minus-to-minus-the-minus-2,(2*x-5)^2,product,(2*x-5)^2,4*(-5+2*x),Product Rule,3,True,8*x - 20,PASS,sympy simplify: difference is exactly 0
+derivative-of-2x-minus-plus-minus-5-minus-to-minus-the-minus-3,(2*x+5)^3,product,(2*x+5)^3,6*(2*x+5)^2,Product Rule,3,True,6*(2*x + 5)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-2x-minus-5-minus-to-minus-the-minus-3,(2*x-5)^3,product,(2*x-5)^3,6*(-5+2*x)^2,Product Rule,3,True,6*(2*x - 5)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-2x-minus-plus-minus-5-minus-to-minus-the-minus-4,(2*x+5)^4,product,(2*x+5)^4,8*(2*x+5)^3,Product Rule,3,True,8*(2*x + 5)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-2x-minus-5-minus-to-minus-the-minus-4,(2*x-5)^4,product,(2*x-5)^4,8*(-5+2*x)^3,Product Rule,3,True,8*(2*x - 5)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-2x-minus-plus-minus-5-minus-to-minus-the-minus-5,(2*x+5)^5,product,(2*x+5)^5,10*(2*x+5)^4,Product Rule,3,True,10*(2*x + 5)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-2x-minus-5-minus-to-minus-the-minus-5,(2*x-5)^5,product,(2*x-5)^5,10*(-5+2*x)^4,Product Rule,3,True,10*(2*x - 5)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-3x-minus-plus-minus-1-minus-to-minus-the-minus-2,(3*x+1)^2,product,(3*x+1)^2,6*(1+3*x),Product Rule,3,True,18*x + 6,PASS,sympy simplify: difference is exactly 0
+derivative-of-3x-minus-1-minus-to-minus-the-minus-2,(3*x-1)^2,product,(3*x-1)^2,6*(-1+3*x),Product Rule,3,True,18*x - 6,PASS,sympy simplify: difference is exactly 0
+derivative-of-3x-minus-plus-minus-1-minus-to-minus-the-minus-3,(3*x+1)^3,product,(3*x+1)^3,9*(1+3*x)^2,Product Rule,3,True,9*(3*x + 1)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-3x-minus-1-minus-to-minus-the-minus-3,(3*x-1)^3,product,(3*x-1)^3,9*(-1+3*x)^2,Product Rule,3,True,9*(3*x - 1)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-3x-minus-plus-minus-1-minus-to-minus-the-minus-4,(3*x+1)^4,product,(3*x+1)^4,12*(1+3*x)^3,Product Rule,3,True,12*(3*x + 1)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-3x-minus-1-minus-to-minus-the-minus-4,(3*x-1)^4,product,(3*x-1)^4,12*(-1+3*x)^3,Product Rule,3,True,12*(3*x - 1)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-3x-minus-plus-minus-1-minus-to-minus-the-minus-5,(3*x+1)^5,product,(3*x+1)^5,15*(1+3*x)^4,Product Rule,3,True,15*(3*x + 1)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-3x-minus-1-minus-to-minus-the-minus-5,(3*x-1)^5,product,(3*x-1)^5,15*(-1+3*x)^4,Product Rule,3,True,15*(3*x - 1)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-3x-minus-plus-minus-2-minus-to-minus-the-minus-2,(3*x+2)^2,product,(3*x+2)^2,6*(2+3*x),Product Rule,3,True,18*x + 12,PASS,sympy simplify: difference is exactly 0
+derivative-of-3x-minus-2-minus-to-minus-the-minus-2,(3*x-2)^2,product,(3*x-2)^2,6*(-2+3*x),Product Rule,3,True,18*x - 12,PASS,sympy simplify: difference is exactly 0
+derivative-of-3x-minus-plus-minus-2-minus-to-minus-the-minus-3,(3*x+2)^3,product,(3*x+2)^3,9*(2+3*x)^2,Product Rule,3,True,9*(3*x + 2)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-3x-minus-2-minus-to-minus-the-minus-3,(3*x-2)^3,product,(3*x-2)^3,9*(-2+3*x)^2,Product Rule,3,True,9*(3*x - 2)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-3x-minus-plus-minus-2-minus-to-minus-the-minus-4,(3*x+2)^4,product,(3*x+2)^4,12*(2+3*x)^3,Product Rule,3,True,12*(3*x + 2)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-3x-minus-2-minus-to-minus-the-minus-4,(3*x-2)^4,product,(3*x-2)^4,12*(-2+3*x)^3,Product Rule,3,True,12*(3*x - 2)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-3x-minus-plus-minus-2-minus-to-minus-the-minus-5,(3*x+2)^5,product,(3*x+2)^5,15*(2+3*x)^4,Product Rule,3,True,15*(3*x + 2)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-3x-minus-2-minus-to-minus-the-minus-5,(3*x-2)^5,product,(3*x-2)^5,15*(-2+3*x)^4,Product Rule,3,True,15*(3*x - 2)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-3x-minus-plus-minus-3-minus-to-minus-the-minus-2,(3*x+3)^2,product,(3*x+3)^2,6*(3+3*x),Product Rule,3,True,18*x + 18,PASS,sympy simplify: difference is exactly 0
+derivative-of-3x-minus-3-minus-to-minus-the-minus-2,(3*x-3)^2,product,(3*x-3)^2,6*(-3+3*x),Product Rule,3,True,18*x - 18,PASS,sympy simplify: difference is exactly 0
+derivative-of-3x-minus-plus-minus-3-minus-to-minus-the-minus-3,(3*x+3)^3,product,(3*x+3)^3,9*(3+3*x)^2,Product Rule,3,True,9*(3*x + 3)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-3x-minus-3-minus-to-minus-the-minus-3,(3*x-3)^3,product,(3*x-3)^3,9*(-3+3*x)^2,Product Rule,3,True,9*(3*x - 3)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-3x-minus-plus-minus-3-minus-to-minus-the-minus-4,(3*x+3)^4,product,(3*x+3)^4,12*(3+3*x)^3,Product Rule,3,True,12*(3*x + 3)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-3x-minus-3-minus-to-minus-the-minus-4,(3*x-3)^4,product,(3*x-3)^4,12*(-3+3*x)^3,Product Rule,3,True,12*(3*x - 3)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-3x-minus-plus-minus-3-minus-to-minus-the-minus-5,(3*x+3)^5,product,(3*x+3)^5,15*(3+3*x)^4,Product Rule,3,True,15*(3*x + 3)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-3x-minus-3-minus-to-minus-the-minus-5,(3*x-3)^5,product,(3*x-3)^5,15*(-3+3*x)^4,Product Rule,3,True,15*(3*x - 3)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-3x-minus-plus-minus-4-minus-to-minus-the-minus-2,(3*x+4)^2,product,(3*x+4)^2,6*(3*x+4),Product Rule,3,True,18*x + 24,PASS,sympy simplify: difference is exactly 0
+derivative-of-3x-minus-4-minus-to-minus-the-minus-2,(3*x-4)^2,product,(3*x-4)^2,6*(-4+3*x),Product Rule,3,True,18*x - 24,PASS,sympy simplify: difference is exactly 0
+derivative-of-3x-minus-plus-minus-4-minus-to-minus-the-minus-3,(3*x+4)^3,product,(3*x+4)^3,9*(3*x+4)^2,Product Rule,3,True,9*(3*x + 4)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-3x-minus-4-minus-to-minus-the-minus-3,(3*x-4)^3,product,(3*x-4)^3,9*(-4+3*x)^2,Product Rule,3,True,9*(3*x - 4)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-3x-minus-plus-minus-4-minus-to-minus-the-minus-4,(3*x+4)^4,product,(3*x+4)^4,12*(3*x+4)^3,Product Rule,3,True,12*(3*x + 4)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-3x-minus-4-minus-to-minus-the-minus-4,(3*x-4)^4,product,(3*x-4)^4,12*(-4+3*x)^3,Product Rule,3,True,12*(3*x - 4)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-3x-minus-plus-minus-4-minus-to-minus-the-minus-5,(3*x+4)^5,product,(3*x+4)^5,15*(3*x+4)^4,Product Rule,3,True,15*(3*x + 4)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-3x-minus-4-minus-to-minus-the-minus-5,(3*x-4)^5,product,(3*x-4)^5,15*(-4+3*x)^4,Product Rule,3,True,15*(3*x - 4)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-3x-minus-plus-minus-5-minus-to-minus-the-minus-2,(3*x+5)^2,product,(3*x+5)^2,6*(3*x+5),Product Rule,3,True,18*x + 30,PASS,sympy simplify: difference is exactly 0
+derivative-of-3x-minus-5-minus-to-minus-the-minus-2,(3*x-5)^2,product,(3*x-5)^2,6*(-5+3*x),Product Rule,3,True,18*x - 30,PASS,sympy simplify: difference is exactly 0
+derivative-of-3x-minus-plus-minus-5-minus-to-minus-the-minus-3,(3*x+5)^3,product,(3*x+5)^3,9*(3*x+5)^2,Product Rule,3,True,9*(3*x + 5)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-3x-minus-5-minus-to-minus-the-minus-3,(3*x-5)^3,product,(3*x-5)^3,9*(-5+3*x)^2,Product Rule,3,True,9*(3*x - 5)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-3x-minus-plus-minus-5-minus-to-minus-the-minus-4,(3*x+5)^4,product,(3*x+5)^4,12*(3*x+5)^3,Product Rule,3,True,12*(3*x + 5)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-3x-minus-5-minus-to-minus-the-minus-4,(3*x-5)^4,product,(3*x-5)^4,12*(-5+3*x)^3,Product Rule,3,True,12*(3*x - 5)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-3x-minus-plus-minus-5-minus-to-minus-the-minus-5,(3*x+5)^5,product,(3*x+5)^5,15*(3*x+5)^4,Product Rule,3,True,15*(3*x + 5)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-3x-minus-5-minus-to-minus-the-minus-5,(3*x-5)^5,product,(3*x-5)^5,15*(-5+3*x)^4,Product Rule,3,True,15*(3*x - 5)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-4x-minus-plus-minus-1-minus-to-minus-the-minus-2,(4*x+1)^2,product,(4*x+1)^2,8*(1+4*x),Product Rule,3,True,32*x + 8,PASS,sympy simplify: difference is exactly 0
+derivative-of-4x-minus-1-minus-to-minus-the-minus-2,(4*x-1)^2,product,(4*x-1)^2,8*(-1+4*x),Product Rule,3,True,32*x - 8,PASS,sympy simplify: difference is exactly 0
+derivative-of-4x-minus-plus-minus-1-minus-to-minus-the-minus-3,(4*x+1)^3,product,(4*x+1)^3,12*(1+4*x)^2,Product Rule,3,True,12*(4*x + 1)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-4x-minus-1-minus-to-minus-the-minus-3,(4*x-1)^3,product,(4*x-1)^3,12*(-1+4*x)^2,Product Rule,3,True,12*(4*x - 1)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-4x-minus-plus-minus-1-minus-to-minus-the-minus-4,(4*x+1)^4,product,(4*x+1)^4,16*(1+4*x)^3,Product Rule,3,True,16*(4*x + 1)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-4x-minus-1-minus-to-minus-the-minus-4,(4*x-1)^4,product,(4*x-1)^4,16*(-1+4*x)^3,Product Rule,3,True,16*(4*x - 1)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-4x-minus-plus-minus-1-minus-to-minus-the-minus-5,(4*x+1)^5,product,(4*x+1)^5,20*(1+4*x)^4,Product Rule,3,True,20*(4*x + 1)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-4x-minus-1-minus-to-minus-the-minus-5,(4*x-1)^5,product,(4*x-1)^5,20*(-1+4*x)^4,Product Rule,3,True,20*(4*x - 1)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-4x-minus-plus-minus-2-minus-to-minus-the-minus-2,(4*x+2)^2,product,(4*x+2)^2,8*(2+4*x),Product Rule,3,True,32*x + 16,PASS,sympy simplify: difference is exactly 0
+derivative-of-4x-minus-2-minus-to-minus-the-minus-2,(4*x-2)^2,product,(4*x-2)^2,8*(-2+4*x),Product Rule,3,True,32*x - 16,PASS,sympy simplify: difference is exactly 0
+derivative-of-4x-minus-plus-minus-2-minus-to-minus-the-minus-3,(4*x+2)^3,product,(4*x+2)^3,12*(2+4*x)^2,Product Rule,3,True,12*(4*x + 2)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-4x-minus-2-minus-to-minus-the-minus-3,(4*x-2)^3,product,(4*x-2)^3,12*(-2+4*x)^2,Product Rule,3,True,12*(4*x - 2)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-4x-minus-plus-minus-2-minus-to-minus-the-minus-4,(4*x+2)^4,product,(4*x+2)^4,16*(2+4*x)^3,Product Rule,3,True,16*(4*x + 2)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-4x-minus-2-minus-to-minus-the-minus-4,(4*x-2)^4,product,(4*x-2)^4,16*(-2+4*x)^3,Product Rule,3,True,16*(4*x - 2)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-4x-minus-plus-minus-2-minus-to-minus-the-minus-5,(4*x+2)^5,product,(4*x+2)^5,20*(2+4*x)^4,Product Rule,3,True,20*(4*x + 2)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-4x-minus-2-minus-to-minus-the-minus-5,(4*x-2)^5,product,(4*x-2)^5,20*(-2+4*x)^4,Product Rule,3,True,20*(4*x - 2)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-4x-minus-plus-minus-3-minus-to-minus-the-minus-2,(4*x+3)^2,product,(4*x+3)^2,8*(3+4*x),Product Rule,3,True,32*x + 24,PASS,sympy simplify: difference is exactly 0
+derivative-of-4x-minus-3-minus-to-minus-the-minus-2,(4*x-3)^2,product,(4*x-3)^2,8*(-3+4*x),Product Rule,3,True,32*x - 24,PASS,sympy simplify: difference is exactly 0
+derivative-of-4x-minus-plus-minus-3-minus-to-minus-the-minus-3,(4*x+3)^3,product,(4*x+3)^3,12*(3+4*x)^2,Product Rule,3,True,12*(4*x + 3)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-4x-minus-3-minus-to-minus-the-minus-3,(4*x-3)^3,product,(4*x-3)^3,12*(-3+4*x)^2,Product Rule,3,True,12*(4*x - 3)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-4x-minus-plus-minus-3-minus-to-minus-the-minus-4,(4*x+3)^4,product,(4*x+3)^4,16*(3+4*x)^3,Product Rule,3,True,16*(4*x + 3)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-4x-minus-3-minus-to-minus-the-minus-4,(4*x-3)^4,product,(4*x-3)^4,16*(-3+4*x)^3,Product Rule,3,True,16*(4*x - 3)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-4x-minus-plus-minus-3-minus-to-minus-the-minus-5,(4*x+3)^5,product,(4*x+3)^5,20*(3+4*x)^4,Product Rule,3,True,20*(4*x + 3)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-4x-minus-3-minus-to-minus-the-minus-5,(4*x-3)^5,product,(4*x-3)^5,20*(-3+4*x)^4,Product Rule,3,True,20*(4*x - 3)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-4x-minus-plus-minus-4-minus-to-minus-the-minus-2,(4*x+4)^2,product,(4*x+4)^2,8*(4+4*x),Product Rule,3,True,32*x + 32,PASS,sympy simplify: difference is exactly 0
+derivative-of-4x-minus-4-minus-to-minus-the-minus-2,(4*x-4)^2,product,(4*x-4)^2,8*(-4+4*x),Product Rule,3,True,32*x - 32,PASS,sympy simplify: difference is exactly 0
+derivative-of-4x-minus-plus-minus-4-minus-to-minus-the-minus-3,(4*x+4)^3,product,(4*x+4)^3,12*(4+4*x)^2,Product Rule,3,True,12*(4*x + 4)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-4x-minus-4-minus-to-minus-the-minus-3,(4*x-4)^3,product,(4*x-4)^3,12*(-4+4*x)^2,Product Rule,3,True,12*(4*x - 4)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-4x-minus-plus-minus-4-minus-to-minus-the-minus-4,(4*x+4)^4,product,(4*x+4)^4,16*(4+4*x)^3,Product Rule,3,True,16*(4*x + 4)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-4x-minus-4-minus-to-minus-the-minus-4,(4*x-4)^4,product,(4*x-4)^4,16*(-4+4*x)^3,Product Rule,3,True,16*(4*x - 4)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-4x-minus-plus-minus-4-minus-to-minus-the-minus-5,(4*x+4)^5,product,(4*x+4)^5,20*(4+4*x)^4,Product Rule,3,True,20*(4*x + 4)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-4x-minus-4-minus-to-minus-the-minus-5,(4*x-4)^5,product,(4*x-4)^5,20*(-4+4*x)^4,Product Rule,3,True,20*(4*x - 4)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-4x-minus-plus-minus-5-minus-to-minus-the-minus-2,(4*x+5)^2,product,(4*x+5)^2,8*(4*x+5),Product Rule,3,True,32*x + 40,PASS,sympy simplify: difference is exactly 0
+derivative-of-4x-minus-5-minus-to-minus-the-minus-2,(4*x-5)^2,product,(4*x-5)^2,8*(-5+4*x),Product Rule,3,True,32*x - 40,PASS,sympy simplify: difference is exactly 0
+derivative-of-4x-minus-plus-minus-5-minus-to-minus-the-minus-3,(4*x+5)^3,product,(4*x+5)^3,12*(4*x+5)^2,Product Rule,3,True,12*(4*x + 5)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-4x-minus-5-minus-to-minus-the-minus-3,(4*x-5)^3,product,(4*x-5)^3,12*(-5+4*x)^2,Product Rule,3,True,12*(4*x - 5)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-4x-minus-plus-minus-5-minus-to-minus-the-minus-4,(4*x+5)^4,product,(4*x+5)^4,16*(4*x+5)^3,Product Rule,3,True,16*(4*x + 5)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-4x-minus-5-minus-to-minus-the-minus-4,(4*x-5)^4,product,(4*x-5)^4,16*(-5+4*x)^3,Product Rule,3,True,16*(4*x - 5)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-4x-minus-plus-minus-5-minus-to-minus-the-minus-5,(4*x+5)^5,product,(4*x+5)^5,20*(4*x+5)^4,Product Rule,3,True,20*(4*x + 5)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-4x-minus-5-minus-to-minus-the-minus-5,(4*x-5)^5,product,(4*x-5)^5,20*(-5+4*x)^4,Product Rule,3,True,20*(4*x - 5)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-5x-minus-plus-minus-1-minus-to-minus-the-minus-2,(5*x+1)^2,product,(5*x+1)^2,10*(1+5*x),Product Rule,3,True,50*x + 10,PASS,sympy simplify: difference is exactly 0
+derivative-of-5x-minus-1-minus-to-minus-the-minus-2,(5*x-1)^2,product,(5*x-1)^2,10*(-1+5*x),Product Rule,3,True,50*x - 10,PASS,sympy simplify: difference is exactly 0
+derivative-of-5x-minus-plus-minus-1-minus-to-minus-the-minus-3,(5*x+1)^3,product,(5*x+1)^3,15*(1+5*x)^2,Product Rule,3,True,15*(5*x + 1)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-5x-minus-1-minus-to-minus-the-minus-3,(5*x-1)^3,product,(5*x-1)^3,15*(-1+5*x)^2,Product Rule,3,True,15*(5*x - 1)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-5x-minus-plus-minus-1-minus-to-minus-the-minus-4,(5*x+1)^4,product,(5*x+1)^4,20*(1+5*x)^3,Product Rule,3,True,20*(5*x + 1)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-5x-minus-1-minus-to-minus-the-minus-4,(5*x-1)^4,product,(5*x-1)^4,20*(-1+5*x)^3,Product Rule,3,True,20*(5*x - 1)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-5x-minus-plus-minus-1-minus-to-minus-the-minus-5,(5*x+1)^5,product,(5*x+1)^5,25*(1+5*x)^4,Product Rule,3,True,25*(5*x + 1)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-5x-minus-1-minus-to-minus-the-minus-5,(5*x-1)^5,product,(5*x-1)^5,25*(-1+5*x)^4,Product Rule,3,True,25*(5*x - 1)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-5x-minus-plus-minus-2-minus-to-minus-the-minus-2,(5*x+2)^2,product,(5*x+2)^2,10*(2+5*x),Product Rule,3,True,50*x + 20,PASS,sympy simplify: difference is exactly 0
+derivative-of-5x-minus-2-minus-to-minus-the-minus-2,(5*x-2)^2,product,(5*x-2)^2,10*(-2+5*x),Product Rule,3,True,50*x - 20,PASS,sympy simplify: difference is exactly 0
+derivative-of-5x-minus-plus-minus-2-minus-to-minus-the-minus-3,(5*x+2)^3,product,(5*x+2)^3,15*(2+5*x)^2,Product Rule,3,True,15*(5*x + 2)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-5x-minus-2-minus-to-minus-the-minus-3,(5*x-2)^3,product,(5*x-2)^3,15*(-2+5*x)^2,Product Rule,3,True,15*(5*x - 2)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-5x-minus-plus-minus-2-minus-to-minus-the-minus-4,(5*x+2)^4,product,(5*x+2)^4,20*(2+5*x)^3,Product Rule,3,True,20*(5*x + 2)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-5x-minus-2-minus-to-minus-the-minus-4,(5*x-2)^4,product,(5*x-2)^4,20*(-2+5*x)^3,Product Rule,3,True,20*(5*x - 2)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-5x-minus-plus-minus-2-minus-to-minus-the-minus-5,(5*x+2)^5,product,(5*x+2)^5,25*(2+5*x)^4,Product Rule,3,True,25*(5*x + 2)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-5x-minus-2-minus-to-minus-the-minus-5,(5*x-2)^5,product,(5*x-2)^5,25*(-2+5*x)^4,Product Rule,3,True,25*(5*x - 2)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-5x-minus-plus-minus-3-minus-to-minus-the-minus-2,(5*x+3)^2,product,(5*x+3)^2,10*(3+5*x),Product Rule,3,True,50*x + 30,PASS,sympy simplify: difference is exactly 0
+derivative-of-5x-minus-3-minus-to-minus-the-minus-2,(5*x-3)^2,product,(5*x-3)^2,10*(-3+5*x),Product Rule,3,True,50*x - 30,PASS,sympy simplify: difference is exactly 0
+derivative-of-5x-minus-plus-minus-3-minus-to-minus-the-minus-3,(5*x+3)^3,product,(5*x+3)^3,15*(3+5*x)^2,Product Rule,3,True,15*(5*x + 3)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-5x-minus-3-minus-to-minus-the-minus-3,(5*x-3)^3,product,(5*x-3)^3,15*(-3+5*x)^2,Product Rule,3,True,15*(5*x - 3)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-5x-minus-plus-minus-3-minus-to-minus-the-minus-4,(5*x+3)^4,product,(5*x+3)^4,20*(3+5*x)^3,Product Rule,3,True,20*(5*x + 3)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-5x-minus-3-minus-to-minus-the-minus-4,(5*x-3)^4,product,(5*x-3)^4,20*(-3+5*x)^3,Product Rule,3,True,20*(5*x - 3)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-5x-minus-plus-minus-3-minus-to-minus-the-minus-5,(5*x+3)^5,product,(5*x+3)^5,25*(3+5*x)^4,Product Rule,3,True,25*(5*x + 3)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-5x-minus-3-minus-to-minus-the-minus-5,(5*x-3)^5,product,(5*x-3)^5,25*(-3+5*x)^4,Product Rule,3,True,25*(5*x - 3)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-5x-minus-plus-minus-4-minus-to-minus-the-minus-2,(5*x+4)^2,product,(5*x+4)^2,10*(4+5*x),Product Rule,3,True,50*x + 40,PASS,sympy simplify: difference is exactly 0
+derivative-of-5x-minus-4-minus-to-minus-the-minus-2,(5*x-4)^2,product,(5*x-4)^2,10*(-4+5*x),Product Rule,3,True,50*x - 40,PASS,sympy simplify: difference is exactly 0
+derivative-of-5x-minus-plus-minus-4-minus-to-minus-the-minus-3,(5*x+4)^3,product,(5*x+4)^3,15*(4+5*x)^2,Product Rule,3,True,15*(5*x + 4)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-5x-minus-4-minus-to-minus-the-minus-3,(5*x-4)^3,product,(5*x-4)^3,15*(-4+5*x)^2,Product Rule,3,True,15*(5*x - 4)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-5x-minus-plus-minus-4-minus-to-minus-the-minus-4,(5*x+4)^4,product,(5*x+4)^4,20*(4+5*x)^3,Product Rule,3,True,20*(5*x + 4)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-5x-minus-4-minus-to-minus-the-minus-4,(5*x-4)^4,product,(5*x-4)^4,20*(-4+5*x)^3,Product Rule,3,True,20*(5*x - 4)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-5x-minus-plus-minus-4-minus-to-minus-the-minus-5,(5*x+4)^5,product,(5*x+4)^5,25*(4+5*x)^4,Product Rule,3,True,25*(5*x + 4)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-5x-minus-4-minus-to-minus-the-minus-5,(5*x-4)^5,product,(5*x-4)^5,25*(-4+5*x)^4,Product Rule,3,True,25*(5*x - 4)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-5x-minus-plus-minus-5-minus-to-minus-the-minus-2,(5*x+5)^2,product,(5*x+5)^2,10*(5+5*x),Product Rule,3,True,50*x + 50,PASS,sympy simplify: difference is exactly 0
+derivative-of-5x-minus-5-minus-to-minus-the-minus-2,(5*x-5)^2,product,(5*x-5)^2,10*(-5+5*x),Product Rule,3,True,50*x - 50,PASS,sympy simplify: difference is exactly 0
+derivative-of-5x-minus-plus-minus-5-minus-to-minus-the-minus-3,(5*x+5)^3,product,(5*x+5)^3,15*(5+5*x)^2,Product Rule,3,True,15*(5*x + 5)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-5x-minus-5-minus-to-minus-the-minus-3,(5*x-5)^3,product,(5*x-5)^3,15*(-5+5*x)^2,Product Rule,3,True,15*(5*x - 5)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-5x-minus-plus-minus-5-minus-to-minus-the-minus-4,(5*x+5)^4,product,(5*x+5)^4,20*(5+5*x)^3,Product Rule,3,True,20*(5*x + 5)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-5x-minus-5-minus-to-minus-the-minus-4,(5*x-5)^4,product,(5*x-5)^4,20*(-5+5*x)^3,Product Rule,3,True,20*(5*x - 5)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-5x-minus-plus-minus-5-minus-to-minus-the-minus-5,(5*x+5)^5,product,(5*x+5)^5,25*(5+5*x)^4,Product Rule,3,True,25*(5*x + 5)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-5x-minus-5-minus-to-minus-the-minus-5,(5*x-5)^5,product,(5*x-5)^5,25*(-5+5*x)^4,Product Rule,3,True,25*(5*x - 5)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-x,x^x,exponential,x^x,(1+log(x))*x^x,Power Rule,2,True,x**x*(log(x) + 1),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-sinx,x^sin(x),trig,x^sin(x),(cos(x)*log(x)+sin(x)*x^(-1))*x^sin(x),Power Rule,2,True,x**sin(x)*(log(x)*cos(x) + sin(x)/x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sinx-minus-to-minus-the-minus-x,sin(x)^x,trig,sin(x)^x,(cos(x)*sin(x)^(-1)*x+log(sin(x)))*sin(x)^x,Power Rule,2,True,(x*cos(x)/sin(x) + log(sin(x)))*sin(x)**x,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-lnx,x^ln(x),ln,x^log(x),2*log(x)*x^(-1+log(x)),Logarithmic Rule,3,True,2*x**log(x)*log(x)/x,PASS,sympy simplify: difference is exactly 0
+derivative-of-sqrtx-minus-to-minus-the-minus-2-minus-plus-minus-1,sqrt(x^2+1),power,sqrt(x^2+1),(1+x^2)^(-1/2)*x,Power Rule,2,True,x/sqrt(x**2 + 1),PASS,sympy simplify: difference is exactly 0
+derivative-of-sqrtx-minus-to-minus-the-minus-2-minus-1,sqrt(x^2-1),power,sqrt(x^2-1),(-1+x^2)^(-1/2)*x,Power Rule,2,True,x/sqrt(x**2 - 1),PASS,sympy simplify: difference is exactly 0
+derivative-of-sqrt1-minus-x-minus-to-minus-the-minus-2,sqrt(1-x^2),power,sqrt(1-x^2),-(-x^2+1)^(-1/2)*x,Chain Rule,3,True,-x/sqrt(1 - x**2),PASS,sympy simplify: difference is exactly 0
+derivative-of-1-minus-over-minus-sqrt1-minus-x-minus-to-minus-the-minus-2,1/sqrt(1-x^2),quotient,1/sqrt(1-x^2),(-x^2+1)^(-3/2)*x,Quotient Rule,3,True,x/(1 - x**2)**(3/2),PASS,sympy simplify: difference is exactly 0
+derivative-of-sqrtx-minus-to-minus-the-minus-2-minus-plus-minus-2,sqrt(x^2+2),power,sqrt(x^2+2),(2+x^2)^(-1/2)*x,Power Rule,2,True,x/sqrt(x**2 + 2),PASS,sympy simplify: difference is exactly 0
+derivative-of-sqrtx-minus-to-minus-the-minus-2-minus-2,sqrt(x^2-2),power,sqrt(x^2-2),(-2+x^2)^(-1/2)*x,Power Rule,2,True,x/sqrt(x**2 - 2),PASS,sympy simplify: difference is exactly 0
+derivative-of-sqrt2-minus-x-minus-to-minus-the-minus-2,sqrt(2-x^2),power,sqrt(2-x^2),-(-x^2+2)^(-1/2)*x,Chain Rule,3,True,-x/sqrt(2 - x**2),PASS,sympy simplify: difference is exactly 0
+derivative-of-1-minus-over-minus-sqrt2-minus-x-minus-to-minus-the-minus-2,1/sqrt(2-x^2),quotient,1/sqrt(2-x^2),(-x^2+2)^(-3/2)*x,Quotient Rule,3,True,x/(2 - x**2)**(3/2),PASS,sympy simplify: difference is exactly 0
+derivative-of-sqrtx-minus-to-minus-the-minus-2-minus-plus-minus-3,sqrt(x^2+3),power,sqrt(x^2+3),(3+x^2)^(-1/2)*x,Power Rule,2,True,x/sqrt(x**2 + 3),PASS,sympy simplify: difference is exactly 0
+derivative-of-sqrtx-minus-to-minus-the-minus-2-minus-3,sqrt(x^2-3),power,sqrt(x^2-3),(-3+x^2)^(-1/2)*x,Power Rule,2,True,x/sqrt(x**2 - 3),PASS,sympy simplify: difference is exactly 0
+derivative-of-sqrt3-minus-x-minus-to-minus-the-minus-2,sqrt(3-x^2),power,sqrt(3-x^2),-(-x^2+3)^(-1/2)*x,Chain Rule,3,True,-x/sqrt(3 - x**2),PASS,sympy simplify: difference is exactly 0
+derivative-of-1-minus-over-minus-sqrt3-minus-x-minus-to-minus-the-minus-2,1/sqrt(3-x^2),quotient,1/sqrt(3-x^2),(-x^2+3)^(-3/2)*x,Quotient Rule,3,True,x/(3 - x**2)**(3/2),PASS,sympy simplify: difference is exactly 0
+derivative-of-sqrtx-minus-to-minus-the-minus-2-minus-plus-minus-4,sqrt(x^2+4),power,sqrt(x^2+4),(4+x^2)^(-1/2)*x,Power Rule,2,True,x/sqrt(x**2 + 4),PASS,sympy simplify: difference is exactly 0
+derivative-of-sqrtx-minus-to-minus-the-minus-2-minus-4,sqrt(x^2-4),power,sqrt(x^2-4),(-4+x^2)^(-1/2)*x,Power Rule,2,True,x/sqrt(x**2 - 4),PASS,sympy simplify: difference is exactly 0
+derivative-of-sqrt4-minus-x-minus-to-minus-the-minus-2,sqrt(4-x^2),power,sqrt(4-x^2),-(-x^2+4)^(-1/2)*x,Chain Rule,3,True,-x/sqrt(4 - x**2),PASS,sympy simplify: difference is exactly 0
+derivative-of-1-minus-over-minus-sqrt4-minus-x-minus-to-minus-the-minus-2,1/sqrt(4-x^2),quotient,1/sqrt(4-x^2),(-x^2+4)^(-3/2)*x,Quotient Rule,3,True,x/(4 - x**2)**(3/2),PASS,sympy simplify: difference is exactly 0
+derivative-of-sqrtx-minus-to-minus-the-minus-2-minus-plus-minus-5,sqrt(x^2+5),power,sqrt(x^2+5),(5+x^2)^(-1/2)*x,Power Rule,2,True,x/sqrt(x**2 + 5),PASS,sympy simplify: difference is exactly 0
+derivative-of-sqrtx-minus-to-minus-the-minus-2-minus-5,sqrt(x^2-5),power,sqrt(x^2-5),(-5+x^2)^(-1/2)*x,Power Rule,2,True,x/sqrt(x**2 - 5),PASS,sympy simplify: difference is exactly 0
+derivative-of-sqrt5-minus-x-minus-to-minus-the-minus-2,sqrt(5-x^2),power,sqrt(5-x^2),-(-x^2+5)^(-1/2)*x,Chain Rule,3,True,-x/sqrt(5 - x**2),PASS,sympy simplify: difference is exactly 0
+derivative-of-1-minus-over-minus-sqrt5-minus-x-minus-to-minus-the-minus-2,1/sqrt(5-x^2),quotient,1/sqrt(5-x^2),(-x^2+5)^(-3/2)*x,Quotient Rule,3,True,x/(5 - x**2)**(3/2),PASS,sympy simplify: difference is exactly 0
+derivative-of-sqrtx-minus-to-minus-the-minus-2-minus-plus-minus-6,sqrt(x^2+6),power,sqrt(x^2+6),(6+x^2)^(-1/2)*x,Power Rule,2,True,x/sqrt(x**2 + 6),PASS,sympy simplify: difference is exactly 0
+derivative-of-sqrtx-minus-to-minus-the-minus-2-minus-6,sqrt(x^2-6),power,sqrt(x^2-6),(-6+x^2)^(-1/2)*x,Power Rule,2,True,x/sqrt(x**2 - 6),PASS,sympy simplify: difference is exactly 0
+derivative-of-sqrt6-minus-x-minus-to-minus-the-minus-2,sqrt(6-x^2),power,sqrt(6-x^2),-(-x^2+6)^(-1/2)*x,Chain Rule,3,True,-x/sqrt(6 - x**2),PASS,sympy simplify: difference is exactly 0
+derivative-of-1-minus-over-minus-sqrt6-minus-x-minus-to-minus-the-minus-2,1/sqrt(6-x^2),quotient,1/sqrt(6-x^2),(-x^2+6)^(-3/2)*x,Quotient Rule,3,True,x/(6 - x**2)**(3/2),PASS,sympy simplify: difference is exactly 0
+derivative-of-sqrtx-minus-to-minus-the-minus-2-minus-plus-minus-7,sqrt(x^2+7),power,sqrt(x^2+7),(7+x^2)^(-1/2)*x,Power Rule,2,True,x/sqrt(x**2 + 7),PASS,sympy simplify: difference is exactly 0
+derivative-of-sqrtx-minus-to-minus-the-minus-2-minus-7,sqrt(x^2-7),power,sqrt(x^2-7),(-7+x^2)^(-1/2)*x,Power Rule,2,True,x/sqrt(x**2 - 7),PASS,sympy simplify: difference is exactly 0
+derivative-of-sqrt7-minus-x-minus-to-minus-the-minus-2,sqrt(7-x^2),power,sqrt(7-x^2),-(-x^2+7)^(-1/2)*x,Chain Rule,3,True,-x/sqrt(7 - x**2),PASS,sympy simplify: difference is exactly 0
+derivative-of-1-minus-over-minus-sqrt7-minus-x-minus-to-minus-the-minus-2,1/sqrt(7-x^2),quotient,1/sqrt(7-x^2),(-x^2+7)^(-3/2)*x,Quotient Rule,3,True,x/(7 - x**2)**(3/2),PASS,sympy simplify: difference is exactly 0
+derivative-of-sqrtx-minus-to-minus-the-minus-2-minus-plus-minus-8,sqrt(x^2+8),power,sqrt(x^2+8),(8+x^2)^(-1/2)*x,Power Rule,2,True,x/sqrt(x**2 + 8),PASS,sympy simplify: difference is exactly 0
+derivative-of-sqrtx-minus-to-minus-the-minus-2-minus-8,sqrt(x^2-8),power,sqrt(x^2-8),(-8+x^2)^(-1/2)*x,Power Rule,2,True,x/sqrt(x**2 - 8),PASS,sympy simplify: difference is exactly 0
+derivative-of-sqrt8-minus-x-minus-to-minus-the-minus-2,sqrt(8-x^2),power,sqrt(8-x^2),-(-x^2+8)^(-1/2)*x,Chain Rule,3,True,-x/sqrt(8 - x**2),PASS,sympy simplify: difference is exactly 0
+derivative-of-1-minus-over-minus-sqrt8-minus-x-minus-to-minus-the-minus-2,1/sqrt(8-x^2),quotient,1/sqrt(8-x^2),(-x^2+8)^(-3/2)*x,Quotient Rule,3,True,x/(8 - x**2)**(3/2),PASS,sympy simplify: difference is exactly 0
+derivative-of-sqrtx-minus-to-minus-the-minus-2-minus-plus-minus-9,sqrt(x^2+9),power,sqrt(x^2+9),(9+x^2)^(-1/2)*x,Power Rule,2,True,x/sqrt(x**2 + 9),PASS,sympy simplify: difference is exactly 0
+derivative-of-sqrtx-minus-to-minus-the-minus-2-minus-9,sqrt(x^2-9),power,sqrt(x^2-9),(-9+x^2)^(-1/2)*x,Power Rule,2,True,x/sqrt(x**2 - 9),PASS,sympy simplify: difference is exactly 0
+derivative-of-sqrt9-minus-x-minus-to-minus-the-minus-2,sqrt(9-x^2),power,sqrt(9-x^2),-(-x^2+9)^(-1/2)*x,Chain Rule,3,True,-x/sqrt(9 - x**2),PASS,sympy simplify: difference is exactly 0
+derivative-of-1-minus-over-minus-sqrt9-minus-x-minus-to-minus-the-minus-2,1/sqrt(9-x^2),quotient,1/sqrt(9-x^2),(-x^2+9)^(-3/2)*x,Quotient Rule,3,True,x/(9 - x**2)**(3/2),PASS,sympy simplify: difference is exactly 0
+derivative-of-sqrtx-minus-to-minus-the-minus-2-minus-plus-minus-10,sqrt(x^2+10),power,sqrt(x^2+10),(10+x^2)^(-1/2)*x,Power Rule,2,True,x/sqrt(x**2 + 10),PASS,sympy simplify: difference is exactly 0
+derivative-of-sqrtx-minus-to-minus-the-minus-2-minus-10,sqrt(x^2-10),power,sqrt(x^2-10),(-10+x^2)^(-1/2)*x,Power Rule,2,True,x/sqrt(x**2 - 10),PASS,sympy simplify: difference is exactly 0
+derivative-of-sqrt10-minus-x-minus-to-minus-the-minus-2,sqrt(10-x^2),power,sqrt(10-x^2),-(-x^2+10)^(-1/2)*x,Chain Rule,3,True,-x/sqrt(10 - x**2),PASS,sympy simplify: difference is exactly 0
+derivative-of-1-minus-over-minus-sqrt10-minus-x-minus-to-minus-the-minus-2,1/sqrt(10-x^2),quotient,1/sqrt(10-x^2),(-x^2+10)^(-3/2)*x,Quotient Rule,3,True,x/(10 - x**2)**(3/2),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin2xcos2x,sin(2*x)*cos(2*x),trig,sin(2*x)*cos(2*x),-2*sin(2*x)^2+2*cos(2*x)^2,Product Rule,3,True,-2*sin(2*x)**2 + 2*cos(2*x)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-tan2xsec2x,tan(2*x)*sec(2*x),trig,tan(2*x)*sec(2*x),2*sec(2*x)*tan(2*x)^2+2*sec(2*x)^3,Product Rule,3,True,(2*tan(2*x)**2 + 2)*sec(2*x) + 2*tan(2*x)**2*sec(2*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin3xcos3x,sin(3*x)*cos(3*x),trig,sin(3*x)*cos(3*x),-3*sin(3*x)^2+3*cos(3*x)^2,Product Rule,3,True,-3*sin(3*x)**2 + 3*cos(3*x)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-tan3xsec3x,tan(3*x)*sec(3*x),trig,tan(3*x)*sec(3*x),3*sec(3*x)*tan(3*x)^2+3*sec(3*x)^3,Product Rule,3,True,(3*tan(3*x)**2 + 3)*sec(3*x) + 3*tan(3*x)**2*sec(3*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin4xcos4x,sin(4*x)*cos(4*x),trig,sin(4*x)*cos(4*x),-4*sin(4*x)^2+4*cos(4*x)^2,Product Rule,3,True,-4*sin(4*x)**2 + 4*cos(4*x)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-tan4xsec4x,tan(4*x)*sec(4*x),trig,tan(4*x)*sec(4*x),4*sec(4*x)*tan(4*x)^2+4*sec(4*x)^3,Product Rule,3,True,(4*tan(4*x)**2 + 4)*sec(4*x) + 4*tan(4*x)**2*sec(4*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin5xcos5x,sin(5*x)*cos(5*x),trig,sin(5*x)*cos(5*x),-5*sin(5*x)^2+5*cos(5*x)^2,Product Rule,3,True,-5*sin(5*x)**2 + 5*cos(5*x)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-tan5xsec5x,tan(5*x)*sec(5*x),trig,tan(5*x)*sec(5*x),5*sec(5*x)*tan(5*x)^2+5*sec(5*x)^3,Product Rule,3,True,(5*tan(5*x)**2 + 5)*sec(5*x) + 5*tan(5*x)**2*sec(5*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin6xcos6x,sin(6*x)*cos(6*x),trig,sin(6*x)*cos(6*x),-6*sin(6*x)^2+6*cos(6*x)^2,Product Rule,3,True,-6*sin(6*x)**2 + 6*cos(6*x)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-tan6xsec6x,tan(6*x)*sec(6*x),trig,tan(6*x)*sec(6*x),6*sec(6*x)*tan(6*x)^2+6*sec(6*x)^3,Product Rule,3,True,(6*tan(6*x)**2 + 6)*sec(6*x) + 6*tan(6*x)**2*sec(6*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin7xcos7x,sin(7*x)*cos(7*x),trig,sin(7*x)*cos(7*x),-7*sin(7*x)^2+7*cos(7*x)^2,Product Rule,3,True,-7*sin(7*x)**2 + 7*cos(7*x)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-tan7xsec7x,tan(7*x)*sec(7*x),trig,tan(7*x)*sec(7*x),7*sec(7*x)*tan(7*x)^2+7*sec(7*x)^3,Product Rule,3,True,(7*tan(7*x)**2 + 7)*sec(7*x) + 7*tan(7*x)**2*sec(7*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin8xcos8x,sin(8*x)*cos(8*x),trig,sin(8*x)*cos(8*x),-8*sin(8*x)^2+8*cos(8*x)^2,Product Rule,3,True,-8*sin(8*x)**2 + 8*cos(8*x)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-tan8xsec8x,tan(8*x)*sec(8*x),trig,tan(8*x)*sec(8*x),8*sec(8*x)*tan(8*x)^2+8*sec(8*x)^3,Product Rule,3,True,(8*tan(8*x)**2 + 8)*sec(8*x) + 8*tan(8*x)**2*sec(8*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin9xcos9x,sin(9*x)*cos(9*x),trig,sin(9*x)*cos(9*x),-9*sin(9*x)^2+9*cos(9*x)^2,Product Rule,3,True,-9*sin(9*x)**2 + 9*cos(9*x)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-tan9xsec9x,tan(9*x)*sec(9*x),trig,tan(9*x)*sec(9*x),9*sec(9*x)*tan(9*x)^2+9*sec(9*x)^3,Product Rule,3,True,(9*tan(9*x)**2 + 9)*sec(9*x) + 9*tan(9*x)**2*sec(9*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin10xcos10x,sin(10*x)*cos(10*x),trig,sin(10*x)*cos(10*x),-10*sin(10*x)^2+10*cos(10*x)^2,Product Rule,3,True,-10*sin(10*x)**2 + 10*cos(10*x)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-tan10xsec10x,tan(10*x)*sec(10*x),trig,tan(10*x)*sec(10*x),10*sec(10*x)*tan(10*x)^2+10*sec(10*x)^3,Product Rule,3,True,(10*tan(10*x)**2 + 10)*sec(10*x) + 10*tan(10*x)**2*sec(10*x),PASS,sympy simplify: difference is exactly 0
+derivative-of-lnx-minus-to-minus-the-minus-2-minus-plus-minus-1,ln(x^2+1),ln,log(x^2+1),2*(1+x^2)^(-1)*x,Logarithmic Rule,3,True,2*x/(x**2 + 1),PASS,sympy simplify: difference is exactly 0
+derivative-of-lnx-minus-to-minus-the-minus-2-minus-1,ln(x^2-1),ln,log(x^2-1),2*(-1+x^2)^(-1)*x,Logarithmic Rule,3,True,2*x/(x**2 - 1),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-x-minus-to-minus-the-minus-2-minus-plus-minus-1,e^(x^2+1),exponential,e^(x^2+1),2*e^(1+x^2)*x,Exponential Rule,3,True,2*x*exp(x**2 + 1),PASS,sympy simplify: difference is exactly 0
+derivative-of-sinx-minus-to-minus-the-minus-2-minus-plus-minus-1,sin(x^2+1),trig,sin(x^2+1),2*cos(1+x^2)*x,Trigonometric Rule,3,True,2*x*cos(x**2 + 1),PASS,sympy simplify: difference is exactly 0
+derivative-of-cosx-minus-to-minus-the-minus-2-minus-plus-minus-1,cos(x^2+1),trig,cos(x^2+1),-2*sin(1+x^2)*x,Trigonometric Rule,3,True,-2*x*sin(x**2 + 1),PASS,sympy simplify: difference is exactly 0
+derivative-of-lnx-minus-to-minus-the-minus-2-minus-plus-minus-2,ln(x^2+2),ln,log(x^2+2),2*(2+x^2)^(-1)*x,Logarithmic Rule,3,True,2*x/(x**2 + 2),PASS,sympy simplify: difference is exactly 0
+derivative-of-lnx-minus-to-minus-the-minus-2-minus-2,ln(x^2-2),ln,log(x^2-2),2*(-2+x^2)^(-1)*x,Logarithmic Rule,3,True,2*x/(x**2 - 2),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-x-minus-to-minus-the-minus-2-minus-plus-minus-2,e^(x^2+2),exponential,e^(x^2+2),2*e^(2+x^2)*x,Exponential Rule,3,True,2*x*exp(x**2 + 2),PASS,sympy simplify: difference is exactly 0
+derivative-of-sinx-minus-to-minus-the-minus-2-minus-plus-minus-2,sin(x^2+2),trig,sin(x^2+2),2*cos(2+x^2)*x,Trigonometric Rule,3,True,2*x*cos(x**2 + 2),PASS,sympy simplify: difference is exactly 0
+derivative-of-cosx-minus-to-minus-the-minus-2-minus-plus-minus-2,cos(x^2+2),trig,cos(x^2+2),-2*sin(2+x^2)*x,Trigonometric Rule,3,True,-2*x*sin(x**2 + 2),PASS,sympy simplify: difference is exactly 0
+derivative-of-lnx-minus-to-minus-the-minus-2-minus-plus-minus-3,ln(x^2+3),ln,log(x^2+3),2*(3+x^2)^(-1)*x,Logarithmic Rule,3,True,2*x/(x**2 + 3),PASS,sympy simplify: difference is exactly 0
+derivative-of-lnx-minus-to-minus-the-minus-2-minus-3,ln(x^2-3),ln,log(x^2-3),2*(-3+x^2)^(-1)*x,Logarithmic Rule,3,True,2*x/(x**2 - 3),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-x-minus-to-minus-the-minus-2-minus-plus-minus-3,e^(x^2+3),exponential,e^(x^2+3),2*e^(3+x^2)*x,Exponential Rule,3,True,2*x*exp(x**2 + 3),PASS,sympy simplify: difference is exactly 0
+derivative-of-sinx-minus-to-minus-the-minus-2-minus-plus-minus-3,sin(x^2+3),trig,sin(x^2+3),2*cos(3+x^2)*x,Trigonometric Rule,3,True,2*x*cos(x**2 + 3),PASS,sympy simplify: difference is exactly 0
+derivative-of-cosx-minus-to-minus-the-minus-2-minus-plus-minus-3,cos(x^2+3),trig,cos(x^2+3),-2*sin(3+x^2)*x,Trigonometric Rule,3,True,-2*x*sin(x**2 + 3),PASS,sympy simplify: difference is exactly 0
+derivative-of-lnx-minus-to-minus-the-minus-2-minus-plus-minus-4,ln(x^2+4),ln,log(x^2+4),2*(4+x^2)^(-1)*x,Logarithmic Rule,3,True,2*x/(x**2 + 4),PASS,sympy simplify: difference is exactly 0
+derivative-of-lnx-minus-to-minus-the-minus-2-minus-4,ln(x^2-4),ln,log(x^2-4),2*(-4+x^2)^(-1)*x,Logarithmic Rule,3,True,2*x/(x**2 - 4),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-x-minus-to-minus-the-minus-2-minus-plus-minus-4,e^(x^2+4),exponential,e^(x^2+4),2*e^(4+x^2)*x,Exponential Rule,3,True,2*x*exp(x**2 + 4),PASS,sympy simplify: difference is exactly 0
+derivative-of-sinx-minus-to-minus-the-minus-2-minus-plus-minus-4,sin(x^2+4),trig,sin(x^2+4),2*cos(4+x^2)*x,Trigonometric Rule,3,True,2*x*cos(x**2 + 4),PASS,sympy simplify: difference is exactly 0
+derivative-of-cosx-minus-to-minus-the-minus-2-minus-plus-minus-4,cos(x^2+4),trig,cos(x^2+4),-2*sin(4+x^2)*x,Trigonometric Rule,3,True,-2*x*sin(x**2 + 4),PASS,sympy simplify: difference is exactly 0
+derivative-of-lnx-minus-to-minus-the-minus-2-minus-plus-minus-5,ln(x^2+5),ln,log(x^2+5),2*(5+x^2)^(-1)*x,Logarithmic Rule,3,True,2*x/(x**2 + 5),PASS,sympy simplify: difference is exactly 0
+derivative-of-lnx-minus-to-minus-the-minus-2-minus-5,ln(x^2-5),ln,log(x^2-5),2*(-5+x^2)^(-1)*x,Logarithmic Rule,3,True,2*x/(x**2 - 5),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-x-minus-to-minus-the-minus-2-minus-plus-minus-5,e^(x^2+5),exponential,e^(x^2+5),2*e^(5+x^2)*x,Exponential Rule,3,True,2*x*exp(x**2 + 5),PASS,sympy simplify: difference is exactly 0
+derivative-of-sinx-minus-to-minus-the-minus-2-minus-plus-minus-5,sin(x^2+5),trig,sin(x^2+5),2*cos(5+x^2)*x,Trigonometric Rule,3,True,2*x*cos(x**2 + 5),PASS,sympy simplify: difference is exactly 0
+derivative-of-cosx-minus-to-minus-the-minus-2-minus-plus-minus-5,cos(x^2+5),trig,cos(x^2+5),-2*sin(5+x^2)*x,Trigonometric Rule,3,True,-2*x*sin(x**2 + 5),PASS,sympy simplify: difference is exactly 0
+derivative-of-lnx-minus-to-minus-the-minus-2-minus-plus-minus-6,ln(x^2+6),ln,log(x^2+6),2*(6+x^2)^(-1)*x,Logarithmic Rule,3,True,2*x/(x**2 + 6),PASS,sympy simplify: difference is exactly 0
+derivative-of-lnx-minus-to-minus-the-minus-2-minus-6,ln(x^2-6),ln,log(x^2-6),2*(-6+x^2)^(-1)*x,Logarithmic Rule,3,True,2*x/(x**2 - 6),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-x-minus-to-minus-the-minus-2-minus-plus-minus-6,e^(x^2+6),exponential,e^(x^2+6),2*e^(6+x^2)*x,Exponential Rule,3,True,2*x*exp(x**2 + 6),PASS,sympy simplify: difference is exactly 0
+derivative-of-sinx-minus-to-minus-the-minus-2-minus-plus-minus-6,sin(x^2+6),trig,sin(x^2+6),2*cos(6+x^2)*x,Trigonometric Rule,3,True,2*x*cos(x**2 + 6),PASS,sympy simplify: difference is exactly 0
+derivative-of-cosx-minus-to-minus-the-minus-2-minus-plus-minus-6,cos(x^2+6),trig,cos(x^2+6),-2*sin(6+x^2)*x,Trigonometric Rule,3,True,-2*x*sin(x**2 + 6),PASS,sympy simplify: difference is exactly 0
+derivative-of-lnx-minus-to-minus-the-minus-2-minus-plus-minus-7,ln(x^2+7),ln,log(x^2+7),2*(7+x^2)^(-1)*x,Logarithmic Rule,3,True,2*x/(x**2 + 7),PASS,sympy simplify: difference is exactly 0
+derivative-of-lnx-minus-to-minus-the-minus-2-minus-7,ln(x^2-7),ln,log(x^2-7),2*(-7+x^2)^(-1)*x,Logarithmic Rule,3,True,2*x/(x**2 - 7),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-x-minus-to-minus-the-minus-2-minus-plus-minus-7,e^(x^2+7),exponential,e^(x^2+7),2*e^(7+x^2)*x,Exponential Rule,3,True,2*x*exp(x**2 + 7),PASS,sympy simplify: difference is exactly 0
+derivative-of-sinx-minus-to-minus-the-minus-2-minus-plus-minus-7,sin(x^2+7),trig,sin(x^2+7),2*cos(7+x^2)*x,Trigonometric Rule,3,True,2*x*cos(x**2 + 7),PASS,sympy simplify: difference is exactly 0
+derivative-of-cosx-minus-to-minus-the-minus-2-minus-plus-minus-7,cos(x^2+7),trig,cos(x^2+7),-2*sin(7+x^2)*x,Trigonometric Rule,3,True,-2*x*sin(x**2 + 7),PASS,sympy simplify: difference is exactly 0
+derivative-of-lnx-minus-to-minus-the-minus-2-minus-plus-minus-8,ln(x^2+8),ln,log(x^2+8),2*(8+x^2)^(-1)*x,Logarithmic Rule,3,True,2*x/(x**2 + 8),PASS,sympy simplify: difference is exactly 0
+derivative-of-lnx-minus-to-minus-the-minus-2-minus-8,ln(x^2-8),ln,log(x^2-8),2*(-8+x^2)^(-1)*x,Logarithmic Rule,3,True,2*x/(x**2 - 8),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-x-minus-to-minus-the-minus-2-minus-plus-minus-8,e^(x^2+8),exponential,e^(x^2+8),2*e^(8+x^2)*x,Exponential Rule,3,True,2*x*exp(x**2 + 8),PASS,sympy simplify: difference is exactly 0
+derivative-of-sinx-minus-to-minus-the-minus-2-minus-plus-minus-8,sin(x^2+8),trig,sin(x^2+8),2*cos(8+x^2)*x,Trigonometric Rule,3,True,2*x*cos(x**2 + 8),PASS,sympy simplify: difference is exactly 0
+derivative-of-cosx-minus-to-minus-the-minus-2-minus-plus-minus-8,cos(x^2+8),trig,cos(x^2+8),-2*sin(8+x^2)*x,Trigonometric Rule,3,True,-2*x*sin(x**2 + 8),PASS,sympy simplify: difference is exactly 0
+derivative-of-lnx-minus-to-minus-the-minus-2-minus-plus-minus-9,ln(x^2+9),ln,log(x^2+9),2*(9+x^2)^(-1)*x,Logarithmic Rule,3,True,2*x/(x**2 + 9),PASS,sympy simplify: difference is exactly 0
+derivative-of-lnx-minus-to-minus-the-minus-2-minus-9,ln(x^2-9),ln,log(x^2-9),2*(-9+x^2)^(-1)*x,Logarithmic Rule,3,True,2*x/(x**2 - 9),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-x-minus-to-minus-the-minus-2-minus-plus-minus-9,e^(x^2+9),exponential,e^(x^2+9),2*e^(9+x^2)*x,Exponential Rule,3,True,2*x*exp(x**2 + 9),PASS,sympy simplify: difference is exactly 0
+derivative-of-sinx-minus-to-minus-the-minus-2-minus-plus-minus-9,sin(x^2+9),trig,sin(x^2+9),2*cos(9+x^2)*x,Trigonometric Rule,3,True,2*x*cos(x**2 + 9),PASS,sympy simplify: difference is exactly 0
+derivative-of-cosx-minus-to-minus-the-minus-2-minus-plus-minus-9,cos(x^2+9),trig,cos(x^2+9),-2*sin(9+x^2)*x,Trigonometric Rule,3,True,-2*x*sin(x**2 + 9),PASS,sympy simplify: difference is exactly 0
+derivative-of-lnx-minus-to-minus-the-minus-2-minus-plus-minus-10,ln(x^2+10),ln,log(x^2+10),2*(10+x^2)^(-1)*x,Logarithmic Rule,3,True,2*x/(x**2 + 10),PASS,sympy simplify: difference is exactly 0
+derivative-of-lnx-minus-to-minus-the-minus-2-minus-10,ln(x^2-10),ln,log(x^2-10),2*(-10+x^2)^(-1)*x,Logarithmic Rule,3,True,2*x/(x**2 - 10),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-x-minus-to-minus-the-minus-2-minus-plus-minus-10,e^(x^2+10),exponential,e^(x^2+10),2*e^(10+x^2)*x,Exponential Rule,3,True,2*x*exp(x**2 + 10),PASS,sympy simplify: difference is exactly 0
+derivative-of-sinx-minus-to-minus-the-minus-2-minus-plus-minus-10,sin(x^2+10),trig,sin(x^2+10),2*cos(10+x^2)*x,Trigonometric Rule,3,True,2*x*cos(x**2 + 10),PASS,sympy simplify: difference is exactly 0
+derivative-of-cosx-minus-to-minus-the-minus-2-minus-plus-minus-10,cos(x^2+10),trig,cos(x^2+10),-2*sin(10+x^2)*x,Trigonometric Rule,3,True,-2*x*sin(x**2 + 10),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-2-minus-plus-minus-1-minus-to-minus-the-minus-2,(x^2+1)^2,power,(x^2+1)^2,4*(1+x^2)*x,Chain Rule,3,True,4*x*(x**2 + 1),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-2-minus-1-minus-to-minus-the-minus-2,(x^2-1)^2,power,(x^2-1)^2,4*(-1+x^2)*x,Chain Rule,3,True,4*x*(x**2 - 1),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-3-minus-plus-minus-1-minus-to-minus-the-minus-2,(x^3+1)^2,power,(x^3+1)^2,6*(1+x^3)*x^2,Chain Rule,3,True,6*x**2*(x**3 + 1),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-2-minus-plus-minus-1-minus-to-minus-the-minus-3,(x^2+1)^3,power,(x^2+1)^3,6*(1+x^2)^2*x,Chain Rule,3,True,6*x*(x**2 + 1)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-2-minus-1-minus-to-minus-the-minus-3,(x^2-1)^3,power,(x^2-1)^3,6*(-1+x^2)^2*x,Chain Rule,3,True,6*x*(x**2 - 1)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-3-minus-plus-minus-1-minus-to-minus-the-minus-3,(x^3+1)^3,power,(x^3+1)^3,9*(1+x^3)^2*x^2,Chain Rule,3,True,9*x**2*(x**3 + 1)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-2-minus-plus-minus-1-minus-to-minus-the-minus-4,(x^2+1)^4,power,(x^2+1)^4,8*(1+x^2)^3*x,Chain Rule,3,True,8*x*(x**2 + 1)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-2-minus-1-minus-to-minus-the-minus-4,(x^2-1)^4,power,(x^2-1)^4,8*(-1+x^2)^3*x,Chain Rule,3,True,8*x*(x**2 - 1)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-3-minus-plus-minus-1-minus-to-minus-the-minus-4,(x^3+1)^4,power,(x^3+1)^4,12*(1+x^3)^3*x^2,Chain Rule,3,True,12*x**2*(x**3 + 1)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-2-minus-plus-minus-1-minus-to-minus-the-minus-5,(x^2+1)^5,power,(x^2+1)^5,10*(1+x^2)^4*x,Chain Rule,3,True,10*x*(x**2 + 1)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-2-minus-1-minus-to-minus-the-minus-5,(x^2-1)^5,power,(x^2-1)^5,10*(-1+x^2)^4*x,Chain Rule,3,True,10*x*(x**2 - 1)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-3-minus-plus-minus-1-minus-to-minus-the-minus-5,(x^3+1)^5,power,(x^3+1)^5,15*(1+x^3)^4*x^2,Chain Rule,3,True,15*x**2*(x**3 + 1)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-2-minus-plus-minus-2-minus-to-minus-the-minus-2,(x^2+2)^2,power,(x^2+2)^2,4*(2+x^2)*x,Chain Rule,3,True,4*x*(x**2 + 2),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-2-minus-2-minus-to-minus-the-minus-2,(x^2-2)^2,power,(x^2-2)^2,4*(-2+x^2)*x,Chain Rule,3,True,4*x*(x**2 - 2),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-3-minus-plus-minus-2-minus-to-minus-the-minus-2,(x^3+2)^2,power,(x^3+2)^2,6*(2+x^3)*x^2,Chain Rule,3,True,6*x**2*(x**3 + 2),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-2-minus-plus-minus-2-minus-to-minus-the-minus-3,(x^2+2)^3,power,(x^2+2)^3,6*(2+x^2)^2*x,Chain Rule,3,True,6*x*(x**2 + 2)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-2-minus-2-minus-to-minus-the-minus-3,(x^2-2)^3,power,(x^2-2)^3,6*(-2+x^2)^2*x,Chain Rule,3,True,6*x*(x**2 - 2)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-3-minus-plus-minus-2-minus-to-minus-the-minus-3,(x^3+2)^3,power,(x^3+2)^3,9*(2+x^3)^2*x^2,Chain Rule,3,True,9*x**2*(x**3 + 2)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-2-minus-plus-minus-2-minus-to-minus-the-minus-4,(x^2+2)^4,power,(x^2+2)^4,8*(2+x^2)^3*x,Chain Rule,3,True,8*x*(x**2 + 2)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-2-minus-2-minus-to-minus-the-minus-4,(x^2-2)^4,power,(x^2-2)^4,8*(-2+x^2)^3*x,Chain Rule,3,True,8*x*(x**2 - 2)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-3-minus-plus-minus-2-minus-to-minus-the-minus-4,(x^3+2)^4,power,(x^3+2)^4,12*(2+x^3)^3*x^2,Chain Rule,3,True,12*x**2*(x**3 + 2)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-2-minus-plus-minus-2-minus-to-minus-the-minus-5,(x^2+2)^5,power,(x^2+2)^5,10*(2+x^2)^4*x,Chain Rule,3,True,10*x*(x**2 + 2)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-2-minus-2-minus-to-minus-the-minus-5,(x^2-2)^5,power,(x^2-2)^5,10*(-2+x^2)^4*x,Chain Rule,3,True,10*x*(x**2 - 2)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-3-minus-plus-minus-2-minus-to-minus-the-minus-5,(x^3+2)^5,power,(x^3+2)^5,15*(2+x^3)^4*x^2,Chain Rule,3,True,15*x**2*(x**3 + 2)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-2-minus-plus-minus-3-minus-to-minus-the-minus-2,(x^2+3)^2,power,(x^2+3)^2,4*(3+x^2)*x,Chain Rule,3,True,4*x*(x**2 + 3),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-2-minus-3-minus-to-minus-the-minus-2,(x^2-3)^2,power,(x^2-3)^2,4*(-3+x^2)*x,Chain Rule,3,True,4*x*(x**2 - 3),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-3-minus-plus-minus-3-minus-to-minus-the-minus-2,(x^3+3)^2,power,(x^3+3)^2,6*(3+x^3)*x^2,Chain Rule,3,True,6*x**2*(x**3 + 3),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-2-minus-plus-minus-3-minus-to-minus-the-minus-3,(x^2+3)^3,power,(x^2+3)^3,6*(3+x^2)^2*x,Chain Rule,3,True,6*x*(x**2 + 3)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-2-minus-3-minus-to-minus-the-minus-3,(x^2-3)^3,power,(x^2-3)^3,6*(-3+x^2)^2*x,Chain Rule,3,True,6*x*(x**2 - 3)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-3-minus-plus-minus-3-minus-to-minus-the-minus-3,(x^3+3)^3,power,(x^3+3)^3,9*(3+x^3)^2*x^2,Chain Rule,3,True,9*x**2*(x**3 + 3)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-2-minus-plus-minus-3-minus-to-minus-the-minus-4,(x^2+3)^4,power,(x^2+3)^4,8*(3+x^2)^3*x,Chain Rule,3,True,8*x*(x**2 + 3)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-2-minus-3-minus-to-minus-the-minus-4,(x^2-3)^4,power,(x^2-3)^4,8*(-3+x^2)^3*x,Chain Rule,3,True,8*x*(x**2 - 3)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-3-minus-plus-minus-3-minus-to-minus-the-minus-4,(x^3+3)^4,power,(x^3+3)^4,12*(3+x^3)^3*x^2,Chain Rule,3,True,12*x**2*(x**3 + 3)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-2-minus-plus-minus-3-minus-to-minus-the-minus-5,(x^2+3)^5,power,(x^2+3)^5,10*(3+x^2)^4*x,Chain Rule,3,True,10*x*(x**2 + 3)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-2-minus-3-minus-to-minus-the-minus-5,(x^2-3)^5,power,(x^2-3)^5,10*(-3+x^2)^4*x,Chain Rule,3,True,10*x*(x**2 - 3)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-3-minus-plus-minus-3-minus-to-minus-the-minus-5,(x^3+3)^5,power,(x^3+3)^5,15*(3+x^3)^4*x^2,Chain Rule,3,True,15*x**2*(x**3 + 3)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-2-minus-plus-minus-4-minus-to-minus-the-minus-2,(x^2+4)^2,power,(x^2+4)^2,4*(4+x^2)*x,Chain Rule,3,True,4*x*(x**2 + 4),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-2-minus-4-minus-to-minus-the-minus-2,(x^2-4)^2,power,(x^2-4)^2,4*(-4+x^2)*x,Chain Rule,3,True,4*x*(x**2 - 4),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-3-minus-plus-minus-4-minus-to-minus-the-minus-2,(x^3+4)^2,power,(x^3+4)^2,6*(4+x^3)*x^2,Chain Rule,3,True,6*x**2*(x**3 + 4),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-2-minus-plus-minus-4-minus-to-minus-the-minus-3,(x^2+4)^3,power,(x^2+4)^3,6*(4+x^2)^2*x,Chain Rule,3,True,6*x*(x**2 + 4)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-2-minus-4-minus-to-minus-the-minus-3,(x^2-4)^3,power,(x^2-4)^3,6*(-4+x^2)^2*x,Chain Rule,3,True,6*x*(x**2 - 4)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-3-minus-plus-minus-4-minus-to-minus-the-minus-3,(x^3+4)^3,power,(x^3+4)^3,9*(4+x^3)^2*x^2,Chain Rule,3,True,9*x**2*(x**3 + 4)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-2-minus-plus-minus-4-minus-to-minus-the-minus-4,(x^2+4)^4,power,(x^2+4)^4,8*(4+x^2)^3*x,Chain Rule,3,True,8*x*(x**2 + 4)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-2-minus-4-minus-to-minus-the-minus-4,(x^2-4)^4,power,(x^2-4)^4,8*(-4+x^2)^3*x,Chain Rule,3,True,8*x*(x**2 - 4)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-3-minus-plus-minus-4-minus-to-minus-the-minus-4,(x^3+4)^4,power,(x^3+4)^4,12*(4+x^3)^3*x^2,Chain Rule,3,True,12*x**2*(x**3 + 4)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-2-minus-plus-minus-4-minus-to-minus-the-minus-5,(x^2+4)^5,power,(x^2+4)^5,10*(4+x^2)^4*x,Chain Rule,3,True,10*x*(x**2 + 4)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-2-minus-4-minus-to-minus-the-minus-5,(x^2-4)^5,power,(x^2-4)^5,10*(-4+x^2)^4*x,Chain Rule,3,True,10*x*(x**2 - 4)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-3-minus-plus-minus-4-minus-to-minus-the-minus-5,(x^3+4)^5,power,(x^3+4)^5,15*(4+x^3)^4*x^2,Chain Rule,3,True,15*x**2*(x**3 + 4)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-2-minus-plus-minus-5-minus-to-minus-the-minus-2,(x^2+5)^2,power,(x^2+5)^2,4*(5+x^2)*x,Chain Rule,3,True,4*x*(x**2 + 5),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-2-minus-5-minus-to-minus-the-minus-2,(x^2-5)^2,power,(x^2-5)^2,4*(-5+x^2)*x,Chain Rule,3,True,4*x*(x**2 - 5),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-3-minus-plus-minus-5-minus-to-minus-the-minus-2,(x^3+5)^2,power,(x^3+5)^2,6*(5+x^3)*x^2,Chain Rule,3,True,6*x**2*(x**3 + 5),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-2-minus-plus-minus-5-minus-to-minus-the-minus-3,(x^2+5)^3,power,(x^2+5)^3,6*(5+x^2)^2*x,Chain Rule,3,True,6*x*(x**2 + 5)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-2-minus-5-minus-to-minus-the-minus-3,(x^2-5)^3,power,(x^2-5)^3,6*(-5+x^2)^2*x,Chain Rule,3,True,6*x*(x**2 - 5)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-3-minus-plus-minus-5-minus-to-minus-the-minus-3,(x^3+5)^3,power,(x^3+5)^3,9*(5+x^3)^2*x^2,Chain Rule,3,True,9*x**2*(x**3 + 5)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-2-minus-plus-minus-5-minus-to-minus-the-minus-4,(x^2+5)^4,power,(x^2+5)^4,8*(5+x^2)^3*x,Chain Rule,3,True,8*x*(x**2 + 5)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-2-minus-5-minus-to-minus-the-minus-4,(x^2-5)^4,power,(x^2-5)^4,8*(-5+x^2)^3*x,Chain Rule,3,True,8*x*(x**2 - 5)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-3-minus-plus-minus-5-minus-to-minus-the-minus-4,(x^3+5)^4,power,(x^3+5)^4,12*(5+x^3)^3*x^2,Chain Rule,3,True,12*x**2*(x**3 + 5)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-2-minus-plus-minus-5-minus-to-minus-the-minus-5,(x^2+5)^5,power,(x^2+5)^5,10*(5+x^2)^4*x,Chain Rule,3,True,10*x*(x**2 + 5)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-2-minus-5-minus-to-minus-the-minus-5,(x^2-5)^5,power,(x^2-5)^5,10*(-5+x^2)^4*x,Chain Rule,3,True,10*x*(x**2 - 5)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-3-minus-plus-minus-5-minus-to-minus-the-minus-5,(x^3+5)^5,power,(x^3+5)^5,15*(5+x^3)^4*x^2,Chain Rule,3,True,15*x**2*(x**3 + 5)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-xe-minus-to-minus-the-minus-xsinx,x*e^x*sin(x),trig,x*e^x*sin(x),cos(x)*e^x*x+e^x*sin(x)+e^x*sin(x)*x,Product Rule,3,True,x*exp(x)*sin(x) + x*exp(x)*cos(x) + exp(x)*sin(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-xlnxsinx,x*ln(x)*sin(x),ln,x*log(x)*sin(x),cos(x)*log(x)*x+log(x)*sin(x)+sin(x),Product Rule,3,True,x*log(x)*cos(x) + log(x)*sin(x) + sin(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-2e-minus-to-minus-the-minus-xcosx,x^2*e^x*cos(x),trig,x^2*e^x*cos(x),-e^x*sin(x)*x^2+2*cos(x)*e^x*x+cos(x)*e^x*x^2,Product Rule,3,True,-x**2*exp(x)*sin(x) + x**2*exp(x)*cos(x) + 2*x*exp(x)*cos(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-tanx-minus-to-minus-the-minus-3,tan(x)^3,trig,tan(x)^3,3*sec(x)^2*tan(x)^2,Chain Rule,3,True,(3*tan(x)**2 + 3)*tan(x)**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-tanx-minus-to-minus-the-minus-4,tan(x)^4,trig,tan(x)^4,4*sec(x)^2*tan(x)^3,Chain Rule,3,True,(4*tan(x)**2 + 4)*tan(x)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-tanx-minus-to-minus-the-minus-5,tan(x)^5,trig,tan(x)^5,5*sec(x)^2*tan(x)^4,Chain Rule,3,True,(5*tan(x)**2 + 5)*tan(x)**4,PASS,sympy simplify: difference is exactly 0
+derivative-of-tanx-minus-to-minus-the-minus-6,tan(x)^6,trig,tan(x)^6,6*sec(x)^2*tan(x)^5,Chain Rule,3,True,(6*tan(x)**2 + 6)*tan(x)**5,PASS,sympy simplify: difference is exactly 0
+derivative-of-tanx-minus-to-minus-the-minus-7,tan(x)^7,trig,tan(x)^7,7*sec(x)^2*tan(x)^6,Chain Rule,3,True,(7*tan(x)**2 + 7)*tan(x)**6,PASS,sympy simplify: difference is exactly 0
+derivative-of-tanx-minus-to-minus-the-minus-8,tan(x)^8,trig,tan(x)^8,8*sec(x)^2*tan(x)^7,Chain Rule,3,True,(8*tan(x)**2 + 8)*tan(x)**7,PASS,sympy simplify: difference is exactly 0
+derivative-of-tanx-minus-to-minus-the-minus-9,tan(x)^9,trig,tan(x)^9,9*sec(x)^2*tan(x)^8,Chain Rule,3,True,(9*tan(x)**2 + 9)*tan(x)**8,PASS,sympy simplify: difference is exactly 0
+derivative-of-tanx-minus-to-minus-the-minus-10,tan(x)^10,trig,tan(x)^10,10*sec(x)^2*tan(x)^9,Chain Rule,3,True,(10*tan(x)**2 + 10)*tan(x)**9,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-3-minus-over-minus-2,x^(3/2),quotient,x^(3/2),(3/2)*x^(1/2),Quotient Rule,3,True,3*sqrt(x)/2,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-5-minus-over-minus-2,x^(5/2),quotient,x^(5/2),(5/2)*x^(3/2),Quotient Rule,3,True,5*x**(3/2)/2,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-7-minus-over-minus-2,x^(7/2),quotient,x^(7/2),(7/2)*x^(5/2),Quotient Rule,3,True,7*x**(5/2)/2,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-9-minus-over-minus-2,x^(9/2),quotient,x^(9/2),(9/2)*x^(7/2),Quotient Rule,3,True,9*x**(7/2)/2,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-11-minus-over-minus-2,x^(11/2),quotient,x^(11/2),(11/2)*x^(9/2),Quotient Rule,3,True,11*x**(9/2)/2,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-to-minus-the-minus-13-minus-over-minus-2,x^(13/2),quotient,x^(13/2),(13/2)*x^(11/2),Quotient Rule,3,True,13*x**(11/2)/2,PASS,sympy simplify: difference is exactly 0
+derivative-of-1-minus-over-minus-x-minus-to-minus-the-minus-2-minus-plus-minus-1-minus-to-minus-the-minus-2,1/(x^2+1)^2,quotient,1/(x^2+1)^2,-4*(1+x^2)^(-3)*x,Quotient Rule,3,True,-4*x/(x**2 + 1)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-over-minus-x-minus-to-minus-the-minus-2-minus-plus-minus-1-minus-to-minus-the-minus-2,x/(x^2+1)^2,quotient,x/(x^2+1)^2,(1+x^2)^(-2)-4*(1+x^2)^(-3)*x^2,Quotient Rule,3,True,-4*x**2/(x**2 + 1)**3 + (x**2 + 1)**(-2),PASS,sympy simplify: difference is exactly 0
+derivative-of-1-minus-over-minus-x-minus-to-minus-the-minus-2-minus-plus-minus-2-minus-to-minus-the-minus-2,1/(x^2+2)^2,quotient,1/(x^2+2)^2,-4*(2+x^2)^(-3)*x,Quotient Rule,3,True,-4*x/(x**2 + 2)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-over-minus-x-minus-to-minus-the-minus-2-minus-plus-minus-2-minus-to-minus-the-minus-2,x/(x^2+2)^2,quotient,x/(x^2+2)^2,(2+x^2)^(-2)-4*(2+x^2)^(-3)*x^2,Quotient Rule,3,True,-4*x**2/(x**2 + 2)**3 + (x**2 + 2)**(-2),PASS,sympy simplify: difference is exactly 0
+derivative-of-1-minus-over-minus-x-minus-to-minus-the-minus-2-minus-plus-minus-3-minus-to-minus-the-minus-2,1/(x^2+3)^2,quotient,1/(x^2+3)^2,-4*(3+x^2)^(-3)*x,Quotient Rule,3,True,-4*x/(x**2 + 3)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-over-minus-x-minus-to-minus-the-minus-2-minus-plus-minus-3-minus-to-minus-the-minus-2,x/(x^2+3)^2,quotient,x/(x^2+3)^2,(3+x^2)^(-2)-4*(3+x^2)^(-3)*x^2,Quotient Rule,3,True,-4*x**2/(x**2 + 3)**3 + (x**2 + 3)**(-2),PASS,sympy simplify: difference is exactly 0
+derivative-of-1-minus-over-minus-x-minus-to-minus-the-minus-2-minus-plus-minus-4-minus-to-minus-the-minus-2,1/(x^2+4)^2,quotient,1/(x^2+4)^2,-4*(4+x^2)^(-3)*x,Quotient Rule,3,True,-4*x/(x**2 + 4)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-over-minus-x-minus-to-minus-the-minus-2-minus-plus-minus-4-minus-to-minus-the-minus-2,x/(x^2+4)^2,quotient,x/(x^2+4)^2,(4+x^2)^(-2)-4*(4+x^2)^(-3)*x^2,Quotient Rule,3,True,-4*x**2/(x**2 + 4)**3 + (x**2 + 4)**(-2),PASS,sympy simplify: difference is exactly 0
+derivative-of-1-minus-over-minus-x-minus-to-minus-the-minus-2-minus-plus-minus-5-minus-to-minus-the-minus-2,1/(x^2+5)^2,quotient,1/(x^2+5)^2,-4*(5+x^2)^(-3)*x,Quotient Rule,3,True,-4*x/(x**2 + 5)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-over-minus-x-minus-to-minus-the-minus-2-minus-plus-minus-5-minus-to-minus-the-minus-2,x/(x^2+5)^2,quotient,x/(x^2+5)^2,(5+x^2)^(-2)-4*(5+x^2)^(-3)*x^2,Quotient Rule,3,True,-4*x**2/(x**2 + 5)**3 + (x**2 + 5)**(-2),PASS,sympy simplify: difference is exactly 0
+derivative-of-1-minus-over-minus-x-minus-to-minus-the-minus-2-minus-plus-minus-6-minus-to-minus-the-minus-2,1/(x^2+6)^2,quotient,1/(x^2+6)^2,-4*(6+x^2)^(-3)*x,Quotient Rule,3,True,-4*x/(x**2 + 6)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-over-minus-x-minus-to-minus-the-minus-2-minus-plus-minus-6-minus-to-minus-the-minus-2,x/(x^2+6)^2,quotient,x/(x^2+6)^2,(6+x^2)^(-2)-4*(6+x^2)^(-3)*x^2,Quotient Rule,3,True,-4*x**2/(x**2 + 6)**3 + (x**2 + 6)**(-2),PASS,sympy simplify: difference is exactly 0
+derivative-of-1-minus-over-minus-x-minus-to-minus-the-minus-2-minus-plus-minus-7-minus-to-minus-the-minus-2,1/(x^2+7)^2,quotient,1/(x^2+7)^2,-4*(7+x^2)^(-3)*x,Quotient Rule,3,True,-4*x/(x**2 + 7)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-over-minus-x-minus-to-minus-the-minus-2-minus-plus-minus-7-minus-to-minus-the-minus-2,x/(x^2+7)^2,quotient,x/(x^2+7)^2,(7+x^2)^(-2)-4*(7+x^2)^(-3)*x^2,Quotient Rule,3,True,-4*x**2/(x**2 + 7)**3 + (x**2 + 7)**(-2),PASS,sympy simplify: difference is exactly 0
+derivative-of-1-minus-over-minus-x-minus-to-minus-the-minus-2-minus-plus-minus-8-minus-to-minus-the-minus-2,1/(x^2+8)^2,quotient,1/(x^2+8)^2,-4*(8+x^2)^(-3)*x,Quotient Rule,3,True,-4*x/(x**2 + 8)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-over-minus-x-minus-to-minus-the-minus-2-minus-plus-minus-8-minus-to-minus-the-minus-2,x/(x^2+8)^2,quotient,x/(x^2+8)^2,(8+x^2)^(-2)-4*(8+x^2)^(-3)*x^2,Quotient Rule,3,True,-4*x**2/(x**2 + 8)**3 + (x**2 + 8)**(-2),PASS,sympy simplify: difference is exactly 0
+derivative-of-1-minus-over-minus-x-minus-to-minus-the-minus-2-minus-plus-minus-9-minus-to-minus-the-minus-2,1/(x^2+9)^2,quotient,1/(x^2+9)^2,-4*(9+x^2)^(-3)*x,Quotient Rule,3,True,-4*x/(x**2 + 9)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-over-minus-x-minus-to-minus-the-minus-2-minus-plus-minus-9-minus-to-minus-the-minus-2,x/(x^2+9)^2,quotient,x/(x^2+9)^2,(9+x^2)^(-2)-4*(9+x^2)^(-3)*x^2,Quotient Rule,3,True,-4*x**2/(x**2 + 9)**3 + (x**2 + 9)**(-2),PASS,sympy simplify: difference is exactly 0
+derivative-of-1-minus-over-minus-x-minus-to-minus-the-minus-2-minus-plus-minus-10-minus-to-minus-the-minus-2,1/(x^2+10)^2,quotient,1/(x^2+10)^2,-4*(10+x^2)^(-3)*x,Quotient Rule,3,True,-4*x/(x**2 + 10)**3,PASS,sympy simplify: difference is exactly 0
+derivative-of-x-minus-over-minus-x-minus-to-minus-the-minus-2-minus-plus-minus-10-minus-to-minus-the-minus-2,x/(x^2+10)^2,quotient,x/(x^2+10)^2,(10+x^2)^(-2)-4*(10+x^2)^(-3)*x^2,Quotient Rule,3,True,-4*x**2/(x**2 + 10)**3 + (x**2 + 10)**(-2),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-2x-minus-plus-minus-1,e^(2*x+1),exponential,e^(2*x+1),2*e^(1+2*x),Product Rule,3,True,2*exp(2*x + 1),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-2x-minus-1,e^(2*x-1),exponential,e^(2*x-1),2*e^(-1+2*x),Product Rule,3,True,2*exp(2*x - 1),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-2x-minus-plus-minus-2,e^(2*x+2),exponential,e^(2*x+2),2*e^(2+2*x),Product Rule,3,True,2*exp(2*x + 2),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-2x-minus-2,e^(2*x-2),exponential,e^(2*x-2),2*e^(-2+2*x),Product Rule,3,True,2*exp(2*x - 2),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-2x-minus-plus-minus-3,e^(2*x+3),exponential,e^(2*x+3),2*e^(2*x+3),Product Rule,3,True,2*exp(2*x + 3),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-2x-minus-3,e^(2*x-3),exponential,e^(2*x-3),2*e^(-3+2*x),Product Rule,3,True,2*exp(2*x - 3),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-2x-minus-plus-minus-4,e^(2*x+4),exponential,e^(2*x+4),2*e^(2*x+4),Product Rule,3,True,2*exp(2*x + 4),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-2x-minus-4,e^(2*x-4),exponential,e^(2*x-4),2*e^(-4+2*x),Product Rule,3,True,2*exp(2*x - 4),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-2x-minus-plus-minus-5,e^(2*x+5),exponential,e^(2*x+5),2*e^(2*x+5),Product Rule,3,True,2*exp(2*x + 5),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-2x-minus-5,e^(2*x-5),exponential,e^(2*x-5),2*e^(-5+2*x),Product Rule,3,True,2*exp(2*x - 5),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-3x-minus-plus-minus-1,e^(3*x+1),exponential,e^(3*x+1),3*e^(1+3*x),Product Rule,3,True,3*exp(3*x + 1),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-3x-minus-1,e^(3*x-1),exponential,e^(3*x-1),3*e^(-1+3*x),Product Rule,3,True,3*exp(3*x - 1),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-3x-minus-plus-minus-2,e^(3*x+2),exponential,e^(3*x+2),3*e^(2+3*x),Product Rule,3,True,3*exp(3*x + 2),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-3x-minus-2,e^(3*x-2),exponential,e^(3*x-2),3*e^(-2+3*x),Product Rule,3,True,3*exp(3*x - 2),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-3x-minus-plus-minus-3,e^(3*x+3),exponential,e^(3*x+3),3*e^(3+3*x),Product Rule,3,True,3*exp(3*x + 3),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-3x-minus-3,e^(3*x-3),exponential,e^(3*x-3),3*e^(-3+3*x),Product Rule,3,True,3*exp(3*x - 3),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-3x-minus-plus-minus-4,e^(3*x+4),exponential,e^(3*x+4),3*e^(3*x+4),Product Rule,3,True,3*exp(3*x + 4),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-3x-minus-4,e^(3*x-4),exponential,e^(3*x-4),3*e^(-4+3*x),Product Rule,3,True,3*exp(3*x - 4),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-3x-minus-plus-minus-5,e^(3*x+5),exponential,e^(3*x+5),3*e^(3*x+5),Product Rule,3,True,3*exp(3*x + 5),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-3x-minus-5,e^(3*x-5),exponential,e^(3*x-5),3*e^(-5+3*x),Product Rule,3,True,3*exp(3*x - 5),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-4x-minus-plus-minus-1,e^(4*x+1),exponential,e^(4*x+1),4*e^(1+4*x),Product Rule,3,True,4*exp(4*x + 1),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-4x-minus-1,e^(4*x-1),exponential,e^(4*x-1),4*e^(-1+4*x),Product Rule,3,True,4*exp(4*x - 1),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-4x-minus-plus-minus-2,e^(4*x+2),exponential,e^(4*x+2),4*e^(2+4*x),Product Rule,3,True,4*exp(4*x + 2),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-4x-minus-2,e^(4*x-2),exponential,e^(4*x-2),4*e^(-2+4*x),Product Rule,3,True,4*exp(4*x - 2),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-4x-minus-plus-minus-3,e^(4*x+3),exponential,e^(4*x+3),4*e^(3+4*x),Product Rule,3,True,4*exp(4*x + 3),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-4x-minus-3,e^(4*x-3),exponential,e^(4*x-3),4*e^(-3+4*x),Product Rule,3,True,4*exp(4*x - 3),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-4x-minus-plus-minus-4,e^(4*x+4),exponential,e^(4*x+4),4*e^(4+4*x),Product Rule,3,True,4*exp(4*x + 4),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-4x-minus-4,e^(4*x-4),exponential,e^(4*x-4),4*e^(-4+4*x),Product Rule,3,True,4*exp(4*x - 4),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-4x-minus-plus-minus-5,e^(4*x+5),exponential,e^(4*x+5),4*e^(4*x+5),Product Rule,3,True,4*exp(4*x + 5),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-4x-minus-5,e^(4*x-5),exponential,e^(4*x-5),4*e^(-5+4*x),Product Rule,3,True,4*exp(4*x - 5),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-5x-minus-plus-minus-1,e^(5*x+1),exponential,e^(5*x+1),5*e^(1+5*x),Product Rule,3,True,5*exp(5*x + 1),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-5x-minus-1,e^(5*x-1),exponential,e^(5*x-1),5*e^(-1+5*x),Product Rule,3,True,5*exp(5*x - 1),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-5x-minus-plus-minus-2,e^(5*x+2),exponential,e^(5*x+2),5*e^(2+5*x),Product Rule,3,True,5*exp(5*x + 2),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-5x-minus-2,e^(5*x-2),exponential,e^(5*x-2),5*e^(-2+5*x),Product Rule,3,True,5*exp(5*x - 2),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-5x-minus-plus-minus-3,e^(5*x+3),exponential,e^(5*x+3),5*e^(3+5*x),Product Rule,3,True,5*exp(5*x + 3),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-5x-minus-3,e^(5*x-3),exponential,e^(5*x-3),5*e^(-3+5*x),Product Rule,3,True,5*exp(5*x - 3),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-5x-minus-plus-minus-4,e^(5*x+4),exponential,e^(5*x+4),5*e^(4+5*x),Product Rule,3,True,5*exp(5*x + 4),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-5x-minus-4,e^(5*x-4),exponential,e^(5*x-4),5*e^(-4+5*x),Product Rule,3,True,5*exp(5*x - 4),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-5x-minus-plus-minus-5,e^(5*x+5),exponential,e^(5*x+5),5*e^(5+5*x),Product Rule,3,True,5*exp(5*x + 5),PASS,sympy simplify: difference is exactly 0
+derivative-of-e-minus-to-minus-the-minus-5x-minus-5,e^(5*x-5),exponential,e^(5*x-5),5*e^(-5+5*x),Product Rule,3,True,5*exp(5*x - 5),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin2x-minus-plus-minus-1,sin(2*x+1),trig,sin(2*x+1),2*cos(1+2*x),Product Rule,3,True,2*cos(2*x + 1),PASS,sympy simplify: difference is exactly 0
+derivative-of-cos2x-minus-plus-minus-1,cos(2*x+1),trig,cos(2*x+1),-2*sin(1+2*x),Product Rule,3,True,-2*sin(2*x + 1),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin2x-minus-plus-minus-2,sin(2*x+2),trig,sin(2*x+2),2*cos(2+2*x),Product Rule,3,True,2*cos(2*x + 2),PASS,sympy simplify: difference is exactly 0
+derivative-of-cos2x-minus-plus-minus-2,cos(2*x+2),trig,cos(2*x+2),-2*sin(2+2*x),Product Rule,3,True,-2*sin(2*x + 2),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin2x-minus-plus-minus-3,sin(2*x+3),trig,sin(2*x+3),2*cos(2*x+3),Product Rule,3,True,2*cos(2*x + 3),PASS,sympy simplify: difference is exactly 0
+derivative-of-cos2x-minus-plus-minus-3,cos(2*x+3),trig,cos(2*x+3),-2*sin(2*x+3),Product Rule,3,True,-2*sin(2*x + 3),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin2x-minus-plus-minus-4,sin(2*x+4),trig,sin(2*x+4),2*cos(2*x+4),Product Rule,3,True,2*cos(2*x + 4),PASS,sympy simplify: difference is exactly 0
+derivative-of-cos2x-minus-plus-minus-4,cos(2*x+4),trig,cos(2*x+4),-2*sin(2*x+4),Product Rule,3,True,-2*sin(2*x + 4),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin2x-minus-plus-minus-5,sin(2*x+5),trig,sin(2*x+5),2*cos(2*x+5),Product Rule,3,True,2*cos(2*x + 5),PASS,sympy simplify: difference is exactly 0
+derivative-of-cos2x-minus-plus-minus-5,cos(2*x+5),trig,cos(2*x+5),-2*sin(2*x+5),Product Rule,3,True,-2*sin(2*x + 5),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin3x-minus-plus-minus-1,sin(3*x+1),trig,sin(3*x+1),3*cos(1+3*x),Product Rule,3,True,3*cos(3*x + 1),PASS,sympy simplify: difference is exactly 0
+derivative-of-cos3x-minus-plus-minus-1,cos(3*x+1),trig,cos(3*x+1),-3*sin(1+3*x),Product Rule,3,True,-3*sin(3*x + 1),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin3x-minus-plus-minus-2,sin(3*x+2),trig,sin(3*x+2),3*cos(2+3*x),Product Rule,3,True,3*cos(3*x + 2),PASS,sympy simplify: difference is exactly 0
+derivative-of-cos3x-minus-plus-minus-2,cos(3*x+2),trig,cos(3*x+2),-3*sin(2+3*x),Product Rule,3,True,-3*sin(3*x + 2),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin3x-minus-plus-minus-3,sin(3*x+3),trig,sin(3*x+3),3*cos(3+3*x),Product Rule,3,True,3*cos(3*x + 3),PASS,sympy simplify: difference is exactly 0
+derivative-of-cos3x-minus-plus-minus-3,cos(3*x+3),trig,cos(3*x+3),-3*sin(3+3*x),Product Rule,3,True,-3*sin(3*x + 3),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin3x-minus-plus-minus-4,sin(3*x+4),trig,sin(3*x+4),3*cos(3*x+4),Product Rule,3,True,3*cos(3*x + 4),PASS,sympy simplify: difference is exactly 0
+derivative-of-cos3x-minus-plus-minus-4,cos(3*x+4),trig,cos(3*x+4),-3*sin(3*x+4),Product Rule,3,True,-3*sin(3*x + 4),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin3x-minus-plus-minus-5,sin(3*x+5),trig,sin(3*x+5),3*cos(3*x+5),Product Rule,3,True,3*cos(3*x + 5),PASS,sympy simplify: difference is exactly 0
+derivative-of-cos3x-minus-plus-minus-5,cos(3*x+5),trig,cos(3*x+5),-3*sin(3*x+5),Product Rule,3,True,-3*sin(3*x + 5),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin4x-minus-plus-minus-1,sin(4*x+1),trig,sin(4*x+1),4*cos(1+4*x),Product Rule,3,True,4*cos(4*x + 1),PASS,sympy simplify: difference is exactly 0
+derivative-of-cos4x-minus-plus-minus-1,cos(4*x+1),trig,cos(4*x+1),-4*sin(1+4*x),Product Rule,3,True,-4*sin(4*x + 1),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin4x-minus-plus-minus-2,sin(4*x+2),trig,sin(4*x+2),4*cos(2+4*x),Product Rule,3,True,4*cos(4*x + 2),PASS,sympy simplify: difference is exactly 0
+derivative-of-cos4x-minus-plus-minus-2,cos(4*x+2),trig,cos(4*x+2),-4*sin(2+4*x),Product Rule,3,True,-4*sin(4*x + 2),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin4x-minus-plus-minus-3,sin(4*x+3),trig,sin(4*x+3),4*cos(3+4*x),Product Rule,3,True,4*cos(4*x + 3),PASS,sympy simplify: difference is exactly 0
+derivative-of-cos4x-minus-plus-minus-3,cos(4*x+3),trig,cos(4*x+3),-4*sin(3+4*x),Product Rule,3,True,-4*sin(4*x + 3),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin4x-minus-plus-minus-4,sin(4*x+4),trig,sin(4*x+4),4*cos(4+4*x),Product Rule,3,True,4*cos(4*x + 4),PASS,sympy simplify: difference is exactly 0
+derivative-of-cos4x-minus-plus-minus-4,cos(4*x+4),trig,cos(4*x+4),-4*sin(4+4*x),Product Rule,3,True,-4*sin(4*x + 4),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin4x-minus-plus-minus-5,sin(4*x+5),trig,sin(4*x+5),4*cos(4*x+5),Product Rule,3,True,4*cos(4*x + 5),PASS,sympy simplify: difference is exactly 0
+derivative-of-cos4x-minus-plus-minus-5,cos(4*x+5),trig,cos(4*x+5),-4*sin(4*x+5),Product Rule,3,True,-4*sin(4*x + 5),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin5x-minus-plus-minus-1,sin(5*x+1),trig,sin(5*x+1),5*cos(1+5*x),Product Rule,3,True,5*cos(5*x + 1),PASS,sympy simplify: difference is exactly 0
+derivative-of-cos5x-minus-plus-minus-1,cos(5*x+1),trig,cos(5*x+1),-5*sin(1+5*x),Product Rule,3,True,-5*sin(5*x + 1),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin5x-minus-plus-minus-2,sin(5*x+2),trig,sin(5*x+2),5*cos(2+5*x),Product Rule,3,True,5*cos(5*x + 2),PASS,sympy simplify: difference is exactly 0
+derivative-of-cos5x-minus-plus-minus-2,cos(5*x+2),trig,cos(5*x+2),-5*sin(2+5*x),Product Rule,3,True,-5*sin(5*x + 2),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin5x-minus-plus-minus-3,sin(5*x+3),trig,sin(5*x+3),5*cos(3+5*x),Product Rule,3,True,5*cos(5*x + 3),PASS,sympy simplify: difference is exactly 0
+derivative-of-cos5x-minus-plus-minus-3,cos(5*x+3),trig,cos(5*x+3),-5*sin(3+5*x),Product Rule,3,True,-5*sin(5*x + 3),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin5x-minus-plus-minus-4,sin(5*x+4),trig,sin(5*x+4),5*cos(4+5*x),Product Rule,3,True,5*cos(5*x + 4),PASS,sympy simplify: difference is exactly 0
+derivative-of-cos5x-minus-plus-minus-4,cos(5*x+4),trig,cos(5*x+4),-5*sin(4+5*x),Product Rule,3,True,-5*sin(5*x + 4),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin5x-minus-plus-minus-5,sin(5*x+5),trig,sin(5*x+5),5*cos(5+5*x),Product Rule,3,True,5*cos(5*x + 5),PASS,sympy simplify: difference is exactly 0
+derivative-of-cos5x-minus-plus-minus-5,cos(5*x+5),trig,cos(5*x+5),-5*sin(5+5*x),Product Rule,3,True,-5*sin(5*x + 5),PASS,sympy simplify: difference is exactly 0
+derivative-of-asinx-minus-over-minus-2,asin(x/2),inverse-trig,asin(x/2),(1/2)*sqrt((-1/4)*x^2+1)^(-1),Quotient Rule,3,True,1/(2*sqrt(1 - x**2/4)),PASS,sympy simplify: difference is exactly 0
+derivative-of-acosx-minus-over-minus-2,acos(x/2),inverse-trig,acos(x/2),(-1/2)*sqrt((-1/4)*x^2+1)^(-1),Quotient Rule,3,True,-1/(2*sqrt(1 - x**2/4)),PASS,sympy simplify: difference is exactly 0
+derivative-of-atanx-minus-over-minus-2,atan(x/2),inverse-trig,atan(x/2),(1/2)*((1/4)*x^2+1)^(-1),Quotient Rule,3,True,1/(2*(x**2/4 + 1)),PASS,sympy simplify: difference is exactly 0
+derivative-of-asinx-minus-over-minus-3,asin(x/3),inverse-trig,asin(x/3),(1/3)*sqrt((-1/9)*x^2+1)^(-1),Quotient Rule,3,True,1/(3*sqrt(1 - x**2/9)),PASS,sympy simplify: difference is exactly 0
+derivative-of-acosx-minus-over-minus-3,acos(x/3),inverse-trig,acos(x/3),(-1/3)*sqrt((-1/9)*x^2+1)^(-1),Quotient Rule,3,True,-1/(3*sqrt(1 - x**2/9)),PASS,sympy simplify: difference is exactly 0
+derivative-of-atanx-minus-over-minus-3,atan(x/3),inverse-trig,atan(x/3),(1/3)*((1/9)*x^2+1)^(-1),Quotient Rule,3,True,1/(3*(x**2/9 + 1)),PASS,sympy simplify: difference is exactly 0
+derivative-of-asinx-minus-over-minus-4,asin(x/4),inverse-trig,asin(x/4),(1/4)*sqrt((-1/16)*x^2+1)^(-1),Quotient Rule,3,True,1/(4*sqrt(1 - x**2/16)),PASS,sympy simplify: difference is exactly 0
+derivative-of-acosx-minus-over-minus-4,acos(x/4),inverse-trig,acos(x/4),(-1/4)*sqrt((-1/16)*x^2+1)^(-1),Quotient Rule,3,True,-1/(4*sqrt(1 - x**2/16)),PASS,sympy simplify: difference is exactly 0
+derivative-of-atanx-minus-over-minus-4,atan(x/4),inverse-trig,atan(x/4),(1/4)*((1/16)*x^2+1)^(-1),Quotient Rule,3,True,1/(4*(x**2/16 + 1)),PASS,sympy simplify: difference is exactly 0
+derivative-of-asinx-minus-over-minus-5,asin(x/5),inverse-trig,asin(x/5),(1/5)*sqrt((-1/25)*x^2+1)^(-1),Quotient Rule,3,True,1/(5*sqrt(1 - x**2/25)),PASS,sympy simplify: difference is exactly 0
+derivative-of-acosx-minus-over-minus-5,acos(x/5),inverse-trig,acos(x/5),(-1/5)*sqrt((-1/25)*x^2+1)^(-1),Quotient Rule,3,True,-1/(5*sqrt(1 - x**2/25)),PASS,sympy simplify: difference is exactly 0
+derivative-of-atanx-minus-over-minus-5,atan(x/5),inverse-trig,atan(x/5),(1/5)*((1/25)*x^2+1)^(-1),Quotient Rule,3,True,1/(5*(x**2/25 + 1)),PASS,sympy simplify: difference is exactly 0
+derivative-of-asinx-minus-over-minus-6,asin(x/6),inverse-trig,asin(x/6),(1/6)*sqrt((-1/36)*x^2+1)^(-1),Quotient Rule,3,True,1/(6*sqrt(1 - x**2/36)),PASS,sympy simplify: difference is exactly 0
+derivative-of-acosx-minus-over-minus-6,acos(x/6),inverse-trig,acos(x/6),(-1/6)*sqrt((-1/36)*x^2+1)^(-1),Quotient Rule,3,True,-1/(6*sqrt(1 - x**2/36)),PASS,sympy simplify: difference is exactly 0
+derivative-of-atanx-minus-over-minus-6,atan(x/6),inverse-trig,atan(x/6),(1/6)*((1/36)*x^2+1)^(-1),Quotient Rule,3,True,1/(6*(x**2/36 + 1)),PASS,sympy simplify: difference is exactly 0
+derivative-of-asinx-minus-over-minus-7,asin(x/7),inverse-trig,asin(x/7),(1/7)*sqrt((-1/49)*x^2+1)^(-1),Quotient Rule,3,True,1/(7*sqrt(1 - x**2/49)),PASS,sympy simplify: difference is exactly 0
+derivative-of-acosx-minus-over-minus-7,acos(x/7),inverse-trig,acos(x/7),(-1/7)*sqrt((-1/49)*x^2+1)^(-1),Quotient Rule,3,True,-1/(7*sqrt(1 - x**2/49)),PASS,sympy simplify: difference is exactly 0
+derivative-of-atanx-minus-over-minus-7,atan(x/7),inverse-trig,atan(x/7),(1/7)*((1/49)*x^2+1)^(-1),Quotient Rule,3,True,1/(7*(x**2/49 + 1)),PASS,sympy simplify: difference is exactly 0
+derivative-of-asinx-minus-over-minus-8,asin(x/8),inverse-trig,asin(x/8),(1/8)*sqrt((-1/64)*x^2+1)^(-1),Quotient Rule,3,True,1/(8*sqrt(1 - x**2/64)),PASS,sympy simplify: difference is exactly 0
+derivative-of-acosx-minus-over-minus-8,acos(x/8),inverse-trig,acos(x/8),(-1/8)*sqrt((-1/64)*x^2+1)^(-1),Quotient Rule,3,True,-1/(8*sqrt(1 - x**2/64)),PASS,sympy simplify: difference is exactly 0
+derivative-of-atanx-minus-over-minus-8,atan(x/8),inverse-trig,atan(x/8),(1/8)*((1/64)*x^2+1)^(-1),Quotient Rule,3,True,1/(8*(x**2/64 + 1)),PASS,sympy simplify: difference is exactly 0
+derivative-of-asinx-minus-over-minus-9,asin(x/9),inverse-trig,asin(x/9),(1/9)*sqrt((-1/81)*x^2+1)^(-1),Quotient Rule,3,True,1/(9*sqrt(1 - x**2/81)),PASS,sympy simplify: difference is exactly 0
+derivative-of-acosx-minus-over-minus-9,acos(x/9),inverse-trig,acos(x/9),(-1/9)*sqrt((-1/81)*x^2+1)^(-1),Quotient Rule,3,True,-1/(9*sqrt(1 - x**2/81)),PASS,sympy simplify: difference is exactly 0
+derivative-of-atanx-minus-over-minus-9,atan(x/9),inverse-trig,atan(x/9),(1/9)*((1/81)*x^2+1)^(-1),Quotient Rule,3,True,1/(9*(x**2/81 + 1)),PASS,sympy simplify: difference is exactly 0
+derivative-of-asinx-minus-over-minus-10,asin(x/10),inverse-trig,asin(x/10),(1/10)*sqrt((-1/100)*x^2+1)^(-1),Quotient Rule,3,True,1/(10*sqrt(1 - x**2/100)),PASS,sympy simplify: difference is exactly 0
+derivative-of-acosx-minus-over-minus-10,acos(x/10),inverse-trig,acos(x/10),(-1/10)*sqrt((-1/100)*x^2+1)^(-1),Quotient Rule,3,True,-1/(10*sqrt(1 - x**2/100)),PASS,sympy simplify: difference is exactly 0
+derivative-of-atanx-minus-over-minus-10,atan(x/10),inverse-trig,atan(x/10),(1/10)*((1/100)*x^2+1)^(-1),Quotient Rule,3,True,1/(10*(x**2/100 + 1)),PASS,sympy simplify: difference is exactly 0
+derivative-of-sin-x2,sin(x^2),trig,sin(x^2),2*cos(x^2)*x,Chain Rule,3,True,2*x*cos(x**2),PASS,sympy simplify: difference is exactly 0
+derivative-of-x-e-x,x*e^x,exponential,x*e^x,e^x+e^x*x,Product Rule,3,True,x*exp(x) + exp(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-1-x,1/x,quotient,1/x,-x^(-2),Quotient Rule,3,True,-1/x**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-x2,x^2,power,x^2,2*x,Power Rule,3,True,2*x,PASS,sympy simplify: difference is exactly 0
+derivative-of-x3,x^3,power,x^3,3*x^2,Power Rule,3,True,3*x**2,PASS,sympy simplify: difference is exactly 0
+derivative-of-x2-y2-25,x^2+y^2=25,power,x^2+y^2=25,0,Power Rule,2,False,,UNKNOWN,engine flagged the result invalid (validateDerivativeResult)
+derivative-of-sin-xy-x,sin(x*y)=x,trig,sin(x*y)=x,1,Product Rule,3,False,,UNKNOWN,engine flagged the result invalid (validateDerivativeResult)
+partial-derivative-of-x2y-xy2,x^2*y + x*y^2,product,x^2*y + x*y^2,2*x*y+y^2,Product Rule,3,True,2*x*y + y**2,PASS,sympy simplify: difference is exactly 0
+partial-derivative-of-sin-xy,sin(x*y),trig,sin(x*y),cos(x*y)*y,Product Rule,3,True,y*cos(x*y),PASS,sympy simplify: difference is exactly 0
+derivative-of-x2-by-definition,x^2,power,x^2,2*x,Power Rule,3,True,2*x,PASS,sympy simplify: difference is exactly 0
+derivative-of-3x-by-definition,3*x,product,3*x,3,Product Rule,3,True,3,PASS,sympy simplify: difference is exactly 0
+derivative-of-e-x,e^x,exponential,e^x,e^x,Exponential Rule,3,True,exp(x),PASS,sympy simplify: difference is exactly 0
+derivative-of-2-x,2^x,exponential,2^x,2^x*log(2),Power Rule,2,True,2**x*log(2),PASS,sympy simplify: difference is exactly 0
+mvt-problem-1,x^2,power,x^2,2*x,Power Rule,3,True,2*x,PASS,sympy simplify: difference is exactly 0
+mvt-problem-2,x^3-x,power,x^3-x,-1+3*x^2,Power Rule,2,True,3*x**2 - 1,PASS,sympy simplify: difference is exactly 0

@@ -4,6 +4,7 @@ export const runtime = 'edge';
 
 import { getDictionary } from '../dictionaries';
 import { getBaseUrl } from '@/utils/robust-url';
+import { loadStaticProblemsSafe } from '@/lib/problems-source';
 
 // OPTIMIZED: Allow caching to reduce quota usage
 // Directory page content is relatively static, can be cached for 1 hour
@@ -52,36 +53,30 @@ export default async function DirectoryPage() {
     // Fetch all problems from API
     const baseUrl = getBaseUrl();
 
-    let problemsList = [];
-    if (baseUrl) {
-        try {
-            const res = await fetch(`${baseUrl}/api/problems`, {
-                cache: 'force-cache',
-                // @ts-ignore
-                next: { revalidate: 3600 }
-            });
+    // RC-8 FIX: the authoritative library is the primary source. The old
+    // `fetch(url, { cache: 'force-cache', next: { revalidate: 3600 } })` never
+    // returned data on this platform, so this page always fell through to the
+    // fallback — and each miss still cost a D1 read.
+    let problemsList: any[] = await loadStaticProblemsSafe();
 
+    if (problemsList.length === 0 && baseUrl) {
+        try {
+            const res = await fetch(`${baseUrl}/api/problems?limit=1000`);
             const contentType = res.headers.get("content-type");
             if (res.ok && contentType && contentType.includes("application/json")) {
                 problemsList = await res.json();
             } else {
-                console.warn("Backend returned non-JSON, using local fallback for directory.");
+                console.warn("Backend returned non-JSON for directory.");
             }
         } catch (e) {
             console.error("Failed to fetch problems for directory:", e);
         }
     }
 
-    // FALLBACK: Use full local data if API failed
+    // FALLBACK: Use the shared static loader (plain fetch — the only path
+    // proven to work on this platform, see lib/problems-source.ts).
     if (!problemsList || problemsList.length === 0) {
-        try {
-            const fallbackRes = await fetch(`${baseUrl}/problems.json`);
-            if (fallbackRes.ok) {
-                problemsList = await fallbackRes.json();
-            }
-        } catch (e) {
-            console.error("Static fallback failed in DirectoryPage:", e);
-        }
+        problemsList = await loadStaticProblemsSafe();
     }
 
     return (

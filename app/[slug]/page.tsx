@@ -10,121 +10,33 @@ import { Suspense } from 'react';
 import { getBaseUrl } from '@/utils/robust-url';
 import { getRequestContext } from '@cloudflare/next-on-pages';
 import { NOINDEX_SLUGS } from '@/lib/noindex-slugs';
-import { sanitizeSlug, sanitizeLimitValue } from '@/utils/sanitize';
 import { calculateDerivative } from '@/lib/math/math-core';
 import type { DerivativeSolution } from '@/lib/math/math-core';
 import { fetchRelatedFromD1 } from '@/lib/d1/related-problems';
+import {
+    loadStaticProblemsSafe,
+    findStaticProblem,
+    pickStableRelated,
+} from '@/lib/problems-source';
+import { parseSlugToMath } from '@/lib/slug-math';
 
-// Define the type for our problem data
+// Define the type for our problem data.
+// `title` is optional because raw library rows are not guaranteed to carry one;
+// every consumer falls back to `Problem ${formula}`.
 type Problem = {
     slug: string;
     formula: string;
-    title: string;
+    title?: string;
     description?: string;
     type?: 'derivative' | 'integral' | 'limit';
     limitTo?: string;
 };
 
 /**
- * RC-6 FIX: stable, deterministic related-problem selection.
- * - Excludes the current slug.
- * - Prefers problems of the same type (derivative/integral/limit).
- * - Deterministic lexicographic order (never Math.random).
- * - Caps at 10.
+ * Stable related-problem selection and the slug→math fallback now live in
+ * lib/problems-source.ts and lib/slug-math.ts so they can be unit-tested
+ * without importing the page (which pulls in the Cloudflare edge runtime).
  */
-function pickStableRelated(problems: any[], currentSlug: string, typeHint?: string): Problem[] {
-    const type = typeHint || 'derivative';
-    const sameType = problems
-        .filter((p) => p && p.slug && p.slug !== currentSlug && (!p.type || p.type === type))
-        .sort((a, b) => a.slug.localeCompare(b.slug))
-        .slice(0, 10);
-    if (sameType.length >= 5) return sameType;
-    const others = problems
-        .filter((p) => p && p.slug && p.slug !== currentSlug)
-        .sort((a, b) => a.slug.localeCompare(b.slug))
-        .slice(0, 10 - sameType.length);
-    return [...sameType, ...others];
-}
-
-/**
- * Smart Slug-to-Math Parser
- * Converts SEO-friendly descriptive slugs into mathematical formulas.
- * e.g., "integral-of-31-over-x2-plus-1" -> "31/(x^2+1)"
- */
-function parseSlugToMath(slug: string): Problem | null {
-    // Sanitize the slug first
-    const sanitizedSlug = sanitizeSlug(slug);
-    if (!sanitizedSlug) return null;
-
-    let type: 'derivative' | 'integral' | 'limit' = 'derivative';
-    let formula = sanitizedSlug;
-    let limitTo = '0';
-
-    if (slug.startsWith('integral-of-')) {
-        type = 'integral';
-        formula = slug.replace('integral-of-', '');
-    } else if (slug.startsWith('limit-of-')) {
-        type = 'limit';
-        formula = slug.replace('limit-of-', '');
-        // Handle limit targets like "to-0" or "as-x-approaches-0"
-        const limitMatch = formula.match(/(.*?)-(?:to|as-x-approaches)-(.*)/i);
-        if (limitMatch) {
-            formula = limitMatch[1];
-            // Sanitize the limit target value
-            limitTo = sanitizeLimitValue(
-                limitMatch[2]
-                    .replace(/^minus-/i, '-') // e.g. minus-2 -> -2
-                    .replace(/^-+/g, '-')     // e.g. --2 -> -2
-                    .replace(/(\d)-(\d)/g, '$1.$2') // e.g. 1-5 -> 1.5
-            );
-        }
-    } else if (slug.startsWith('derivative-of-')) {
-        type = 'derivative';
-        formula = slug.replace('derivative-of-', '');
-    } else {
-        // Not a descriptive slugs, check if it's raw math
-        const looksLikeMath = /[\+\*\/\^\(\)]/.test(decodeURIComponent(slug)) || (slug.length < 15 && !slug.includes('-'));
-        if (!looksLikeMath) return null;
-    }
-
-    // Replace keywords with math symbols
-    let mathFormula = formula
-        .replace(/-/g, ' ')
-        .replace(/\be to the\b/gi, 'e^')
-        .replace(/\bto the\b/gi, '^')
-        .replace(/\bsqrt\b/gi, 'sqrt')
-        .replace(/\broot\b/gi, 'sqrt')
-        .replace(/\bcbrt\b/gi, 'cbrt')
-        .replace(/\bplus\b/gi, '+')
-        .replace(/\bminus\b/gi, '-')
-        .replace(/\btimes\b/gi, '*')
-        .replace(/\bover\b/gi, '/')
-        .replace(/\bpower\b/gi, '^')
-        .replace(/\bsquared\b/gi, '^2')
-        .replace(/\bcubed\b/gi, '^3')
-        .replace(/\s+/g, '');
-
-    // Add parentheses for functions if missing (simple heuristic)
-    const functions = ['sin', 'cos', 'tan', 'ln', 'log', 'sqrt', 'cbrt', 'exp', 'arcsin', 'arccos', 'arctan', 'sec', 'csc', 'cot'];
-    functions.forEach(fn => {
-        const regex = new RegExp(`\\b${fn}([a-z0-9]+)\\b`, 'gi');
-        mathFormula = mathFormula.replace(regex, `${fn}($1)`);
-    });
-
-    // Handle common shorthand like x2 -> x^2
-    mathFormula = mathFormula.replace(/([a-z])(\d+)/gi, '$1^$2');
-
-    // Final sanity check
-    if (!mathFormula || mathFormula.length < 1) return null;
-
-    return {
-        slug,
-        formula: mathFormula,
-        title: type === 'integral' ? `Integral of ${mathFormula}` : type === 'limit' ? `Limit of ${mathFormula}` : `Derivative of ${mathFormula}`,
-        type,
-        limitTo
-    };
-}
 
 // OPTIMIZED: Allow caching to reduce quota usage
 // Cache for 1 hour - locale is handled via middleware rewrite, so caching is safe
@@ -205,34 +117,21 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     // Fetch problem details from API
     const baseUrl = getBaseUrl();
 
-    let problem: Problem | null = null;
-    if (baseUrl) {
-        try {
-            const res = await fetch(`${baseUrl}/api/problem/${slug}`, {
-                cache: 'force-cache',
-                // @ts-ignore
-                next: { revalidate: 3600 }
-            });
+    // RC-8 FIX: the authoritative library is the FIRST source here, exactly as
+    // in the page body, so <title> and <h1> can never disagree again. The old
+    // `cache: 'force-cache'` fetches never returned data on this platform.
+    let problem: Problem | null = findStaticProblem(await loadStaticProblemsSafe(), slug);
 
+    // Only slugs outside the library pay for a D1-backed HTTP round trip.
+    if (!problem && baseUrl) {
+        try {
+            const res = await fetch(`${baseUrl}/api/problem/${slug}`);
             const contentType = res.headers.get("content-type");
             if (res.ok && contentType && contentType.includes("application/json")) {
                 problem = await res.json();
             }
         } catch (e) {
             console.error("Failed to fetch problem for metadata:", e);
-        }
-    }
-
-    // FALLBACK: Look up in local data if API failed or returned HTML
-    if (!problem) {
-        try {
-            const fallbackRes = await fetch(`${baseUrl}/problems.json`);
-            if (fallbackRes.ok) {
-                const problemsData = await fallbackRes.json();
-                problem = (problemsData as Problem[]).find(p => p.slug === slug) || null;
-            }
-        } catch (e) {
-            console.error("Static fallback failed in generateMetadata:", e);
         }
     }
 
@@ -245,7 +144,11 @@ export async function generateMetadata({ params }: { params: { slug: string } })
             // @ts-ignore
             const db = getRequestContext().env.DB;
             if (db) {
-                problem = await db.prepare("SELECT * FROM problems WHERE slug = ?").bind(slug).first();
+                // Explicit columns only: no `SELECT *` on D1.
+                problem = await db
+                    .prepare("SELECT slug, formula, title, type, description, limitTo FROM problems WHERE slug = ?")
+                    .bind(slug)
+                    .first() as Problem | null;
             }
         } catch (e) {
             console.error("D1 Metadata fetch failed:", e);
@@ -304,93 +207,75 @@ export default async function ProblemPage({ params }: { params: { slug: string }
     let relatedProblems: Problem[] = [];
 
     try {
-        // OPTIMIZED: Parallel fetch from all data sources to minimize processing time
-        // Fetch from static JSON, API, and D1 simultaneously, use fastest available result
         const context = getRequestContext();
         // @ts-ignore
         const db = context?.env?.DB;
 
-        // PARALLEL: Fetch from all sources simultaneously
+        // ------------------------------------------------------------------
+        // RC-8 FIX — data resolution order.
         //
-        // D1-QUOTA FIX: this array used to contain two more promises that were
-        // pure D1 cost for "related problems":
-        //   1. `SELECT * FROM problems WHERE slug != ? ORDER BY RANDOM() LIMIT 10`
-        //      → full table scan + sort, ~3,137 rows_read per page view.
-        //   2. `fetch('/api/problems?limit=50')` → 50 more rows_read per page view
-        //      (plus a self-inflicted HTTP round trip).
-        // Both are gone. Related problems now come from /problems.json (0 D1 rows,
-        // force-cached) with `fetchRelatedFromD1()` as an index-seek fallback.
-        const [staticRes, apiProbRes, d1Problem, d1Related] = await Promise.allSettled([
-            // Static JSON file (fastest)
-            baseUrl ? fetch(`${baseUrl}/problems.json`, {
-                cache: 'force-cache',
-                // @ts-ignore
-                next: { revalidate: 3600 }
-            }) : Promise.reject('No baseUrl'),
-            // API problem endpoint
-            baseUrl ? fetch(`${baseUrl}/api/problem/${slug}`, {
-                cache: 'force-cache',
-                // @ts-ignore
-                next: { revalidate: 3600 }
-            }) : Promise.reject('No baseUrl'),
-            // D1 problem query
-            (async () => {
-                try {
-                    if (db) {
-                        return await db.prepare("SELECT * FROM problems WHERE slug = ?").bind(slug).first();
-                    }
-                } catch (e) {
-                    return null;
-                }
-            })(),
-            // D1 related problems query — index range seek, no RANDOM, no full scan
-            (async () => {
-                try {
-                    if (db) {
-                        return await fetchRelatedFromD1(db, slug, 10);
-                    }
-                } catch (e) {
-                    return [];
-                }
-            })()
-        ]);
+        // The authoritative library (/problems.json) is consulted FIRST and
+        // alone. Previously every source was fetched in parallel with
+        // `fetch(url, { cache: 'force-cache', next: { revalidate: 3600 } })`,
+        // which never returns data on this platform (see lib/problems-source.ts
+        // for the mechanism). Every page therefore fell through to the
+        // slug heuristic and published slug-derived formulas instead of the
+        // library's — e.g. slug "derivative-of-1-x" rendered "1x" (d/dx = 1)
+        // instead of the real "1/x" (d/dx = -1/x^2).
+        //
+        // Bonus: for the 3,137 slugs present in the library this performs
+        // ZERO D1 queries, removing the ~21 rows_read/page-view of D1 cost
+        // that the old parallel fan-out incurred.
+        // ------------------------------------------------------------------
+        const library = await loadStaticProblemsSafe();
 
-        // Process results in priority order: static > D1 > API
-        // Problem
-        if (!problem) {
-            if (staticRes.status === 'fulfilled' && staticRes.value.ok) {
-                const problemsData = await staticRes.value.json();
-                if (Array.isArray(problemsData)) {
-                    problem = problemsData.find(p => p.slug === slug) || null;
-                }
-            }
-            if (!problem && d1Problem.status === 'fulfilled' && d1Problem.value) {
-                problem = d1Problem.value;
-            }
-            if (!problem && apiProbRes.status === 'fulfilled' && apiProbRes.value.ok) {
-                const contentType = apiProbRes.value.headers.get("content-type");
-                if (contentType && contentType.includes("application/json")) {
-                    problem = await apiProbRes.value.json();
-                }
-            }
-        }
+        problem = findStaticProblem(library, slug);
 
         // Type hint for stable related selection (falls back to slug prefix).
-        const problemTypeHint = problem?.type || (slug.startsWith('integral') ? 'integral' : slug.startsWith('limit') ? 'limit' : 'derivative');
+        const problemTypeHint = problem?.type
+            || (slug.startsWith('integral') ? 'integral' : slug.startsWith('limit') ? 'limit' : 'derivative');
 
-        // Related problems — RC-6 FIX: deterministic, stable, semantically biased.
-        // Previously `sort(() => 0.5 - Math.random())` produced a DIFFERENT set on
-        // every SSR pass → hydration mismatch + unstable internal links for crawlers.
-        // Now: same-type problems first, then stable lexicographic order, capped at 10.
-        if (relatedProblems.length === 0) {
-            if (staticRes.status === 'fulfilled' && staticRes.value.ok) {
-                const problemsData = await staticRes.value.json();
-                if (Array.isArray(problemsData)) {
-                    relatedProblems = pickStableRelated(problemsData, slug, problemTypeHint);
+        if (problem && library.length > 0) {
+            relatedProblems = pickStableRelated(library, slug, problemTypeHint);
+        }
+
+        // Only slugs OUTSIDE the library pay for D1 / API lookups.
+        if (!problem) {
+            const [d1Problem, apiProbRes, d1Related] = await Promise.allSettled([
+                (async () => {
+                    try {
+                        if (db) {
+                            return await db.prepare("SELECT slug, formula, title, type, difficulty FROM problems WHERE slug = ?")
+                                .bind(slug)
+                                .first();
+                        }
+                    } catch (e) {
+                        return null;
+                    }
+                })(),
+                baseUrl ? fetch(`${baseUrl}/api/problem/${slug}`) : Promise.reject('No baseUrl'),
+                (async () => {
+                    try {
+                        if (db) {
+                            return await fetchRelatedFromD1(db, slug, 10);
+                        }
+                    } catch (e) {
+                        return [];
+                    }
+                })()
+            ]);
+
+            if (!problem && d1Problem.status === 'fulfilled' && d1Problem.value) {
+                problem = d1Problem.value as Problem;
+            }
+            if (!problem && apiProbRes.status === 'fulfilled' && (apiProbRes.value as Response).ok) {
+                const contentType = (apiProbRes.value as Response).headers.get("content-type");
+                if (contentType && contentType.includes("application/json")) {
+                    problem = await (apiProbRes.value as Response).json() as Problem;
                 }
             }
             if (relatedProblems.length === 0 && d1Related.status === 'fulfilled' && Array.isArray(d1Related.value)) {
-                relatedProblems = pickStableRelated(d1Related.value, slug, problemTypeHint);
+                relatedProblems = pickStableRelated(d1Related.value as any[], slug, problemTypeHint);
             }
         }
 

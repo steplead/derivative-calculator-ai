@@ -49,6 +49,9 @@ export interface DerivativeSolution {
  *   ln(  → log(      (natural log — nerdamer has no ln; its log IS natural log)
  *   log( → log(      (kept; nerdamer's log is natural log, contract matches)
  *   log10( → log10(  (kept; nerdamer supports log10 natively)
+ *   Abs( → abs(      (nerdamer only knows lowercase `abs`; `Abs(` is parsed as
+ *                     the unknown symbol `Abs` times x, and diff() then returns
+ *                     the bare word "Abs" — a wrong answer on a live page)
  */
 export function normalizeExpression(expr: string): string {
   if (!expr) return '';
@@ -56,6 +59,8 @@ export function normalizeExpression(expr: string): string {
   // Rewrite `ln(` → `log(` (function token only; lookahead for `(` avoids
   // corrupting identifiers like "lnx" if ever present).
   s = s.replace(/ln(?=\s*\()/g, 'log');
+  // Rewrite `Abs(` → `abs(` (case-insensitive function token only).
+  s = s.replace(/\babs(?=\s*\()/gi, 'abs');
   return s;
 }
 
@@ -77,6 +82,8 @@ export function identifyRule(expr: string): string {
   if (composite) return 'Chain Rule';
   // Exponential: e^x or a^x
   if (/e\^|exp\(/.test(e)) return 'Exponential Rule';
+  // Absolute value: d/dx |u| = u' · u/|u|
+  if (/abs\s*\(/.test(e)) return 'Absolute Value Rule';
   // Logarithmic
   if (/log\(|log10\(/.test(e)) return 'Logarithmic Rule';
   // Trigonometric (simple, not composite)
@@ -134,6 +141,13 @@ export function generateSteps(expr: string, solutionRaw: string, rule: string): 
         steps.push(`Apply the rule: d/dx log(x) = 1/x.`);
         steps.push(`Final answer: ${sol}`);
       }
+      break;
+    }
+    case 'Absolute Value Rule': {
+      steps.push(`Recognize the absolute value function |u| = abs(u).`);
+      steps.push(`Apply the rule: d/dx |u| = u' · u/|u|  (equivalently u'·sign(u) for u ≠ 0).`);
+      steps.push(`Here u = ${e.replace(/abs\(|\)/g, '')}, so the derivative is shown below.`);
+      steps.push(`Final answer: ${sol}`);
       break;
     }
     case 'Exponential Rule': {
@@ -223,13 +237,23 @@ export function calculateDerivative(expr: string): DerivativeSolution {
  */
 export function validateDerivativeResult(engineExpression: string, rawResult: string): boolean {
   if (!rawResult) return false;
-  // nerdamer ln bug: diff(ln(x),x) → "ln" (bare ln symbol with no argument)
-  if (/^ln$/.test(rawResult.trim()) || (/(^|\*)ln($|\*)/.test(rawResult) && !/ln\(/.test(rawResult))) {
-    return false;
-  }
-  // Implicit equation with '=' cannot be differentiated as a plain function.
+  const res = rawResult.trim();
+
+  // (1) nerdamer could not differentiate at all and echoed the call back, e.g.
+  //       diff(floor(x), x)      →  "diff(floor(x),x)"
+  //     or the tuple form          "(floor(x), x, diff)"
+  //     Publishing that as an "answer" would be plainly wrong.
+  if (/diff\s*\(/.test(res) || /,\s*x\s*,\s*diff\s*\)?$/.test(res)) return false;
+
+  // (2) A bare multi-letter word is a mis-parsed function symbol, not a result.
+  //     Known signatures: diff(ln(x),x)  → "ln",  diff(Abs(x),x) → "Abs".
+  //     Legitimate single-symbol results (`e`, `pi`, `x`, `1`) must still pass.
+  if (/^[A-Za-z]{2,}$/.test(res) && !/^(pi|inf)$/i.test(res)) return false;
+
+  // (3) Implicit equation with '=' cannot be differentiated as a plain function.
   if (engineExpression.includes('=')) return false;
-  // Result must contain at least one variable/function artifact or be a constant zero
-  if (!/[a-z0-9]/.test(rawResult)) return false;
+
+  // (4) Result must contain at least one variable/function artifact or be a constant zero
+  if (!/[a-z0-9]/.test(res)) return false;
   return true;
 }

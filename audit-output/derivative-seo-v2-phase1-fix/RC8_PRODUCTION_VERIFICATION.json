@@ -1,0 +1,107 @@
+{
+  "timestamp_utc": "2026-09-02T11:21:49Z",
+  "results": [
+    {
+      "check": "/derivative-of-1-x http 200",
+      "pass": true,
+      "detail": "http=200"
+    },
+    {
+      "check": "/derivative-of-1-x H1 uses library formula 1/x (not 1x)",
+      "pass": true,
+      "detail": "h1='Derivative of 1/x'"
+    },
+    {
+      "check": "/derivative-of-1-x title matches H1 formula",
+      "pass": true,
+      "detail": "title='Derivative of 1/x - Instant Step-by-Step Solutions | Derivative Calculator AI'"
+    },
+    {
+      "check": "/derivative-of-1-x SSR Solution block present",
+      "pass": true,
+      "detail": "aria-label=\"Solution\" x1"
+    },
+    {
+      "check": "/derivative-of-1-x SSR answer text present",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "check": "/derivative-of-1-x SSR answer is -x^(-2) family (not 1)",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "check": "/derivative-of-acosx-minus-over-minus-2 http 200",
+      "pass": true,
+      "detail": "http=200"
+    },
+    {
+      "check": "  renders acos(x/2), not the slug-derived fallback",
+      "pass": true,
+      "detail": "h1='Derivative of acos(x/2)'"
+    },
+    {
+      "check": "  SSR Solution block present",
+      "pass": true,
+      "detail": "count=1"
+    },
+    {
+      "check": "/problems http 200",
+      "pass": true,
+      "detail": "http=200"
+    },
+    {
+      "check": "/problems renders real problem links",
+      "pass": true,
+      "detail": "unique problem links=2306"
+    },
+    {
+      "check": "/problems/derivative http 200",
+      "pass": true,
+      "detail": "http=200"
+    },
+    {
+      "check": "/problems/derivative renders real problem links",
+      "pass": true,
+      "detail": "unique problem links=1084"
+    },
+    {
+      "check": "/qqqzzz999 returns 404 (was 200 before)",
+      "pass": true,
+      "detail": "http=404"
+    },
+    {
+      "check": "/asdfgh returns 404 (was 200 before)",
+      "pass": true,
+      "detail": "http=404"
+    },
+    {
+      "check": "/not-a-math-page-xyz returns 404 (was 200 before)",
+      "pass": true,
+      "detail": "http=404"
+    },
+    {
+      "check": "CDN /derivative-of-1-x already serves the fixed HTML",
+      "pass": false,
+      "detail": "h1='Derivative of 1x' cf-cache-status=HIT age=None"
+    },
+    {
+      "check": "CDN /derivative-of-acosx-minus-over-minus-2 already serves the fixed HTML",
+      "pass": false,
+      "detail": "h1='Derivative of acosx-/-2' cf-cache-status=HIT age=None"
+    },
+    {
+      "check": "CDN /problems already serves real problem links",
+      "pass": false,
+      "detail": "links=0 cf-cache-status=HIT age=None"
+    },
+    {
+      "check": "CDN /problems/derivative already serves real problem links",
+      "pass": false,
+      "detail": "links=0 cf-cache-status=HIT age=None"
+    }
+  ],
+  "passed": 16,
+  "total": 20
+}

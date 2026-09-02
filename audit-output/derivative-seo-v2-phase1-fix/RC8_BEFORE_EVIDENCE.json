@@ -1,0 +1,87 @@
+{
+  "timestamp_utc": "2026-09-02T11:01:27Z",
+  "results": [
+    {
+      "check": "/derivative-of-1-x http 200",
+      "pass": true,
+      "detail": "http=200"
+    },
+    {
+      "check": "/derivative-of-1-x H1 uses library formula 1/x (not 1x)",
+      "pass": false,
+      "detail": "h1='Derivative of 1x'"
+    },
+    {
+      "check": "/derivative-of-1-x title matches H1 formula",
+      "pass": true,
+      "detail": "title='Derivative of 1/x - Instant Step-by-Step Solutions | Derivative Calculator AI'"
+    },
+    {
+      "check": "/derivative-of-1-x SSR Solution block present",
+      "pass": true,
+      "detail": "aria-label=\"Solution\" x1"
+    },
+    {
+      "check": "/derivative-of-1-x SSR answer text present",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "check": "/derivative-of-1-x SSR answer is -x^(-2) family (not 1)",
+      "pass": false,
+      "detail": ""
+    },
+    {
+      "check": "/derivative-of-acosx-minus-over-minus-2 http 200",
+      "pass": true,
+      "detail": "http=200"
+    },
+    {
+      "check": "  renders acos(x/2), not the slug-derived fallback",
+      "pass": false,
+      "detail": "h1='Derivative of acosx-/-2'"
+    },
+    {
+      "check": "  SSR Solution block present",
+      "pass": false,
+      "detail": "count=0"
+    },
+    {
+      "check": "/problems http 200",
+      "pass": true,
+      "detail": "http=200"
+    },
+    {
+      "check": "/problems renders real problem links",
+      "pass": false,
+      "detail": "unique problem links=0"
+    },
+    {
+      "check": "/problems/derivative http 200",
+      "pass": true,
+      "detail": "http=200"
+    },
+    {
+      "check": "/problems/derivative renders real problem links",
+      "pass": false,
+      "detail": "unique problem links=0"
+    },
+    {
+      "check": "/qqqzzz999 returns 404 (was 200 before)",
+      "pass": false,
+      "detail": "http=200"
+    },
+    {
+      "check": "/asdfgh returns 404 (was 200 before)",
+      "pass": false,
+      "detail": "http=200"
+    },
+    {
+      "check": "/not-a-math-page-xyz returns 404 (was 200 before)",
+      "pass": true,
+      "detail": "http=404"
+    }
+  ],
+  "passed": 8,
+  "total": 16
+}

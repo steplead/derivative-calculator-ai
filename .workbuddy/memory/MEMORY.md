@@ -11,6 +11,24 @@
 - 绑定：Cloudflare D1（DB）、Redis（UPSTASH_REDIS_REST_URL/UPSTASH_REDIS_REST_TOKEN）、OPENROUTER_API_KEY
 - **新增 env var（Phase 5A）**：`ADMIN_MONITORING_TOKEN`（admin endpoint Bearer auth）、`MONITORING_HASH_SALT`（IP HMAC-SHA256 盐）。两者都是 server-side secret，不以 NEXT_PUBLIC_ 开头，production 必须在 CF Dashboard Settings → Environment Variables 配置。缺任一 → admin monitoring 端点 fail closed（401/503）。见 `.env.example`。
 
+## ⛔ 最高危约定：`force-cache` 在本平台是死代码（RC-8，2026-09-02 事故）
+- **在 Cloudflare Pages + next-on-pages 上，`fetch(url, { cache: 'force-cache', next: { revalidate } })` 永远拿不到数据。**
+  Next.js 只在 adapter 提供 `IncrementalCache` 时才装配 `globalThis.__incrementalCache`
+  （`node_modules/next/dist/server/web/adapter.js`）；next-on-pages 不提供 → 走 cache 分支却无 handler。
+- 后果（曾经真实发生）：全站数据源静默失效，`/[slug]` 全部落到 `parseSlugToMath()` 兜底，
+  发布由 slug 反推的**错误公式**，3100/3137 页（98.82%）内容错误。`/problems` 渲染 0 条链接。
+- **铁律：服务端取数据只用普通 `fetch(url)`。禁止 `cache: 'force-cache'` 和 `next: { revalidate }`。**
+  已由 `__tests__/rc8-production-source.test.ts` 全量源码扫描守护（app/ lib/ utils/ components/）。
+- **数据源必须有单一权威入口**：`lib/problems-source.ts`（`loadStaticProblemsSafe()` 等）。
+  新增页面一律用它，禁止各页面自己 fetch。
+- **页面渲染路径禁止依赖 D1**：题库 `/problems.json` 优先且唯一主源；D1 仅用于题库外 slug 的兜底。
+  判据：D1 超日配额（`/api/problem/*` 返回 500）时页面仍须渲染正确。
+- **`app/layout.tsx` 跑在每一个请求上**：任何加在 layout 的 fetch 都是全站每 PV 成本。
+  曾在此处放 `/api/problems?limit=100` = 全站每 PV 100 行 D1 读取（最大稳态消耗源），已移除。
+- **`public/problems.json` 只有 5 个字段**：slug / formula / title / description / type / limitTo。
+  **没有 `difficulty`、`tags`**（那些只在 D1）。需要它们的路由（`/problems/tag/[tag]`、
+  `/practice/[level]`）无法静态化，且都不在 sitemap。
+
 ## 关键约定（勿违反）
 - **禁止提交 `vercel.json`**：项目部署到 Cloudflare Pages，vercel.json 会 rewrite API 到不存在的 Python 文件导致部署失败。
 - **middleware 不要 export `runtime='edge'`**：Next.js 14.2.x 会报 "edge runtime for rendering is currently experimental"，应省略该导出。
@@ -60,3 +78,11 @@
 - **沙箱 safe-delete 保护会中断 `npm run build`**：清理 `.next` 时报 `[safe-delete][SAFE_DELETE_BULK_CONFIRM_REQUIRED] count:50`。解法：该命令加 `dangerouslyDisableSandbox`。
 - **`npm run build` 会顺带重写 `public/sitemap.xml` 全部 `lastmod`**（脚本副作用，URL 数量不变）。提交前用 `git checkout -- public/sitemap.xml` 或只 add 目标文件排除它。
 - **额外检查**：如果用了 Tailwind 任意值（如 `max-w-[80rem]`），确认构建后的 CSS 文件中确实生成了该类。Tailwind v4 可能不生成未在 content 中扫描到的任意值类，导致样式丢失。优先使用标准 utility 类（如 `max-w-7xl`）。
+- **部署后 CDN 各 PoP 缓存不一致，最长 2 小时**：页面 `cache-control: public, max-age=14400, s-maxage=7200, stale-while-revalidate=86400`。
+  实测同一秒 curl 走 AMS 拿到新 HTML、python 走 LAX 拿到旧 HTML。age 在 s-maxage 内不会自动回源。
+  客户端发 `Cache-Control: no-cache` 被 CF 忽略。
+  验证线上改动必须用 **cache-buster（`?cb=<ts>`）打源头**，再单独用干净 URL 测 CDN 现状。
+  要立即生效需 CF Dashboard → Caching → Configuration → **Purge Everything**
+  （wrangler OAuth 只有 `zone:read`，无 cache_purge；项目也没有 CF_API_TOKEN）。
+- **`re.findall` 带捕获组会只返回组内容**：统计链接数时 `href="/(a|b)-..."` 会让
+  `set()` 把 1084 条链接坍缩成 3 条。必须用非捕获组 `(?:a|b)`。

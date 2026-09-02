@@ -58,6 +58,21 @@ def get_cdn(path: str, timeout: int = 60):
     return get(f"{BASE}{path}", timeout)
 
 
+def cdn_where(headers: dict) -> str:
+    """Summarise which Cloudflare PoP answered and how old the entry is.
+
+    The colo matters: after a deploy, individual PoPs roll over independently,
+    so 'this PoP is stale' and 'the site is broken' are different statements.
+    """
+    ray = headers.get("cf-ray") or headers.get("CF-RAY") or "?"
+    colo = ray.split("-")[-1] if "-" in ray else "?"
+    age = headers.get("age")
+    return (
+        f"colo={colo} cf-cache-status={headers.get('cf-cache-status')} "
+        f"age={age + 's' if age else '?'}"
+    )
+
+
 def strip_tags(html_fragment: str) -> str:
     return re.sub(r"<[^>]+>", "", html_fragment).strip()
 
@@ -177,6 +192,10 @@ def main() -> int:
     # What a real visitor / Googlebot receives right now. Cloudflare PoPs can
     # hold pre-deploy HTML for up to s-maxage (7,200s) after a deploy, so this
     # pass can legitimately differ from the origin pass until caches roll over.
+    # NOTE: this channel is PoP-local. The local egress lands on one specific
+    # colo (cf-ray suffix below); a FAIL here means THAT colo still holds a
+    # pre-deploy entry, not that the deploy is broken. Other colos may already
+    # be correct. Compare against the origin channel above before concluding.
     print("Checking what the CDN currently serves (no cache-buster) ...")
     for path, want in [
         ("/derivative-of-1-x", "1/x"),
@@ -187,7 +206,7 @@ def main() -> int:
         check(
             f"CDN {path} already serves the fixed HTML",
             want in h1c,
-            f"h1={h1c!r} cf-cache-status={hdrsc.get('cf-cache-status')} age={hdrsc.get('age')}",
+            f"h1={h1c!r} {cdn_where(hdrsc)}",
         )
         time.sleep(0.5)
     for path in ["/problems", "/problems/derivative"]:
@@ -196,7 +215,7 @@ def main() -> int:
         check(
             f"CDN {path} already serves real problem links",
             nc > 100,
-            f"links={nc} cf-cache-status={hdrsc.get('cf-cache-status')} age={hdrsc.get('age')}",
+            f"links={nc} {cdn_where(hdrsc)}",
         )
         time.sleep(0.5)
 

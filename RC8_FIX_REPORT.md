@@ -234,31 +234,67 @@ The origin is fixed, but **Cloudflare edge PoPs still hold pre-deploy HTML**:
 cache-control: public, max-age=14400, s-maxage=7200, stale-while-revalidate=86400
 ```
 
-Measured divergence, same URL, same second:
+### 8.1 Measured divergence (2026-09-02, ~11:40 UTC)
 
-| Client route | PoP | `cf-cache-status` | `<h1>` |
-|---|---|---|---|
-| curl | AMS | HIT (age 559) | `Derivative of 1/x` ✅ |
-| python urllib | LAX | HIT (age 702) | `Derivative of 1x` ❌ |
+Same URL, same second, different egress → different PoP → different HTML:
 
-`Cache-Control: no-cache` sent by the client is ignored by Cloudflare, so this cannot be
-forced from the outside. **The stale entries are still inside `s-maxage` (7,200 s), so they
-will not revalidate on their own for up to ~2 hours.**
+| PoP | `cf-cache-status` | `<h1>` for `/derivative-of-1-x` |
+|---|---|---|
+| **AMS** | HIT | `Derivative of 1/x` ✅ |
+| **LAX** | HIT | `Derivative of 1x` ❌ |
 
-**Convergence observed** (AMS PoP, ~35 min after deploy) — all four URLs now correct:
+The LAX entry is not merely "old". Its headers pin down exactly when it was created:
 
-| URL | status | links | `<h1>` |
-|---|---|---|---|
-| `/problems` | HIT age 961 | 1,084 | Calculus Problems Library |
-| `/problems/derivative` | HIT age 960 | 1,084 | Derivatives Library |
-| `/derivative-of-1-x` | HIT age 1,434 | — | `Derivative of 1/x` |
-| `/derivative-of-acosx-minus-over-minus-2` | EXPIRED → refetched | — | `Derivative of acos(x/2)` |
+```
+Date:          Wed, 02 Sep 2026 11:36:12 GMT
+Age:           2099
+last-modified: Wed, 02 Sep 2026 11:01:13 GMT     <- 11:36:12 - 2099s, exact match
+CF-RAY:        a34c373748569e15-LAX
+```
 
-The verifier's CDN pass went 16/20 → 17/20 over ~15 minutes as PoPs rolled over, with no
-further action. A purge collapses the remaining tail to zero.
+So LAX fetched from origin at **11:01:13 UTC — the instant the deployment went live** —
+and cached a pre-deploy response. It will not revalidate until
+**13:01:13 UTC** (`s-maxage` 7,200 s).
 
-I could not purge programmatically: the wrangler OAuth grant is `zone:read` (no
-`cache_purge`), and no `CF_API_TOKEN` / `CF_ZONE_ID` exists in this project.
+### 8.2 The PoP-local nature matters — read this before panicking
+
+A FAIL on the verifier's CDN channel means **that one colo is stale**, not that the deploy
+is broken. Proof, all measured from the same LAX PoP:
+
+| Channel | URL | Result |
+|---|---|---|
+| Origin (LAX + `?cb=` cache-buster) | `/derivative-of-1-x` | `Derivative of 1/x` ✅ |
+| Origin (LAX + `?cb=` cache-buster) | `/problems` | 2,306 links ✅ |
+| CDN (LAX, no cache-buster) | `/derivative-of-1-x` | `Derivative of 1x` ❌ |
+
+The same edge that serves the stale copy renders the correct page the moment it is made to
+miss. The deployed code is right; only the cached bytes are wrong.
+
+AMS is already fully converged — all four URLs correct with a browser user-agent:
+
+| URL | `<h1>` | links |
+|---|---|---|
+| `/derivative-of-1-x` | `Derivative of 1/x` | 16 |
+| `/derivative-of-acosx-minus-over-minus-2` | `Derivative of acos(x/2)` | 16 |
+| `/problems` | Calculus Problems Library | 2,306 |
+| `/problems/derivative` | Derivatives | 1,084 |
+
+### 8.3 Why this is a real risk for Googlebot, not a cosmetic one
+
+Googlebot crawls primarily from US egress. The one colo confirmed stale is **LAX** — a US
+PoP. Until it rolls over, a crawl landing there receives the wrong formula. That is exactly
+the failure mode this whole exercise exists to eliminate, so it should not be waited out.
+
+`Cache-Control: no-cache` sent by a client is ignored by Cloudflare, so this cannot be
+forced from the outside.
+
+I could not purge programmatically. Three routes checked, all dead ends:
+
+| Route | Result |
+|---|---|
+| `wrangler` OAuth grant | scopes are `d1 (write)`, `pages (write)`, `zone (read)` — **no `cache_purge`** |
+| `CLOUDFLARE_API_TOKEN` | exists only as a **GitHub Actions secret** (used by `.github/workflows/deploy.yml` for `wrangler pages deploy`). It is not on disk, and it is scoped to Pages deploy — not a zone purge token anyway |
+| `CF_API_TOKEN` / `CF_ZONE_ID` on disk | searched this project's `.env`, `.env.local`, `.dev.vars`, and every `.env` under `~/Documents/iProjects/*` — **none found**. The only keys on disk here are `OPENROUTER_API_KEY` and `GEMINI_API_KEY` |
 
 **Please run:** Cloudflare Dashboard → Caching → Configuration → **Purge Everything**
 (or `curl -X POST "https://api.cloudflare.com/client/v4/zones/<ZONE_ID>/purge_cache"

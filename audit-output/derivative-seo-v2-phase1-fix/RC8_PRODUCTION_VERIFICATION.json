@@ -1,5 +1,5 @@
 {
-  "timestamp_utc": "2026-09-02T11:29:21Z",
+  "timestamp_utc": "2026-09-02T11:37:57Z",
   "results": [
     {
       "check": "/derivative-of-1-x http 200",
@@ -84,22 +84,22 @@
     {
       "check": "CDN /derivative-of-1-x already serves the fixed HTML",
       "pass": false,
-      "detail": "h1='Derivative of 1x' cf-cache-status=HIT age=None"
+      "detail": "h1='Derivative of 1x' colo=LAX cf-cache-status=HIT age=?"
     },
     {
       "check": "CDN /derivative-of-acosx-minus-over-minus-2 already serves the fixed HTML",
       "pass": false,
-      "detail": "h1='Derivative of acosx-/-2' cf-cache-status=HIT age=None"
+      "detail": "h1='Derivative of acosx-/-2' colo=LAX cf-cache-status=HIT age=?"
     },
     {
       "check": "CDN /problems already serves real problem links",
       "pass": false,
-      "detail": "links=0 cf-cache-status=HIT age=None"
+      "detail": "links=0 colo=LAX cf-cache-status=HIT age=?"
     },
     {
       "check": "CDN /problems/derivative already serves real problem links",
       "pass": true,
-      "detail": "links=1084 cf-cache-status=MISS age=None"
+      "detail": "links=1084 colo=LAX cf-cache-status=HIT age=?"
     }
   ],
   "passed": 17,

@@ -245,6 +245,18 @@ Measured divergence, same URL, same second:
 forced from the outside. **The stale entries are still inside `s-maxage` (7,200 s), so they
 will not revalidate on their own for up to ~2 hours.**
 
+**Convergence observed** (AMS PoP, ~35 min after deploy) — all four URLs now correct:
+
+| URL | status | links | `<h1>` |
+|---|---|---|---|
+| `/problems` | HIT age 961 | 1,084 | Calculus Problems Library |
+| `/problems/derivative` | HIT age 960 | 1,084 | Derivatives Library |
+| `/derivative-of-1-x` | HIT age 1,434 | — | `Derivative of 1/x` |
+| `/derivative-of-acosx-minus-over-minus-2` | EXPIRED → refetched | — | `Derivative of acos(x/2)` |
+
+The verifier's CDN pass went 16/20 → 17/20 over ~15 minutes as PoPs rolled over, with no
+further action. A purge collapses the remaining tail to zero.
+
 I could not purge programmatically: the wrangler OAuth grant is `zone:read` (no
 `cache_purge`), and no `CF_API_TOKEN` / `CF_ZONE_ID` exists in this project.
 

@@ -1,5 +1,5 @@
 {
-  "timestamp_utc": "2026-09-02T11:21:49Z",
+  "timestamp_utc": "2026-09-02T11:29:21Z",
   "results": [
     {
       "check": "/derivative-of-1-x http 200",
@@ -98,10 +98,10 @@
     },
     {
       "check": "CDN /problems/derivative already serves real problem links",
-      "pass": false,
-      "detail": "links=0 cf-cache-status=HIT age=None"
+      "pass": true,
+      "detail": "links=1084 cf-cache-status=MISS age=None"
     }
   ],
-  "passed": 16,
+  "passed": 17,
   "total": 20
 }

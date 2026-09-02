@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { OpenAI } from 'openai';
 import { getCachedExplanation, setCachedExplanation } from '@/utils/cache';
 import { performSecurityCheck } from '@/utils/security';
-import { trackPath } from '@/utils/path-tracker';
 import { calculateDerivative } from '@/lib/math/math-core';
 
 export const runtime = 'edge';
@@ -16,14 +15,7 @@ export async function GET(req: NextRequest) {
     // production and degrades gracefully when no key is set.
     const includeAi = !!process.env.OPENROUTER_API_KEY;
 
-    // Track API path for traffic analysis (async, non-blocking)
-    trackPath('/api/derivative', 200).catch(err => {
-        console.error('[API] Error tracking path:', err);
-    });
-
     if (!expression) {
-        // Track error response
-        trackPath('/api/derivative', 400).catch(() => {});
         return NextResponse.json({ error: "No equation provided" }, { status: 400, headers: { 'Cache-Control': 'no-store' } });
     }
 
@@ -31,8 +23,6 @@ export async function GET(req: NextRequest) {
     const securityResult = await performSecurityCheck(req.headers, searchParams, '/api/derivative');
 
     if (!securityResult.success) {
-        // Track blocked/rate limited response
-        trackPath('/api/derivative', securityResult.blocked ? 403 : 429).catch(() => {});
         return NextResponse.json(
             { error: securityResult.error },
             {

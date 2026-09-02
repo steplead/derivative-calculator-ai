@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { create, all } from 'mathjs';
 import { performSecurityCheck } from '@/utils/security';
-import { trackPath } from '@/utils/path-tracker';
 
 // Initialize mathjs with all functions
 const math = create(all);
@@ -74,11 +73,6 @@ function rref(matrix: any): { rrefMatrix: any, rank: number } {
 
 
 export async function POST(req: NextRequest) {
-    // Track API path for traffic analysis (async, non-blocking)
-    trackPath('/api/matrix', 200).catch(err => {
-        console.error('[API] Error tracking path:', err);
-    });
-
     // Unified Security Check (Rate limiting, Bot detection, IP blacklist)
     const { searchParams } = new URL(req.url);
     const securityResult = await performSecurityCheck(req.headers, searchParams, '/api/matrix', {
@@ -87,7 +81,6 @@ export async function POST(req: NextRequest) {
     });
 
     if (!securityResult.success) {
-        trackPath('/api/matrix', securityResult.blocked ? 403 : 429).catch(() => {});
         return NextResponse.json(
             { error: securityResult.error },
             {

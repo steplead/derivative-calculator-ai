@@ -4,7 +4,6 @@ import 'nerdamer/Calculus';
 import { OpenAI } from 'openai';
 import { getCachedExplanation, setCachedExplanation } from '@/utils/cache';
 import { performSecurityCheck } from '@/utils/security';
-import { trackPath } from '@/utils/path-tracker';
 import { extractRealContent } from '@/utils/validate-ai-content';
 import { normalizeExpression } from '@/lib/math/math-core';
 
@@ -18,13 +17,7 @@ export async function GET(req: NextRequest) {
     const includeAiParam = searchParams.get('includeAi');
     const includeAi = includeAiParam === 'false' ? false : !!process.env.OPENROUTER_API_KEY;
 
-    // Track API path for traffic analysis (async, non-blocking)
-    trackPath('/api/integral', 200).catch(err => {
-        console.error('[API] Error tracking path:', err);
-    });
-
     if (!expression) {
-        trackPath('/api/integral', 400).catch(() => {});
         return NextResponse.json({ error: "No equation provided" }, { status: 400, headers: { 'Cache-Control': 'no-store' } });
     }
 
@@ -32,7 +25,6 @@ export async function GET(req: NextRequest) {
     const securityResult = await performSecurityCheck(req.headers, searchParams, '/api/integral');
 
     if (!securityResult.success) {
-        trackPath('/api/integral', securityResult.blocked ? 403 : 429).catch(() => {});
         return NextResponse.json(
             { error: securityResult.error },
             {

@@ -4,7 +4,6 @@ import 'nerdamer/Calculus';
 import { OpenAI } from 'openai';
 import { getCachedExplanation, setCachedExplanation } from '@/utils/cache';
 import { performSecurityCheck } from '@/utils/security';
-import { trackPath } from '@/utils/path-tracker';
 import { normalizeExpression } from '@/lib/math/math-core';
 
 export const runtime = 'edge';
@@ -16,13 +15,7 @@ export async function GET(req: NextRequest) {
     // AI explanation enabled when an API key is configured (see derivative route for rationale).
     const includeAi = !!process.env.OPENROUTER_API_KEY;
 
-    // Track API path for traffic analysis (async, non-blocking)
-    trackPath('/api/limit', 200).catch(err => {
-        console.error('[API] Error tracking path:', err);
-    });
-
     if (!expression) {
-        trackPath('/api/limit', 400).catch(() => {});
         return NextResponse.json({ error: "No equation provided" }, { status: 400, headers: { 'Cache-Control': 'no-store' } });
     }
 
@@ -30,7 +23,6 @@ export async function GET(req: NextRequest) {
     const securityResult = await performSecurityCheck(req.headers, searchParams, '/api/limit');
 
     if (!securityResult.success) {
-        trackPath('/api/limit', securityResult.blocked ? 403 : 429).catch(() => {});
         return NextResponse.json(
             { error: securityResult.error },
             {

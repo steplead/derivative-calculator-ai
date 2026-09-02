@@ -7,10 +7,15 @@
  * 3. Host validation (only allow derivativecalculatorai.com + localhost)
  * 4. UA blacklist (block scripted HTTP clients: curl, python-requests, wget, etc.)
  * 5. Empty UA rejection (block requests without User-Agent)
- * 6. Global quota check (100k/day, 4.2k/hour — matches CF free tier)
- * 7. Turnstile verification (optional, REQUIRED=false by default)
- * 8. Browser detection → strict rate limit for non-browser UAs (5/min)
- * 9. D1 rate limiting (20/min default, 30/min for page requests)
+ * 6. Turnstile verification (optional, REQUIRED=false by default)
+ * 7. Browser detection → strict rate limit for non-browser UAs (5/min)
+ * 8. D1 rate limiting (20/min default, 30/min for page requests)
+ *
+ * P1-1 (2026-09-02): the site-wide global quota check (was step 6) was REMOVED.
+ * It wrote 2 counter rows to D1 on EVERY request and duplicated Cloudflare's
+ * native per-project 100k/day Workers request cap, so it was the single largest
+ * D1 write source. Rate limiting (1 write/request) remains as the essential
+ * abuse guard and is fail-open on D1 errors.
  *
  * NOTE: Checks 4-5 also exist in middleware.ts but only cover PAGE requests
  * (not /api/). Here they cover API route handlers as well, closing the gap
@@ -38,15 +43,6 @@ interface SecurityCheckResult {
 
 // Configuration — tuned for real-user friendliness while preventing abuse
 const SECURITY_CONFIG = {
-    // Global quota: matches Cloudflare Workers free tier (100k/day).
-    // Previous 30k/day was too aggressive and could block all real users
-    // during normal traffic spikes. 100k/day gives 70% safety margin below
-    // the actual CF limit while accommodating organic growth.
-    GLOBAL_QUOTA: {
-        DAILY_LIMIT: 100000,      // 100k requests/day (CF free tier limit)
-        HOURLY_LIMIT: 4200,       // ~100k / 24 ≈ 4,200/hour
-    },
-
     // Rate limiting: requests per window per IP
     // Pages override to 30/min via middleware; APIs use 20/min default.
     RATE_LIMIT: {
@@ -70,75 +66,6 @@ export function getClientIp(headers: Headers): string {
            headers.get('x-forwarded-for')?.split(',')[0].trim() ||
            headers.get('x-real-ip') ||
            'unknown';
-}
-
-/**
- * Global quota check: Enforce daily/hourly limits for entire system
- * Returns false if quota exceeded, true if OK
- */
-async function _checkGlobalQuota(db: any): Promise<{ allowed: boolean; reason?: string; retryAfter?: number }> {
-    try {
-        const now = Math.floor(Date.now() / 1000);
-        const currentHour = Math.floor(now / 3600);
-        const currentDay = Math.floor(now / 86400);
-
-        // Check hourly quota first (more granular)
-        const hourKey = `global:hour:${currentHour}`;
-        const hourCount = await db.prepare(
-            "SELECT value FROM counters WHERE key = ?"
-        ).bind(hourKey).first() as { value: number } | null;
-
-        const hourlyRequests = hourCount?.value || 0;
-
-        if (hourlyRequests >= SECURITY_CONFIG.GLOBAL_QUOTA.HOURLY_LIMIT) {
-            const retryAfter = 3600 - (now % 3600);
-            return {
-                allowed: false,
-                reason: 'Service is temporarily at capacity. Please try again later.',
-                retryAfter
-            };
-        }
-
-        // Check daily quota
-        const dayKey = `global:day:${currentDay}`;
-        const dayCount = await db.prepare(
-            "SELECT value FROM counters WHERE key = ?"
-        ).bind(dayKey).first() as { value: number } | null;
-
-        const dailyRequests = dayCount?.value || 0;
-
-        if (dailyRequests >= SECURITY_CONFIG.GLOBAL_QUOTA.DAILY_LIMIT) {
-            const retryAfter = 86400 - (now % 86400);
-            return {
-                allowed: false,
-                reason: 'Daily quota exceeded. Service will resume tomorrow.',
-                retryAfter
-            };
-        }
-
-        // Increment counters
-        await db.prepare(`
-            INSERT INTO counters (key, value, last_updated)
-            VALUES (?, 1, ?)
-            ON CONFLICT(key) DO UPDATE SET
-                value = value + 1,
-                last_updated = ?
-        `).bind(hourKey, now, now).run();
-
-        await db.prepare(`
-            INSERT INTO counters (key, value, last_updated)
-            VALUES (?, 1, ?)
-            ON CONFLICT(key) DO UPDATE SET
-                value = value + 1,
-                last_updated = ?
-        `).bind(dayKey, now, now).run();
-
-        return { allowed: true };
-
-    } catch (error) {
-        // Fail open — allow request if counter fails (D1 transient error)
-        return { allowed: true };
-    }
 }
 
 /**
@@ -218,17 +145,7 @@ export async function performSecurityCheck(
         };
     }
 
-    // ========== 4. Global quota check ==========
-    const quotaCheck = await _checkGlobalQuota(db);
-    if (!quotaCheck.allowed) {
-        return {
-            success: false,
-            error: quotaCheck.reason || 'Service temporarily unavailable',
-            retryAfter: quotaCheck.retryAfter,
-        };
-    }
-
-    // ========== 5. Turnstile verification (optional) ==========
+    // ========== 4. Turnstile verification (optional) ==========
     const requireTurnstile = options.requireTurnstile ?? SECURITY_CONFIG.TURNSTILE.REQUIRED;
 
     if (turnstileToken) {
@@ -275,7 +192,7 @@ export async function performSecurityCheck(
         };
     }
 
-    // ========== 6. Browser detection ==========
+    // ========== 5. Browser detection ==========
     // looksLikeLegitimateBrowser() is now reliable (no false positives).
     // Non-browser UAs that passed middleware UA blacklist get strict rate limiting
     // instead of outright blocking — this avoids false positives from unusual
@@ -296,7 +213,7 @@ export async function performSecurityCheck(
         }
     }
 
-    // ========== 7. D1 rate limiting (normal) ==========
+    // ========== 6. D1 rate limiting (normal) ==========
     const limit = options.rateLimit ?? SECURITY_CONFIG.RATE_LIMIT.DEFAULT_LIMIT;
     const window = options.rateWindow ?? SECURITY_CONFIG.RATE_LIMIT.DEFAULT_WINDOW;
 

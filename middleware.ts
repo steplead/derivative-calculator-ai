@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { trackPath } from "@/utils/path-tracker";
 import { performSecurityCheck } from "@/utils/security";
 
 // Note: middleware in Next.js always runs on the edge runtime. We intentionally
@@ -70,17 +69,6 @@ export async function middleware(request: NextRequest) {
         }
     }
 
-    // Track request path for traffic analysis (async, non-blocking)
-    if (pathname.startsWith('/embed/')) {
-        trackPath(pathname, 200).catch(err => {
-            console.error('[MIDDLEWARE] Error tracking embed path:', err);
-        });
-    } else {
-        trackPath(pathname).catch(err => {
-            console.error('[MIDDLEWARE] Error tracking path:', err);
-        });
-    }
-
     // Rate limiting for page requests only (NOT API, NOT static assets, NOT /embed/).
     // Static assets are excluded at the matcher level so they never hit D1.
     // API routes apply their own limits inside their handlers.
@@ -98,8 +86,6 @@ export async function middleware(request: NextRequest) {
         );
 
         if (!securityResult.success) {
-            trackPath(pathname, securityResult.blocked ? 403 : 429).catch(() => {});
-
             return NextResponse.json(
                 { error: securityResult.error },
                 {

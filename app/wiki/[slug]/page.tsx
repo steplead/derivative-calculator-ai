@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 
     if (topic) {
         return {
-            title: `${topic.title} - Math Wiki | Derivative Calculator AI`,
+            title: `${topic.title} - Math Wiki`,
             description: topic.description,
             alternates: {
                 canonical: url,

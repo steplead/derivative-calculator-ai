@@ -15,11 +15,13 @@ type CalculatorProps = {
     initialEquation?: string;
     initialLimitTo?: string;
     mode?: 'derivative' | 'integral' | 'limit' | 'ode';
+    /** Server-rendered deterministic result — shown immediately without a first API call. */
+    initialResult?: any;
     dict?: any;
     embedded?: boolean;
 };
 
-export default function Calculator({ initialEquation = '', initialLimitTo = '0', mode = 'derivative', dict, embedded = false }: CalculatorProps) {
+export default function Calculator({ initialEquation = '', initialLimitTo = '0', mode = 'derivative', initialResult, dict, embedded = false }: CalculatorProps) {
     const searchParams = useSearchParams();
     const equationParam = searchParams.get('equation');
     const limitToParam = searchParams.get('to');
@@ -27,7 +29,7 @@ export default function Calculator({ initialEquation = '', initialLimitTo = '0',
 
     const [input, setInput] = useState((equationParam || initialEquation || '').toString().replace(/^null$/i, ''));
     const [limitTo, setLimitTo] = useState((limitToParam || initialLimitTo || '0').toString().replace(/^null$/i, '0'));
-    const [result, setResult] = useState<any>(null);
+    const [result, setResult] = useState<any>(initialResult || null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
@@ -49,12 +51,15 @@ export default function Calculator({ initialEquation = '', initialLimitTo = '0',
         const eq = (equationParam || initialEquation || '').toString().replace(/^null$/i, '');
         const to = (limitToParam || initialLimitTo || '0').toString().replace(/^null$/i, '0');
 
-        if (eq) {
+        // RC-1 FIX: if the server already rendered a deterministic result,
+        // do NOT re-fetch on first paint — avoid double API call and hydration
+        // flicker. Only recalculate when the user changes the expression.
+        if (eq && !initialResult) {
             setInput(eq);
             if (mode === 'limit') setLimitTo(to);
             handleCalculate(eq, to);
         }
-    }, [equationParam, limitToParam, initialEquation, initialLimitTo, mode]);
+    }, [equationParam, limitToParam, initialEquation, initialLimitTo, mode, initialResult]);
 
     const handleCalculate = async (equationToSolve = input, targetToSolve = limitTo) => {
         const formula = sanitizeMathFormula((equationToSolve || '').toString().replace(/^null$/i, ''));

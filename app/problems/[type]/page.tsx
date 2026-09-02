@@ -50,18 +50,33 @@ export default async function ProblemsByTypePage({ params }: { params: { type: s
   let allProblems: any[] = [];
 
   if (baseUrl) {
+    // RC-6 FIX: prefer static problems.json (same reliable path as /directory).
     try {
-      const res = await fetch(`${baseUrl}/api/problems?limit=1000`, {
+      const staticRes = await fetch(`${baseUrl}/problems.json`, {
         cache: 'force-cache',
         // @ts-ignore
         next: { revalidate: 3600 }
       });
-
-      if (res.ok && res.headers.get("content-type")?.includes("application/json")) {
-        allProblems = await res.json();
+      if (staticRes.ok && staticRes.headers.get("content-type")?.includes("application/json")) {
+        allProblems = await staticRes.json();
       }
     } catch (e) {
-      console.error("Failed to fetch problems:", e);
+      console.error("Failed to fetch static problems:", e);
+    }
+
+    if (allProblems.length === 0) {
+      try {
+        const res = await fetch(`${baseUrl}/api/problems?limit=1000`, {
+          cache: 'force-cache',
+          // @ts-ignore
+          next: { revalidate: 3600 }
+        });
+        if (res.ok && res.headers.get("content-type")?.includes("application/json")) {
+          allProblems = await res.json();
+        }
+      } catch (e) {
+        console.error("Failed to fetch problems:", e);
+      }
     }
   }
 

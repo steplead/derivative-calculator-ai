@@ -6,6 +6,7 @@ import { getCachedExplanation, setCachedExplanation } from '@/utils/cache';
 import { performSecurityCheck } from '@/utils/security';
 import { trackPath } from '@/utils/path-tracker';
 import { extractRealContent } from '@/utils/validate-ai-content';
+import { normalizeExpression } from '@/lib/math/math-core';
 
 export const runtime = 'edge';
 
@@ -68,7 +69,8 @@ export async function GET(req: NextRequest) {
         let solutionLatex = "";
         let solutionRaw = "";
         try {
-            const integral = nerdamer(`integrate(${expression}, x)`);
+            // RC-4: normalize ln( → log( (nerdamer natural log) before integrating
+            const integral = nerdamer(`integrate(${normalizeExpression(expression)}, x)`);
             solutionLatex = integral.toTeX() + " + C";
             solutionRaw = integral.toString();
         } catch (nerdError) {

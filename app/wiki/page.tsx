@@ -13,7 +13,7 @@ export async function generateMetadata() {
     const url = locale === 'en' ? `${siteUrl}/wiki` : `${siteUrl}/${locale}/wiki`;
 
     return {
-        title: `Math Wiki - Derivative Calculator AI`,
+        title: `Math Wiki`,
         description: `Learn the fundamental rules and concepts of calculus in our Math Wiki.`,
         alternates: {
             canonical: url,

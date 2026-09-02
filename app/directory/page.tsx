@@ -27,7 +27,7 @@ export async function generateMetadata() {
     const url = locale === 'en' ? `${siteUrl}/directory` : `${siteUrl}/${locale}/directory`;
 
     return {
-        title: `${h1} - Complete Problem Directory | Derivative Calculator AI`,
+        title: `${h1} - Complete Problem Directory`,
         description: 'Browse our complete list of derivative problems and solutions.',
         alternates: {
             canonical: url,

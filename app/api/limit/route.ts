@@ -5,6 +5,7 @@ import { OpenAI } from 'openai';
 import { getCachedExplanation, setCachedExplanation } from '@/utils/cache';
 import { performSecurityCheck } from '@/utils/security';
 import { trackPath } from '@/utils/path-tracker';
+import { normalizeExpression } from '@/lib/math/math-core';
 
 export const runtime = 'edge';
 
@@ -66,7 +67,7 @@ export async function GET(req: NextRequest) {
         let solutionLatex = "";
         let solutionRaw = "";
         try {
-            const l = nerdamer(`limit(${expression}, x, ${target})`);
+            const l = nerdamer(`limit(${normalizeExpression(expression)}, x, ${target})`);
             solutionLatex = l.toTeX();
             solutionRaw = l.toString();
         } catch (nerdError) {

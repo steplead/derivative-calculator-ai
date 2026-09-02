@@ -1,0 +1,4 @@
+group_type,count,representative,reason,recommend
+description模板化,148,Calculate the derivative of <FUNC> using the Chain Rule (128页),正文description仅替换函数名,内容升级或合并
+SSR主体模板,504,全部[slug]页面主体文案相同,howTo段落为固定模板+答案靠客户端JS,预渲染真实答案到SSR
+title重复拼接,504,...Derivative Calculator AI - Instant Step-by-Step Solutions | Derivative Calculator AI,layout template与页面title冲突,修复template

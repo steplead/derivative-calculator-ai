@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import nerdamer from 'nerdamer';
-import 'nerdamer/Calculus'; // Load calculus plugin
 import { OpenAI } from 'openai';
 import { getCachedExplanation, setCachedExplanation } from '@/utils/cache';
 import { performSecurityCheck } from '@/utils/security';
 import { trackPath } from '@/utils/path-tracker';
+import { calculateDerivative } from '@/lib/math/math-core';
 
 export const runtime = 'edge';
 
@@ -71,20 +70,36 @@ export async function GET(req: NextRequest) {
     }
 
     try {
-        // 1. Calculate Derivative with Nerdamer (local verification)
+        // 1. Calculate Derivative with the shared deterministic math core.
+        //    RC-4 FIX: math-core normalizes ln( → log( (nerdamer's natural log),
+        //    validates the result, and identifies the rule. Using the same module
+        //    as the SSR page guarantees API and server-rendered answers never diverge.
         let solutionLatex = "";
         let solutionRaw = "";
+        let ruleUsed = "";
+        let deterministicSteps: string[] = [];
         try {
-            const d = nerdamer(`diff(${expression}, x)`);
-            solutionLatex = d.toTeX();
-            solutionRaw = d.toString();
-        } catch (nerdError) {
-            console.error("Nerdamer Error:", nerdError);
-            // We will let AI provide the solution if Nerdamer fails
+            const solution = calculateDerivative(expression);
+            solutionLatex = solution.solutionLatex;
+            solutionRaw = solution.solutionRaw;
+            ruleUsed = solution.rule;
+            deterministicSteps = solution.steps;
+        } catch (nerdError: any) {
+            console.error("Math Core Error:", nerdError?.message || nerdError);
+            // Deterministic calculation failed → let the AI/fallback explain, but
+            // do NOT return a wrong answer. solutionRaw stays empty → 500 below
+            // if no fallback is available.
         }
 
-        let stepsContent = "Step-by-step solution unavailable (AI disabled).";
-        let aiExplanation = "AI explanation unavailable (AI disabled).";
+        // RC-4: Always surface deterministic steps from the shared math core.
+        // AI (when enabled) can enrich them, but the page/API must never ship
+        // a bare "AI disabled" placeholder — the math itself is deterministic.
+        let stepsContent = deterministicSteps.length > 0
+            ? deterministicSteps.map((s, i) => `**Step ${i + 1}:** ${s}`).join('\n\n')
+            : "Step-by-step solution unavailable.";
+        let aiExplanation = ruleUsed
+            ? `The derivative of ${expression} is ${solutionRaw || solutionLatex}. Rule used: ${ruleUsed}.`
+            : "AI explanation unavailable.";
 
         // 2. AI Explanation (DeepSeek via OpenRouter + Redis Cache)
         const apiKey = process.env.OPENROUTER_API_KEY;
@@ -191,10 +206,18 @@ Output Format (strict JSON):
                 if (!aiContent) {
                     console.error("All AI attempts failed, using enhanced fallback:", lastError?.message);
 
-                    // Generate enhanced SymPy-based explanation
-                    aiExplanation = `The derivative of ${expression} with respect to x is ${solutionLatex || solutionRaw}. This result is obtained by systematically applying the appropriate differentiation rules from calculus. The derivative represents the instantaneous rate of change of the function at any point.`;
+                    // RC-4: Fall back to DETERMINISTIC steps from the shared math
+                    // core (never a generic "AI disabled" template). These steps
+                    // are math-correct and rule-specific.
+                    if (deterministicSteps.length > 0) {
+                        stepsContent = deterministicSteps
+                            .map((s, i) => `**Step ${i + 1}:** ${s}`)
+                            .join('\n\n');
+                        aiExplanation = `The derivative of ${expression} with respect to x is ${solutionLatex || solutionRaw}. Rule used: ${ruleUsed}.`;
+                    } else {
+                        aiExplanation = `The derivative of ${expression} with respect to x is ${solutionLatex || solutionRaw}. This result is obtained by systematically applying the appropriate differentiation rules from calculus. The derivative represents the instantaneous rate of change of the function at any point.`;
 
-                    stepsContent = `**Step 1: Problem Identification**
+                        stepsContent = `**Step 1: Problem Identification**
 We need to find d/dx of the function: f(x) = ${expression}
 
 **Step 2: Rule Selection**
@@ -214,6 +237,7 @@ You can verify this result by:
 - Applying the definition of the derivative as a limit
 
 **Final Answer:** $$${solutionLatex || solutionRaw}$$`;
+                    }
                 }
             }
         }

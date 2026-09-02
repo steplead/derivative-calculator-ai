@@ -11,7 +11,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const url = locale === 'en' ? `${siteUrl}/problems` : `${siteUrl}/${locale}/problems`;
 
   return {
-    title: `All Calculus Problems - Complete Library | Derivative Calculator AI`,
+    title: `All Calculus Problems - Complete Library`,
     description: `Browse our complete library of calculus problems including derivatives, integrals, limits, and ODEs. Step-by-step solutions with AI explanations.`,
     alternates: {
       canonical: url,
@@ -22,7 +22,7 @@ export async function generateMetadata(): Promise<Metadata> {
       }
     },
     openGraph: {
-      title: `All Calculus Problems - Complete Library | Derivative Calculator AI`,
+      title: `All Calculus Problems - Complete Library`,
       description: `Browse our complete library of calculus problems.`,
       url,
       type: 'website',
@@ -38,18 +38,36 @@ export default async function ProblemsPage() {
   let allProblems: any[] = [];
 
   if (baseUrl) {
+    // RC-6 FIX: prefer the static problems.json (same reliable path as /directory).
+    // The D1-backed /api/problems caps at 100 rows and can return empty during
+    // SSR, so it can never be the primary source for the full library page.
     try {
-      const res = await fetch(`${baseUrl}/api/problems?limit=1000`, {
+      const staticRes = await fetch(`${baseUrl}/problems.json`, {
         cache: 'force-cache',
         // @ts-ignore
         next: { revalidate: 3600 }
       });
-
-      if (res.ok && res.headers.get("content-type")?.includes("application/json")) {
-        allProblems = await res.json();
+      if (staticRes.ok && staticRes.headers.get("content-type")?.includes("application/json")) {
+        allProblems = await staticRes.json();
       }
     } catch (e) {
-      console.error("Failed to fetch problems:", e);
+      console.error("Failed to fetch static problems:", e);
+    }
+
+    // Only if static data is unavailable, fall back to the API.
+    if (allProblems.length === 0) {
+      try {
+        const res = await fetch(`${baseUrl}/api/problems?limit=1000`, {
+          cache: 'force-cache',
+          // @ts-ignore
+          next: { revalidate: 3600 }
+        });
+        if (res.ok && res.headers.get("content-type")?.includes("application/json")) {
+          allProblems = await res.json();
+        }
+      } catch (e) {
+        console.error("Failed to fetch problems:", e);
+      }
     }
   }
 

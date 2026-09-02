@@ -1,0 +1,9 @@
+metric,value
+derivative 可索引页面总数,504
+至少1个内链(directory覆盖),504 (directory 页含全部 derivative-of 链接)
+孤岛页,0 (directory 全覆盖)
+点击深度1-2,504 (首页→directory→slug)
+点击深度3,部分 (首页→problems→type→slug 链路断)
+点击深度≥4,0
+problems 页 SSR 渲染链接数,0 (依赖API limit=100且客户端渲染)
+directory 页 SSR 渲染链接数,1084 (derivative-of)

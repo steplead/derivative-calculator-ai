@@ -28,7 +28,7 @@ export async function generateMetadata() {
     const url = `${baseUrlWithLocale}/limit`;
 
     return {
-        title: `${h1} - Evaluate Limits with Steps | Derivative Calculator AI`,
+        title: `${h1} - Evaluate Limits with Steps`,
         description: subtitle,
         alternates: {
             canonical: url,
@@ -39,7 +39,7 @@ export async function generateMetadata() {
             },
         },
         openGraph: {
-            title: `${h1} - Derivative Calculator AI`,
+            title: `${h1}`,
             description: subtitle,
             url,
             type: 'website',

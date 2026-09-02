@@ -23,7 +23,7 @@ export async function generateMetadata() {
     const url = `${baseUrlWithLocale}/matrix`;
 
     return {
-        title: `${h1} - Matrix Operations & Solutions | Derivative Calculator AI`,
+        title: `${h1} - Matrix Operations & Solutions`,
         description: subtitle,
         alternates: {
             canonical: url,
@@ -34,7 +34,7 @@ export async function generateMetadata() {
             },
         },
         openGraph: {
-            title: `${h1} - Derivative Calculator AI`,
+            title: `${h1}`,
             description: subtitle,
             url,
             type: 'website',

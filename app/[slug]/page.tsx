@@ -11,6 +11,9 @@ import { getBaseUrl } from '@/utils/robust-url';
 import { getRequestContext } from '@cloudflare/next-on-pages';
 import { NOINDEX_SLUGS } from '@/lib/noindex-slugs';
 import { sanitizeSlug, sanitizeLimitValue } from '@/utils/sanitize';
+import { calculateDerivative } from '@/lib/math/math-core';
+import type { DerivativeSolution } from '@/lib/math/math-core';
+import { fetchRelatedFromD1 } from '@/lib/d1/related-problems';
 
 // Define the type for our problem data
 type Problem = {
@@ -21,6 +24,27 @@ type Problem = {
     type?: 'derivative' | 'integral' | 'limit';
     limitTo?: string;
 };
+
+/**
+ * RC-6 FIX: stable, deterministic related-problem selection.
+ * - Excludes the current slug.
+ * - Prefers problems of the same type (derivative/integral/limit).
+ * - Deterministic lexicographic order (never Math.random).
+ * - Caps at 10.
+ */
+function pickStableRelated(problems: any[], currentSlug: string, typeHint?: string): Problem[] {
+    const type = typeHint || 'derivative';
+    const sameType = problems
+        .filter((p) => p && p.slug && p.slug !== currentSlug && (!p.type || p.type === type))
+        .sort((a, b) => a.slug.localeCompare(b.slug))
+        .slice(0, 10);
+    if (sameType.length >= 5) return sameType;
+    const others = problems
+        .filter((p) => p && p.slug && p.slug !== currentSlug)
+        .sort((a, b) => a.slug.localeCompare(b.slug))
+        .slice(0, 10 - sameType.length);
+    return [...sameType, ...others];
+}
 
 /**
  * Smart Slug-to-Math Parser
@@ -247,7 +271,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     const url = `${baseUrlWithLocale}/${slug}`;
 
     return {
-        title: `${t.title} - Derivative Calculator AI`,
+        title: t.title,
         description: t.description,
         robots: NOINDEX_SLUGS.has(slug) ? {
             index: false,
@@ -262,7 +286,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
             }
         },
         openGraph: {
-            title: `${t.title} - Derivative Calculator AI`,
+            title: t.title,
             description: t.description,
             url,
             type: 'website',
@@ -287,7 +311,16 @@ export default async function ProblemPage({ params }: { params: { slug: string }
         const db = context?.env?.DB;
 
         // PARALLEL: Fetch from all sources simultaneously
-        const [staticRes, apiProbRes, apiAllRes, d1Problem, d1Related] = await Promise.allSettled([
+        //
+        // D1-QUOTA FIX: this array used to contain two more promises that were
+        // pure D1 cost for "related problems":
+        //   1. `SELECT * FROM problems WHERE slug != ? ORDER BY RANDOM() LIMIT 10`
+        //      → full table scan + sort, ~3,137 rows_read per page view.
+        //   2. `fetch('/api/problems?limit=50')` → 50 more rows_read per page view
+        //      (plus a self-inflicted HTTP round trip).
+        // Both are gone. Related problems now come from /problems.json (0 D1 rows,
+        // force-cached) with `fetchRelatedFromD1()` as an index-seek fallback.
+        const [staticRes, apiProbRes, d1Problem, d1Related] = await Promise.allSettled([
             // Static JSON file (fastest)
             baseUrl ? fetch(`${baseUrl}/problems.json`, {
                 cache: 'force-cache',
@@ -296,12 +329,6 @@ export default async function ProblemPage({ params }: { params: { slug: string }
             }) : Promise.reject('No baseUrl'),
             // API problem endpoint
             baseUrl ? fetch(`${baseUrl}/api/problem/${slug}`, {
-                cache: 'force-cache',
-                // @ts-ignore
-                next: { revalidate: 3600 }
-            }) : Promise.reject('No baseUrl'),
-            // API all problems endpoint
-            baseUrl ? fetch(`${baseUrl}/api/problems?limit=50`, {
                 cache: 'force-cache',
                 // @ts-ignore
                 next: { revalidate: 3600 }
@@ -316,12 +343,11 @@ export default async function ProblemPage({ params }: { params: { slug: string }
                     return null;
                 }
             })(),
-            // D1 related problems query
+            // D1 related problems query — index range seek, no RANDOM, no full scan
             (async () => {
                 try {
                     if (db) {
-                        const { results } = await db.prepare("SELECT * FROM problems WHERE slug != ? ORDER BY RANDOM() LIMIT 10").bind(slug).all();
-                        return Array.isArray(results) ? results : [];
+                        return await fetchRelatedFromD1(db, slug, 10);
                     }
                 } catch (e) {
                     return [];
@@ -349,31 +375,22 @@ export default async function ProblemPage({ params }: { params: { slug: string }
             }
         }
 
-        // Related problems
+        // Type hint for stable related selection (falls back to slug prefix).
+        const problemTypeHint = problem?.type || (slug.startsWith('integral') ? 'integral' : slug.startsWith('limit') ? 'limit' : 'derivative');
+
+        // Related problems — RC-6 FIX: deterministic, stable, semantically biased.
+        // Previously `sort(() => 0.5 - Math.random())` produced a DIFFERENT set on
+        // every SSR pass → hydration mismatch + unstable internal links for crawlers.
+        // Now: same-type problems first, then stable lexicographic order, capped at 10.
         if (relatedProblems.length === 0) {
             if (staticRes.status === 'fulfilled' && staticRes.value.ok) {
                 const problemsData = await staticRes.value.json();
                 if (Array.isArray(problemsData)) {
-                    relatedProblems = problemsData
-                        .filter(p => p.slug !== slug)
-                        .sort(() => 0.5 - Math.random())
-                        .slice(0, 10);
+                    relatedProblems = pickStableRelated(problemsData, slug, problemTypeHint);
                 }
             }
             if (relatedProblems.length === 0 && d1Related.status === 'fulfilled' && Array.isArray(d1Related.value)) {
-                relatedProblems = d1Related.value;
-            }
-            if (relatedProblems.length === 0 && apiAllRes.status === 'fulfilled' && apiAllRes.value.ok) {
-                const contentType = apiAllRes.value.headers.get("content-type");
-                if (contentType && contentType.includes("application/json")) {
-                    const allProblems = await apiAllRes.value.json();
-                    if (Array.isArray(allProblems)) {
-                        relatedProblems = allProblems
-                            .filter((p: any) => p && p.slug !== slug)
-                            .sort(() => 0.5 - Math.random())
-                            .slice(0, 10);
-                    }
-                }
+                relatedProblems = pickStableRelated(d1Related.value, slug, problemTypeHint);
             }
         }
 
@@ -403,6 +420,30 @@ export default async function ProblemPage({ params }: { params: { slug: string }
             limitTo: problemLimitTo,
             description: problem.description || ""
         };
+
+        // RC-1 FIX: deterministically compute the answer server-side so the
+        // initial HTML contains real math content (answer, rule, steps) —
+        // not just a template sentence. Same shared module as /api/derivative.
+        let ssrSolution: DerivativeSolution | null = null;
+        if (safeProblem.type === 'derivative' || !safeProblem.type) {
+            try {
+                ssrSolution = calculateDerivative(safeProblem.formula);
+                // Never surface a failed/invalid result as if it were correct.
+                if (!ssrSolution.isValid) ssrSolution = null;
+            } catch (e) {
+                console.error("SSR derivative calculation failed:", e);
+                ssrSolution = null;
+            }
+        }
+
+        // initialResult passed to the client Calculator (avoids duplicate first fetch).
+        const initialResult = ssrSolution ? {
+            solution: ssrSolution.solutionLatex,
+            solution_raw: ssrSolution.solutionRaw,
+            steps: ssrSolution.steps.map((s, i) => `**Step ${i + 1}:** ${s}`).join('\n\n'),
+            ai_explanation: ssrSolution.rule ? `Rule used: ${ssrSolution.rule}.` : 'Deterministic step-by-step solution.',
+            _ssr: true,
+        } : undefined;
 
         const t = getLocalizedContent(locale, safeProblem.formula, safeProblem.type);
         const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://derivativecalculatorai.com';
@@ -445,8 +486,44 @@ export default async function ProblemPage({ params }: { params: { slug: string }
                         initialEquation={safeProblem.formula}
                         initialLimitTo={safeProblem.limitTo}
                         mode={safeProblem.type as any}
+                        initialResult={initialResult}
                     />
                 </Suspense>
+
+                {/* RC-1 FIX: deterministic answer block rendered in initial HTML.
+                    Gives Googlebot real math content without JS execution. */}
+                {ssrSolution && (
+                    <section
+                        className="max-w-4xl mx-auto mt-8 p-6 bg-gray-50 dark:bg-slate-800 rounded-2xl border border-gray-200 dark:border-slate-700"
+                        aria-label="Solution"
+                    >
+                        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
+                            {safeProblem.type === 'integral' ? 'Integral' : 'Derivative'} of {safeProblem.formula}
+                        </h2>
+                        <dl className="space-y-4">
+                            <div>
+                                <dt className="text-sm font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wide">Answer</dt>
+                                <dd className="mt-1 text-2xl text-gray-900 dark:text-white font-math">
+                                    {ssrSolution.solutionRaw}
+                                </dd>
+                            </div>
+                            <div>
+                                <dt className="text-sm font-semibold text-purple-600 dark:text-purple-400 uppercase tracking-wide">Rule Used</dt>
+                                <dd className="mt-1 text-gray-700 dark:text-gray-300">{ssrSolution.rule}</dd>
+                            </div>
+                            <div>
+                                <dt className="text-sm font-semibold text-green-600 dark:text-green-400 uppercase tracking-wide">Steps</dt>
+                                <dd className="mt-1">
+                                    <ol className="list-decimal list-inside space-y-1 text-gray-700 dark:text-gray-300">
+                                        {ssrSolution.steps.map((s, i) => (
+                                            <li key={i}>{s}</li>
+                                        ))}
+                                    </ol>
+                                </dd>
+                            </div>
+                        </dl>
+                    </section>
+                )}
 
                 <div className="max-w-2xl mx-auto mt-12 prose prose-invert">
                     <h3 className="text-gray-900 dark:text-white font-bold text-xl mb-2">{t.howToTitle}</h3>
@@ -483,14 +560,18 @@ export default async function ProblemPage({ params }: { params: { slug: string }
             </div>
             </>
         );
-    } catch (criticalError) {
+    } catch (criticalError: any) {
+        // RC-2 FIX: Next.js `notFound()` throws a special control-flow error with
+        // digest "NEXT_NOT_FOUND". Previously this catch block swallowed it and
+        // returned a 200 fallback page (soft 404). We must re-throw it so Next.js
+        // renders the real 404 (not-found.tsx).
+        if (criticalError?.digest === 'NEXT_NOT_FOUND') {
+            throw criticalError;
+        }
+        // Any OTHER error is a genuine server/render failure → re-throw so the
+        // error boundary returns 500. Never return HTTP 200 with a "Unable to
+        // load" body, which would get cached by the CDN (RC-3).
         console.error("Critical Render Error in ProblemPage:", criticalError);
-        return (
-            <div className="py-20 text-center">
-                <h1 className="text-2xl font-bold mb-4">Unable to load calculation</h1>
-                <p className="text-gray-500 mb-8">We encountered a temporary issue loading this math problem.</p>
-                <a href="/" className="bg-blue-600 text-white px-6 py-2 rounded-full">Go to Home</a>
-            </div>
-        );
+        throw criticalError;
     }
 }

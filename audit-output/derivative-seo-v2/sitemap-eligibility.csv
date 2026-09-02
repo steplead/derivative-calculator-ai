@@ -1,0 +1,6 @@
+status,count,note
+当前可安全进入sitemap,0,SSR主体空洞，无真实答案，全部不符合
+修复后可进入,460,非ln类，数学正确，但需先修复SSR主体空洞
+应保持noindex/不提交,787,现有noindex垃圾slug
+需要数学人工审核,44,ln类数学bug(44个)+log语义(39个)
+重复或应合并,0,formula层面无完全重复，但description高度模板化

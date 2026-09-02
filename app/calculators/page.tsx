@@ -11,7 +11,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const url = locale === 'en' ? `${siteUrl}/calculators` : `${siteUrl}/${locale}/calculators`;
 
   return {
-    title: `Math Calculators - Free Online Tools | Derivative Calculator AI`,
+    title: `Math Calculators - Free Online Tools`,
     description: `Free online math calculators: Derivative, Integral, Limit, ODE, and Matrix solvers. Step-by-step solutions with AI explanations.`,
     alternates: {
       canonical: url,
@@ -22,7 +22,7 @@ export async function generateMetadata(): Promise<Metadata> {
       }
     },
     openGraph: {
-      title: `Math Calculators - Free Online Tools | Derivative Calculator AI`,
+      title: `Math Calculators - Free Online Tools`,
       description: `Free online math calculators with step-by-step solutions.`,
       url,
       type: 'website',

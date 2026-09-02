@@ -67,8 +67,32 @@
 
 ## Git 推送坑
 - 远程 `https://github.com/steplead/derivative-calculator-ai.git` 偶发 HTTP2 framing error。
-- 解决：`git -c http.version=HTTP/1.1 push origin main`
-- 代理偶发 502：加 `-c http.lowSpeedLimit=1000 -c http.lowSpeedTime=120` 延长超时。
+- **有效命令（2026-09-02 验证，多次重试唯一稳定成功的形式）**：
+  `GIT_HTTP_LOW_SPEED_LIMIT=1000 GIT_HTTP_LOW_SPEED_TIME=180 git -c http.version=HTTP/1.1 -c http.postBuffer=524288000 push origin main`
+- **不要 `env -u HTTP_PROXY ...`**：本项目 shell 根本没配代理（`.zshrc`/`.gitconfig` 均无 proxy 设置，只有 `http.sslverify false`）。去掉代理变量反而让 git 走慢速直连更容易超时。
+- github.com 直连极慢（首页 20s 才响应），`api.github.com` 正常。push 失败多为超时，重试即可。
+
+## 生产验证踩坑（curl / CDN）
+- **用 curl 测本站点必须带浏览器 UA**：middleware 的脚本 UA 黑名单拦截 curl，回源直接 403（body 无 h1）。
+  曾出现「curl 干净 URL 拿到正确缓存副本 / curl 回源拿到 403 空 h1」，差点误判成渲染错误。
+  正确写法：`curl -A "Mozilla/5.0 (Macintosh...) Chrome/128.0 Safari/537.36" <url>`
+- **CDN 检查是 PoP 局部的**：本机出口固定命中某一个 colo（曾长期是 LAX）。该 colo 陈旧 ≠ 部署坏了。
+  判据：同一 colo 加 `?cb=` 回源若全对，则是缓存字节错、代码对。
+- **部署瞬间回源的 PoP 会缓存到部署前的响应**：实测 LAX 在 `11:01:13 UTC`（部署上线时刻）回源并缓存旧 HTML，
+  按 `s-maxage=7200` 要等满 2 小时才自动失效。Googlebot 主要走美国出口，容易命中这类美国 PoP，不能干等。
+- **本项目无任何 CDN purge 凭据**：wrangler OAuth 无 `cache_purge` scope；`CLOUDFLARE_API_TOKEN` 只在 GitHub
+  Actions secret（且仅 Pages deploy 权限）；磁盘上无 `CF_API_TOKEN`/`CF_ZONE_ID`。
+  → 只能人工 CF Dashboard → Caching → Configuration → Purge Everything。
+
+## D1 配额铁律（补充：写入侧，2026-09-02 audit 发现）
+- **RC-8 只修了读侧**（RANDOM 全扫 + 页面渲染 D1）。**写侧仍是下一个悬崖**：
+  `middleware.ts` → `utils/security.ts`(`_checkGlobalQuota` 2 写 + `_checkD1RateLimit` 1 写)
+  + `utils/path-tracker.ts`(`trackPath` 1 写) 在**每个 cache-miss 请求**打 ~4 次 D1 写入。
+- 免费档写入上限 50k/天。2375 URL × 多 PoP × s-maxage=7200 的回源量远超此数 → 写入配额会被打爆。
+- **修复方向**：把 analytics/全局配额计数写入移出请求关键路径（fire-and-forget + Workers Analytics / CF Web Analytics），
+  rate-limit 读保持走索引（已有 idx_rate_limits_ip）。**切勿在 middleware 热路径同步写 D1。**
+- `app/api/problems/route.ts` 仍有 `SELECT *` + `tags LIKE '%x%'`（不可索引全扫）；
+  `app/api/problem/[slug]/route.ts` 仍有 `SELECT *`。两者 D1 超限时 500（页面不依赖它们，故页面仍正常）。
 
 ## 构建验证清单（改动后必跑）
 1. `npx tsc --noEmit` — 类型检查

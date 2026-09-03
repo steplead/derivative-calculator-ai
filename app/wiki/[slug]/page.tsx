@@ -167,7 +167,7 @@ export default async function WikiTopicPage({ params }: { params: { slug: string
                     <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         {allTopics
                             .filter(t => t.slug !== slug)
-                            .sort(() => 0.5 - Math.random())
+                            .sort((a, b) => a.slug.localeCompare(b.slug))
                             .slice(0, 3)
                             .map((t) => (
                                 <Link

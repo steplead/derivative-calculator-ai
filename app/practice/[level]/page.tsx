@@ -14,7 +14,12 @@ const LEVEL_INFO: Record<string, { title: string; description: string; color: st
 export async function generateMetadata({ params }: { params: { level: string } }): Promise<Metadata> {
   const info = LEVEL_INFO[params.level];
   if (!info) return { title: 'Not Found' };
-  return { title: info.title + ' | Derivative Calculator AI' };
+  // P2-D: thin near-duplicate content (3 levels share the same body, D1-backed);
+  // keep indexable library pages clean by noindexing this utility route.
+  return {
+    title: info.title + ' | Derivative Calculator AI',
+    robots: { index: false, follow: true },
+  };
 }
 
 export default async function LevelPage({ params }: { params: { level: string } }) {

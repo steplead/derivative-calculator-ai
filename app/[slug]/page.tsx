@@ -121,6 +121,10 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     // in the page body, so <title> and <h1> can never disagree again. The old
     // `cache: 'force-cache'` fetches never returned data on this platform.
     let problem: Problem | null = findStaticProblem(await loadStaticProblemsSafe(), slug);
+    // True only when the slug resolves via the slug→math heuristic (not present
+    // in the library / D1 / API). Such pages form an infinite URL surface and
+    // must be noindexed (P2-H).
+    let isHeuristic = false;
 
     // Only slugs outside the library pay for a D1-backed HTTP round trip.
     if (!problem && baseUrl) {
@@ -158,6 +162,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     // DYNAMIC FALLBACK: Smart Parser (Heuristic for descriptive or raw math slugs)
     if (!problem) {
         problem = parseSlugToMath(slug);
+        isHeuristic = true;
     }
 
     if (!problem) {
@@ -176,7 +181,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     return {
         title: t.title,
         description: t.description,
-        robots: NOINDEX_SLUGS.has(slug) ? {
+        robots: (NOINDEX_SLUGS.has(slug) || isHeuristic) ? {
             index: false,
             follow: true,
         } : undefined,

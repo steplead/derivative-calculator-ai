@@ -175,9 +175,11 @@ describe('RC-8 task 7: /problems and /problems/derivative render real links', ()
 
     it('/problems/[type] rejects an unknown type before rendering', () => {
         // The page calls notFound() for anything outside this list.
-        const validTypes = ['derivative', 'integral', 'limit', 'ode'];
+        // P2-B: 'ode' removed — problems.json has zero ode-typed rows, so the
+        // category was empty; it now 404s (consistent with /problems/matrix).
+        const validTypes = ['derivative', 'integral', 'limit'];
         const src = fs.readFileSync(path.join(ROOT, 'app/problems/[type]/page.tsx'), 'utf-8');
-        expect(src).toMatch(/validTypes\s*=\s*\['derivative', 'integral', 'limit', 'ode'\]/);
+        expect(src).toMatch(/validTypes\s*=\s*\['derivative', 'integral', 'limit'\]/);
         expect(src).toMatch(/notFound\(\)/);
         expect(validTypes).toContain('derivative');
     });

@@ -19,6 +19,12 @@ export async function generateMetadata({ params }: { params: { tag: string } }):
     alternates: {
       canonical: url,
     },
+    // P2-E: route is D1-backed and soft-404s when the D1 daily read quota is
+    // exhausted; noindex to keep the index clean and avoid orphaned/empty URLs.
+    robots: {
+      index: false,
+      follow: true,
+    },
     openGraph: {
       title: `${tagName} Calculus Problems`,
       description: `Browse problems tagged with "${tagName}".`,

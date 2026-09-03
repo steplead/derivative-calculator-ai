@@ -18,11 +18,12 @@ interface FooterProps {
 }
 
 export default function Footer({ wikiTopics, problems, locale }: FooterProps) {
-    // Shuffle and slice to implement "Stir-Fry"
-    // Note: On truly static hosting, this only shuffles during build.
-    // In our Edge runtime, it shuffles on every dynamic request.
-    const randomWiki = wikiTopics.sort(() => 0.5 - Math.random()).slice(0, 4);
-    const randomProblems = problems.sort(() => 0.5 - Math.random()).slice(0, 6);
+    // Deterministic, crawl-stable feature selection. Previously this used
+    // Math.random() on every Edge request AND mutated the props arrays in place
+    // (RC-9: unstable SSR internal links, hurting crawl consistency). We now
+    // sort a COPY by slug and take the first N — identical HTML every request.
+    const wikiLinks = [...wikiTopics].sort((a, b) => a.slug.localeCompare(b.slug)).slice(0, 4);
+    const problemLinks = [...problems].sort((a, b) => a.slug.localeCompare(b.slug)).slice(0, 6);
 
     const baseUrl = locale === 'en' ? '' : `/${locale}`;
 
@@ -47,7 +48,7 @@ export default function Footer({ wikiTopics, problems, locale }: FooterProps) {
                             Math Wiki (Featured)
                         </h4>
                         <ul className="space-y-2">
-                            {randomWiki.map(topic => (
+                            {wikiLinks.map(topic => (
                                 <li key={topic.slug}>
                                     <Link
                                         href={`${baseUrl}/wiki/${topic.slug}`}
@@ -74,7 +75,7 @@ export default function Footer({ wikiTopics, problems, locale }: FooterProps) {
                             Practice Problems
                         </h4>
                         <ul className="space-y-2">
-                            {randomProblems.map(problem => (
+                            {problemLinks.map(problem => (
                                 <li key={problem.slug}>
                                     <Link
                                         href={`${baseUrl}/${problem.slug}`}

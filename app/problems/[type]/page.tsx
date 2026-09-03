@@ -43,7 +43,11 @@ export default async function ProblemsByTypePage({ params }: { params: { type: s
   const locale = headersList.get("x-next-locale") || "en";
   const baseUrl = getBaseUrl();
 
-  const validTypes = ['derivative', 'integral', 'limit', 'ode'];
+  // P2-B: `ode` removed — problems.json has zero `ode`-typed rows, so
+  // /problems/ode rendered an empty (zero-value) category. Dropping it makes
+  // /problems/ode 404 (consistent with /problems/matrix) instead of an
+  // indexed empty page, and Related Categories no longer links to it.
+  const validTypes = ['derivative', 'integral', 'limit'];
   if (!validTypes.includes(type)) {
     notFound();
   }
@@ -110,9 +114,9 @@ export default async function ProblemsByTypePage({ params }: { params: { type: s
             <Link
               key={problem.slug}
               href={`/${locale === 'en' ? '' : locale + '/'}${problem.slug}`}
-              className="bg-white dark:bg-slate-800 p-6 rounded-lg border border-gray-200 dark:border-slate-700 hover:border-${color}-500 dark:hover:border-${color}-400 hover:shadow-lg transition-all group"
+              className="bg-white dark:bg-slate-800 p-6 rounded-lg border border-gray-200 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-400 hover:shadow-lg transition-all group"
             >
-              <div className="font-mono text-lg text-gray-900 dark:text-white mb-3 group-hover:text-${color}-600 dark:group-hover:text-${color}-400 transition-colors">
+              <div className="font-mono text-lg text-gray-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                 {type === 'integral' && '∫'}
                 {type === 'limit' && 'lim'}
                 {type === 'derivative' && 'd/dx('}
@@ -135,7 +139,7 @@ export default async function ProblemsByTypePage({ params }: { params: { type: s
               <Link
                 key={otherType}
                 href={`/problems/${otherType}`}
-                className="bg-gray-50 dark:bg-slate-800 p-4 rounded-lg hover:ring-2 hover:ring-${typeColors[otherType]}-500 transition-all text-center"
+                className="bg-gray-50 dark:bg-slate-800 p-4 rounded-lg hover:ring-2 hover:ring-blue-500 transition-all text-center"
               >
                 <div className="font-medium text-gray-900 dark:text-white">
                   {typeNames[otherType]}

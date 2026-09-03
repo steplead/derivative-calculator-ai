@@ -15,6 +15,7 @@ import fs from 'fs';
 import path from 'path';
 import { parseSlugToMath } from '@/lib/slug-math';
 import { pickStableRelated, findStaticProblem, getDerivativeCanonicalMap } from '@/lib/problems-source';
+import { NOINDEX_SLUGS } from '@/lib/noindex-slugs';
 
 const ROOT = path.resolve(__dirname, '..');
 
@@ -198,5 +199,40 @@ describe('P2-G: derivative near-duplicate canonical map', () => {
         const a = await getDerivativeCanonicalMap(library);
         const b = await getDerivativeCanonicalMap(library);
         expect([...a.entries()]).toEqual([...b.entries()]);
+    });
+});
+
+describe('P2-G follow-up: derivative dup-group slugs unlocked from NOINDEX_SLUGS', () => {
+    // Production wiring (app/[slug]/page.tsx generateMetadata) lifts noindex for
+    // any slug that participates in a derivative near-duplicate group, deriving
+    // the unlock set from getDerivativeCanonicalMap (keys ∪ values). These guards
+    // pin the contract so a future regeneration of lib/noindex-slugs.ts from
+    // scripts/noindex_list.txt cannot silently re-noindex the 35 slugs.
+    const library: any[] = JSON.parse(read('data/problems.json'));
+
+    async function unlockSet(): Promise<Set<string>> {
+        const map = await getDerivativeCanonicalMap(library);
+        return new Set<string>([...map.keys(), ...map.values()]);
+    }
+
+    it('unlock set = 35 slugs (15 groups), every one currently in NOINDEX_SLUGS', async () => {
+        const unlock = await unlockSet();
+        expect(unlock.size).toBe(35);
+        for (const s of unlock) expect(NOINDEX_SLUGS.has(s)).toBe(true);
+    });
+
+    it('non-group NOINDEX_SLUGS slugs stay locked (not in unlock set)', async () => {
+        const unlock = await unlockSet();
+        // A polluted sqrt slug that is NOT part of any derivative dup group must
+        // remain noindex — the unlock only lifts the 15 duplicate groups.
+        const polluted = 'derivative-of-1-minus-over-minus-sqrt1-minus-x-minus-to-minus-the-minus-2';
+        expect(NOINDEX_SLUGS.has(polluted)).toBe(true);
+        expect(unlock.has(polluted)).toBe(false);
+    });
+
+    it('primary + a secondary of the same group are both in the unlock set', async () => {
+        const unlock = await unlockSet();
+        expect(unlock.has('derivative-of-x-squared')).toBe(true); // primary
+        expect(unlock.has('derivative-of-x2')).toBe(true); // secondary -> x-squared
     });
 });

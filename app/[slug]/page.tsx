@@ -208,11 +208,20 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     const canonMap = await getDerivativeCanonicalMap();
     const canonicalSlug = canonMap.get(slug) || slug;
     const url = `${baseUrlWithLocale}/${canonicalSlug}`;
+    // P2-G follow-up: slugs that belong to a derivative near-duplicate group are
+    // intentionally indexable. The canonical tag above already points every
+    // non-primary member at the group's primary slug, so indexing equity stays
+    // consolidated. The unlock set is DERIVED from the canonical map (the single
+    // source of truth) and therefore survives any regeneration of
+    // lib/noindex-slugs.ts from scripts/noindex_list.txt. Slugs outside the
+    // library stay noindex (RC-8 guard) — only the NOINDEX_SLUGS overlap is lifted.
+    const derivDupSlugs = new Set<string>([...canonMap.keys(), ...canonMap.values()]);
+    const lockedNoindex = (NOINDEX_SLUGS.has(slug) && !derivDupSlugs.has(slug)) || isOutOfLibrary;
 
     return {
         title: t.title,
         description: t.description,
-        robots: (NOINDEX_SLUGS.has(slug) || isOutOfLibrary) ? {
+        robots: lockedNoindex ? {
             index: false,
             follow: true,
         } : undefined,

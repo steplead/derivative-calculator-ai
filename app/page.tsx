@@ -54,6 +54,9 @@ export default async function Home() {
   // `cache: 'force-cache'` + `next: { revalidate }` fetch returned nothing
   // here, so the homepage "popular problems" strip was always empty.
   popularProblems = (await loadStaticProblemsSafe()).slice(0, 20);
+  // P3-P1-2: deterministic, crawl-stable "recommended" list from the static
+  // library — replaces the old client-side 60s polling of /api/problems.
+  const recommendedProblems = (await loadStaticProblemsSafe()).slice(20, 28);
 
   if (popularProblems.length === 0 && baseUrl) {
     try {
@@ -154,7 +157,7 @@ export default async function Home() {
         <div className="mt-16">
           <Suspense fallback={<div className="text-center py-12">Loading recommendations...</div>}>
             {/* @ts-ignore */}
-            <DynamicRecommendations baseUrl={baseUrl} locale={locale} count={8} refreshInterval={60000} />
+            <DynamicRecommendations problems={recommendedProblems} locale={locale} count={8} />
           </Suspense>
         </div>
       </div>

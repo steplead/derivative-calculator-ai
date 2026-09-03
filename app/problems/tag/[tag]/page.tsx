@@ -37,18 +37,26 @@ export async function generateMetadata({ params }: { params: { tag: string } }):
 
   const tagName = tag.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 
+  // B6: unlock noindex ONLY for tags that actually have problems in the static
+  // library. Real tags are thick (hundreds–thousands of unique problems, unique
+  // title/H1, cross-tag links, unique intro) and safe to index. Empty /
+  // nonexistent tags stay noindex,follow so a thin/empty URL never reaches the
+  // index. Fail-closed: if the library fails to load, `hasProblems` is false →
+  // noindex. Uses .some() so a real tag short-circuits on first match.
+  const library = await loadStaticProblemsSafe();
+  const hasProblems = library.some(
+    (p) => p && p.tags && String(p.tags).split(',').map((t) => t.trim()).includes(tag)
+  );
+
   return {
     title: `${tagName} Calculus Problems - Tagged Library`,
     description: `Browse calculus problems tagged with "${tagName}". Step-by-step solutions with AI explanations.`,
     alternates: {
       canonical: url,
     },
-    // P2-E: route is D1-backed and soft-404s when the D1 daily read quota is
-    // exhausted; noindex to keep the index clean and avoid orphaned/empty URLs.
-    robots: {
-      index: false,
-      follow: true,
-    },
+    robots: hasProblems
+      ? { index: true, follow: true }
+      : { index: false, follow: true },
     openGraph: {
       title: `${tagName} Calculus Problems`,
       description: `Browse problems tagged with "${tagName}".`,

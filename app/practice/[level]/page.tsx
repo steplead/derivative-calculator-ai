@@ -1,9 +1,9 @@
 export const runtime = 'edge';
 import Link from 'next/link';
 import Breadcrumbs from '@/components/Breadcrumbs';
-import { getBaseUrl } from '@/utils/robust-url';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { loadStaticProblemsSafe } from '@/lib/problems-source';
 
 const LEVEL_INFO: Record<string, { title: string; description: string; color: string }> = {
   beginner: { title: 'Beginner Problems', description: 'Start here with basic calculus.', color: 'green' },
@@ -14,8 +14,10 @@ const LEVEL_INFO: Record<string, { title: string; description: string; color: st
 export async function generateMetadata({ params }: { params: { level: string } }): Promise<Metadata> {
   const info = LEVEL_INFO[params.level];
   if (!info) return { title: 'Not Found' };
-  // P2-D: thin near-duplicate content (3 levels share the same body, D1-backed);
-  // keep indexable library pages clean by noindexing this utility route.
+  // P2-D: this utility route stays noindex to keep the indexable library pages
+  // clean. It now reads the static library filtered by difficulty (no D1), so
+  // the three levels are distinct — but remains noindex pending a content-quality
+  // decision.
   return {
     title: info.title + ' | Derivative Calculator AI',
     robots: { index: false, follow: true },
@@ -26,17 +28,14 @@ export default async function LevelPage({ params }: { params: { level: string } 
   const info = LEVEL_INFO[params.level];
   if (!info) notFound();
 
-  const baseUrl = getBaseUrl();
-  let problems: any[] = [];
-  if (baseUrl) {
-    try {
-      // RC-8 FIX: `cache: 'force-cache'` never returns data on this platform.
-      // NOTE: difficulty lives only in D1 (absent from /problems.json), so this
-      // route stays D1-backed. It is outside the sitemap.
-      const res = await fetch(baseUrl + '/api/problems?limit=100');
-      if (res.ok) problems = await res.json();
-    } catch (e) {}
-  }
+  // B5b: read the static library directly and filter by the `difficulty` field
+  // (present on every row after the Batch 1-3 backfill). No D1, no API self-fetch.
+  // Each level now shows its own distinct problem set instead of the first 100
+  // problems shared across all three (the old P2-D near-duplicate).
+  const library = await loadStaticProblemsSafe();
+  const problems = library.filter(
+    (p) => p && p.difficulty === params.level
+  );
 
   return (
     <div className="py-12 px-4 sm:px-6 lg:px-8">

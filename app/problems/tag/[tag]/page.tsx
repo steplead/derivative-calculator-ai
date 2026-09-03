@@ -11,6 +11,23 @@ function tagDisplayName(tag: string): string {
     return tag.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 }
 
+// B5: unique per-tag intro copy. Adds descriptive body text so tag pages are
+// not flagged as thin content when noindex is later reconsidered. Pure static
+// map — no D1, no data change, no i18n (the tag page body is English only).
+// Rendered only when the tag has an entry AND has matching problems, so
+// empty/nonexistent tag pages stay minimal.
+const TAG_INTROS: Record<string, string> = {
+    fraction: 'These fraction calculus problems cover derivatives and integrals of rational functions — quotients of polynomials. Each solution applies the quotient and chain rules step by step.',
+    trigonometric: 'These trigonometric calculus problems work through derivatives and integrals of sine, cosine, tangent and their reciprocal functions, using the chain rule and trig identities.',
+    derivative: 'These derivative problems span polynomials, trigonometric, exponential and logarithmic functions. Every solution breaks the differentiation into explicit steps and names the rule used.',
+    limit: 'These limit problems use direct substitution, factoring and L’Hôpital’s rule to evaluate how a function behaves as the variable approaches a value.',
+    integral: 'These integral problems cover antiderivatives of polynomials, trigonometric, exponential and logarithmic functions, with substitution and integration by parts shown step by step.',
+    polynomial: 'These polynomial calculus problems cover derivatives and integrals of powers of x using the power rule, with no trigonometric or exponential terms.',
+    radical: 'These radical calculus problems involve square-root expressions, applying the chain rule and rationalizing steps for derivatives and integrals.',
+    exponential: 'These exponential calculus problems cover derivatives and integrals of e^x and a^x, including the natural exponential and base-changed forms.',
+    logarithmic: 'These logarithmic calculus problems work through derivatives and integrals of ln(x) and log_a(x) using the logarithm differentiation rule.',
+};
+
 export async function generateMetadata({ params }: { params: { tag: string } }): Promise<Metadata> {
   const { tag } = params;
   const headersList = await headers();
@@ -91,6 +108,11 @@ export default async function ProblemsByTagPage({ params }: { params: { tag: str
           <p className="text-xl text-gray-600 dark:text-gray-400">
             {filteredProblems.length} problems tagged with &quot;{tagName}&quot;
           </p>
+          {TAG_INTROS[tag] && filteredProblems.length > 0 && (
+            <p className="max-w-3xl mx-auto text-base text-gray-600 dark:text-gray-400 mt-4">
+              {TAG_INTROS[tag]}
+            </p>
+          )}
         </div>
 
         {/* Problems Grid */}

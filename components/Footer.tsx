@@ -85,6 +85,14 @@ export default function Footer({ wikiTopics, problems, locale }: FooterProps) {
                                     </Link>
                                 </li>
                             ))}
+                            <li>
+                                <Link
+                                    href={`${baseUrl}/practice`}
+                                    className="text-blue-600 dark:text-blue-400 text-sm font-medium hover:underline"
+                                >
+                                    All Practice Levels &rarr;
+                                </Link>
+                            </li>
                         </ul>
                     </div>
 

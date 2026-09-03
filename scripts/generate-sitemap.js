@@ -24,7 +24,7 @@ function generateSitemap() {
   const lm = (loc) => prevLastmod.get(loc) || new Date().toISOString();
 
   // Static Pages (updated with new SEO architecture)
-  const staticPages = ['', 'integral', 'limit', 'matrix', 'ode', 'directory', 'wiki', 'problems', 'calculators'];
+  const staticPages = ['', 'integral', 'limit', 'matrix', 'ode', 'directory', 'wiki', 'problems', 'calculators', 'practice'];
 
   const staticUrls = staticPages.flatMap(page => {
     return locales.map(locale => {

@@ -17,6 +17,7 @@ import {
     loadStaticProblemsSafe,
     findStaticProblem,
     pickStableRelated,
+    getDerivativeCanonicalMap,
 } from '@/lib/problems-source';
 import { parseSlugToMath } from '@/lib/slug-math';
 import Link from 'next/link';
@@ -200,7 +201,13 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     // Use host-relative or dynamic canonical based on env
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://derivativecalculatorai.com';
     const baseUrlWithLocale = locale === 'en' ? siteUrl : `${siteUrl}/${locale}`;
-    const url = `${baseUrlWithLocale}/${slug}`;
+    // P2-G: derivative near-duplicates (same formula -> identical title+content)
+    // point their canonical at the group's primary slug to consolidate indexing
+    // equity. Non-duplicate slugs (and all limit/integral slugs) stay
+    // self-canonical. Fail-closed: an empty map leaves `url` === self.
+    const canonMap = await getDerivativeCanonicalMap();
+    const canonicalSlug = canonMap.get(slug) || slug;
+    const url = `${baseUrlWithLocale}/${canonicalSlug}`;
 
     return {
         title: t.title,
@@ -212,9 +219,9 @@ export async function generateMetadata({ params }: { params: { slug: string } })
         alternates: {
             canonical: url,
             languages: {
-                'en': `${siteUrl}/${slug}`,
-                'es': `${siteUrl}/es/${slug}`,
-                'pt': `${siteUrl}/pt/${slug}`,
+                'en': `${siteUrl}/${canonicalSlug}`,
+                'es': `${siteUrl}/es/${canonicalSlug}`,
+                'pt': `${siteUrl}/pt/${canonicalSlug}`,
             }
         },
         openGraph: {

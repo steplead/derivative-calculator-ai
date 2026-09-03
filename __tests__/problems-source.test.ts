@@ -14,7 +14,7 @@
 import fs from 'fs';
 import path from 'path';
 import { parseSlugToMath } from '@/lib/slug-math';
-import { pickStableRelated, findStaticProblem } from '@/lib/problems-source';
+import { pickStableRelated, findStaticProblem, getDerivativeCanonicalMap } from '@/lib/problems-source';
 
 const ROOT = path.resolve(__dirname, '..');
 
@@ -156,5 +156,47 @@ describe('RC-7: slug heuristic rejects non-math slugs', () => {
         // Single atoms must not gain cosmetic parentheses.
         expect(parseSlugToMath('derivative-of-sin-x-over-x')?.formula).toBe('sin(x)/x');
         expect(parseSlugToMath('derivative-of-x-over-2')?.formula).toBe('x/2');
+    });
+});
+
+describe('P2-G: derivative near-duplicate canonical map', () => {
+    // Read the real library from disk (no network) and feed it to the helper.
+    const library: any[] = JSON.parse(read('data/problems.json'));
+
+    it('maps exactly the 20 non-primary derivative slugs (15 groups)', async () => {
+        const map = await getDerivativeCanonicalMap(library);
+        expect(map.size).toBe(20);
+    });
+
+    it('points each non-primary at its clean primary slug', async () => {
+        const map = await getDerivativeCanonicalMap(library);
+        expect(map.get('derivative-of-x2')).toBe('derivative-of-x-squared');
+        expect(map.get('derivative-of-e-x')).toBe('derivative-of-e-to-the-x');
+        expect(map.get('derivative-of-1-x')).toBe('derivative-of-1-over-x');
+        expect(map.get('derivative-of-sin2x')).toBe('derivative-of-sin-2x');
+        expect(map.get('derivative-of-cos2x')).toBe('derivative-of-cos-2x');
+        expect(map.get('derivative-of-ln2x')).toBe('derivative-of-ln-2x');
+    });
+
+    it('keeps primary slugs self-canonical (not in the map)', async () => {
+        const map = await getDerivativeCanonicalMap(library);
+        expect(map.has('derivative-of-x-squared')).toBe(false);
+        expect(map.has('derivative-of-x-cubed')).toBe(false);
+        expect(map.has('derivative-of-2-to-the-x')).toBe(false);
+    });
+
+    it('EXCLUDES limit/integral near-duplicates (different content)', async () => {
+        const map = await getDerivativeCanonicalMap(library);
+        // Same formula but different limit point / bounds => distinct problems.
+        expect(map.has('limit-of-sinx-as-x-to-0')).toBe(false);
+        expect(map.has('limit-of-sinx-as-x-to-infinity')).toBe(false);
+        expect(map.has('integral-of-x2')).toBe(false);
+        expect(map.has('integral-of-x2-from-0-to-1')).toBe(false);
+    });
+
+    it('is deterministic across calls', async () => {
+        const a = await getDerivativeCanonicalMap(library);
+        const b = await getDerivativeCanonicalMap(library);
+        expect([...a.entries()]).toEqual([...b.entries()]);
     });
 });

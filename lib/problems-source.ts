@@ -155,3 +155,64 @@ export function pickStableRelated(
         .slice(0, Math.max(0, limit - sameType.length));
     return [...sameType, ...others].slice(0, limit);
 }
+
+/**
+ * P2-G: deterministic canonical map for derivative near-duplicates.
+ *
+ * Two derivative problems that share a `formula` render an identical <title>
+ * ("Derivative of <formula>") and identical math (d/dx is unique per formula),
+ * so they are TRUE near-duplicates. We pick one primary slug per formula group
+ * and return a map { nonPrimarySlug -> primarySlug } so those pages can emit
+ * <link rel="canonical" href={primary}> and consolidate indexing equity.
+ *
+ * SCOPE IS DELIBERATELY DERIVATIVES ONLY:
+ *   - Limit problems with the same formula but different limit points (x->0 vs
+ *     x->infinity) are genuinely different content -> stay self-canonical.
+ *   - Integral problems with the same formula but different bounds (0..1 vs
+ *     1..3) are genuinely different content -> stay self-canonical.
+ * Canonicalising those would wrongly merge distinct problems, so they are
+ * excluded by the `type === 'derivative'` guard below.
+ *
+ * Primary selection (deterministic, no guessing):
+ *   1. Prefer "clean" slugs: start with `derivative-of-` and NOT contain the
+ *      slug-math auto-fallback artifact `minus-to-minus-the-minus`.
+ *   2. Among the clean pool, pick the lexicographically smallest slug.
+ *   3. If a group has no clean slug, fall back to the lexicographically
+ *      smallest overall (still deterministic).
+ *
+ * Memoised per isolate; returns {} (never throws) so a source failure simply
+ * leaves every page self-canonical (fail-closed, no broken canonical links).
+ */
+let _derivCanonicalCache: Map<string, string> | null = null;
+
+export async function getDerivativeCanonicalMap(
+    problems?: StaticProblem[]
+): Promise<Map<string, string>> {
+    // When called without a library (production path) the result is memoised
+    // per isolate. When given an explicit library (tests), we rebuild fresh and
+    // do NOT touch the cache.
+    if (!problems && _derivCanonicalCache) return _derivCanonicalCache;
+    const map = new Map<string, string>();
+    const lib = problems ?? (await loadStaticProblemsSafe());
+    const byFormula = new Map<string, string[]>();
+    for (const p of lib) {
+        if (!p || (p.type || 'derivative') !== 'derivative') continue;
+        const f = p.formula || '';
+        if (!f) continue;
+        if (!byFormula.has(f)) byFormula.set(f, []);
+        byFormula.get(f)!.push(p.slug);
+    }
+    for (const slugs of byFormula.values()) {
+        if (slugs.length < 2) continue;
+        const clean = slugs.filter(
+            (s) => s.startsWith('derivative-of-') && !s.includes('minus-to-minus-the-minus')
+        );
+        const pool = clean.length ? clean : slugs;
+        const primary = [...pool].sort()[0];
+        for (const s of slugs) {
+            if (s !== primary) map.set(s, primary);
+        }
+    }
+    if (!problems) _derivCanonicalCache = map;
+    return map;
+}

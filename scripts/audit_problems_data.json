@@ -1,0 +1,307 @@
+{
+  "totals": {
+    "total": 3137
+  },
+  "slug_uniqueness": {
+    "unique_slugs": 3137,
+    "duplicate_slug_count": 0,
+    "duplicate_slug_examples": {}
+  },
+  "field_presence": {
+    "slug": {
+      "present": 3137,
+      "missing_or_empty": 0,
+      "empty_string": 0
+    },
+    "formula": {
+      "present": 3137,
+      "missing_or_empty": 0,
+      "empty_string": 0
+    },
+    "title": {
+      "present": 3137,
+      "missing_or_empty": 0,
+      "empty_string": 0
+    },
+    "description": {
+      "present": 3112,
+      "missing_or_empty": 25,
+      "empty_string": 0
+    },
+    "type": {
+      "present": 2064,
+      "missing_or_empty": 1073,
+      "empty_string": 0
+    },
+    "difficulty": {
+      "present": 0,
+      "missing_or_empty": 3137,
+      "empty_string": 0
+    },
+    "tags": {
+      "present": 0,
+      "missing_or_empty": 3137,
+      "empty_string": 0
+    },
+    "limitTo": {
+      "present": 1039,
+      "missing_or_empty": 2098,
+      "empty_string": 0
+    }
+  },
+  "type_distribution": {
+    "null": 1073,
+    "values": {
+      "integral": 1008,
+      "limit": 1041,
+      "derivative": 15
+    },
+    "unexpected_values": {}
+  },
+  "difficulty_distribution": {
+    "null": 3137,
+    "values": {}
+  },
+  "tags": {
+    "missing": 3137,
+    "present": 0,
+    "empty_string": 0,
+    "unexpected_shape": 0,
+    "within_row_duplicates": 0,
+    "unique_tag_count": 0,
+    "top_30": []
+  },
+  "formula": {
+    "empty": 0,
+    "duplicate_formula_groups": 67,
+    "duplicate_formula_examples": {
+      "x^2": [
+        "derivative-of-x-squared",
+        "derivative-of-x-minus-to-minus-the-minus-2",
+        "integral-of-x2",
+        "limit-of-x2-as-x-to-2",
+        "limit-of-x2-as-x-to-infinity"
+      ],
+      "sin(x)": [
+        "derivative-of-sin-x",
+        "integral-of-sinx",
+        "limit-of-sinx-as-x-to-2",
+        "limit-of-sinx-as-x-to--infinity",
+        "limit-of-sinx-as-x-to-infinity"
+      ],
+      "cos(x)": [
+        "derivative-of-cos-x",
+        "integral-of-cosx",
+        "limit-of-cosx-as-x-to-0",
+        "limit-of-cosx-as-x-to-infinity",
+        "limit-of-cosx-as-x-to-2"
+      ],
+      "tan(x)": [
+        "derivative-of-tan-x",
+        "integral-of-tanx",
+        "limit-of-tanx-as-x-to-infinity",
+        "limit-of-tanx-as-x-to--infinity",
+        "limit-of-tanx-as-x-to-2"
+      ],
+      "ln(x)": [
+        "derivative-of-ln-x",
+        "integral-of-lnx"
+      ],
+      "e^x": [
+        "derivative-of-e-to-the-x",
+        "integral-of-ex",
+        "derivative-of-e-x"
+      ],
+      "1/x": [
+        "derivative-of-1-over-x",
+        "integral-of-1-over-x",
+        "limit-of-1-over-x-as-x-to-1",
+        "limit-of-1-over-x-as-x-to--infinity",
+        "limit-of-1-over-x-as-x-to-0"
+      ],
+      "sqrt(x)": [
+        "derivative-of-sqrt-x",
+        "integral-of-sqrtx"
+      ],
+      "x^3": [
+        "derivative-of-x-cubed",
+        "derivative-of-x-minus-to-minus-the-minus-3",
+        "integral-of-x3",
+        "derivative-of-x3"
+      ],
+      "2*x": [
+        "derivative-of-2x",
+        "integral-of-2x"
+      ],
+      "3*x^2": [
+        "derivative-of-3x-squared",
+        "integral-of-3x2"
+      ],
+      "sin(2*x)": [
+        "derivative-of-sin-2x",
+        "derivative-of-sin2x"
+      ],
+      "cos(2*x)": [
+        "derivative-of-cos-2x",
+        "derivative-of-cos2x"
+      ],
+      "ln(2*x)": [
+        "derivative-of-ln-2x",
+        "derivative-of-ln2x"
+      ],
+      "x^4": [
+        "derivative-of-x-to-the-4",
+        "derivative-of-x-minus-to-minus-the-minus-4",
+        "integral-of-x4"
+      ],
+      "5*x": [
+        "derivative-of-5x",
+        "integral-of-5x"
+      ],
+      "-x": [
+        "derivative-of-minus-x",
+        "integral-of--x"
+      ],
+      "1/x^2": [
+        "derivative-of-1-over-x-squared",
+        "derivative-of-1-minus-over-minus-x-minus-to-minus-the-minus-2",
+        "integral-of-1-over-x2",
+        "limit-of-1-over-x2-as-x-to-0",
+        "limit-of-1-over-x2-as-x-to--infinity"
+      ],
+      "x^(1/2)": [
+        "derivative-of-root-x",
+        "derivative-of-x-minus-to-minus-the-minus-1-minus-over-minus-2"
+      ],
+      "x^(1/3)": [
+        "derivative-of-cbrt-x",
+        "derivative-of-x-minus-to-minus-the-minus-1-minus-over-minus-3"
+      ]
+    }
+  },
+  "title": {
+    "empty": 0,
+    "duplicate_title_groups": 10,
+    "duplicate_title_examples": {
+      "Derivative of x^2": [
+        "derivative-of-x-squared",
+        "derivative-of-x-minus-to-minus-the-minus-2",
+        "derivative-of-x2"
+      ],
+      "Derivative of e^x": [
+        "derivative-of-e-to-the-x",
+        "derivative-of-e-x"
+      ],
+      "Derivative of 1/x": [
+        "derivative-of-1-over-x",
+        "derivative-of-1-x"
+      ],
+      "Derivative of x^3": [
+        "derivative-of-x-cubed",
+        "derivative-of-x-minus-to-minus-the-minus-3",
+        "derivative-of-x3"
+      ],
+      "Derivative of x^4": [
+        "derivative-of-x-to-the-4",
+        "derivative-of-x-minus-to-minus-the-minus-4"
+      ],
+      "Derivative of 1/x^2": [
+        "derivative-of-1-over-x-squared",
+        "derivative-of-1-minus-over-minus-x-minus-to-minus-the-minus-2"
+      ],
+      "Derivative of x*e^x": [
+        "derivative-of-x-e-to-the-x",
+        "derivative-of-x-e-x"
+      ],
+      "Derivative of 2^x": [
+        "derivative-of-2-to-the-x",
+        "derivative-of-2-minus-to-minus-the-minus-x",
+        "derivative-of-2-x"
+      ],
+      "Derivative of 10^x": [
+        "derivative-of-10-to-the-x",
+        "derivative-of-10-minus-to-minus-the-minus-x"
+      ],
+      "Derivative of sin(x^2)": [
+        "derivative-of-sinx-minus-to-minus-the-minus-2",
+        "derivative-of-sin-x2"
+      ]
+    }
+  },
+  "slug_type_consistency": {
+    "checked": 3133,
+    "inconsistent_count": 0,
+    "inconsistent_examples": []
+  },
+  "wiki_dead_links": {
+    "total_related_refs": 30,
+    "dead_count": 0,
+    "dead_examples": [],
+    "wiki_topics": 15
+  },
+  "sitemap_coverage": {
+    "sitemap_loc_total": 9483,
+    "problems_not_in_sitemap": 827,
+    "problems_not_in_sitemap_examples": [
+      "integral-of--1-over-1+x2",
+      "integral-of--1-over-1+x2-+-1-over-21-over-x-+-2sqrtx",
+      "integral-of--1-over-1+x2-+-1-over-2sqrtx-+-5cosx",
+      "integral-of--1-over-1+x2-+-1-over-x",
+      "integral-of--1-over-1+x2-+-21-over-x2",
+      "integral-of--1-over-1+x2-+-21-over-x2-+-1-over-2x3",
+      "integral-of--1-over-1+x2-+-31-over-1+x2-+-1-over-2x3",
+      "integral-of--1-over-1+x2-+-41-over-x",
+      "integral-of--1-over-1+x2-+-41-over-x2-+-4x",
+      "integral-of--1-over-1+x2-+-4x",
+      "integral-of--1-over-1+x2-+-5cosx-+-5sinx",
+      "integral-of--1-over-sqrt1-x2-+-1-over-21-over-x2",
+      "integral-of--1-over-sqrt1-x2-+-1-over-2x2",
+      "integral-of--1-over-sqrt1-x2-+-4lnx-+-3sinx",
+      "integral-of--1-over-sqrt1-x2-+-5sinx--lnx",
+      "integral-of--1-over-sqrt1-x2-+-5x3-+-51-over-1+x2",
+      "integral-of--1-over-sqrt1-x2-+-sqrtx",
+      "integral-of--1-over-x-+-1-over-2ex-+-1-over-2sqrtx",
+      "integral-of--1-over-x-+-21-over-x2",
+      "integral-of--1-over-x-+-3lnx"
+    ],
+    "sitemap_slugs_not_in_problems": 10
+  },
+  "anomaly_samples": {
+    "null_type_examples": [
+      "derivative-of-x-squared",
+      "derivative-of-sin-x",
+      "derivative-of-cos-x",
+      "derivative-of-tan-x",
+      "derivative-of-ln-x",
+      "derivative-of-e-to-the-x",
+      "derivative-of-1-over-x",
+      "derivative-of-sqrt-x",
+      "derivative-of-x-cubed",
+      "derivative-of-log-x"
+    ],
+    "null_difficulty_examples": [
+      "derivative-of-x-squared",
+      "derivative-of-sin-x",
+      "derivative-of-cos-x",
+      "derivative-of-tan-x",
+      "derivative-of-ln-x",
+      "derivative-of-e-to-the-x",
+      "derivative-of-1-over-x",
+      "derivative-of-sqrt-x",
+      "derivative-of-x-cubed",
+      "derivative-of-log-x"
+    ],
+    "null_tags_examples": [
+      "derivative-of-x-squared",
+      "derivative-of-sin-x",
+      "derivative-of-cos-x",
+      "derivative-of-tan-x",
+      "derivative-of-ln-x",
+      "derivative-of-e-to-the-x",
+      "derivative-of-1-over-x",
+      "derivative-of-sqrt-x",
+      "derivative-of-x-cubed",
+      "derivative-of-log-x"
+    ]
+  }
+}

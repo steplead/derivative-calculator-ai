@@ -1,112 +1,59 @@
 # DerivativeCalculatorAI 项目长期记忆
 
 ## 部署架构
-- 框架：Next.js 14.2.16 (App Router) + @cloudflare/next-on-pages
-- 托管：Cloudflare Pages，项目名 `derivative-calculator-ai`
-- 域名：`derivativecalculatorai.com`（无连字符；不要写成 `derivative-calculator-ai.com`）
-- CI/CD：`.github/workflows/deploy.yml`，push 到 main 自动触发部署到 Cloudflare Pages
-- 部署产物路径：`.vercel/output/static`（next-on-pages 生成）
-- 部署命令：`npx wrangler pages deploy .vercel/output/static --project-name=derivative-calculator-ai --branch=main`（已弃用 cloudflare/pages-action@v1）
-- **CI 部署依赖两个 GitHub Secret**：`CLOUDFLARE_API_TOKEN`（需 Cloudflare Pages:Edit 权限）、`CLOUDFLARE_ACCOUNT_ID`。未配置则 CI 第7步 deploy 必失败。
-- 绑定：Cloudflare D1（DB）、Redis（UPSTASH_REDIS_REST_URL/UPSTASH_REDIS_REST_TOKEN）、OPENROUTER_API_KEY
-- **新增 env var（Phase 5A）**：`ADMIN_MONITORING_TOKEN`（admin endpoint Bearer auth）、`MONITORING_HASH_SALT`（IP HMAC-SHA256 盐）。两者都是 server-side secret，不以 NEXT_PUBLIC_ 开头，production 必须在 CF Dashboard Settings → Environment Variables 配置。缺任一 → admin monitoring 端点 fail closed（401/503）。见 `.env.example`。
+- Next.js 14.2.16 (App Router) + @cloudflare/next-on-pages；Cloudflare Pages 项目 `derivative-calculator-ai`；域名 `derivativecalculatorai.com`（无连字符，勿写 derivative-calculator-ai.com）。
+- CI/CD：`.github/workflows/deploy.yml`，push main → Actions `wrangler pages deploy .vercel/output/static`（产物路径，next-on-pages 生成）。已弃用 cloudflare/pages-action@v1。
+- Secrets 实测在位：`CLOUDFLARE_API_TOKEN`(Pages:Edit)、`CLOUDFLARE_ACCOUNT_ID`。绑定：D1、Upstash Redis、OPENROUTER_API_KEY。新增 server secret：`ADMIN_MONITORING_TOKEN`、`MONITORING_HASH_SALT`（CF Dashboard 配置，缺则 admin 端点 fail closed）。
 
-## ⛔ 最高危约定：`force-cache` 在本平台是死代码（RC-8，2026-09-02 事故）
-- **在 Cloudflare Pages + next-on-pages 上，`fetch(url, { cache: 'force-cache', next: { revalidate } })` 永远拿不到数据。**
-  Next.js 只在 adapter 提供 `IncrementalCache` 时才装配 `globalThis.__incrementalCache`
-  （`node_modules/next/dist/server/web/adapter.js`）；next-on-pages 不提供 → 走 cache 分支却无 handler。
-- 后果（曾经真实发生）：全站数据源静默失效，`/[slug]` 全部落到 `parseSlugToMath()` 兜底，
-  发布由 slug 反推的**错误公式**，3100/3137 页（98.82%）内容错误。`/problems` 渲染 0 条链接。
-- **铁律：服务端取数据只用普通 `fetch(url)`。禁止 `cache: 'force-cache'` 和 `next: { revalidate }`。**
-  已由 `__tests__/rc8-production-source.test.ts` 全量源码扫描守护（app/ lib/ utils/ components/）。
-- **数据源必须有单一权威入口**：`lib/problems-source.ts`（`loadStaticProblemsSafe()` 等）。
-  新增页面一律用它，禁止各页面自己 fetch。
-- **页面渲染路径禁止依赖 D1**：题库 `/problems.json` 优先且唯一主源；D1 仅用于题库外 slug 的兜底。
-  判据：D1 超日配额（`/api/problem/*` 返回 500）时页面仍须渲染正确。
-- **`app/layout.tsx` 跑在每一个请求上**：任何加在 layout 的 fetch 都是全站每 PV 成本。
-  曾在此处放 `/api/problems?limit=100` = 全站每 PV 100 行 D1 读取（最大稳态消耗源），已移除。
-- **`public/problems.json` 只有 5 个字段**：slug / formula / title / description / type / limitTo。
-  **没有 `difficulty`、`tags`**（那些只在 D1）。需要它们的路由（`/problems/tag/[tag]`、
-  `/practice/[level]`）无法静态化，且都不在 sitemap。
+## ⛔ RC-8 最高危铁律：force-cache 是死代码（2026-09-02 事故）
+- Cloudflare Pages + next-on-pages 上 `fetch({cache:'force-cache', next:{revalidate}})` 永远拿不到数据（adapter 不提供 IncrementalCache）。
+- 后果：全站数据源失效，`/[slug]` 落到 `parseSlugToMath()` 兜底发布错误公式，3100/3137 页(98.82%)内容错误。
+- 铁律：服务端取数只用普通 `fetch`；数据源单一入口 `lib/problems-source.ts`（`loadStaticProblemsSafe`）；页面渲染禁止依赖 D1（题库 `public/problems.json` 优先唯一主源，D1 仅兜底）；`app/layout.tsx` 禁止 fetch（每 PV 成本）。
+- **`public/problems.json` 仅字段 slug/formula/title/description/type（+limitTo）；无 difficulty/tags（仅 D1 有）。** 需 difficulty/tags 的路由（/problems/tag/[tag]、/practice/[level]）无法静态化、不在 sitemap。
+- 守护：`__tests__/rc8-production-source.test.ts` 全量扫描禁 force-cache。
 
 ## 关键约定（勿违反）
-- **禁止提交 `vercel.json`**：项目部署到 Cloudflare Pages，vercel.json 会 rewrite API 到不存在的 Python 文件导致部署失败。
-- **middleware 不要 export `runtime='edge'`**：Next.js 14.2.x 会报 "edge runtime for rendering is currently experimental"，应省略该导出。
-- **不要在 UA 黑名单里写 `bot/crawler/spider`**：会误杀 Googlebot/Bingbot，毁掉 SEO。只封禁脚本类 UA（python/curl/wget 等）。**同时注意 utils/turnstile.ts 的 looksLikeLegitimateBrowser()**：不要用 /bot/i /http/i /client/i /tool/i /library/i 等过宽模式，会误杀浏览器和合法爬虫。正确做法：白名单搜索引擎爬虫 + 黑名单脚本工具。
-- **API 的 `includeAi` 不要硬编码 false**：用 `!!process.env.OPENROUTER_API_KEY` 控制，否则产品核心价值（步骤讲解）消失。
-- **rate limit 不要设 1 req/min**：会锁死正常用户。页面 30 req/min，API 20 req/min 是合理基线。
-- **不要每请求 console.log 诊断信息**：浪费 Cloudflare 免费配额，且可能泄露 IP。包括 turnstile.ts 的验证日志也要去掉。
-- **/embed/ 路径在 middleware 中跳过 D1 rate limit 检查**：route handler 直接返回 cached 403，跑 D1 查询只浪费配额。
-- **middleware matcher 必须排除所有 `_next/*` 路径**：不能只排除 `_next/static|_next/image`。Next.js 页面 JS 从 `/_next/static/chunks/*.js` 加载，如果 matcher 不排除这些路径，它们会经过 middleware → D1 rate limit → 429 → CSS/JS 加载失败 → 版面错乱。正确 matcher：`'/((?!api|_next|favicon.ico|robots.txt|sitemap.xml|manifest.json|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|json|txt|xml|css|js|map|woff|woff2|ttf|eot)$).*)'`
-- **不要在 looksLikeLegitimateBrowser() 里检查 referer 是否为"纯域名"**：`https://derivativecalculatorai.com/`（首页 URL）是完全合法的 referer，把它判定为"suspicious"会导致真实用户从首页发起 API 请求时被 403 封禁。referer 不是可靠的 bot 检测信号。
-- **abuse 评分系统很激进**：`looksLikeLegitimateBrowser` 返回 false 时每次加 20 分，≥30 分就 403 封禁。任何误判 2 次就封 IP。确保 `looksLikeLegitimateBrowser` 不产生 false positive 至关重要。
+- 禁止提交 `vercel.json`（rewrite API 到不存在文件致部署失败）。
+- middleware 不要 export `runtime='edge'`（Next 14.2.x 报 experimental）。
+- UA 黑名单只封脚本类（python/curl/wget），不要写 bot/crawler/spider（误杀 Googlebot 毁 SEO）；`looksLikeLegitimateBrowser()` 禁用过宽模式（/bot/i /http/i /client/i /tool/i /library/i），且不要因"纯域名 referer"判 suspicious。
+- API `includeAi` 用 `!!process.env.OPENROUTER_API_KEY` 控制，不要硬编码 false。
+- rate limit 基线：页面 30/min、API 20/min；禁止 1 req/min 锁死用户。
+- 禁止每请求 console.log（浪费配额+泄露 IP）；/embed/ 在 middleware 跳过 D1 rate limit；middleware matcher 必须排除 `api|_next|favicon.ico|robots.txt|sitemap.xml|manifest.json|静态资源`（只排除 _next/static 会让 JS/CSS 被 429 版面错乱）。
+- abuse 评分激进（false +20，≥30 封 IP），确保无 false positive。
 
-## Cloudflare 控制台关键约定
-- **不要启用 Bot Fight Mode / Super Bot Fight Mode**：会拦截所有非浏览器 UA，包括 Googlebot，且用 JS Challenge 拦截 curl。防滥用改用 Cloudflare Rate Limiting Rules（边缘层、不消耗 Workers 配额）。
-- **不要在 Custom Security Rules 里写 Block Known Bots / Block No Referer**：Block Known Bots 杀 SEO；Block No Referer 拦截所有直接访问首页的用户（820 次误伤记录）。
-- **不要在 Cloudflare Rate Limiting Rules 里写 "URI Path contains /"**：这会匹配所有请求（包括 JS/CSS 静态资源），浏览器并行加载 10+ 个 JS chunk 时全部被 429 拦截 → JavaScript 不加载 → 按钮点击无反应。应用层 D1 rate limit（30/min 页面, 20/min API）已足够防滥用，不需要 Cloudflare 边缘限流规则。
-- 防嵌入滥用的正确做法：代码层 middleware 的 API referer 检查 + /embed/ 返回 cached 403，不需要 Cloudflare WAF 规则。
-- **⚠️ CF Pages 对 API 200 响应强制覆盖 Cache-Control**：代码层设置的 `no-store` 或 `private, no-store` 被 CF Pages 替换为 `private, max-age=14400`。`private` 指令不被 CF Pages 尊重。400/403/405 等错误响应的 `no-store` 被尊重（BYPASS/DYNAMIC）。**已通过 CF Cache Rules 解决**：Rule "API bypass cache" (Expression: `http.host eq "derivativecalculatorai.com" and starts_with(http.request.uri.path, "/api/")`, Action: Bypass Cache, Active) 确保 /api/* 所有响应 cf-cache-status=DYNAMIC，无 Age 头，不被 CDN 缓存。R1 CLOSED。
+## Cloudflare 控制台约定
+- 不要启用 Bot Fight Mode（拦截 Googlebot + JS Challenge 拦 curl）。
+- 不要在 Custom Security Rules 写 Block Known Bots / Block No Referer（杀 SEO / 误伤 820 次直接访问）。
+- 不要在 Rate Limiting Rules 写 "URI Path contains /"（匹配所有静态资源，浏览器并行加载被 429 → JS 不加载）。
+- CF Pages 对 API 200 强制覆盖 Cache-Control → 已用 Cache Rule "API bypass cache"（host eq + starts_with /api/）解决，/api/* 全 DYNAMIC。R1 CLOSED。
 
-## D1 配额铁律（2026-09-02 事故沉淀）
-- **绝对禁止在 D1 上写 `ORDER BY RANDOM()` / `ORDER BY RAND()`**：RANDOM() 不可索引，SQLite 必须先物化+排序全表再应用 LIMIT，每次执行读取整表行数。曾因此 24h 烧掉 8M rows_read（免费额度 5M/日）。
-- **`slug != ?` 不是范围约束**，无法 seek 索引；要用 `slug > ?` / `slug <= ?` 这类可做 B-tree range seek 的谓词，并让 `ORDER BY` 与索引同序（避免 TEMP B-TREE）。
-- **禁止 `SELECT *`**：只取渲染所需列。
-- **页面渲染路径上禁止为"推荐/相关"内容打 D1**：优先用静态 JSON（`/problems.json`，force-cache，0 rows），D1 仅作最后 fallback 且必须走索引 + LIMIT。
-- **禁止页面自我 fetch `/api/problems?limit=N`**：会额外计 N rows_read/次，且多一次 HTTP 往返。
-- **改动 D1 查询后必须看 EXPLAIN QUERY PLAN**：出现 `SCAN <table>` 或 `USE TEMP B-TREE FOR ORDER BY` 即不合格。
-- 4 个必需索引（见 `scripts/ensure_d1_indexes.sql`，幂等）：`problems.slug`、`rate_limits.ip`（曾长期缺失，middleware 每请求都查）、`counters.key`、`path_stats.path`。
-- 回归守护：`__tests__/d1-quota.test.ts`（源码扫描禁 RANDOM + 运行时断言 rows_read ≤ 2×limit）。
-- 本地验证索引脚本：用 python sqlite3 建 3137 行副本 + wrangler 式解析（去注释、按 `;` 切分）跑一遍，再 EXPLAIN 对比新旧计划。
+## D1 配额铁律（读+写）
+- 禁止 `ORDER BY RANDOM()/RAND()`（曾 24h 烧 8M rows_read，免费 5M/日）；`slug != ?` 非范围约束，用 `slug > ?`/`<= ?` + ORDER BY 同序；禁止 `SELECT *`；页面禁止为推荐/相关打 D1（用静态 JSON）；禁止页面自我 fetch `/api/problems?limit=N`。改动后看 EXPLAIN，出现 SCAN/TEMP B-TREE 即不合格。4 必需索引见 `scripts/ensure_d1_indexes.sql`；回归守护 `__tests__/d1-quota.test.ts`。
+- **写侧（P1 已修，de8d3b5）**：曾 `middleware`+`security`(`_checkGlobalQuota` 2 写)+`path-tracker`(`trackPath` 1 写) 每 cache-miss 请求 ~4 次 D1 写（免费 50k/日会被打爆）。P1 已移除 `trackPath`/`_checkGlobalQuota`，每请求写入 ~4→仅 `_checkD1RateLimit` 1 次（rate_limits upsert，fail-open）。problem API 的 `SELECT *`+`tags LIKE` 已由 P1-2 改 static-first + 显式列消除。
 
 ## 监控/安全约定
-- **IP 脱敏必须用 HMAC-SHA256 + salt**：`utils/monitoring-sanitize.ts` 的 `hashIp()` 使用 HMAC-SHA256 + `MONITORING_HASH_SALT` 环境变量，输出前 16 hex 字符。不可用简单 32-bit hash（IPv4 空间可枚举反推）。
-- **admin endpoint 必须 admin auth + no-store**：所有 `/api/admin/*` 和 diagnostic/stats endpoint 需 `isAdminRequest()` + `adminResponseHeaders()`（含 `Cache-Control: no-store`）。
-- **不要输出 IP/UA/env var 原文**：用 `hashIp()` 替代 IP、`classifyUa()` 替代 UA、boolean 替代 env var 值。
-- **ADMIN_MONITORING_TOKEN 必须在 CF Dashboard 设置**：未配置时 production 所有 admin endpoint 返回 401（fail closed）。
+- IP 脱敏用 HMAC-SHA256 + `MONITORING_HASH_SALT`（前 16 hex）；admin endpoint 需 `isAdminRequest()`+`adminResponseHeaders()`(no-store)；不输出 IP/UA/env 原文。
 
 ## Git 推送坑
-- 远程 `https://github.com/steplead/derivative-calculator-ai.git` 偶发 HTTP2 framing error。
-- **有效命令（2026-09-02 验证，多次重试唯一稳定成功的形式）**：
-  `GIT_HTTP_LOW_SPEED_LIMIT=1000 GIT_HTTP_LOW_SPEED_TIME=180 git -c http.version=HTTP/1.1 -c http.postBuffer=524288000 push origin main`
-- **不要 `env -u HTTP_PROXY ...`**：本项目 shell 根本没配代理（`.zshrc`/`.gitconfig` 均无 proxy 设置，只有 `http.sslverify false`）。去掉代理变量反而让 git 走慢速直连更容易超时。
-- github.com 直连极慢（首页 20s 才响应），`api.github.com` 正常。push 失败多为超时，重试即可。
+- 远程偶发 HTTP2 framing error；有效命令：`GIT_HTTP_LOW_SPEED_LIMIT=1000 GIT_HTTP_LOW_SPEED_TIME=180 git -c http.version=HTTP/1.1 -c http.postBuffer=524288000 push origin main`。不要 `env -u HTTP_PROXY`（无代理设置）。github.com 直连慢，重试即可。
 
-## 生产验证踩坑（curl / CDN）
-- **用 curl 测本站点必须带浏览器 UA**：middleware 的脚本 UA 黑名单拦截 curl，回源直接 403（body 无 h1）。
-  曾出现「curl 干净 URL 拿到正确缓存副本 / curl 回源拿到 403 空 h1」，差点误判成渲染错误。
-  正确写法：`curl -A "Mozilla/5.0 (Macintosh...) Chrome/128.0 Safari/537.36" <url>`
-- **CDN 检查是 PoP 局部的**：本机出口固定命中某一个 colo（曾长期是 LAX）。该 colo 陈旧 ≠ 部署坏了。
-  判据：同一 colo 加 `?cb=` 回源若全对，则是缓存字节错、代码对。
-- **部署瞬间回源的 PoP 会缓存到部署前的响应**：实测 LAX 在 `11:01:13 UTC`（部署上线时刻）回源并缓存旧 HTML，
-  按 `s-maxage=7200` 要等满 2 小时才自动失效。Googlebot 主要走美国出口，容易命中这类美国 PoP，不能干等。
-- **本项目无任何 CDN purge 凭据**：wrangler OAuth 无 `cache_purge` scope；`CLOUDFLARE_API_TOKEN` 只在 GitHub
-  Actions secret（且仅 Pages deploy 权限）；磁盘上无 `CF_API_TOKEN`/`CF_ZONE_ID`。
-  → 只能人工 CF Dashboard → Caching → Configuration → Purge Everything。
+## 生产验证踩坑（非显然）
+- curl 默认 UA 被滥用 middleware 拦 403 → 须带浏览器 UA + 匹配 Referer。
+- `*.pages.dev` 预览主机发 production Referer 因 host 不匹配 403（验证预览时 Referer 改对应 pages.dev）。
+- CDN 检查 PoP 局部：同一 colo 加 `?cb=` 回源全对 = 缓存字节错、代码对；部署瞬间回源的 PoP 缓存旧 HTML（s-maxage=7200 最长 2h 才失效），Googlebot 易命中美国 PoP 不能干等。
+- 判据：`/api/problems?limit=3&type=derivative` 无 tag 新代码绝不碰 D1；若返 D1_ERROR 即旧代码未上线。
+- 部署后各 PoP 不一致（cache-control public, max-age=14400, s-maxage=7200, swr=86400）；验证须 cache-buster 打源头 + 干净 URL 测现状。
 
-## D1 配额铁律（补充：写入侧，2026-09-02 audit 发现）
-- **RC-8 只修了读侧**（RANDOM 全扫 + 页面渲染 D1）。**写侧仍是下一个悬崖**：
-  `middleware.ts` → `utils/security.ts`(`_checkGlobalQuota` 2 写 + `_checkD1RateLimit` 1 写)
-  + `utils/path-tracker.ts`(`trackPath` 1 写) 在**每个 cache-miss 请求**打 ~4 次 D1 写入。
-- 免费档写入上限 50k/天。2375 URL × 多 PoP × s-maxage=7200 的回源量远超此数 → 写入配额会被打爆。
-- **修复方向**：把 analytics/全局配额计数写入移出请求关键路径（fire-and-forget + Workers Analytics / CF Web Analytics），
-  rate-limit 读保持走索引（已有 idx_rate_limits_ip）。**切勿在 middleware 热路径同步写 D1。**
-- `app/api/problems/route.ts` 仍有 `SELECT *` + `tags LIKE '%x%'`（不可索引全扫）；
-  `app/api/problem/[slug]/route.ts` 仍有 `SELECT *`。两者 D1 超限时 500（页面不依赖它们，故页面仍正常）。
+## Sitemap 阴影机制（P2 审计，2026-09-03）
+- **`app/sitemap.ts` 已删除**：Next.js 中 `app/sitemap.ts`(MetadataRoute)与静态 `public/sitemap.xml` 都映射 `/sitemap.xml`，app 路由胜出并阴影 9,483 条的静态文件 → production `/sitemap.xml` 实测仅 9 `<loc>`，全部单题页掉出 sitemap。删除 app/sitemap.ts 后 public/sitemap.xml 生效。
+- 勿重新添加 `app/sitemap.ts`（会再次阴影 public/sitemap.xml）。sitemap 由 `npm run generate-sitemap`(scripts/generate-sitemap.js) 生成 public/sitemap.xml；当前仍缺 827 个复杂积分 slug（生成器跳过），补缺口跑该命令即可。
+- **分类页断裂**：`app/problems/[type]` 的 validTypes=['derivative','integral','limit','ode']，但 problems.json 无 `matrix`/`ode` 类型行 → /problems/ode 空分类(0 题)、/problems/matrix 404；`/matrix` 是 calculator 页非题目类型，命名不一致。
 
-## 构建验证清单（改动后必跑）
-1. `npx tsc --noEmit` — 类型检查
-2. `npm run build` — Next.js 生产构建
-3. `npm run pages:build` — @cloudflare/next-on-pages 部署产物构建
-- 三者全过才可 push 上线。
-- **沙箱 safe-delete 保护会中断 `npm run build`**：清理 `.next` 时报 `[safe-delete][SAFE_DELETE_BULK_CONFIRM_REQUIRED] count:50`。解法：该命令加 `dangerouslyDisableSandbox`。
-- **`npm run build` 会顺带重写 `public/sitemap.xml` 全部 `lastmod`**（脚本副作用，URL 数量不变）。提交前用 `git checkout -- public/sitemap.xml` 或只 add 目标文件排除它。
-- **额外检查**：如果用了 Tailwind 任意值（如 `max-w-[80rem]`），确认构建后的 CSS 文件中确实生成了该类。Tailwind v4 可能不生成未在 content 中扫描到的任意值类，导致样式丢失。优先使用标准 utility 类（如 `max-w-7xl`）。
-- **部署后 CDN 各 PoP 缓存不一致，最长 2 小时**：页面 `cache-control: public, max-age=14400, s-maxage=7200, stale-while-revalidate=86400`。
-  实测同一秒 curl 走 AMS 拿到新 HTML、python 走 LAX 拿到旧 HTML。age 在 s-maxage 内不会自动回源。
-  客户端发 `Cache-Control: no-cache` 被 CF 忽略。
-  验证线上改动必须用 **cache-buster（`?cb=<ts>`）打源头**，再单独用干净 URL 测 CDN 现状。
-  要立即生效需 CF Dashboard → Caching → Configuration → **Purge Everything**
-  （wrangler OAuth 只有 `zone:read`，无 cache_purge；项目也没有 CF_API_TOKEN）。
-- **`re.findall` 带捕获组会只返回组内容**：统计链接数时 `href="/(a|b)-..."` 会让
-  `set()` 把 1084 条链接坍缩成 3 条。必须用非捕获组 `(?:a|b)`。
+## Cloudflare Pages 部署架构（2026-09-03）
+- **两套机制竞争**：① Actions `wrangler pages deploy`(权威) ② Cloudflare 原生 GitHub 集成自动部署(项目连 Git，check-run 名 `Cloudflare Pages`)。曾误判"缺 secret 致 CI 失败"——实测 secret 在位、Actions 绿，真实根因是双部署为同 commit 产生竞争 Production 部署，原生集成未 promote 完时去测 active 停在旧构建。
+- **策略**：Actions 唯一部署方；用户已在 CF Dashboard 断开 Git 连接（2026-09-03 验证：空提交后 check-runs 仅剩 `Deploy to Cloudflare Pages` 一条，双部署消除）。
+- workflow 已硬化（47303b7/e2044b5）：项目锁定 `npx wrangler`、`--commit-dirty=true`、secret 校验。
+
+## P1 写侧修复完成（2026-09-03, de8d3b5）
+- middleware 移除 trackPath；security 移除 _checkGlobalQuota；5 高频 API（derivative/integral/limit/matrix/ode）移除 trackPath。每请求 D1 写入 ~4→1（仅 rate-limit，fail-open）。
+- problem API 改 static-first + 显式列 + D1 降级；实测 D1 日读耗尽仍从 static 返 200。

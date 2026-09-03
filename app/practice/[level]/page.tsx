@@ -1,6 +1,7 @@
 export const runtime = 'edge';
 import Link from 'next/link';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import PracticeFlow from '@/components/PracticeFlow';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { loadStaticProblemsSafe } from '@/lib/problems-source';
@@ -49,6 +50,7 @@ export default async function LevelPage({ params }: { params: { level: string } 
         <Breadcrumbs items={[{ name: 'Home', href: '/' }, { name: 'Practice', href: '/practice' }, { name: info.title, href: '/practice/' + params.level }]} />
         <h1 className="text-4xl font-bold text-center mb-4">{info.title}</h1>
         <p className="text-center text-gray-600 dark:text-gray-400 mb-8">{info.description}</p>
+        <PracticeFlow problems={problems} level={params.level} />
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">{problems.map((p: any) => (
           <Link key={p.slug} href={'/' + p.slug} className="block p-4 border rounded hover:border-blue-500 bg-gray-50 dark:bg-slate-800">
             <div className="text-sm text-gray-600">{p.formula}</div>

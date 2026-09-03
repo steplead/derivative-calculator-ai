@@ -37,11 +37,25 @@ jobs:
         # Produces .vercel/output/static (the Pages deployment artifact)
         run: npx @cloudflare/next-on-pages
 
+      - name: Verify Cloudflare credentials
+        # Fail fast with a clear message if the required repo secrets are missing,
+        # instead of an obscure wrangler auth error during deploy.
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ] || [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "::error::Missing GitHub secret(s). Set CLOUDFLARE_API_TOKEN (Cloudflare 'Pages:Edit' permission) and CLOUDFLARE_ACCOUNT_ID in repo Settings > Secrets and variables > Actions."
+            exit 1
+          fi
+
       - name: Deploy to Cloudflare Pages
         # Replaced deprecated cloudflare/pages-action@v1 with the official
         # `wrangler pages deploy` command (Cloudflare's current recommendation).
-        # This gives clearer error output and native wrangler 3.x support.
-        run: npx wrangler@latest pages deploy .vercel/output/static --project-name=derivative-calculator-ai --branch=main
+        # - uses the project-pinned wrangler (devDependency ^3.57.1) for reproducible builds
+        # - --branch=main promotes the build to the Pages production branch
+        # - --commit-dirty=true never blocks deploy on generated files (e.g. lib/noindex-slugs.ts from prebuild)
+        run: npx wrangler pages deploy .vercel/output/static --project-name=derivative-calculator-ai --branch=main --commit-dirty=true
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

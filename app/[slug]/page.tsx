@@ -6,6 +6,7 @@ import Calculator from '@/components/Calculator';
 // EmbedWidget removed to prevent API abuse
 import StructuredData, { generateMathSolverData } from '@/components/StructuredData';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import ShareResultCard from '@/components/ShareResultCard';
 import { Suspense } from 'react';
 import { getBaseUrl } from '@/utils/robust-url';
 import { getRequestContext } from '@cloudflare/next-on-pages';
@@ -481,6 +482,17 @@ export default async function ProblemPage({ params }: { params: { slug: string }
                         </dl>
                     </section>
                 )}
+
+                {/* P3-P2-3: lightweight share-your-result card. Purely front-end;
+                    does not alter SSR math content or the canonical/noindex strategy.
+                    Placed right after the answer block so it reads as "share what you
+                    just solved". Hidden gracefully when the page has no computed result. */}
+                <ShareResultCard
+                    formula={safeProblem.formula}
+                    result={ssrSolution?.solutionRaw}
+                    url={url}
+                    type={safeProblem.type}
+                />
 
                 <div className="max-w-2xl mx-auto mt-12 prose prose-invert">
                     <h3 className="text-gray-900 dark:text-white font-bold text-xl mb-2">{t.howToTitle}</h3>

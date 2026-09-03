@@ -59,7 +59,7 @@ Cloudflare Dashboard → Workers & Pages → derivative-calculator-ai → D1 →
 
 ## 验证状态（2026-09-03）
 - ① Purge Everything：已执行。验证 `derivativecalculatorai.com` 生产缓存头由 `cf-cache-status: HIT (age≈6869)` → `MISS`，即页面已重新回源、服务当前部署副本，边缘陈旧 HTML 已清空。✅
-- ② 关闭原生自动部署：**未通过 ❌**。push `1c68e26` 后 check-runs 仍同时出现 `Deploy to Cloudflare Pages`（Actions, success）与 `Cloudflare Pages`（原生集成, success, "Deploy successful!"）。原生集成仍在部署，双部署竞争窗口仍存在。需重做关闭（见下方"② 收口办法"）。
+- ② 关闭原生自动部署：**已通过 ✅**。用户断开 Pages 项目的 Git 仓库连接后，Buddy 用空提交 `742e9fd` 触发验证：check-runs **仅 1 条** `Deploy to Cloudflare Pages`（Actions, success），原生的 `Cloudflare Pages` check-run 不再出现（NO_NATIVE）。双部署竞争窗口已消除；`push to main` 现在只剩 GitHub Actions 一条部署路径。生产 sanity 复测 `/derivative-of-1-x`、`/problems`、两个 problem API 均 200 / static 答对，断开 Git 不影响 Actions 部署。
 
 ### ② 收口办法（原生集成关不掉时的可靠路径）
 若 Dashboard 的 "Automatic deploys → Disable" 开关点了仍无效（本仓库实测仍出原生 check-run），用**确定性更强**的方式：

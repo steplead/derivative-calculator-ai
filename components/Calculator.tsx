@@ -10,6 +10,7 @@ const Graph = dynamic(() => import('./Graph'), { ssr: false });
 const StepDisplay = dynamic(() => import('./StepDisplay'), { ssr: false });
 import AdShell from './AdShell';
 import { useTurnstile, addTokenToUrl } from './TurnstileProvider';
+import { trackEvent } from '@/lib/analytics';
 
 type CalculatorProps = {
     initialEquation?: string;
@@ -110,6 +111,16 @@ export default function Calculator({ initialEquation = '', initialLimitTo = '0',
             // Show math result immediately
             setResult(dataFast);
             setLoading(false); // Stop main loading spinner
+
+            // P3-OBS-3: track a successful derivative calculation.
+            // Note: only the mode + derived length are sent — never the raw formula.
+            if (mode === 'derivative') {
+                trackEvent('derivative_calculate', {
+                    type: 'derivative',
+                    mode: 'derivative',
+                    formula_length: formula.length,
+                });
+            }
 
             // Step 2: Slow fetch (AI Explanation)
             // We keep the result but maybe show a loading indicator for the explanation part

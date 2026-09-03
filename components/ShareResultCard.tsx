@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Share2, Copy, Check, Twitter } from 'lucide-react';
+import { trackEvent } from '@/lib/analytics';
 
 type ShareResultCardProps = {
     /** The math expression being solved, e.g. "x^2 * sin(x)". */
@@ -50,6 +51,12 @@ export default function ShareResultCard({ formula, result, url, type }: ShareRes
                 await navigator.clipboard.writeText(shareText);
                 setCopied(true);
                 window.setTimeout(() => setCopied(false), 2000);
+                // P3-OBS-3: only scalar/derived fields are sent — never the raw formula.
+                trackEvent('share_result_copy', {
+                    type,
+                    formula_length: formula.length,
+                    result_length: (result || '').length,
+                });
             }
         } catch {
             // clipboard may be blocked (insecure context) — fail silently
@@ -93,6 +100,13 @@ export default function ShareResultCard({ formula, result, url, type }: ShareRes
                         href={twitterHref}
                         target="_blank"
                         rel="noopener noreferrer"
+                        onClick={() =>
+                            trackEvent('share_result_x', {
+                                type,
+                                formula_length: formula.length,
+                                result_length: (result || '').length,
+                            })
+                        }
                         className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 text-sm font-medium hover:opacity-90 transition-opacity"
                     >
                         <Twitter className="w-4 h-4" />

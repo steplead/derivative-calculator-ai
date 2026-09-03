@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Lightbulb, ArrowRight, Flame, CheckCircle2 } from 'lucide-react';
+import { trackEvent } from '@/lib/analytics';
 
 interface Problem {
   slug: string;
@@ -70,6 +71,13 @@ export default function PracticeFlow({ problems, level }: PracticeFlowProps) {
   const handleShow = () => {
     if (revealed) return;
     setRevealed(true);
+    // P3-OBS-3: only the level + fixed problem slug + derived length are sent.
+    trackEvent('practice_show_answer', {
+      level,
+      difficulty: level,
+      problem_slug: current.slug,
+      formula_length: (current.formula || '').length,
+    });
     setStats((prev) => {
       const next = { solved: prev.solved + 1, streak: prev.streak + 1 };
       try {
@@ -84,6 +92,7 @@ export default function PracticeFlow({ problems, level }: PracticeFlowProps) {
 
   const handleNext = () => {
     setRevealed(false);
+    trackEvent('practice_next_problem', { level, difficulty: level });
     const next = idx + 1;
     if (next >= order.length) {
       setOrder((prev) => [...prev].sort(() => Math.random() - 0.5));
@@ -142,6 +151,13 @@ export default function PracticeFlow({ problems, level }: PracticeFlowProps) {
             </div>
             <Link
               href={problemUrl}
+              onClick={() =>
+                trackEvent('practice_view_solution', {
+                  level,
+                  difficulty: level,
+                  problem_slug: current.slug,
+                })
+              }
               className="inline-flex items-center gap-2 w-full sm:w-auto justify-center px-5 py-3 rounded-lg bg-green-600 hover:bg-green-700 text-white font-medium transition-colors"
             >
               View step-by-step solution

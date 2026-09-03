@@ -249,7 +249,7 @@ describe('RC-8 task 4: unknown slugs 404', () => {
             src.indexOf('export async function generateMetadata'),
             src.indexOf('export default async function ProblemPage')
         );
-        const libraryIdx = meta.indexOf('findStaticProblem(await loadStaticProblemsSafe()');
+        const libraryIdx = meta.indexOf('findStaticProblem(library, slug)');
         const heuristicIdx = meta.indexOf('parseSlugToMath(slug)');
         expect(libraryIdx).toBeGreaterThan(-1);
         expect(heuristicIdx).toBeGreaterThan(-1);

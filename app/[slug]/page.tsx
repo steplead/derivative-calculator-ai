@@ -120,11 +120,17 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     // RC-8 FIX: the authoritative library is the FIRST source here, exactly as
     // in the page body, so <title> and <h1> can never disagree again. The old
     // `cache: 'force-cache'` fetches never returned data on this platform.
-    let problem: Problem | null = findStaticProblem(await loadStaticProblemsSafe(), slug);
-    // True only when the slug resolves via the slug→math heuristic (not present
-    // in the library / D1 / API). Such pages form an infinite URL surface and
-    // must be noindexed (P2-H).
-    let isHeuristic = false;
+    const library = await loadStaticProblemsSafe();
+    const libraryProblem = findStaticProblem(library, slug);
+    // Any slug NOT present in the static library (/problems.json) belongs to an
+    // unbounded URL surface: it may resolve via D1, the /api/problem endpoint,
+    // or the slug→math heuristic. The sitemap lists only library slugs, so such
+    // pages must be noindexed (P2-H). The decision is based on library membership
+    // — not on which fallback resolved the slug — because the API itself answers
+    // heuristic slugs with HTTP 200, which would otherwise defeat the noindex and
+    // leave an infinite indexed URL surface.
+    let problem: Problem | null = libraryProblem;
+    const isOutOfLibrary = !libraryProblem;
 
     // Only slugs outside the library pay for a D1-backed HTTP round trip.
     if (!problem && baseUrl) {
@@ -162,7 +168,6 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     // DYNAMIC FALLBACK: Smart Parser (Heuristic for descriptive or raw math slugs)
     if (!problem) {
         problem = parseSlugToMath(slug);
-        isHeuristic = true;
     }
 
     if (!problem) {
@@ -181,7 +186,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     return {
         title: t.title,
         description: t.description,
-        robots: (NOINDEX_SLUGS.has(slug) || isHeuristic) ? {
+        robots: (NOINDEX_SLUGS.has(slug) || isOutOfLibrary) ? {
             index: false,
             follow: true,
         } : undefined,

@@ -1,4 +1,17 @@
-name: Deploy to Cloudflare Pages
+# Deploy to Cloudflare Pages
+#
+# IMPORTANT (single source of truth):
+# This repo has TWO deploy mechanisms that both fire on push to `main`:
+#   1. This GitHub Actions workflow (wrangler pages deploy)  <-- authoritative deployer
+#   2. Cloudflare Pages' native GitHub integration (auto-deploy on push)
+# Both create competing Production deployments for the same commit. They build identical
+# output, but the race can leave the active production deployment pointing at a not-yet-promoted
+# build (observed on de8d3b5: production returned stale code until the build settled).
+# To make "push -> auto-deploy to production" deterministic, DISABLE the native integration's
+# auto-deploy in Cloudflare Dashboard:
+#   Workers & Pages -> derivative-calculator-ai -> Settings -> Builds & deployments ->
+#   disable "Automatic deploys" (or set Production branch to a branch that is never pushed).
+# Keep this workflow as the only deployer.
 
 on:
   push:

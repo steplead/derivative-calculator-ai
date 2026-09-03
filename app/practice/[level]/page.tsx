@@ -13,14 +13,20 @@ const LEVEL_INFO: Record<string, { title: string; description: string; color: st
 
 export async function generateMetadata({ params }: { params: { level: string } }): Promise<Metadata> {
   const info = LEVEL_INFO[params.level];
-  if (!info) return { title: 'Not Found' };
-  // P2-D: this utility route stays noindex to keep the indexable library pages
-  // clean. It now reads the static library filtered by difficulty (no D1), so
-  // the three levels are distinct — but remains noindex pending a content-quality
-  // decision.
+  // fail-closed (1): invalid level → minimal metadata; the page body calls
+  // notFound() and returns a real 404, so no thin/phantom page can be indexed.
+  if (!info) return { title: 'Not Found', robots: { index: false, follow: true } };
+  // P2-D follow-up: the three difficulty levels are now thick (909 / 1835 / 393
+  // distinct problems), mutually distinct, and D1-free (static library filtered
+  // by `difficulty`), so the real levels are indexable.
+  // fail-closed (2): an empty level (e.g. a future data change drops a difficulty,
+  // or the static library fails to load) stays noindex — never index a thin page.
+  const library = await loadStaticProblemsSafe();
+  const count = library.filter((p) => p && p.difficulty === params.level).length;
+  const robots = count > 0 ? undefined : { index: false, follow: true };
   return {
     title: info.title + ' | Derivative Calculator AI',
-    robots: { index: false, follow: true },
+    robots,
   };
 }
 

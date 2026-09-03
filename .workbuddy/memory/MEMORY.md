@@ -46,8 +46,17 @@
 
 ## Sitemap 阴影机制（P2 审计，2026-09-03）
 - **`app/sitemap.ts` 已删除**：Next.js 中 `app/sitemap.ts`(MetadataRoute)与静态 `public/sitemap.xml` 都映射 `/sitemap.xml`，app 路由胜出并阴影 9,483 条的静态文件 → production `/sitemap.xml` 实测仅 9 `<loc>`，全部单题页掉出 sitemap。删除 app/sitemap.ts 后 public/sitemap.xml 生效。
-- 勿重新添加 `app/sitemap.ts`（会再次阴影 public/sitemap.xml）。sitemap 由 `npm run generate-sitemap`(scripts/generate-sitemap.js) 生成 public/sitemap.xml；当前仍缺 827 个复杂积分 slug（生成器跳过），补缺口跑该命令即可。
+- 勿重新添加 `app/sitemap.ts`（会再次阴影 public/sitemap.xml）。sitemap 由 `npm run generate-sitemap`(scripts/generate-sitemap.js) 生成 public/sitemap.xml。
+- **纠正（2026-09-03 复验）："缺 827 个复杂积分 slug" 是审计脚本假阳性**（sitemap_coverage 正则未处理 slug 中的 `+`/特殊字符）；实证 `public/sitemap.xml` 9,483 `<loc>` 已含全部 3,137 题（各 3 locale）。勿再为"827 缺口"做动作；这些复杂积分页有 formula/title/description，质量合格，保持索引。审计脚本 `audit_problems_data.py` 的 sitemap_coverage 待修正则。
 - **分类页断裂**：`app/problems/[type]` 的 validTypes=['derivative','integral','limit','ode']，但 problems.json 无 `matrix`/`ode` 类型行 → /problems/ode 空分类(0 题)、/problems/matrix 404；`/matrix` 是 calculator 页非题目类型，命名不一致。
+
+## 数据回填（P2 评估，2026-09-03）
+- **核心事实**：`difficulty`/`tags` 100% 缺失于 problems.json，但 D1 里那套回填是**确定性前缀规则**（`scripts/update_tags.sql` 逐 slug 精标 + `scripts/update_all_tags.sql` 按 `slug LIKE 'derivative-of-sin%'` 等前缀），可**原样移植到本地 `public/problems.json`**（一次性 transform，零 D1 依赖、零配额风险）。
+- `tags` 逗号分隔（如 `derivative,trigonometric`）；`difficulty` ∈ {beginner,intermediate,advanced}，**正好对应 `/practice/[level]` 三档**（现三档同内容才被 P2-D noindex；回填后可按难度分流再解 noindex）。
+- **两层回填可行且已量化**：L1 移植 D1 规则覆盖 40.2%(1,262/3,137)；L2 公式 token 派生补全残留覆盖 1,873/1,875，仅 2 常量 slug 需硬编码 `constant` → 合计 99.9% 确定性覆盖。
+- `type` 缺失 1,073 全是 `derivative-of-*` → `slug.startsWith('derivative-of-')` 确定性补 `type='derivative'`，零风险。
+- 要让 tags 真正生效还需代码配套：`Problem` 类型加 `tags?`、渲染层展示、`/problems/tag` 改读静态 JSON（去 D1 依赖）。
+- 评估文档：`P2_DATA_BACKFILL_STRATEGY.md`（路线对比 + 批 1→6 计划 + 验收门）。**执行需单独批准，不自动改 3000+ 条**。
 
 ## Cloudflare Pages 部署架构（2026-09-03）
 - **两套机制竞争**：① Actions `wrangler pages deploy`(权威) ② Cloudflare 原生 GitHub 集成自动部署(项目连 Git，check-run 名 `Cloudflare Pages`)。曾误判"缺 secret 致 CI 失败"——实测 secret 在位、Actions 绿，真实根因是双部署为同 commit 产生竞争 Production 部署，原生集成未 promote 完时去测 active 停在旧构建。

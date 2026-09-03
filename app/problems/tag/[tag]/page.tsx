@@ -1,8 +1,15 @@
 import { headers } from 'next/headers';
 export const runtime = 'edge';
 import Link from 'next/link';
-import { getBaseUrl } from '@/utils/robust-url';
 import type { Metadata } from 'next';
+import { loadStaticProblemsSafe, type StaticProblem } from '@/lib/problems-source';
+
+/** Minimum problems a tag must have to appear in "Popular Tags". */
+const MIN_TAG_COUNT = 10;
+
+function tagDisplayName(tag: string): string {
+    return tag.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+}
 
 export async function generateMetadata({ params }: { params: { tag: string } }): Promise<Metadata> {
   const { tag } = params;
@@ -38,29 +45,32 @@ export default async function ProblemsByTagPage({ params }: { params: { tag: str
   const { tag } = params;
   const headersList = await headers();
   const locale = headersList.get("x-next-locale") || "en";
-  const baseUrl = getBaseUrl();
 
-  let allProblems: any[] = [];
+  // B4: read the static library directly and filter by the `tags` field.
+  // No D1, no API self-fetch, no hot path. loadStaticProblemsSafe is already
+  // proven in the edge runtime (used by /[slug]).
+  const library = await loadStaticProblemsSafe();
+  const filteredProblems: StaticProblem[] = library.filter(
+    (p) => p && p.tags && String(p.tags).split(',').map((t) => t.trim()).includes(tag)
+  );
 
-  if (baseUrl) {
-    try {
-      // RC-8 FIX: `cache: 'force-cache'` + `next: { revalidate }` never returns
-      // data on this platform. Plain fetch only.
-      // NOTE: tags/difficulty live only in D1 (absent from /problems.json), so
-      // this route is still D1-backed. It is outside the sitemap.
-      const res = await fetch(`${baseUrl}/api/problems?limit=100&tag=${encodeURIComponent(tag)}`);
-
-      if (res.ok && res.headers.get("content-type")?.includes("application/json")) {
-        allProblems = await res.json();
-      }
-    } catch (e) {
-      console.error("Failed to fetch problems:", e);
+  // Deterministic "Popular Tags": count real tags across the library, keep only
+  // those above MIN_TAG_COUNT, sort by count desc then name asc. Never the
+  // hard-coded list that drifted out of sync with the data.
+  const tagCounts = new Map<string, number>();
+  for (const p of library) {
+    if (!p || !p.tags) continue;
+    for (const raw of String(p.tags).split(',')) {
+      const t = raw.trim();
+      if (t) tagCounts.set(t, (tagCounts.get(t) || 0) + 1);
     }
   }
+  const popularTags = Array.from(tagCounts.entries())
+    .filter(([, n]) => n >= MIN_TAG_COUNT)
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+    .map(([t]) => t);
 
-  const filteredProblems = allProblems;
-
-  const tagName = tag.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+  const tagName = tagDisplayName(tag);
 
   return (
     <div className="py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-200">
@@ -86,7 +96,7 @@ export default async function ProblemsByTagPage({ params }: { params: { tag: str
         {/* Problems Grid */}
         {filteredProblems.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredProblems.map((problem: any) => (
+            {filteredProblems.map((problem) => (
               <Link
                 key={problem.slug}
                 href={`/${locale === 'en' ? '' : locale + '/'}${problem.slug}`}
@@ -112,11 +122,11 @@ export default async function ProblemsByTagPage({ params }: { params: { tag: str
           </div>
         )}
 
-        {/* Popular Tags */}
+        {/* Popular Tags — generated from the real tag vocabulary, not hard-coded */}
         <div className="mt-16 pt-8 border-t border-gray-200 dark:border-slate-700">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Popular Tags</h2>
           <div className="flex flex-wrap gap-3">
-            {['trigonometric', 'polynomial', 'chain-rule', 'product-rule', 'quotient-rule', 'exponential', 'logarithmic', 'easy', 'medium', 'hard'].map((otherTag) => (
+            {popularTags.map((otherTag) => (
               <Link
                 key={otherTag}
                 href={`/problems/tag/${otherTag}`}
@@ -126,7 +136,7 @@ export default async function ProblemsByTagPage({ params }: { params: { tag: str
                     : 'bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-700'
                 }`}
               >
-                {otherTag.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                {tagDisplayName(otherTag)}
               </Link>
             ))}
           </div>

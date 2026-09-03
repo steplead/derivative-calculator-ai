@@ -19,6 +19,7 @@ import {
     pickStableRelated,
 } from '@/lib/problems-source';
 import { parseSlugToMath } from '@/lib/slug-math';
+import Link from 'next/link';
 
 // Define the type for our problem data.
 // `title` is optional because raw library rows are not guaranteed to carry one;
@@ -30,6 +31,10 @@ type Problem = {
     description?: string;
     type?: 'derivative' | 'integral' | 'limit';
     limitTo?: string;
+    // B4: tags/difficulty are now present on library rows; kept optional because
+    // heuristic (parseSlugToMath) and some D1 paths do not populate them.
+    tags?: string;
+    difficulty?: string;
 };
 
 /**
@@ -37,6 +42,20 @@ type Problem = {
  * lib/problems-source.ts and lib/slug-math.ts so they can be unit-tested
  * without importing the page (which pulls in the Cloudflare edge runtime).
  */
+
+// B4: lightweight labels for the tags/difficulty badge row (server-rendered,
+// no client logic). Tags use the same "word-case" formatting as tag pages.
+function tagLabel(tag: string): string {
+    return tag.split('-').map((x) => x.charAt(0).toUpperCase() + x.slice(1)).join(' ');
+}
+function difficultyLabel(d: string): string {
+    const map: Record<string, string> = {
+        beginner: 'Beginner',
+        intermediate: 'Intermediate',
+        advanced: 'Advanced',
+    };
+    return map[d] || (d.charAt(0).toUpperCase() + d.slice(1));
+}
 
 // OPTIMIZED: Allow caching to reduce quota usage
 // Cache for 1 hour - locale is handled via middleware rewrite, so caching is safe
@@ -313,7 +332,9 @@ export default async function ProblemPage({ params }: { params: { slug: string }
             title: problem.title || `Problem ${problemFormula}`,
             type: problem.type || 'derivative',
             limitTo: problemLimitTo,
-            description: problem.description || ""
+            description: problem.description || "",
+            tags: problem.tags || "",
+            difficulty: problem.difficulty || ""
         };
 
         // RC-1 FIX: deterministically compute the answer server-side so the
@@ -374,6 +395,31 @@ export default async function ProblemPage({ params }: { params: { slug: string }
                     <p className="text-xl text-gray-600 dark:text-gray-400">
                         {t.subtitle} <code className="bg-gray-100 dark:bg-slate-800 px-2 py-1 rounded text-gray-800 dark:text-gray-200">{safeProblem.formula}</code>
                     </p>
+
+                    {/* B4: lightweight tags/difficulty badges. Server-rendered,
+                        no client logic, does not alter the math layout or the
+                        canonical/noindex strategy. Tags link to the static
+                        tag library so the cross-links are real. */}
+                    {(safeProblem.tags || safeProblem.difficulty) && (
+                        <div className="flex flex-wrap justify-center gap-2 mt-4">
+                            {safeProblem.tags
+                                ? safeProblem.tags.split(',').map((t) => t.trim()).filter(Boolean).map((t) => (
+                                    <Link
+                                        key={t}
+                                        href={`/problems/tag/${t}`}
+                                        className="px-3 py-1 rounded-full text-xs font-medium bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors"
+                                    >
+                                        {tagLabel(t)}
+                                    </Link>
+                                ))
+                                : null}
+                            {safeProblem.difficulty && (
+                                <span className="px-3 py-1 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300">
+                                    {difficultyLabel(safeProblem.difficulty)}
+                                </span>
+                            )}
+                        </div>
+                    )}
                 </div>
 
                 <Suspense fallback={<div className="text-gray-900 dark:text-white text-center">Loading Calculator...</div>}>

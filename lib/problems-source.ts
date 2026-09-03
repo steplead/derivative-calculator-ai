@@ -42,6 +42,11 @@ export type StaticProblem = {
     type?: 'derivative' | 'integral' | 'limit';
     limitTo?: string;
     difficulty?: string;
+    // B4: tags is a comma-separated string (e.g. "derivative,polynomial"),
+    // matching the on-disk shape in /problems.json. Kept as string — not a
+    // parsed array — to stay compatible with the existing data model and the
+    // /api/problems consumer; split on demand at the call site.
+    tags?: string;
 };
 
 /** Parsed library, memoised per isolate. */

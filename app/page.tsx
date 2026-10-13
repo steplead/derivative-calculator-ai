@@ -160,6 +160,74 @@ export default async function Home() {
             <DynamicRecommendations problems={recommendedProblems} locale={locale} count={8} />
           </Suspense>
         </div>
+
+        {/* P3-GSC-1: fixed, crawl-stable SSR internal links for inner-page discovery.
+            Static server-rendered array — not random, not client-only, no DB/API.
+            Goal: let Google discover low-competition inner pages from the homepage. */}
+        <div className="mt-16 space-y-12">
+          <section aria-labelledby="gsc-popular">
+            <h2 id="gsc-popular" className="text-2xl font-bold text-gray-900 dark:text-white mb-6 text-center">Popular derivative problems</h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              {[
+                { slug: 'derivative-of-x-squared', label: 'Derivative of x^2' },
+                { slug: 'derivative-of-e-x', label: 'Derivative of e^x' },
+                { slug: 'derivative-of-sin-x', label: 'Derivative of sin(x)' },
+                { slug: 'derivative-of-cos-x', label: 'Derivative of cos(x)' },
+                { slug: 'derivative-of-ln-x', label: 'Derivative of ln(x)' },
+                { slug: 'derivative-of-tan-x', label: 'Derivative of tan(x)' },
+              ].map((item) => (
+                <Link
+                  key={item.slug}
+                  href={locale === 'en' ? `/${item.slug}` : `/${locale}/${item.slug}`}
+                  className="bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 p-3 rounded-lg text-sm text-blue-600 dark:text-blue-300 hover:text-blue-800 dark:hover:text-blue-200 transition-colors text-center block no-underline"
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+          </section>
+
+          <section aria-labelledby="gsc-practice">
+            <h2 id="gsc-practice" className="text-2xl font-bold text-gray-900 dark:text-white mb-6 text-center">Practice paths</h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {[
+                { label: 'All practice levels', href: '/practice' },
+                { label: 'Beginner', href: '/practice/beginner' },
+                { label: 'Intermediate', href: '/practice/intermediate' },
+                { label: 'Advanced', href: '/practice/advanced' },
+              ].map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 p-3 rounded-lg text-sm text-blue-600 dark:text-blue-300 hover:text-blue-800 dark:hover:text-blue-200 transition-colors text-center block no-underline"
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+          </section>
+
+          <section aria-labelledby="gsc-topics">
+            <h2 id="gsc-topics" className="text-2xl font-bold text-gray-900 dark:text-white mb-6 text-center">Explore by topic</h2>
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+              {[
+                { label: 'Polynomial', href: '/problems/tag/polynomial' },
+                { label: 'Trigonometric', href: '/problems/tag/trigonometric' },
+                { label: 'Logarithmic', href: '/problems/tag/logarithmic' },
+                { label: 'Exponential', href: '/problems/tag/exponential' },
+                { label: 'Fraction', href: '/problems/tag/fraction' },
+              ].map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 p-3 rounded-lg text-sm text-blue-600 dark:text-blue-300 hover:text-blue-800 dark:hover:text-blue-200 transition-colors text-center block no-underline"
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+          </section>
+        </div>
       </div>
     </div>
   );

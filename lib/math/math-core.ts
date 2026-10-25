@@ -194,8 +194,15 @@ export function calculateDerivative(expr: string): DerivativeSolution {
   if (!engineExpression) throw new Error('Invalid expression');
 
   let raw = '';
+  let latex = '';
+  let d: any;
   try {
-    const d = nerdamer(`diff(${engineExpression}, x)`);
+    // P1-a: differentiate ONCE and reuse the same nerdamer object for both the
+    // raw string and the LaTeX form. This removes a redundant second
+    // parse + differentiation pass on every request (the same `diff(...)` call
+    // was previously executed twice). No memoization is introduced — `d` is a
+    // per-invocation local, so there is no cross-request state or memory growth.
+    d = nerdamer(`diff(${engineExpression}, x)`);
     raw = d.toString();
   } catch (e: any) {
     throw new Error(`Nerdamer calculation failed: ${e?.message || String(e)}`);
@@ -204,9 +211,8 @@ export function calculateDerivative(expr: string): DerivativeSolution {
     // A zero derivative of something containing x is a red flag — validate later.
   }
 
-  let latex = '';
   try {
-    latex = nerdamer(`diff(${engineExpression}, x)`).toTeX();
+    latex = d.toTeX();
   } catch {
     latex = raw;
   }

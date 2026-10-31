@@ -1,11 +1,15 @@
 import Calculator from '@/components/Calculator';
 import DynamicRecommendations from '@/components/DynamicRecommendations';
+import HomeGuideSection from '@/components/HomeGuide';
+import StructuredData, { generateFAQData } from '@/components/StructuredData';
 import Link from 'next/link';
 import { Suspense } from 'react';
 import { headers } from 'next/headers';
 import { getDictionary } from './dictionaries';
 import { getBaseUrl } from '@/utils/robust-url';
 import { loadStaticProblemsSafe } from '@/lib/problems-source';
+import { homeGuide } from '@/content/home-guide';
+import { HOME_DESCRIPTIONS, localeAlternates, normalizeLocale, pageTitle, problemHref, SITE_URL } from '@/lib/seo';
 import type { Metadata } from 'next';
 
 export const runtime = 'edge';
@@ -16,30 +20,29 @@ export const revalidate = 3600; // 1 hour
 
 export async function generateMetadata(): Promise<Metadata> {
   const headersList = await headers();
-  const locale = headersList.get("x-next-locale") || "en";
-  const dict = getDictionary(locale);
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://derivativecalculatorai.com';
-
-  const url = locale === 'en' ? siteUrl : `${siteUrl}/${locale}`;
+  const locale = normalizeLocale(headersList.get("x-next-locale"));
+  const title = pageTitle('home', locale);
+  const description = HOME_DESCRIPTIONS[locale];
+  const alternates = localeAlternates('/', locale);
 
   return {
-    title: `Derivative Calculator - Instant Step-by-Step Solutions | Derivative Calculator AI`,
-    description: `Free, No Sign-up, Instant Results. ${dict.home.subtitle}`,
-    alternates: {
-      canonical: url,
-      languages: {
-        'en': siteUrl,
-        'es': `${siteUrl}/es`,
-        'pt': `${siteUrl}/pt`,
-      }
-    }
+    title: { absolute: title },
+    description,
+    alternates,
+    openGraph: {
+      title,
+      description,
+      url: alternates.canonical,
+      type: 'website',
+    },
   };
 }
 
 export default async function Home() {
   const headersList = await headers();
-  const locale = headersList.get("x-next-locale") || "en";
+  const locale = normalizeLocale(headersList.get("x-next-locale"));
   const dict = getDictionary(locale);
+  const guide = homeGuide[locale];
 
   if (!dict || !dict.home || !dict.common) {
     return <div className="p-20 text-center">System initialization... (Dictionary missing)</div>;
@@ -69,11 +72,36 @@ export default async function Home() {
     }
   }
 
+  const alternates = localeAlternates('/', locale);
+  const webAppSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: pageTitle('home', locale),
+    url: alternates.canonical,
+    applicationCategory: 'EducationalApplication',
+    operatingSystem: 'Web',
+    browserRequirements: 'Requires JavaScript',
+    description: HOME_DESCRIPTIONS[locale],
+    inLanguage: locale,
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'USD',
+    },
+    provider: {
+      '@type': 'Organization',
+      name: 'Derivative Calculator AI',
+      url: SITE_URL,
+    },
+  };
+
   return (
     <div className="py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-200">
+      <StructuredData data={webAppSchema} />
+      <StructuredData data={generateFAQData(guide.faqs)} />
       <div className="max-w-4xl mx-auto text-center mb-12 mt-10">
-        <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-4">
-          {dict.home.h1} <span className="text-blue-600 dark:text-blue-500">AI</span>
+        <h1 id={locale === 'en' ? 'derivative-calculator' : 'calculadora-de-derivadas'} className="text-4xl sm:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-4">
+          {dict.home.h1}
         </h1>
         <p className="text-xl text-gray-600 dark:text-gray-400">
           {dict.home.subtitle}
@@ -81,7 +109,7 @@ export default async function Home() {
       </div>
 
       <Suspense fallback={<div className="text-gray-900 dark:text-white text-center">{dict.common.loading}</div>}>
-        <Calculator dict={dict.calculator} />
+        <Calculator dict={dict.calculator} showShare shareUrl={alternates.canonical} />
       </Suspense>
 
       {/* Quick Links Section - Protocol 2 Compliance */}
@@ -137,7 +165,7 @@ export default async function Home() {
             {popularProblems.map((problem: any) => (
               <Link
                 key={problem.slug}
-                href={`/${locale === 'en' ? '' : locale + '/'}${problem.slug}`}
+                href={problemHref(problem.slug, locale)}
                 className="bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 p-3 rounded-lg text-sm text-blue-600 dark:text-blue-300 hover:text-blue-800 dark:hover:text-blue-200 transition-colors text-center block no-underline"
               >
                 {locale === 'en' ? `Derivative of ${problem.formula}` :
@@ -178,7 +206,7 @@ export default async function Home() {
               ].map((item) => (
                 <Link
                   key={item.slug}
-                  href={locale === 'en' ? `/${item.slug}` : `/${locale}/${item.slug}`}
+                  href={problemHref(item.slug, locale)}
                   className="bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 p-3 rounded-lg text-sm text-blue-600 dark:text-blue-300 hover:text-blue-800 dark:hover:text-blue-200 transition-colors text-center block no-underline"
                 >
                   {item.label}
@@ -229,6 +257,8 @@ export default async function Home() {
           </section>
         </div>
       </div>
+
+      <HomeGuideSection locale={locale} />
     </div>
   );
 }

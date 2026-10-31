@@ -3,29 +3,24 @@ export const runtime = 'edge';
 import Link from 'next/link';
 import { getBaseUrl } from '@/utils/robust-url';
 import { loadStaticProblemsSafe, filterByType } from '@/lib/problems-source';
+import { localeAlternates, normalizeLocale, pageTitle, problemHref } from '@/lib/seo';
 import type { Metadata } from 'next';
 
 export async function generateMetadata(): Promise<Metadata> {
   const headersList = await headers();
-  const locale = headersList.get("x-next-locale") || "en";
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://derivativecalculatorai.com';
-  const url = locale === 'en' ? `${siteUrl}/problems` : `${siteUrl}/${locale}/problems`;
+  const locale = normalizeLocale(headersList.get("x-next-locale"));
+  const title = pageTitle('problems', locale);
+  const description = 'Browse derivatives, integrals, and limits with a step-by-step solution on each problem.';
+  const alternates = localeAlternates('/problems', locale);
 
   return {
-    title: `All Calculus Problems - Complete Library`,
-    description: `Browse our complete library of calculus problems including derivatives, integrals, limits, and ODEs. Step-by-step solutions with AI explanations.`,
-    alternates: {
-      canonical: url,
-      languages: {
-        'en': `${siteUrl}/problems`,
-        'es': `${siteUrl}/es/problems`,
-        'pt': `${siteUrl}/pt/problems`,
-      }
-    },
+    title: { absolute: title },
+    description,
+    alternates,
     openGraph: {
-      title: `All Calculus Problems - Complete Library`,
-      description: `Browse our complete library of calculus problems.`,
-      url,
+      title,
+      description,
+      url: alternates.canonical,
       type: 'website',
     },
   };
@@ -101,7 +96,7 @@ export default async function ProblemsPage() {
                 {categorized.derivative.map((problem: any) => (
                   <Link
                     key={problem.slug}
-                    href={`/${locale === 'en' ? '' : locale + '/'}${problem.slug}`}
+                    href={problemHref(problem.slug, locale)}
                     className="bg-white dark:bg-slate-800 p-4 rounded-lg border border-gray-200 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-400 hover:shadow-md transition-all"
                   >
                     <div className="font-mono text-sm text-gray-900 dark:text-white mb-2">
@@ -123,7 +118,7 @@ export default async function ProblemsPage() {
                 {categorized.integral.map((problem: any) => (
                   <Link
                     key={problem.slug}
-                    href={`/${locale === 'en' ? '' : locale + '/'}${problem.slug}`}
+                    href={problemHref(problem.slug, locale)}
                     className="bg-white dark:bg-slate-800 p-4 rounded-lg border border-gray-200 dark:border-slate-700 hover:border-purple-500 dark:hover:border-purple-400 hover:shadow-md transition-all"
                   >
                     <div className="font-mono text-sm text-gray-900 dark:text-white mb-2">
@@ -145,7 +140,7 @@ export default async function ProblemsPage() {
                 {categorized.limit.map((problem: any) => (
                   <Link
                     key={problem.slug}
-                    href={`/${locale === 'en' ? '' : locale + '/'}${problem.slug}`}
+                    href={problemHref(problem.slug, locale)}
                     className="bg-white dark:bg-slate-800 p-4 rounded-lg border border-gray-200 dark:border-slate-700 hover:border-green-500 dark:hover:border-green-400 hover:shadow-md transition-all"
                   >
                     <div className="font-mono text-sm text-gray-900 dark:text-white mb-2">
@@ -167,7 +162,7 @@ export default async function ProblemsPage() {
                 {categorized.ode.map((problem: any) => (
                   <Link
                     key={problem.slug}
-                    href={`/${locale === 'en' ? '' : locale + '/'}${problem.slug}`}
+                    href={problemHref(problem.slug, locale)}
                     className="bg-white dark:bg-slate-800 p-4 rounded-lg border border-gray-200 dark:border-slate-700 hover:border-orange-500 dark:hover:border-orange-400 hover:shadow-md transition-all"
                   >
                     <div className="font-mono text-sm text-gray-900 dark:text-white mb-2">

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { problemHref } from '@/lib/seo';
 import { Shuffle } from 'lucide-react';
 
 interface Problem {
@@ -35,8 +36,7 @@ export default function DynamicRecommendations({
   };
 
   const getProblemUrl = (problem: Problem) => {
-    const localePrefix = locale === 'en' ? '' : `${locale}/`;
-    return `/${localePrefix}${problem.slug}`;
+    return problemHref(problem.slug, locale);
   };
 
   const getProblemTitle = (problem: Problem) => {

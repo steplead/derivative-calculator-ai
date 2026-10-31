@@ -3,6 +3,7 @@ import { headers } from 'next/headers';
 import Calculator from '@/components/Calculator';
 // EmbedWidget removed to prevent API abuse
 import { getDictionary } from '../dictionaries';
+import { localeAlternates, normalizeLocale, pageTitle } from '@/lib/seo';
 
 export const runtime = 'edge';
 // OPTIMIZED: Allow caching to reduce quota usage
@@ -15,33 +16,24 @@ export async function generateMetadata() {
 
     try {
         const headersList = await headers();
-        locale = headersList.get("x-next-locale") || "en";
+        locale = normalizeLocale(headersList.get("x-next-locale"));
         dict = getDictionary(locale);
     } catch (e) {
         console.error("Limit metadata error:", e);
     }
 
-    const h1 = dict?.limit?.h1 || "Limit Calculator";
     const subtitle = dict?.limit?.subtitle || "Solve limits instantly.";
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://derivativecalculatorai.com';
-    const baseUrlWithLocale = locale === 'en' ? siteUrl : `${siteUrl}/${locale}`;
-    const url = `${baseUrlWithLocale}/limit`;
+    const title = pageTitle('limit', locale);
+    const alternates = localeAlternates('/limit', locale);
 
     return {
-        title: `${h1} - Evaluate Limits with Steps`,
+        title: { absolute: title },
         description: subtitle,
-        alternates: {
-            canonical: url,
-            languages: {
-                'en': `${siteUrl}/limit`,
-                'es': `${siteUrl}/es/limit`,
-                'pt': `${siteUrl}/pt/limit`,
-            },
-        },
+        alternates,
         openGraph: {
-            title: `${h1}`,
+            title,
             description: subtitle,
-            url,
+            url: alternates.canonical,
             type: 'website',
         },
     };
@@ -66,7 +58,7 @@ export default async function LimitPage() {
     return (
         <div className="py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-200">
             <div className="max-w-4xl mx-auto text-center mb-12 mt-10">
-                <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-4">
+                <h1 id="limit-calculator" className="text-4xl sm:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-4">
                     {dict.limit.h1} <span className="text-green-600 dark:text-green-500">AI</span>
                 </h1>
                 <p className="text-xl text-gray-600 dark:text-gray-400">

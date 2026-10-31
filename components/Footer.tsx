@@ -1,5 +1,6 @@
 
 import Link from 'next/link';
+import { problemHref } from '@/lib/seo';
 
 type WikiTopic = {
     slug: string;
@@ -78,7 +79,7 @@ export default function Footer({ wikiTopics, problems, locale }: FooterProps) {
                             {problemLinks.map(problem => (
                                 <li key={problem.slug}>
                                     <Link
-                                        href={`${baseUrl}/${problem.slug}`}
+                                        href={problemHref(problem.slug, locale)}
                                         className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 text-sm transition-colors"
                                     >
                                         d/dx {problem.formula}

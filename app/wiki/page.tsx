@@ -4,24 +4,24 @@ export async function generateMetadata() {
 
     try {
         const headersList = await headers();
-        locale = headersList.get("x-next-locale") || "en";
+        locale = normalizeLocale(headersList.get("x-next-locale"));
     } catch (e) {
         console.error("Wiki metadata error:", e);
     }
 
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://derivativecalculatorai.com';
-    const url = locale === 'en' ? `${siteUrl}/wiki` : `${siteUrl}/${locale}/wiki`;
+    const title = pageTitle('wiki', locale);
+    const description = 'Calculus rules and worked examples: power, product, quotient, chain, and the derivative of trig and exponential functions.';
+    const alternates = localeAlternates('/wiki', locale);
 
     return {
-        title: `Math Wiki`,
-        description: `Learn the fundamental rules and concepts of calculus in our Math Wiki.`,
-        alternates: {
-            canonical: url,
-            languages: {
-                'en': `${siteUrl}/wiki`,
-                'es': `${siteUrl}/es/wiki`,
-                'pt': `${siteUrl}/pt/wiki`,
-            },
+        title: { absolute: title },
+        description,
+        alternates,
+        openGraph: {
+            title,
+            description,
+            url: alternates.canonical,
+            type: 'website',
         },
     };
 }
@@ -30,6 +30,7 @@ import Link from 'next/link';
 import { headers } from 'next/headers';
 
 import wikiData from '@/data/wiki.json';
+import { localeAlternates, normalizeLocale, pageTitle } from '@/lib/seo';
 
 export const runtime = 'edge';
 

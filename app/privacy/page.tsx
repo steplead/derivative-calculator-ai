@@ -1,24 +1,20 @@
 import type { Metadata } from 'next';
 
 import { headers } from 'next/headers';
+import { localeAlternates, normalizeLocale, pageTitle } from '@/lib/seo';
 
 export async function generateMetadata(): Promise<Metadata> {
     const headersList = await headers();
-    const locale = headersList.get("x-next-locale") || "en";
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://derivativecalculatorai.com';
-    const url = locale === 'en' ? `${siteUrl}/privacy` : `${siteUrl}/${locale}/privacy`;
+    const locale = normalizeLocale(headersList.get("x-next-locale"));
+    const title = pageTitle('privacy', locale);
+    const description = 'Privacy policy for the derivative calculator website and the Chrome extension.';
+    const alternates = localeAlternates('/privacy', locale);
 
     return {
-        title: 'Privacy Policy - Derivative Calculator AI',
-        description: 'Privacy Policy for Derivative Calculator AI and Chrome Extension.',
-        alternates: {
-            canonical: url,
-            languages: {
-                'en': `${siteUrl}/privacy`,
-                'es': `${siteUrl}/es/privacy`,
-                'pt': `${siteUrl}/pt/privacy`,
-            }
-        }
+        title: { absolute: title },
+        description,
+        alternates,
+        openGraph: { title, description, url: alternates.canonical, type: 'website' },
     };
 }
 

@@ -12,12 +12,38 @@
 
 type EventParams = Record<string, string | number | boolean | undefined>;
 
+type GtagWindow = Window & {
+  dataLayer?: unknown[];
+  gtag?: (..._args: unknown[]) => void;
+};
+
+/**
+ * Queue a GA4 event even if the gtag.js snippet has not run yet.
+ *
+ * @next/third-parties defines `function gtag()` inside an inline script. That
+ * binding is global only after the script executes, and the external
+ * googletagmanager script is what actually sends hits. Events that fired in
+ * the gap were dropped because `window.gtag` was missing. Installing the same
+ * dataLayer shim gtag.js expects means a later script flushes the queue.
+ */
 export function trackEvent(name: string, params?: EventParams): void {
   try {
     if (typeof window === 'undefined') return;
-    const gtag = (window as any).gtag;
-    if (typeof gtag !== 'function') return;
-    gtag('event', name, params || {});
+    const w = window as GtagWindow;
+    w.dataLayer = w.dataLayer || [];
+    if (typeof w.gtag !== 'function') {
+      w.gtag = function gtag() {
+        // Must push the Arguments object, which is the shape gtag.js replays.
+        w.dataLayer!.push(arguments);
+      };
+    }
+    const clean: Record<string, string | number | boolean> = {};
+    if (params) {
+      for (const [key, value] of Object.entries(params)) {
+        if (value !== undefined) clean[key] = value;
+      }
+    }
+    w.gtag('event', name, clean);
   } catch {
     // Never let analytics break the UI.
   }

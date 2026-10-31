@@ -5,6 +5,8 @@ import PracticeFlow from '@/components/PracticeFlow';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { loadStaticProblemsSafe } from '@/lib/problems-source';
+import { headers } from 'next/headers';
+import { keywordTitle, localeAlternates, normalizeLocale } from '@/lib/seo';
 
 const LEVEL_INFO: Record<string, { title: string; description: string; color: string }> = {
   beginner: { title: 'Beginner Problems', description: 'Start here with basic calculus.', color: 'green' },
@@ -25,9 +27,21 @@ export async function generateMetadata({ params }: { params: { level: string } }
   const library = await loadStaticProblemsSafe();
   const count = library.filter((p) => p && p.difficulty === params.level).length;
   const robots = count > 0 ? undefined : { index: false, follow: true };
+  const headersList = await headers();
+  const locale = normalizeLocale(headersList.get('x-next-locale'));
+  const titles: Record<string, string> = {
+    beginner: locale === 'es' ? 'Práctica de Cálculo Básica' : locale === 'pt' ? 'Prática de Cálculo Básica' : 'Beginner Calculus Practice',
+    intermediate: locale === 'es' ? 'Práctica de Cálculo Intermedia' : locale === 'pt' ? 'Prática de Cálculo Intermediária' : 'Intermediate Calculus Practice',
+    advanced: locale === 'es' ? 'Práctica de Cálculo Avanzada' : locale === 'pt' ? 'Prática de Cálculo Avançada' : 'Advanced Calculus Practice',
+  };
+  const title = keywordTitle(titles[params.level] || info.title);
+  const alternates = localeAlternates(`/practice/${params.level}`, locale);
   return {
-    title: info.title + ' | Derivative Calculator AI',
+    title: { absolute: title },
+    description: info.description,
     robots,
+    alternates,
+    openGraph: { title, description: info.description, url: alternates.canonical, type: 'website' },
   };
 }
 

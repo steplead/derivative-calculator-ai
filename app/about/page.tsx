@@ -1,24 +1,20 @@
 import { headers } from 'next/headers';
 import type { Metadata } from 'next';
 import StructuredData from '@/components/StructuredData';
+import { localeAlternates, normalizeLocale, pageTitle } from '@/lib/seo';
 
 export async function generateMetadata(): Promise<Metadata> {
     const headersList = await headers();
-    const locale = headersList.get("x-next-locale") || "en";
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://derivativecalculatorai.com';
-    const url = locale === 'en' ? `${siteUrl}/about` : `${siteUrl}/${locale}/about`;
+    const locale = normalizeLocale(headersList.get("x-next-locale"));
+    const title = pageTitle('about', locale);
+    const description = 'How the derivative calculator checks each step and which calculus tools sit next to it.';
+    const alternates = localeAlternates('/about', locale);
 
     return {
-        title: "About Us - Mission & Team | Derivative Calculator AI",
-        description: "Learn more about the mission and technology behind the world's most advanced AI-first mathematical toolkit.",
-        alternates: {
-            canonical: url,
-            languages: {
-                'en': `${siteUrl}/about`,
-                'es': `${siteUrl}/es/about`,
-                'pt': `${siteUrl}/pt/about`,
-            }
-        }
+        title: { absolute: title },
+        description,
+        alternates,
+        openGraph: { title, description, url: alternates.canonical, type: 'website' },
     };
 }
 

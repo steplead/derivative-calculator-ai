@@ -9,6 +9,7 @@ const MathDisplay = dynamic(() => import('./MathDisplay'), { ssr: false });
 const Graph = dynamic(() => import('./Graph'), { ssr: false });
 const StepDisplay = dynamic(() => import('./StepDisplay'), { ssr: false });
 import AdShell from './AdShell';
+import ShareResultCard from './ShareResultCard';
 import { useTurnstile, addTokenToUrl } from './TurnstileProvider';
 import { trackEvent } from '@/lib/analytics';
 
@@ -20,9 +21,12 @@ type CalculatorProps = {
     initialResult?: any;
     dict?: any;
     embedded?: boolean;
+    /** Render the share card under a successful result (homepage). Problem pages pass their own. */
+    showShare?: boolean;
+    shareUrl?: string;
 };
 
-export default function Calculator({ initialEquation = '', initialLimitTo = '0', mode = 'derivative', initialResult, dict, embedded = false }: CalculatorProps) {
+export default function Calculator({ initialEquation = '', initialLimitTo = '0', mode = 'derivative', initialResult, dict, embedded = false, showShare = false, shareUrl = '' }: CalculatorProps) {
     const searchParams = useSearchParams();
     const equationParam = searchParams.get('equation');
     const limitToParam = searchParams.get('to');
@@ -112,15 +116,21 @@ export default function Calculator({ initialEquation = '', initialLimitTo = '0',
             setResult(dataFast);
             setLoading(false); // Stop main loading spinner
 
-            // P3-OBS-3: track a successful derivative calculation.
-            // Note: only the mode + derived length are sent — never the raw formula.
-            if (mode === 'derivative') {
-                trackEvent('derivative_calculate', {
-                    type: 'derivative',
-                    mode: 'derivative',
-                    formula_length: formula.length,
-                });
-            }
+            // Successful calculation only. The raw formula is never sent.
+            // derivative_calculate is the GA4 key event for the homepage tool.
+            // integral_calculate, limit_calculate, and ode_calculate are the
+            // matching events for the other tools.
+            const eventName =
+                mode === 'integral' ? 'integral_calculate'
+                    : mode === 'limit' ? 'limit_calculate'
+                        : mode === 'ode' ? 'ode_calculate'
+                            : 'derivative_calculate';
+            trackEvent(eventName, {
+                type: mode,
+                mode,
+                formula_length: formula.length,
+                source: 'client',
+            });
 
             // Step 2: Slow fetch (AI Explanation)
             // We keep the result but maybe show a loading indicator for the explanation part
@@ -207,8 +217,10 @@ export default function Calculator({ initialEquation = '', initialLimitTo = '0',
                     )}
 
                     <button
+                        type="button"
                         onClick={() => handleCalculate()}
                         disabled={loading}
+                        aria-label={getButtonText()}
                         className="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed min-w-[120px] h-[52px]"
                         style={{ minHeight: '52px' }}
                     >
@@ -269,6 +281,15 @@ export default function Calculator({ initialEquation = '', initialLimitTo = '0',
                             </div>
                         )}
                     </div>
+                )}
+
+                {showShare && result && (
+                    <ShareResultCard
+                        formula={input}
+                        result={result.solution_raw || result.solution}
+                        url={shareUrl || (typeof window !== 'undefined' ? window.location.href : '')}
+                        type={mode}
+                    />
                 )}
 
                 {/* Ad Unit - Hide in embedded mode */}

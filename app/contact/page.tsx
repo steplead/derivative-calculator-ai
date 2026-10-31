@@ -2,24 +2,20 @@ import { Mail, Globe, Shield } from "lucide-react";
 
 import { headers } from 'next/headers';
 import type { Metadata } from 'next';
+import { localeAlternates, normalizeLocale, pageTitle } from '@/lib/seo';
 
 export async function generateMetadata(): Promise<Metadata> {
     const headersList = await headers();
-    const locale = headersList.get("x-next-locale") || "en";
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://derivativecalculatorai.com';
-    const url = locale === 'en' ? `${siteUrl}/contact` : `${siteUrl}/${locale}/contact`;
+    const locale = normalizeLocale(headersList.get("x-next-locale"));
+    const title = pageTitle('contact', locale);
+    const description = 'Contact the derivative calculator team about a wrong step, a missing function, or a partnership.';
+    const alternates = localeAlternates('/contact', locale);
 
     return {
-        title: "Contact Support | Derivative Calculator AI",
-        description: "Get in touch with our engineering team for support, partnership inquiries, or feedback on our mathematical toolkit.",
-        alternates: {
-            canonical: url,
-            languages: {
-                'en': `${siteUrl}/contact`,
-                'es': `${siteUrl}/es/contact`,
-                'pt': `${siteUrl}/pt/contact`,
-            }
-        }
+        title: { absolute: title },
+        description,
+        alternates,
+        openGraph: { title, description, url: alternates.canonical, type: 'website' },
     };
 }
 

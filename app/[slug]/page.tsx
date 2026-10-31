@@ -1,7 +1,7 @@
 import { headers } from 'next/headers';
 export const runtime = 'edge';
 import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 import Calculator from '@/components/Calculator';
 // EmbedWidget removed to prevent API abuse
 import StructuredData, { generateMathSolverData } from '@/components/StructuredData';
@@ -16,10 +16,21 @@ import type { DerivativeSolution } from '@/lib/math/math-core';
 import { fetchRelatedFromD1 } from '@/lib/d1/related-problems';
 import {
     loadStaticProblemsSafe,
-    findStaticProblem,
     pickStableRelated,
     getDerivativeCanonicalMap,
 } from '@/lib/problems-source';
+import indexableProblemSlugs from '@/data/sitemap-problem-slugs.json';
+import {
+    keywordTitle,
+    localeAlternates,
+    normalizeLocale,
+    plusFreeSlug,
+    problemHref,
+    resolveLibraryProblem,
+    safeDecodeSlug,
+} from '@/lib/seo';
+
+const INDEXABLE_PROBLEM_SLUGS = new Set<string>(indexableProblemSlugs);
 import { parseSlugToMath } from '@/lib/slug-math';
 import Link from 'next/link';
 
@@ -141,8 +152,20 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     // RC-8 FIX: the authoritative library is the FIRST source here, exactly as
     // in the page body, so <title> and <h1> can never disagree again. The old
     // `cache: 'force-cache'` fetches never returned data on this platform.
+    const decodedSlug = safeDecodeSlug(slug);
+    if (decodedSlug.includes('+') || decodedSlug.includes(' ')) {
+        const headersListEarly = await headers();
+        const earlyLocale = normalizeLocale(headersListEarly.get('x-next-locale'));
+        const preview = await loadStaticProblemsSafe();
+        const restored = resolveLibraryProblem(preview, decodedSlug);
+        const target = restored
+            ? problemHref(restored.slug, earlyLocale)
+            : (earlyLocale === 'en' ? '/integral' : `/${earlyLocale}/integral`);
+        permanentRedirect(target);
+    }
+
     const library = await loadStaticProblemsSafe();
-    const libraryProblem = findStaticProblem(library, slug);
+    const libraryProblem = resolveLibraryProblem(library, slug);
     // Any slug NOT present in the static library (/problems.json) belongs to an
     // unbounded URL surface: it may resolve via D1, the /api/problem endpoint,
     // or the slug→math heuristic. The sitemap lists only library slugs, so such
@@ -167,7 +190,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     }
 
     const headersList = await headers();
-    const locale = headersList.get("x-next-locale") || "en";
+    const locale = normalizeLocale(headersList.get("x-next-locale"));
 
     // D1 Lookup (Zero-hop)
     if (!problem) {
@@ -199,16 +222,13 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 
     const t = getLocalizedContent(locale, problem.formula, problem.type);
 
-    // Use host-relative or dynamic canonical based on env
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://derivativecalculatorai.com';
-    const baseUrlWithLocale = locale === 'en' ? siteUrl : `${siteUrl}/${locale}`;
     // P2-G: derivative near-duplicates (same formula -> identical title+content)
     // point their canonical at the group's primary slug to consolidate indexing
     // equity. Non-duplicate slugs (and all limit/integral slugs) stay
     // self-canonical. Fail-closed: an empty map leaves `url` === self.
     const canonMap = await getDerivativeCanonicalMap();
-    const canonicalSlug = canonMap.get(slug) || slug;
-    const url = `${baseUrlWithLocale}/${canonicalSlug}`;
+    const librarySlug = libraryProblem?.slug || slug;
+    const canonicalSlug = plusFreeSlug(canonMap.get(librarySlug) || librarySlug);
     // P2-G follow-up: slugs that belong to a derivative near-duplicate group are
     // intentionally indexable. The canonical tag above already points every
     // non-primary member at the group's primary slug, so indexing equity stays
@@ -216,28 +236,27 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     // source of truth) and therefore survives any regeneration of
     // lib/noindex-slugs.ts from scripts/noindex_list.txt. Slugs outside the
     // library stay noindex (RC-8 guard) — only the NOINDEX_SLUGS overlap is lifted.
+    // Impression / textbook slugs in the sitemap allowlist stay indexable even
+    // when an older noindex list still names them.
     const derivDupSlugs = new Set<string>([...canonMap.keys(), ...canonMap.values()]);
-    const lockedNoindex = (NOINDEX_SLUGS.has(slug) && !derivDupSlugs.has(slug)) || isOutOfLibrary;
+    const selfCanonical = plusFreeSlug(librarySlug) === canonicalSlug;
+    const forceIndex = Boolean(libraryProblem) && selfCanonical && INDEXABLE_PROBLEM_SLUGS.has(canonicalSlug);
+    const lockedNoindex = !forceIndex && ((NOINDEX_SLUGS.has(librarySlug) && !derivDupSlugs.has(librarySlug)) || isOutOfLibrary);
+    const alternates = localeAlternates(`/${canonicalSlug}`, locale);
+    const title = keywordTitle(t.title);
 
     return {
-        title: t.title,
+        title: { absolute: title },
         description: t.description,
         robots: lockedNoindex ? {
             index: false,
             follow: true,
         } : undefined,
-        alternates: {
-            canonical: url,
-            languages: {
-                'en': `${siteUrl}/${canonicalSlug}`,
-                'es': `${siteUrl}/es/${canonicalSlug}`,
-                'pt': `${siteUrl}/pt/${canonicalSlug}`,
-            }
-        },
+        alternates,
         openGraph: {
-            title: t.title,
+            title,
             description: t.description,
-            url,
+            url: alternates.canonical,
             type: 'website',
         },
     };
@@ -247,7 +266,16 @@ export default async function ProblemPage({ params }: { params: { slug: string }
     const { slug } = params;
     const baseUrl = getBaseUrl();
     const headersList = await headers();
-    const locale = headersList.get("x-next-locale") || "en";
+    const locale = normalizeLocale(headersList.get("x-next-locale"));
+    const decodedSlug = safeDecodeSlug(slug);
+    if (decodedSlug.includes('+') || decodedSlug.includes(' ')) {
+        const preview = await loadStaticProblemsSafe();
+        const restored = resolveLibraryProblem(preview, decodedSlug);
+        const target = restored
+            ? problemHref(restored.slug, locale)
+            : (locale === 'en' ? '/integral' : `/${locale}/integral`);
+        permanentRedirect(target);
+    }
 
     let problem: Problem | null = null;
     let relatedProblems: Problem[] = [];
@@ -275,7 +303,7 @@ export default async function ProblemPage({ params }: { params: { slug: string }
         // ------------------------------------------------------------------
         const library = await loadStaticProblemsSafe();
 
-        problem = findStaticProblem(library, slug);
+        problem = resolveLibraryProblem(library, slug);
 
         // Type hint for stable related selection (falls back to slug prefix).
         const problemTypeHint = problem?.type
@@ -380,8 +408,7 @@ export default async function ProblemPage({ params }: { params: { slug: string }
 
         const t = getLocalizedContent(locale, safeProblem.formula, safeProblem.type);
         const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://derivativecalculatorai.com';
-        const baseUrlWithLocale = locale === 'en' ? siteUrl : `${siteUrl}/${locale}`;
-        const url = `${baseUrlWithLocale}/${slug}`;
+        const url = `${siteUrl}${problemHref(slug, locale)}`;
 
         // Generate Schema.org structured data
         const mathSolverSchema = generateMathSolverData({
@@ -401,7 +428,7 @@ export default async function ProblemPage({ params }: { params: { slug: string }
                             { name: 'Home', href: '/' },
                             { name: 'Problems', href: '/problems' },
                             { name: safeProblem.type || 'Derivative', href: `/problems/${safeProblem.type || 'derivative'}` },
-                            { name: t.h1, href: `/${slug}` }
+                            { name: t.h1, href: problemHref(slug, locale) }
                         ]}
                     />
                 </div>
@@ -512,7 +539,7 @@ export default async function ProblemPage({ params }: { params: { slug: string }
                             return (
                                 <a
                                     key={p.slug}
-                                    href={`/${locale === 'en' ? '' : locale + '/'}${p.slug}`}
+                                    href={problemHref(p.slug, locale)}
                                     className="block p-4 rounded-lg border border-gray-200 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-400 transition-colors bg-gray-50 dark:bg-slate-800"
                                 >
                                     <div className="font-semibold text-gray-900 dark:text-white">

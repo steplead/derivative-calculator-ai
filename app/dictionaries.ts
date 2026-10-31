@@ -45,7 +45,7 @@ export const dictionaries = {
         },
         home: {
             h1: "Derivative Calculator",
-            subtitle: "Instant step-by-step solutions powered by SymPy & Gemini.",
+            subtitle: "Free derivative solver with step-by-step solutions for polynomials, trig, exponentials, and logs.",
             howToTitle: "How to use this Derivative Calculator",
             howToText: "This tool uses advanced AI to help you solve calculus problems. Simply enter your function into the box above and click \"Solve\".",
             rulesTitle: "Common Derivative Rules",
@@ -160,7 +160,7 @@ export const dictionaries = {
         },
         home: {
             h1: "Calculadora de Derivadas",
-            subtitle: "Soluciones paso a paso instantáneas con SymPy y Gemini.",
+            subtitle: "Solver de derivadas gratis con solución paso a paso para polinomios, trigonometría y logaritmos.",
             howToTitle: "Cómo usar esta Calculadora",
             howToText: "Esta herramienta usa IA avanzada para resolver problemas de cálculo. Ingresa tu función arriba y haz clic en \"Resolver\".",
             rulesTitle: "Reglas de Derivación Comunes",
@@ -275,7 +275,7 @@ export const dictionaries = {
         },
         home: {
             h1: "Calculadora de Derivadas",
-            subtitle: "Soluções passo a passo instantâneas com SymPy e Gemini.",
+            subtitle: "Solver de derivadas grátis com solução passo a passo para polinômios, trigonometria e logaritmos.",
             howToTitle: "Como usar esta Calculadora",
             howToText: "Esta ferramenta usa IA avançada para resolver problemas de cálculo. Digite sua função acima e clique em \"Resolver\".",
             rulesTitle: "Regras de Derivação Comuns",

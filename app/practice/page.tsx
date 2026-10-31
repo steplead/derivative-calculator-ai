@@ -1,7 +1,9 @@
 import Link from 'next/link';
+import { headers } from 'next/headers';
 import type { Metadata } from 'next';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { loadStaticProblemsSafe } from '@/lib/problems-source';
+import { localeAlternates, normalizeLocale, pageTitle } from '@/lib/seo';
 
 const LEVELS = [
   {
@@ -21,12 +23,19 @@ const LEVELS = [
   },
 ];
 
-export const metadata: Metadata = {
-  title: 'Practice Calculus Problems by Difficulty | Derivative Calculator AI',
-  description:
-    'Practice calculus at your level — Beginner, Intermediate, and Advanced problem sets, each linking to a full step-by-step AI solution.',
-  alternates: { canonical: 'https://derivativecalculatorai.com/practice' },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const headersList = await headers();
+  const locale = normalizeLocale(headersList.get('x-next-locale'));
+  const title = pageTitle('practice', locale);
+  const description = 'Practice calculus by difficulty. Each problem links to a full step-by-step solution.';
+  const alternates = localeAlternates('/practice', locale);
+  return {
+    title: { absolute: title },
+    description,
+    alternates,
+    openGraph: { title, description, url: alternates.canonical, type: 'website' },
+  };
+}
 
 export default async function PracticeIndex() {
   const library = await loadStaticProblemsSafe();

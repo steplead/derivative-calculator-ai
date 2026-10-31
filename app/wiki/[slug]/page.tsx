@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 
 import wikiData from '@/data/wiki.json';
+import { keywordTitle, localeAlternates, normalizeLocale } from '@/lib/seo';
 
 export const runtime = 'edge';
 
@@ -21,22 +22,21 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     const { slug } = params;
     const topic = wikiData.find((t: any) => t.slug === slug);
     const headersList = await headers();
-    const locale = headersList.get("x-next-locale") || "en";
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://derivativecalculatorai.com';
-    const url = locale === 'en' ? `${siteUrl}/wiki/${slug}` : `${siteUrl}/${locale}/wiki/${slug}`;
+    const locale = normalizeLocale(headersList.get("x-next-locale"));
 
     if (topic) {
+        const title = keywordTitle(`${topic.title}: Calculus Guide`);
+        const alternates = localeAlternates(`/wiki/${slug}`, locale);
         return {
-            title: `${topic.title} - Math Wiki`,
+            title: { absolute: title },
             description: topic.description,
-            alternates: {
-                canonical: url,
-                languages: {
-                    'en': `${siteUrl}/wiki/${slug}`,
-                    'es': `${siteUrl}/es/wiki/${slug}`,
-                    'pt': `${siteUrl}/pt/wiki/${slug}`,
-                }
-            }
+            alternates,
+            openGraph: {
+                title,
+                description: topic.description,
+                url: alternates.canonical,
+                type: 'article',
+            },
         };
     }
 

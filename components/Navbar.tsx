@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import ThemeToggle from './ThemeToggle';
@@ -8,7 +8,13 @@ import LanguageSwitcher from './LanguageSwitcher';
 
 export default function Navbar({ dict }: { dict: any }) {
     const [isOpen, setIsOpen] = useState(false);
+    const [logoSrc, setLogoSrc] = useState('/logo-light.webp');
     const pathname = usePathname();
+
+    useEffect(() => {
+        const dark = document.documentElement.classList.contains('dark');
+        setLogoSrc(dark ? '/logo-dark.webp' : '/logo-light.webp');
+    }, []);
 
     // Helper to check if a link is active
     const isActive = (path: string) => {
@@ -38,18 +44,13 @@ export default function Navbar({ dict }: { dict: any }) {
                     <div className="flex-shrink-0 flex items-center pr-4">
                         <Link href="/" className="transition-transform hover:scale-105 active:scale-95">
                             <img
-                                src="/logo-light.webp"
+                                src={logoSrc}
                                 alt="Derivative Calculator AI"
                                 width={157}
                                 height={48}
-                                className="h-10 sm:h-12 w-auto dark:hidden"
-                            />
-                            <img
-                                src="/logo-dark.webp"
-                                alt="Derivative Calculator AI"
-                                width={157}
-                                height={48}
-                                className="h-10 sm:h-12 w-auto hidden dark:block"
+                                decoding="async"
+                                fetchPriority="low"
+                                className="h-10 sm:h-12 w-auto"
                             />
                         </Link>
                     </div>

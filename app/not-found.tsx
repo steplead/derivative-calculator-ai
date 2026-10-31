@@ -1,7 +1,13 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { headers } from 'next/headers';
 import Calculator from '@/components/Calculator';
 import { sanitizeSlug, sanitizeMathFormula } from '@/utils/sanitize';
+
+export const metadata: Metadata = {
+    title: 'Page not found',
+    robots: { index: false, follow: false },
+};
 
 // Server-side 404 page with proper status code
 export default function NotFound() {

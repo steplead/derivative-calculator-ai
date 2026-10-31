@@ -32,7 +32,7 @@ export default function AskWhyButton({ equation, step, rule, locale }: AskWhyBut
       const response = await fetch('/api/explain-step', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ equation, step, rule: rule || '' }),
+        body: JSON.stringify({ equation, step, rule: rule || '', locale: locale === 'es' || locale === 'pt' ? locale : 'en' }),
       });
       const data = await response.json();
       setWhy(data.why || data.error || '');

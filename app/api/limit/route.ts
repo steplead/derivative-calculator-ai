@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import nerdamer from 'nerdamer';
-import 'nerdamer/Calculus';
 import { OpenAI } from 'openai';
 import { getCachedExplanation, setCachedExplanation } from '@/utils/cache';
 import { performSecurityCheck } from '@/utils/security';
-import { normalizeExpression } from '@/lib/math/math-core';
+import { calculateLimit } from '@/lib/math/integral-limit';
 
 export const runtime = 'edge';
 
@@ -13,7 +11,8 @@ export async function GET(req: NextRequest) {
     const expression = searchParams.get('equation');
     const target = searchParams.get('to') || '0';
     // AI explanation enabled when an API key is configured (see derivative route for rationale).
-    const includeAi = !!process.env.OPENROUTER_API_KEY;
+    const includeAiParam = searchParams.get('includeAi') ?? searchParams.get('include_ai');
+    const includeAi = includeAiParam === 'false' ? false : !!process.env.OPENROUTER_API_KEY;
 
     if (!expression) {
         return NextResponse.json({ error: "No equation provided" }, { status: 400, headers: { 'Cache-Control': 'no-store' } });
@@ -55,18 +54,26 @@ export async function GET(req: NextRequest) {
     }
 
     try {
-        // 1. Calculate Limit
+        // 1. Deterministic limit. The steps name the technique and why it applies.
         let solutionLatex = "";
         let solutionRaw = "";
+        let ruleUsed = "";
+        let deterministicSteps: string[] = [];
         try {
-            const l = nerdamer(`limit(${normalizeExpression(expression)}, x, ${target})`);
-            solutionLatex = l.toTeX();
-            solutionRaw = l.toString();
+            const solved = calculateLimit(expression, target);
+            if (solved.isValid) {
+                solutionLatex = solved.solutionLatex;
+                solutionRaw = solved.solutionRaw;
+                ruleUsed = solved.rule;
+                deterministicSteps = solved.steps;
+            }
         } catch (nerdError) {
             console.error("Nerdamer Limit Error:", nerdError);
         }
 
-        let stepsContent = "Step-by-step solution unavailable.";
+        let stepsContent = deterministicSteps.length > 0
+            ? deterministicSteps.map((step, index) => `**Step ${index + 1}:** ${step}`).join('\n\n')
+            : "Step-by-step solution unavailable.";
         let aiExplanation = "AI explanation unavailable.";
 
         const apiKey = process.env.OPENROUTER_API_KEY;
@@ -120,7 +127,8 @@ export async function GET(req: NextRequest) {
             solution: solutionLatex,
             solution_raw: solutionRaw,
             steps: stepsContent,
-            ai_explanation: aiExplanation
+            ai_explanation: aiExplanation,
+            rule: ruleUsed,
         }, { headers: { 'Cache-Control': 'private, no-store' } });
 
     } catch (e: any) {

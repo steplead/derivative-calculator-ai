@@ -63,7 +63,18 @@ function polyline(points: Sample[], xOf: (_x: number) => number, yOf: (_y: numbe
  * SVG markup for f and, when it samples cleanly, f'. Returns null when f
  * itself has no visible points (for example a derivative that does not exist).
  */
+const svgCache = new Map<string, string | null>();
+
 export function renderDerivativeSvg(fn: string, derivative: string | null, ariaLabel: string): string | null {
+  const cacheKey = `${fn}|${derivative || ''}`;
+  if (svgCache.has(cacheKey)) return svgCache.get(cacheKey) || null;
+  const svg = renderDerivativeSvgUncached(fn, derivative, ariaLabel);
+  if (svgCache.size > 64) svgCache.clear();
+  svgCache.set(cacheKey, svg);
+  return svg;
+}
+
+function renderDerivativeSvgUncached(fn: string, derivative: string | null, ariaLabel: string): string | null {
   const width = 640;
   const height = 280;
   const pad = 28;

@@ -5,6 +5,7 @@
  */
 
 import { calculateDerivative } from '@/lib/math/math-core';
+import { calculateIntegral, calculateLimit } from '@/lib/math/integral-limit';
 
 export const PRACTICE_RULES = [
   'power',
@@ -29,6 +30,10 @@ export type PracticeProblem = {
   /** Engine derivative. Returned to the checker path, not required by the client. */
   answerRaw: string;
   hintKey: 'power' | 'product' | 'quotient' | 'chain' | 'trig' | 'exp' | 'log';
+  topic?: 'derivative' | 'integral' | 'limit';
+  limitTo?: string;
+  integralRule?: string;
+  limitRule?: string;
 };
 
 function mulberry32(seed: number): () => number {
@@ -129,4 +134,124 @@ export function isPracticeRule(value: string): value is PracticeRule {
 
 export function isPracticeDifficulty(value: string): value is PracticeDifficulty {
   return (PRACTICE_DIFFICULTIES as readonly string[]).includes(value);
+}
+
+export const INTEGRAL_RULES = ['power', 'substitution', 'parts', 'trigonometric', 'exponential', 'logarithmic'] as const;
+export const LIMIT_RULES = ['direct', 'algebraic', 'standard'] as const;
+export type IntegralRule = (typeof INTEGRAL_RULES)[number];
+export type LimitRule = (typeof LIMIT_RULES)[number];
+export type PracticeTopic = 'derivative' | 'integral' | 'limit';
+
+export function isIntegralRule(value: string): value is IntegralRule {
+  return (INTEGRAL_RULES as readonly string[]).includes(value);
+}
+
+export function isLimitRule(value: string): value is LimitRule {
+  return (LIMIT_RULES as readonly string[]).includes(value);
+}
+
+function buildIntegral(rule: IntegralRule, difficulty: PracticeDifficulty, rand: () => number): string {
+  const coeff = () => integer(rand, 2, difficulty === 'beginner' ? 4 : 6);
+  if (rule === 'power') {
+    if (difficulty === 'beginner') return `x^${integer(rand, 2, 4)}`;
+    if (difficulty === 'intermediate') return `${coeff()}*x^${integer(rand, 2, 5)}`;
+    return `x^${integer(rand, 2, 4)}+${coeff()}`;
+  }
+  if (rule === 'substitution') {
+    const a = coeff();
+    if (difficulty === 'beginner') return pick(rand, [`sin(${a}*x)`, `cos(${a}*x)`] as const);
+    if (difficulty === 'intermediate') return `exp(${a}*x)`;
+    return `(x+${integer(rand, 1, 4)})^${integer(rand, 2, 3)}`;
+  }
+  if (rule === 'parts') {
+    return difficulty === 'beginner' ? 'x*exp(x)' : pick(rand, ['x*sin(x)', 'x*cos(x)', 'x*exp(x)'] as const);
+  }
+  if (rule === 'trigonometric') return pick(rand, ['sin(x)', 'cos(x)'] as const);
+  if (rule === 'exponential') return difficulty === 'beginner' ? 'exp(x)' : `${integer(rand, 2, 5)}^x`;
+  return difficulty === 'beginner' ? '1/x' : `1/(${coeff()}*x)`;
+}
+
+function buildLimit(rule: LimitRule, difficulty: PracticeDifficulty, rand: () => number): { expression: string; limitTo: string } {
+  if (rule === 'direct') {
+    const point = integer(rand, 1, 4);
+    if (difficulty === 'beginner') return { expression: `x+${integer(rand, 1, 5)}`, limitTo: String(point) };
+    return { expression: `x^2+${integer(rand, 1, 3)}`, limitTo: String(point) };
+  }
+  if (rule === 'standard') {
+    if (difficulty === 'beginner') return { expression: 'sin(x)/x', limitTo: '0' };
+    if (difficulty === 'intermediate') return { expression: 'sin(2*x)/x', limitTo: '0' };
+    return { expression: '(1-cos(x))/x^2', limitTo: '0' };
+  }
+  const a = integer(rand, 1, 4);
+  return { expression: `(x^2-${a * a})/(x-${a})`, limitTo: String(a) };
+}
+
+export function generateIntegralProblem(rule: IntegralRule, difficulty: PracticeDifficulty, seed: number): PracticeProblem {
+  const base = Math.abs(Math.floor(seed)) % 100000;
+  for (let attempt = 0; attempt < 8; attempt++) {
+    const rand = mulberry32(base + attempt * 97);
+    const expression = buildIntegral(rule, difficulty, rand);
+    try {
+      const solved = calculateIntegral(expression);
+      if (!solved.isValid || !solved.solutionRaw) continue;
+      return {
+        expression,
+        rule: 'power',
+        difficulty,
+        seed: base + attempt * 97,
+        answerRaw: solved.solutionRaw,
+        hintKey: rule === 'parts' ? 'product' : rule === 'substitution' ? 'chain' : rule === 'logarithmic' ? 'log' : rule === 'exponential' ? 'exp' : rule === 'trigonometric' ? 'trig' : 'power',
+        topic: 'integral',
+        integralRule: rule,
+      };
+    } catch {
+      continue;
+    }
+  }
+  return {
+    expression: 'x^2',
+    rule: 'power',
+    difficulty,
+    seed: base,
+    answerRaw: '(1/3)*x^3',
+    hintKey: 'power',
+    topic: 'integral',
+    integralRule: 'power',
+  };
+}
+
+export function generateLimitProblem(rule: LimitRule, difficulty: PracticeDifficulty, seed: number): PracticeProblem {
+  const base = Math.abs(Math.floor(seed)) % 100000;
+  for (let attempt = 0; attempt < 8; attempt++) {
+    const rand = mulberry32(base + attempt * 97);
+    const built = buildLimit(rule, difficulty, rand);
+    try {
+      const solved = calculateLimit(built.expression, built.limitTo);
+      if (!solved.isValid || !solved.solutionRaw) continue;
+      return {
+        expression: built.expression,
+        rule: 'power',
+        difficulty,
+        seed: base + attempt * 97,
+        answerRaw: solved.solutionRaw,
+        hintKey: rule === 'standard' ? 'trig' : rule === 'direct' ? 'power' : 'quotient',
+        topic: 'limit',
+        limitTo: solved.target,
+        limitRule: rule,
+      };
+    } catch {
+      continue;
+    }
+  }
+  return {
+    expression: 'sin(x)/x',
+    rule: 'power',
+    difficulty,
+    seed: base,
+    answerRaw: '1',
+    hintKey: 'trig',
+    topic: 'limit',
+    limitTo: '0',
+    limitRule: 'standard',
+  };
 }

@@ -1,0 +1,93 @@
+# Derivative Calculator AI
+
+> Free calculus calculators with step-by-step work and a why-explanation on each step. No sign-up. English, Spanish (/es), and Portuguese (/pt).
+
+## Calculators
+
+- [Derivative calculator](https://derivativecalculatorai.com/): Differentiate a function of x and show the rule, the steps, and why each step is valid.
+- [Integral calculator](https://derivativecalculatorai.com/integral): Indefinite integrals with the antiderivative, +C, steps, and a check-answer box.
+- [Limit calculator](https://derivativecalculatorai.com/limit): Limits with the technique named, steps, and a check-answer box.
+- [Partial derivative calculator](https://derivativecalculatorai.com/partial-derivative-calculator): Differentiate in one variable while the others stay constant.
+- [Implicit differentiation calculator](https://derivativecalculatorai.com/implicit-differentiation-calculator): Find dy/dx from an equation in x and y.
+- [Chain rule calculator](https://derivativecalculatorai.com/chain-rule-calculator): Break a composition into the outer derivative times the inner derivative.
+- [Matrix calculator](https://derivativecalculatorai.com/matrix): Determinant, inverse, transpose, rank, and row reduction.
+- [ODE solver](https://derivativecalculatorai.com/ode): First- and second-order ordinary differential equations.
+- [Trig derivative hub](https://derivativecalculatorai.com/derivatives-of-trig-functions): The six trig derivatives and the inverse-trig family, with links to each worked page.
+- [Practice](https://derivativecalculatorai.com/practice): Practice problems by difficulty, with a streak saved on the device.
+
+## Comparisons
+
+- [Symbolab alternative](https://derivativecalculatorai.com/symbolab-alternative): What this free calculator does, next to wording from Symbolab’s own registration page.
+- [Derivative calculator comparison](https://derivativecalculatorai.com/derivative-calculator-comparison): Sourced notes on steps and accounts for this site, Symbolab, Wolfram|Alpha, Mathway, and derivative-calculator.net.
+
+## Derivative pages
+
+- [Derivative of 1-x](https://derivativecalculatorai.com/derivative-of-1-minus-x): d/dx 1-x = -1.
+- [Derivative of 1/x](https://derivativecalculatorai.com/derivative-of-1-over-x): d/dx 1/x = -x^(-2).
+- [Derivative of 1/x^2](https://derivativecalculatorai.com/derivative-of-1-over-x-squared): d/dx 1/x^2 = -2*x^(-3).
+- [Derivative of 10^x](https://derivativecalculatorai.com/derivative-of-10-to-the-x): d/dx 10^x = 10^x*log(10).
+- [Derivative of 2^x](https://derivativecalculatorai.com/derivative-of-2-to-the-x): d/dx 2^x = 2^x*log(2).
+- [Derivative of 2x](https://derivativecalculatorai.com/derivative-of-2x): d/dx 2x = 2.
+- [Derivative of 3x^2](https://derivativecalculatorai.com/derivative-of-3x-squared): d/dx 3x^2 = 6*x.
+- [Derivative of 5x](https://derivativecalculatorai.com/derivative-of-5x): d/dx 5x = 5.
+- [Derivative of |x|](https://derivativecalculatorai.com/derivative-of-abs-x): d/dx |x| = abs(x)^(-1)*x.
+- [Derivative of arccos(x)](https://derivativecalculatorai.com/derivative-of-arccos-x): d/dx arccos(x) = -1/sqrt(1-x^2), for -1 < x < 1.
+- [Derivative of arcsin(x)](https://derivativecalculatorai.com/derivative-of-arcsin-x): d/dx arcsin(x) = 1/sqrt(1-x^2), for -1 < x < 1.
+- [Derivative of arctan(x)](https://derivativecalculatorai.com/derivative-of-arctan-x): d/dx arctan(x) = 1/(1+x^2), for every real x.
+- [Derivative of cbrt(x)](https://derivativecalculatorai.com/derivative-of-cbrt-x): d/dx cbrt(x) = (1/3)*x^(-2/3).
+- [Derivative of 5](https://derivativecalculatorai.com/derivative-of-constant): d/dx 5 = 0.
+- [Derivative of cos(2x)](https://derivativecalculatorai.com/derivative-of-cos-2x): d/dx cos(2x) = -2*sin(2*x).
+- [Derivative of cos^2(x)](https://derivativecalculatorai.com/derivative-of-cos-squared-x): d/dx cos^2(x) = -2*cos(x)*sin(x).
+- [Derivative of cos(x)](https://derivativecalculatorai.com/derivative-of-cos-x): d/dx cos(x) = -sin(x).
+- [Derivative of cosh(x)](https://derivativecalculatorai.com/derivative-of-cosh-x): d/dx cosh(x) = sinh(x).
+- [Derivative of cot(x)](https://derivativecalculatorai.com/derivative-of-cot-x): d/dx cot(x) = -csc(x)^2.
+- [Derivative of csc(x)](https://derivativecalculatorai.com/derivative-of-csc-x): d/dx csc(x) = -cot(x)*csc(x).
+- [Derivative of e^(2x)](https://derivativecalculatorai.com/derivative-of-e-to-the-2x): d/dx e^(2x) = 2*e^(2*x).
+- [Derivative of e^(-x)](https://derivativecalculatorai.com/derivative-of-e-to-the-minus-x): d/dx e^(-x) = -e^(-x).
+- [Derivative of e^x](https://derivativecalculatorai.com/derivative-of-e-to-the-x): d/dx e^x = e^x.
+- [Derivative of floor(x)](https://derivativecalculatorai.com/derivative-of-floor-x): The derivative of floor(x) is not defined for every real number: undefined at integers.
+- [Derivative of ln(2x)](https://derivativecalculatorai.com/derivative-of-ln-2x): d/dx ln(2x) = x^(-1).
+- [Derivative of ln(x)](https://derivativecalculatorai.com/derivative-of-ln-x): d/dx ln(x) = x^(-1).
+- [Derivative of log(x)](https://derivativecalculatorai.com/derivative-of-log-x): d/dx log(x) = x^(-1).
+- [Derivative of -x](https://derivativecalculatorai.com/derivative-of-minus-x): d/dx -x = -1.
+- [Derivative of pi](https://derivativecalculatorai.com/derivative-of-pi): d/dx pi = 0.
+- [Derivative of x^(1/2)](https://derivativecalculatorai.com/derivative-of-root-x): d/dx x^(1/2) = (1/2)*x^(-1/2).
+- [Derivative of sec(x)](https://derivativecalculatorai.com/derivative-of-sec-x): d/dx sec(x) = sec(x)*tan(x).
+- [Derivative of sign(x)](https://derivativecalculatorai.com/derivative-of-sign-x): d/dx sign(x) = 0.
+- [Derivative of sin(2x)](https://derivativecalculatorai.com/derivative-of-sin-2x): d/dx sin(2x) = 2*cos(2*x).
+- [Derivative of sin^2(x)](https://derivativecalculatorai.com/derivative-of-sin-squared-x): d/dx sin^2(x) = 2*cos(x)*sin(x).
+- [Derivative of sin(x)](https://derivativecalculatorai.com/derivative-of-sin-x): d/dx sin(x) = cos(x).
+- [Derivative of sinh(x)](https://derivativecalculatorai.com/derivative-of-sinh-x): d/dx sinh(x) = cosh(x).
+- [Derivative of sqrt(x)](https://derivativecalculatorai.com/derivative-of-sqrt-x): d/dx sqrt(x) = (1/2)*x^(-1/2).
+- [Derivative of tan^2(x)](https://derivativecalculatorai.com/derivative-of-tan-squared-x): d/dx tan^2(x) = 2*sec(x)^2*tan(x).
+- [Derivative of tan(x)](https://derivativecalculatorai.com/derivative-of-tan-x): d/dx tan(x) = sec(x)^2.
+- [Derivative of tanh(x)](https://derivativecalculatorai.com/derivative-of-tanh-x): d/dx tanh(x) = sech(x)^2.
+- [Derivative of x cos(x)](https://derivativecalculatorai.com/derivative-of-x-cos-x): d/dx x cos(x) = -sin(x)*x+cos(x).
+- [Derivative of x^3](https://derivativecalculatorai.com/derivative-of-x-cubed): d/dx x^3 = 3*x^2.
+- [Derivative of x e^x](https://derivativecalculatorai.com/derivative-of-x-e-to-the-x): d/dx x e^x = e^x+e^x*x.
+- [Derivative of x ln(x)](https://derivativecalculatorai.com/derivative-of-x-ln-x): d/dx x ln(x) = 1+log(x).
+- [Derivative of x+1](https://derivativecalculatorai.com/derivative-of-x-plus-1): d/dx x+1 = 1.
+- [Derivative of x sin(x)](https://derivativecalculatorai.com/derivative-of-x-sin-x): d/dx x sin(x) = cos(x)*x+sin(x).
+- [Derivative of x^2](https://derivativecalculatorai.com/derivative-of-x-squared): d/dx x^2 = 2*x.
+- [Derivative of x^2-1](https://derivativecalculatorai.com/derivative-of-x-squared-minus-1): d/dx x^2-1 = 2*x.
+- [Derivative of x^2+1](https://derivativecalculatorai.com/derivative-of-x-squared-plus-1): d/dx x^2+1 = 2*x.
+- [Derivative of x^4](https://derivativecalculatorai.com/derivative-of-x-to-the-4): d/dx x^4 = 4*x^3.
+
+## Wiki
+
+- [Chain Rule](https://derivativecalculatorai.com/wiki/chain-rule): Learn how to use the chain rule to find the derivative of composite functions.
+- [Definite Integrals](https://derivativecalculatorai.com/wiki/definite-integrals): Calculating the total accumulation or area under a curve between two limits.
+- [Definition of Derivative](https://derivativecalculatorai.com/wiki/definition-of-derivative): The formal limit definition that explains the concept of instantaneous rate of change.
+- [Exponential Derivatives](https://derivativecalculatorai.com/wiki/exponential-derivatives): Understanding the unique properties of the derivative of e^x and other bases.
+- [Fundamental Theorem of Calculus](https://derivativecalculatorai.com/wiki/fundamental-theorem-of-calculus): The theorem that links the concept of differentiating a function with the concept of integrating a function.
+- [Implicit Differentiation](https://derivativecalculatorai.com/wiki/implicit-differentiation): How to differentiate equations where y is not explicitly isolated.
+- [Integration by Parts](https://derivativecalculatorai.com/wiki/integration-by-parts): A technique for integration based on the product rule for derivatives.
+- [L'Hôpital's Rule](https://derivativecalculatorai.com/wiki/l-hopitals-rule): Using derivatives to find limits of indeterminate forms.
+- [Logarithmic Derivatives](https://derivativecalculatorai.com/wiki/logarithmic-derivatives): Derivatives of ln(x), ln(2x), and the natural log that this site writes as log(x).
+- [Mean Value Theorem](https://derivativecalculatorai.com/wiki/mean-value-theorem): A fundamental theorem linking the average rate of change to the instantaneous rate of change.
+- [Partial Derivatives](https://derivativecalculatorai.com/wiki/partial-derivatives): Find derivatives of multivariable functions with respect to one variable at a time.
+- [Power Rule](https://derivativecalculatorai.com/wiki/power-rule): The most fundamental rule for derivatives: d/dx(x^n) = nx^(n-1).
+- [Product Rule](https://derivativecalculatorai.com/wiki/product-rule): The product rule for finding the derivative of two functions multiplied together.
+- [Quotient Rule](https://derivativecalculatorai.com/wiki/quotient-rule): Learn the quotient rule for differentiating ratios of functions.
+- [Trigonometric Derivatives](https://derivativecalculatorai.com/wiki/trigonometric-derivatives): A guide to the derivatives of sine, cosine, tangent, and other trig functions.
+- [U-Substitution](https://derivativecalculatorai.com/wiki/u-substitution): The integration counterpart to the chain rule.

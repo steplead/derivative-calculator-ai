@@ -108,6 +108,18 @@ export default async function Home() {
         <p className="text-xl text-gray-600 dark:text-gray-400">
           {dict.home.subtitle}
         </p>
+        <p className="mt-4 text-base text-gray-700 dark:text-gray-300 leading-relaxed max-w-3xl mx-auto">
+          {guide.positioning}
+        </p>
+        <p className="mt-3 text-sm text-gray-600 dark:text-gray-400">
+          <Link href={localePath('/derivative-calculator-comparison', locale)} className="font-semibold text-blue-600 dark:text-blue-400 hover:underline">
+            {locale === 'es' ? 'Comparación de calculadoras' : locale === 'pt' ? 'Comparação de calculadoras' : 'Calculator comparison'}
+          </Link>
+          <span> · </span>
+          <Link href={localePath('/symbolab-alternative', locale)} className="font-semibold text-blue-600 dark:text-blue-400 hover:underline">
+            {locale === 'es' ? 'Alternativa a Symbolab' : locale === 'pt' ? 'Alternativa ao Symbolab' : 'Symbolab alternative'}
+          </Link>
+        </p>
       </div>
 
       <Suspense fallback={<div className="text-gray-900 dark:text-white text-center">{dict.common.loading}</div>}>

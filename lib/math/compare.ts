@@ -11,7 +11,7 @@ import nerdamer from 'nerdamer';
 import 'nerdamer/Calculus';
 // @ts-ignore
 import 'nerdamer/Algebra';
-import { normalizeExpression } from '@/lib/math/math-core';
+import { calculateDerivative, normalizeExpression } from '@/lib/math/math-core';
 
 const SAFE_CHARS = /^[0-9a-zA-Z+\-*/^().,=\s|]+$/;
 
@@ -100,4 +100,42 @@ export function answersEquivalent(expectedRaw: string, userAnswer: string): Equi
   }
   if (checked >= 3) return { match: true, method: 'numeric' };
   return { match: false, method: 'uncompared' };
+}
+
+function stripIntegrationConstant(answer: string): string {
+  return answer
+    .replace(/\+\s*C\b/gi, '')
+    .replace(/\bC\b/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+/**
+ * An antiderivative is right when it matches the engine result, or when
+ * differentiating it recovers the integrand (any constant is allowed).
+ */
+export function integralAnswersEquivalent(expectedRaw: string, userAnswer: string, integrand: string): Equivalence {
+  const stripped = stripIntegrationConstant(userAnswer);
+  if (!stripped) return { match: false, method: 'uncompared' };
+  const direct = answersEquivalent(expectedRaw, stripped);
+  if (direct.match) return direct;
+  try {
+    const differentiated = calculateDerivative(stripped);
+    if (!differentiated.isValid) return { match: false, method: 'uncompared' };
+    return answersEquivalent(normalizeExpression(integrand), differentiated.solutionRaw);
+  } catch {
+    return { match: false, method: 'uncompared' };
+  }
+}
+
+const POSITIVE_INFINITY = new Set(['infinity', 'inf', '∞', '+infinity', '+inf', '+∞']);
+const NEGATIVE_INFINITY = new Set(['-infinity', '-inf', '-∞']);
+
+export function limitAnswersEquivalent(expectedRaw: string, userAnswer: string): Equivalence {
+  const compact = (value: string) => value.replace(/\s+/g, '').toLowerCase();
+  const expected = compact(expectedRaw);
+  const user = compact(userAnswer);
+  if (POSITIVE_INFINITY.has(expected) && POSITIVE_INFINITY.has(user)) return { match: true, method: 'symbolic' };
+  if (NEGATIVE_INFINITY.has(expected) && NEGATIVE_INFINITY.has(user)) return { match: true, method: 'symbolic' };
+  return answersEquivalent(expectedRaw, userAnswer);
 }

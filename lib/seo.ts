@@ -198,6 +198,16 @@ export const PAGE_TITLES: Record<string, Record<Locale, string>> = {
         es: 'Calculadora de la Regla de la Cadena',
         pt: 'Calculadora da Regra da Cadeia',
     },
+    symbolab: {
+        en: 'Symbolab Alternative with Full Steps',
+        es: 'Alternativa a Symbolab con Pasos',
+        pt: 'Alternativa ao Symbolab com Passos',
+    },
+    comparison: {
+        en: 'Derivative Calculator Comparison',
+        es: 'Comparación de Calculadoras de Derivadas',
+        pt: 'Comparação de Calculadoras de Derivadas',
+    },
 };
 
 export const HOME_DESCRIPTIONS: Record<Locale, string> = {

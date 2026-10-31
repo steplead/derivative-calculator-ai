@@ -39,6 +39,8 @@ const STATIC_PATHS = [
   { path: '/partial-derivative-calculator', file: 'app/partial-derivative-calculator/page.tsx', priority: '0.9' },
   { path: '/implicit-differentiation-calculator', file: 'app/implicit-differentiation-calculator/page.tsx', priority: '0.9' },
   { path: '/chain-rule-calculator', file: 'app/chain-rule-calculator/page.tsx', priority: '0.9' },
+  { path: '/symbolab-alternative', file: 'content/comparisons.ts', priority: '0.6' },
+  { path: '/derivative-calculator-comparison', file: 'content/comparisons.ts', priority: '0.6' },
 ];
 
 function gitLastmod(relFile) {

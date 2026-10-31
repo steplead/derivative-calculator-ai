@@ -34,6 +34,7 @@ import InverseTrigLesson from '@/components/InverseTrigLesson';
 import TrigHubLink from '@/components/TrigHubLink';
 import DerivativeLessonView, { LinksOnlySupplement } from '@/components/DerivativeLesson';
 import { getDerivativeLesson } from '@/content/derivative-lesson';
+import { answerFirstLead } from '@/content/answer-lead';
 import { TRIG_CLUSTER_SLUGS } from '@/lib/trig-cluster';
 
 const INDEXABLE_PROBLEM_SLUGS = new Set<string>(indexableProblemSlugs);
@@ -417,6 +418,12 @@ export default async function ProblemPage({ params }: { params: { slug: string }
         } : undefined;
 
         const t = getLocalizedContent(locale, safeProblem.formula, safeProblem.type);
+        const answerLead = (safeProblem.type === 'derivative' || !safeProblem.type)
+            ? answerFirstLead(safeProblem.slug, locale, {
+                formula: safeProblem.formula,
+                raw: ssrSolution?.solutionRaw || null,
+            })
+            : null;
         const pageLesson = getInverseTrigLesson(safeProblem.slug, locale);
         const indexLesson = getDerivativeLesson(safeProblem.slug, locale);
         const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://derivativecalculatorai.com';
@@ -476,6 +483,11 @@ export default async function ProblemPage({ params }: { params: { slug: string }
                             )}
                         </div>
                     )}
+                    {answerLead ? (
+                        <p className="mt-6 text-lg text-gray-800 dark:text-gray-100 leading-relaxed text-left sm:text-center">
+                            {answerLead}
+                        </p>
+                    ) : null}
                 </div>
 
                 <Suspense fallback={<div className="text-gray-900 dark:text-white text-center">Loading Calculator...</div>}>

@@ -1,16 +1,13 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
 import './globals.css';
 import Navbar from "@/components/Navbar";
 import { getDictionary } from "./dictionaries";
-import { GoogleAnalytics } from '@next/third-parties/google';
+import DeferredAnalytics from "@/components/DeferredAnalytics";
 import Footer from "@/components/Footer";
 import { headers } from 'next/headers';
 import { loadStaticProblemsSafe } from '@/lib/problems-source';
 import { TurnstileProvider } from "@/components/TurnstileProvider";
 import wikiData from '@/data/wiki.json';
-
-const inter = Inter({ subsets: ['latin'], display: 'swap' });
 
 export const runtime = 'edge';
 
@@ -45,10 +42,6 @@ export const metadata: Metadata = {
     description: 'AI-powered math solutions with step-by-step logic.',
     images: ['/og-image.webp'],
   },
-  robots: {
-    index: true,
-    follow: true,
-  },
 };
 
 export default async function RootLayout({
@@ -73,7 +66,7 @@ export default async function RootLayout({
 
   return (
     <html lang={locale} className="bg-white dark:bg-[#0a0a0a]">
-      <body className={`${inter.className} min-h-screen bg-white dark:bg-[#0a0a0a] text-gray-900 dark:text-gray-100 flex flex-col`}>
+      <body className="min-h-screen bg-white dark:bg-[#0a0a0a] text-gray-900 dark:text-gray-100 flex flex-col">
         <TurnstileProvider>
           <Navbar dict={dict} />
           <main className="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -81,7 +74,7 @@ export default async function RootLayout({
           </main>
           <Footer wikiTopics={wikiTopics} problems={popularProblems} locale={locale} />
         </TurnstileProvider>
-        <GoogleAnalytics gaId="G-3WHC12TKH4" />
+        <DeferredAnalytics />
       </body>
     </html>
   );

@@ -25,8 +25,53 @@ const ALLOWED_API_HOSTS = [
 // and blocking them would destroy SEO indexing. Only block CLI/script tools.
 const ABUSE_UA_PATTERNS = ['python-requests', 'python/', 'curl/', 'wget/', 'go-http-client', 'java/', 'scrapy', 'httpx/'];
 
+/**
+ * Host and slug redirects run before the UA block and the rate limiter.
+ * www HTML is often redirected by Cloudflare already, but www/sitemap.xml and
+ * www/robots.txt are served by the worker (the matcher used to skip them) and
+ * a scripted client used to receive 403 before any redirect.
+ * A literal "+" in integral/derivative/limit slugs is decoded as a space at
+ * the edge and 404s; the public slug spells it "plus".
+ */
+function redirectToApexOrPlusFree(request: NextRequest): NextResponse | null {
+    const hostHeader = request.headers.get("host") || "";
+    const hostname = hostHeader.split(":")[0];
+    const isWww = hostname.toLowerCase().startsWith("www.");
+    const url = request.nextUrl.clone();
+    let pathname = url.pathname;
+    const needsPlusRewrite =
+        /\/(integral-of-|derivative-of-|limit-of-)/.test(pathname) &&
+        (pathname.includes("+") || pathname.includes(" "));
+
+    if (!isWww && !needsPlusRewrite) return null;
+
+    if (needsPlusRewrite) {
+        pathname = pathname.replace(/\+/g, "plus").replace(/ /g, "plus");
+        url.pathname = pathname;
+    }
+
+    if (isWww || hostname.toLowerCase().endsWith("derivativecalculatorai.com")) {
+        url.protocol = "https:";
+        url.port = "";
+    }
+    if (isWww) {
+        url.hostname = hostname.replace(/^www\./i, "");
+    }
+
+    return NextResponse.redirect(url, 301);
+}
+
 export async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
+
+    const earlyRedirect = redirectToApexOrPlusFree(request);
+    if (earlyRedirect) return earlyRedirect;
+
+    // Static SEO files must 301 off www (handled above) but must not spend a
+    // D1 rate-limit write on every crawler fetch.
+    if (pathname === "/sitemap.xml" || pathname === "/robots.txt") {
+        return NextResponse.next();
+    }
 
     // --- Early blocking of scripted abuse (before any expensive processing) ---
     const userAgent = request.headers.get('user-agent') || '';
@@ -106,17 +151,6 @@ export async function middleware(request: NextRequest) {
         (l) => pathname.startsWith(`/${l}/`) || pathname === `/${l}`
     );
 
-    const url = request.nextUrl.clone();
-    const host = request.headers.get("host") || "";
-
-    // Enforce Non-WWW and HTTPS
-    if (host.startsWith("www.")) {
-        const newHost = host.replace("www.", "");
-        url.host = newHost;
-        url.protocol = "https";
-        return NextResponse.redirect(url, 301);
-    }
-
     if (locale) {
         let newPath = pathname.replace(`/${locale}`, "");
         if (newPath === "") newPath = "/";
@@ -152,5 +186,9 @@ export const config = {
         // _next/static|_next/image caused /_next/static/chunks/*.js (page JS)
         // to run through middleware → D1 rate limit → 429 on CSS/JS → broken layout.
         '/((?!api|_next|favicon.ico|robots.txt|sitemap.xml|manifest.json|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|json|txt|xml|css|js|map|woff|woff2|ttf|eot)$).*)',
+        // Included explicitly so a www request for these files still 301s.
+        // The negative lookahead above excludes them from the general pattern.
+        '/sitemap.xml',
+        '/robots.txt',
     ],
 };

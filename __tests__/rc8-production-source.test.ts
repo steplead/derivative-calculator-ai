@@ -234,7 +234,7 @@ describe('RC-8 task 4: unknown slugs 404', () => {
         // Scope to the page component: generateMetadata has its own (correctly
         // ordered) resolution block and would skew a whole-file index check.
         const body = src.slice(src.indexOf('export default async function ProblemPage'));
-        const libraryIdx = body.indexOf('findStaticProblem(library, slug)');
+        const libraryIdx = body.indexOf('resolveLibraryProblem(library, slug)');
         const heuristicIdx = body.indexOf('parseSlugToMath(slug)');
         expect(libraryIdx).toBeGreaterThan(-1);
         expect(heuristicIdx).toBeGreaterThan(-1);
@@ -249,7 +249,7 @@ describe('RC-8 task 4: unknown slugs 404', () => {
             src.indexOf('export async function generateMetadata'),
             src.indexOf('export default async function ProblemPage')
         );
-        const libraryIdx = meta.indexOf('findStaticProblem(library, slug)');
+        const libraryIdx = meta.indexOf('resolveLibraryProblem(library, slug)');
         const heuristicIdx = meta.indexOf('parseSlugToMath(slug)');
         expect(libraryIdx).toBeGreaterThan(-1);
         expect(heuristicIdx).toBeGreaterThan(-1);

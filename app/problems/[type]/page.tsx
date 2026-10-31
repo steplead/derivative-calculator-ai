@@ -4,34 +4,34 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getBaseUrl } from '@/utils/robust-url';
 import { loadStaticProblemsSafe, filterByType } from '@/lib/problems-source';
+import { keywordTitle, localeAlternates, normalizeLocale, problemHref } from '@/lib/seo';
 import type { Metadata } from 'next';
 
 export async function generateMetadata({ params }: { params: { type: string } }): Promise<Metadata> {
   const { type } = params;
   const headersList = await headers();
-  const locale = headersList.get("x-next-locale") || "en";
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://derivativecalculatorai.com';
-  const url = locale === 'en' ? `${siteUrl}/problems/${type}` : `${siteUrl}/${locale}/problems/${type}`;
+  const locale = normalizeLocale(headersList.get("x-next-locale"));
 
   const typeNames: Record<string, string> = {
-    derivative: 'Derivatives',
-    integral: 'Integrals',
-    limit: 'Limits',
-    ode: 'Differential Equations',
+    derivative: 'Derivative Problem Library',
+    integral: 'Integral Problem Library',
+    limit: 'Limit Problem Library',
+    ode: 'Differential Equation Problems',
   };
 
-  const typeName = typeNames[type] || type.charAt(0).toUpperCase() + type.slice(1);
+  const typeName = typeNames[type] || keywordTitle(`${type} Problems`);
+  const title = keywordTitle(typeName);
+  const description = `Browse ${typeName.toLowerCase()} with a step-by-step solution on each problem.`;
+  const alternates = localeAlternates(`/problems/${type}`, locale);
 
   return {
-    title: `${typeName} Problems - Calculus Library`,
-    description: `Browse all ${typeName.toLowerCase()} problems with step-by-step solutions and AI explanations.`,
-    alternates: {
-      canonical: url,
-    },
+    title: { absolute: title },
+    description,
+    alternates,
     openGraph: {
-      title: `${typeName} Problems - Calculus Library`,
-      description: `Browse all ${typeName.toLowerCase()} problems.`,
-      url,
+      title,
+      description,
+      url: alternates.canonical,
       type: 'website',
     },
   };
@@ -113,7 +113,7 @@ export default async function ProblemsByTypePage({ params }: { params: { type: s
           {filteredProblems.map((problem: any) => (
             <Link
               key={problem.slug}
-              href={`/${locale === 'en' ? '' : locale + '/'}${problem.slug}`}
+              href={problemHref(problem.slug, locale)}
               className="bg-white dark:bg-slate-800 p-6 rounded-lg border border-gray-200 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-400 hover:shadow-lg transition-all group"
             >
               <div className="font-mono text-lg text-gray-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">

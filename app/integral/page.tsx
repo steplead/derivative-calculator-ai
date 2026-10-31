@@ -3,6 +3,7 @@ import { headers } from 'next/headers';
 import Calculator from '@/components/Calculator';
 // EmbedWidget removed to prevent API abuse
 import { getDictionary } from '../dictionaries';
+import { localeAlternates, normalizeLocale, pageTitle } from '@/lib/seo';
 
 export const runtime = 'edge';
 // OPTIMIZED: Allow caching to reduce quota usage
@@ -15,33 +16,24 @@ export async function generateMetadata() {
 
     try {
         const headersList = await headers();
-        locale = headersList.get("x-next-locale") || "en";
+        locale = normalizeLocale(headersList.get("x-next-locale"));
         dict = getDictionary(locale);
     } catch (e) {
         console.error("Integral metadata error:", e);
     }
 
-    const h1 = dict?.integral?.h1 || "Integral Calculator";
     const subtitle = dict?.integral?.subtitle || "Solve integrals instantly.";
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://derivativecalculatorai.com';
-    const baseUrlWithLocale = locale === 'en' ? siteUrl : `${siteUrl}/${locale}`;
-    const url = `${baseUrlWithLocale}/integral`;
+    const title = pageTitle('integral', locale);
+    const alternates = localeAlternates('/integral', locale);
 
     return {
-        title: `${h1} - Step-by-Step Integration`,
+        title: { absolute: title },
         description: subtitle,
-        alternates: {
-            canonical: url,
-            languages: {
-                'en': `${siteUrl}/integral`,
-                'es': `${siteUrl}/es/integral`,
-                'pt': `${siteUrl}/pt/integral`,
-            },
-        },
+        alternates,
         openGraph: {
-            title: `${h1}`,
+            title,
             description: subtitle,
-            url,
+            url: alternates.canonical,
             type: 'website',
         },
     };
@@ -66,7 +58,7 @@ export default async function IntegralPage() {
     return (
         <div className="py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-200">
             <div className="max-w-4xl mx-auto text-center mb-12 mt-10">
-                <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-4">
+                <h1 id="integral-calculator" className="text-4xl sm:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-4">
                     {dict.integral.h1} <span className="text-purple-600 dark:text-purple-500">AI</span>
                 </h1>
                 <p className="text-xl text-gray-600 dark:text-gray-400">

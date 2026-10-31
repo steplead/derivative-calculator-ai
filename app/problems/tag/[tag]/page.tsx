@@ -3,6 +3,7 @@ export const runtime = 'edge';
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import { loadStaticProblemsSafe, type StaticProblem } from '@/lib/problems-source';
+import { keywordTitle, localeAlternates, normalizeLocale, problemHref } from '@/lib/seo';
 
 /** Minimum problems a tag must have to appear in "Popular Tags". */
 const MIN_TAG_COUNT = 10;
@@ -31,9 +32,7 @@ const TAG_INTROS: Record<string, string> = {
 export async function generateMetadata({ params }: { params: { tag: string } }): Promise<Metadata> {
   const { tag } = params;
   const headersList = await headers();
-  const locale = headersList.get("x-next-locale") || "en";
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://derivativecalculatorai.com';
-  const url = locale === 'en' ? `${siteUrl}/problems/tag/${tag}` : `${siteUrl}/${locale}/problems/tag/${tag}`;
+  const locale = normalizeLocale(headersList.get("x-next-locale"));
 
   const tagName = tag.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 
@@ -48,19 +47,21 @@ export async function generateMetadata({ params }: { params: { tag: string } }):
     (p) => p && p.tags && String(p.tags).split(',').map((t) => t.trim()).includes(tag)
   );
 
+  const title = keywordTitle(`${tagName} Calculus Problems`);
+  const description = `Browse calculus problems tagged ${tagName}, each with a step-by-step solution.`;
+  const alternates = localeAlternates(`/problems/tag/${tag}`, locale);
+
   return {
-    title: `${tagName} Calculus Problems - Tagged Library`,
-    description: `Browse calculus problems tagged with "${tagName}". Step-by-step solutions with AI explanations.`,
-    alternates: {
-      canonical: url,
-    },
+    title: { absolute: title },
+    description,
     robots: hasProblems
       ? { index: true, follow: true }
       : { index: false, follow: true },
+    alternates,
     openGraph: {
-      title: `${tagName} Calculus Problems`,
-      description: `Browse problems tagged with "${tagName}".`,
-      url,
+      title,
+      description,
+      url: alternates.canonical,
       type: 'website',
     },
   };
@@ -129,7 +130,7 @@ export default async function ProblemsByTagPage({ params }: { params: { tag: str
             {filteredProblems.map((problem) => (
               <Link
                 key={problem.slug}
-                href={`/${locale === 'en' ? '' : locale + '/'}${problem.slug}`}
+                href={problemHref(problem.slug, locale)}
                 className="bg-white dark:bg-slate-800 p-6 rounded-lg border border-gray-200 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-400 hover:shadow-lg transition-all group"
               >
                 <div className="font-mono text-lg text-gray-900 dark:text-white mb-3">

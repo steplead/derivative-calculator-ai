@@ -1,6 +1,7 @@
 import { headers } from 'next/headers';
 export const runtime = 'edge';
 import { getDictionary } from '@/app/dictionaries';
+import { localeAlternates, normalizeLocale, pageTitle } from '@/lib/seo';
 import MatrixCalculator from '@/components/MatrixCalculator';
 
 
@@ -10,33 +11,24 @@ export async function generateMetadata() {
 
     try {
         const headersList = await headers();
-        locale = headersList.get("x-next-locale") || "en";
+        locale = normalizeLocale(headersList.get("x-next-locale"));
         dict = getDictionary(locale);
     } catch (e) {
         console.error("Matrix metadata error:", e);
     }
 
-    const h1 = dict?.matrix?.h1 || "Matrix Calculator";
     const subtitle = dict?.matrix?.subtitle || "Calculate determinants and more.";
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://derivativecalculatorai.com';
-    const baseUrlWithLocale = locale === 'en' ? siteUrl : `${siteUrl}/${locale}`;
-    const url = `${baseUrlWithLocale}/matrix`;
+    const title = pageTitle('matrix', locale);
+    const alternates = localeAlternates('/matrix', locale);
 
     return {
-        title: `${h1} - Matrix Operations & Solutions`,
+        title: { absolute: title },
         description: subtitle,
-        alternates: {
-            canonical: url,
-            languages: {
-                'en': `${siteUrl}/matrix`,
-                'es': `${siteUrl}/es/matrix`,
-                'pt': `${siteUrl}/pt/matrix`,
-            },
-        },
+        alternates,
         openGraph: {
-            title: `${h1}`,
+            title,
             description: subtitle,
-            url,
+            url: alternates.canonical,
             type: 'website',
         },
     };

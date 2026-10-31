@@ -3,28 +3,23 @@ export const runtime = 'edge';
 import Link from 'next/link';
 import { Calculator, Divide, FunctionSquare, Minus } from 'lucide-react';
 import type { Metadata } from 'next';
+import { localeAlternates, normalizeLocale, pageTitle } from '@/lib/seo';
 
 export async function generateMetadata(): Promise<Metadata> {
   const headersList = await headers();
-  const locale = headersList.get("x-next-locale") || "en";
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://derivativecalculatorai.com';
-  const url = locale === 'en' ? `${siteUrl}/calculators` : `${siteUrl}/${locale}/calculators`;
+  const locale = normalizeLocale(headersList.get("x-next-locale"));
+  const title = pageTitle('calculators', locale);
+  const description = 'Free calculus calculators for derivatives, integrals, limits, ODEs, and matrices, with step-by-step solutions.';
+  const alternates = localeAlternates('/calculators', locale);
 
   return {
-    title: `Math Calculators - Free Online Tools`,
-    description: `Free online math calculators: Derivative, Integral, Limit, ODE, and Matrix solvers. Step-by-step solutions with AI explanations.`,
-    alternates: {
-      canonical: url,
-      languages: {
-        'en': `${siteUrl}/calculators`,
-        'es': `${siteUrl}/es/calculators`,
-        'pt': `${siteUrl}/pt/calculators`,
-      }
-    },
+    title: { absolute: title },
+    description,
+    alternates,
     openGraph: {
-      title: `Math Calculators - Free Online Tools`,
-      description: `Free online math calculators with step-by-step solutions.`,
-      url,
+      title,
+      description,
+      url: alternates.canonical,
       type: 'website',
     },
   };

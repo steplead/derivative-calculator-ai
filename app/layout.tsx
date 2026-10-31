@@ -17,8 +17,9 @@ export const runtime = 'edge';
 export const metadata: Metadata = {
   metadataBase: new URL('https://derivativecalculatorai.com'),
   title: {
-    default: 'Derivative Calculator - Instant Step-by-Step Solutions | Derivative Calculator AI',
-    template: '%s - Instant Step-by-Step Solutions | Derivative Calculator AI'
+    default: 'Derivative Calculator & Solver with Steps (Free)',
+    // Child pages pass a finished ≤60-character title. Do not append a slogan.
+    template: '%s',
   },
   description: 'AI-powered mathematical toolkit with step-by-step solutions for derivatives, integrals, limits, and matrices using DeepSeek R1/V3.',
   manifest: '/manifest.json',
@@ -92,8 +93,8 @@ export default async function RootLayout({
           </main>
           <Footer wikiTopics={wikiTopics} problems={popularProblems} locale={locale} />
         </TurnstileProvider>
+        <GoogleAnalytics gaId="G-3WHC12TKH4" />
       </body>
-      <GoogleAnalytics gaId="G-3WHC12TKH4" />
     </html>
   );
 }

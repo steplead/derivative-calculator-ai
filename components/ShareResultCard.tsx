@@ -71,6 +71,11 @@ export default function ShareResultCard({ formula, result, url, type }: ShareRes
                     text: shareText,
                     url,
                 });
+                trackEvent('share_result_native', {
+                    type,
+                    formula_length: formula.length,
+                    result_length: (result || '').length,
+                });
             }
         } catch {
             // user cancelled or share failed — no-op
@@ -91,6 +96,7 @@ export default function ShareResultCard({ formula, result, url, type }: ShareRes
                     <button
                         type="button"
                         onClick={handleCopy}
+                        aria-label={copied ? 'Copied result' : 'Copy result'}
                         className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 text-gray-700 dark:text-gray-200 text-sm font-medium hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors"
                     >
                         {copied ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4" />}
@@ -100,6 +106,7 @@ export default function ShareResultCard({ formula, result, url, type }: ShareRes
                         href={twitterHref}
                         target="_blank"
                         rel="noopener noreferrer"
+                        aria-label="Share on X"
                         onClick={() =>
                             trackEvent('share_result_x', {
                                 type,
@@ -116,6 +123,7 @@ export default function ShareResultCard({ formula, result, url, type }: ShareRes
                         <button
                             type="button"
                             onClick={handleNativeShare}
+                            aria-label="Share result"
                             className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-colors"
                         >
                             <Share2 className="w-4 h-4" />

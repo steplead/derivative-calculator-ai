@@ -5,6 +5,7 @@ export const runtime = 'edge';
 import { getDictionary } from '../dictionaries';
 import { getBaseUrl } from '@/utils/robust-url';
 import { loadStaticProblemsSafe } from '@/lib/problems-source';
+import { localeAlternates, normalizeLocale, pageTitle, problemHref } from '@/lib/seo';
 
 // OPTIMIZED: Allow caching to reduce quota usage
 // Directory page content is relatively static, can be cached for 1 hour
@@ -12,31 +13,27 @@ export const revalidate = 3600; // 1 hour
 
 export async function generateMetadata() {
     let locale = "en";
-    let dict = getDictionary("en");
 
     try {
         const headersList = await headers();
-        locale = headersList.get("x-next-locale") || "en";
-        dict = getDictionary(locale);
+        locale = normalizeLocale(headersList.get("x-next-locale"));
     } catch (e) {
         console.error("Directory metadata error:", e);
     }
 
-    const h1 = dict?.directory?.h1 || "All Problems";
-
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://derivativecalculatorai.com';
-    const url = locale === 'en' ? `${siteUrl}/directory` : `${siteUrl}/${locale}/directory`;
+    const title = pageTitle('directory', locale);
+    const description = 'Browse derivative problems and open a step-by-step solution for each one.';
+    const alternates = localeAlternates('/directory', locale);
 
     return {
-        title: `${h1} - Complete Problem Directory`,
-        description: 'Browse our complete list of derivative problems and solutions.',
-        alternates: {
-            canonical: url,
-            languages: {
-                'en': `${siteUrl}/directory`,
-                'es': `${siteUrl}/es/directory`,
-                'pt': `${siteUrl}/pt/directory`,
-            },
+        title: { absolute: title },
+        description,
+        alternates,
+        openGraph: {
+            title,
+            description,
+            url: alternates.canonical,
+            type: 'website',
         },
     };
 }
@@ -95,7 +92,7 @@ export default async function DirectoryPage() {
                     {problemsList.map((problem: any) => (
                         <Link
                             key={problem.slug}
-                            href={`/${locale === 'en' ? '' : locale + '/'}${problem.slug}`}
+                            href={problemHref(problem.slug, locale)}
                             className="bg-gray-50 hover:bg-white dark:bg-slate-800 dark:hover:bg-slate-700 p-4 rounded-lg border border-gray-200 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-400 hover:shadow-md transition-all group"
                         >
                             <h3 className="text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300 font-semibold mb-1 truncate">

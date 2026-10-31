@@ -186,7 +186,7 @@ describe('P1: public problem pages resolve the library before D1', () => {
             fs.readFileSync(path.join(ROOT, 'app/[slug]/page.tsx'), 'utf-8')
         );
         const body = src.slice(src.indexOf('export default async function ProblemPage'));
-        const libraryIdx = body.indexOf('findStaticProblem(library, slug)');
+        const libraryIdx = body.indexOf('resolveLibraryProblem(library, slug)');
         const d1Idx = body.indexOf('SELECT');
         expect(libraryIdx).toBeGreaterThan(-1);
         expect(d1Idx).toBeGreaterThan(-1);

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { problemHref } from '@/lib/seo';
 
 interface Problem {
   slug: string;
@@ -65,7 +66,7 @@ export default function SmartRecommendations({
         {recommendations.map((problem) => (
           <Link
             key={problem.slug}
-            href={`/${locale === 'en' ? '' : `${locale}/`}${problem.slug}`}
+            href={problemHref(problem.slug, locale)}
             className="block p-4 rounded-lg border border-gray-200 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-400 transition-colors bg-gray-50 dark:bg-slate-800 group"
           >
             <div className="font-mono text-sm text-gray-600 dark:text-gray-400 mb-2">

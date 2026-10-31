@@ -1,12 +1,10 @@
 /**
- * A5: Title regression — brand must appear at most once per page.
- *
- * Root layout uses `template: '%s - Instant Step-by-Step Solutions | Derivative Calculator AI'`.
- * Pages must return ONLY the core title (no manual brand suffix), otherwise the
- * template appends a second brand → "Page | Brand - Instant... | Brand".
+ * Titles are keyword-first and at most 60 characters.
+ * The root layout must not append a slogan or a second brand.
  */
 import * as fs from 'fs';
 import * as path from 'path';
+import { HOME_DESCRIPTIONS, PAGE_TITLES, keywordTitle } from '@/lib/seo';
 
 const PAGES: Array<[string, string]> = [
   ['app/integral/page.tsx', 'generateMetadata'],
@@ -23,25 +21,33 @@ const PAGES: Array<[string, string]> = [
 describe('A5: Title brand duplication regression', () => {
   it.each(PAGES)('%s core title must not hardcode the brand', (file) => {
     const src = fs.readFileSync(path.resolve(process.cwd(), file), 'utf8');
-    // Extract all title: `...` lines
     const titleLines = src.match(/title:\s*`[^`]*`/g) || [];
     for (const line of titleLines) {
-      // Page-level titles must NOT contain the brand (layout template adds it once)
       expect(line).not.toContain('Derivative Calculator AI');
     }
   });
 
-  it('homepage keeps its full default title (brand allowed once)', () => {
+  it('homepage default title is the keyword-first calculator title', () => {
     const layout = fs.readFileSync(path.resolve(process.cwd(), 'app/layout.tsx'), 'utf8');
-    // title.default contains brand once
-    expect(layout).toContain("Derivative Calculator - Instant Step-by-Step Solutions | Derivative Calculator AI");
+    expect(layout).toContain('Derivative Calculator & Solver with Steps (Free)');
+    expect(layout).not.toContain('Instant Step-by-Step Solutions');
   });
 
-  it('root layout template adds the brand exactly once', () => {
+  it('root layout template does not append a brand slogan', () => {
     const layout = fs.readFileSync(path.resolve(process.cwd(), 'app/layout.tsx'), 'utf8');
     const m = layout.match(/template:\s*'([^']*)'/);
     expect(m).toBeTruthy();
-    const brandCount = (m![1].match(/Derivative Calculator AI/g) || []).length;
-    expect(brandCount).toBe(1);
+    expect(m![1]).toBe('%s');
+  });
+
+  it('every curated page title is at most 60 characters', () => {
+    for (const titles of Object.values(PAGE_TITLES)) {
+      for (const title of Object.values(titles)) {
+        expect(keywordTitle(title).length).toBeLessThanOrEqual(60);
+      }
+    }
+    for (const description of Object.values(HOME_DESCRIPTIONS)) {
+      expect(description.length).toBeLessThanOrEqual(160);
+    }
   });
 });

@@ -183,6 +183,21 @@ export const PAGE_TITLES: Record<string, Record<Locale, string>> = {
         es: 'Política de Privacidad',
         pt: 'Política de Privacidade',
     },
+    partial: {
+        en: 'Partial Derivative Calculator (Free)',
+        es: 'Calculadora de Derivadas Parciales',
+        pt: 'Calculadora de Derivadas Parciais',
+    },
+    implicit: {
+        en: 'Implicit Differentiation Calculator',
+        es: 'Calculadora de Derivación Implícita',
+        pt: 'Calculadora de Derivação Implícita',
+    },
+    chain: {
+        en: 'Chain Rule Calculator with Steps',
+        es: 'Calculadora de la Regla de la Cadena',
+        pt: 'Calculadora da Regra da Cadeia',
+    },
 };
 
 export const HOME_DESCRIPTIONS: Record<Locale, string> = {

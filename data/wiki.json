@@ -139,7 +139,19 @@
         "content": "The natural exponential function f(x) = e^x is unique because its derivative is also e^x. For general bases, d/dx(a^x) = a^x * ln(a). These functions appear in growth models and are differentiated using the <a href=\"/wiki/product-rule\">Product Rule</a> and <a href=\"/wiki/chain-rule\">Chain Rule</a>.",
         "relatedProblems": [
             "derivative-of-e-to-the-x",
-            "derivative-of-2-x"
+            "derivative-of-2-to-the-x"
+        ]
+    },
+    {
+        "slug": "logarithmic-derivatives",
+        "title": "Logarithmic Derivatives",
+        "description": "Derivatives of ln(x), ln(2x), and the natural log that this site writes as log(x).",
+        "category": "Derivatives",
+        "content": "The natural logarithm ln(x) is the inverse of e^x, so its derivative is 1/x. A constant factor inside the log usually cancels: ln(2x) = ln 2 + ln x, and the constant vanishes, leaving the same 1/x. On this calculator log(x) means the natural log, matching the engine. Base-10 log is log10(x), whose derivative divides by ln(10). These rules sit next to the <a href=\"/wiki/exponential-derivatives\">exponential derivatives</a> and the <a href=\"/wiki/chain-rule\">chain rule</a>.",
+        "relatedProblems": [
+            "derivative-of-ln-x",
+            "derivative-of-ln-2x",
+            "derivative-of-log-x"
         ]
     },
     {

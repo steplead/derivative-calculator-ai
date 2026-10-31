@@ -35,8 +35,6 @@ export function TurnstileProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
-    console.log('[Turnstile] Loading script...');
-
     // Check if already loaded
     if (window.turnstile) {
       console.log('[Turnstile] Script already loaded');
@@ -44,24 +42,30 @@ export function TurnstileProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    const script = document.createElement('script');
-    script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
-    script.async = true;
-    script.defer = true;
-
-    script.onload = () => {
-      console.log('[Turnstile] Script loaded successfully');
-      setIsLoaded(true);
+    let started = false;
+    const start = () => {
+      if (started || window.turnstile) {
+        if (window.turnstile) setIsLoaded(true);
+        return;
+      }
+      started = true;
+      const script = document.createElement('script');
+      script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+      script.async = true;
+      script.defer = true;
+      script.onload = () => setIsLoaded(true);
+      script.onerror = () => {
+        started = false;
+      };
+      document.head.appendChild(script);
     };
 
-    script.onerror = () => {
-      console.error('[Turnstile] Failed to load script');
-    };
-
-    document.head.appendChild(script);
-
+    // Third-party bot script stays off the critical path until the visitor
+    // actually interacts. Turnstile is optional for the API.
+    const events = ['pointerdown', 'keydown', 'focusin'] as const;
+    for (const event of events) window.addEventListener(event, start, { once: true, passive: true });
     return () => {
-      // Don't remove script
+      for (const event of events) window.removeEventListener(event, start);
     };
   }, []);
 

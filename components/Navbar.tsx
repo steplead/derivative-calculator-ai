@@ -38,13 +38,17 @@ export default function Navbar({ dict }: { dict: any }) {
                     <div className="flex-shrink-0 flex items-center pr-4">
                         <Link href="/" className="transition-transform hover:scale-105 active:scale-95">
                             <img
-                                src="/logo-light.png"
+                                src="/logo-light.webp"
                                 alt="Derivative Calculator AI"
+                                width={157}
+                                height={48}
                                 className="h-10 sm:h-12 w-auto dark:hidden"
                             />
                             <img
-                                src="/logo-dark-v2.png"
+                                src="/logo-dark.webp"
                                 alt="Derivative Calculator AI"
+                                width={157}
+                                height={48}
                                 className="h-10 sm:h-12 w-auto hidden dark:block"
                             />
                         </Link>

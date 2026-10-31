@@ -3,6 +3,7 @@ import { headers } from 'next/headers';
 import type { Metadata } from 'next';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { loadStaticProblemsSafe } from '@/lib/problems-source';
+import PracticeGenerator from '@/components/PracticeGenerator';
 import { localeAlternates, normalizeLocale, pageTitle } from '@/lib/seo';
 
 const LEVELS = [
@@ -38,6 +39,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function PracticeIndex() {
+  const headersList = await headers();
+  const locale = normalizeLocale(headersList.get('x-next-locale'));
   const library = await loadStaticProblemsSafe();
   const counts: Record<string, number> = {};
   for (const lvl of LEVELS) {
@@ -48,7 +51,8 @@ export default async function PracticeIndex() {
     <div className="py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <Breadcrumbs items={[{ name: 'Home', href: '/' }, { name: 'Practice Problems', href: '/practice' }]} />
-        <h1 className="text-4xl font-bold text-center mb-4">Practice Calculus Problems</h1>
+        <h1 id="practice-calculus" className="text-4xl font-bold text-center mb-4">Practice Calculus Problems</h1>
+        <PracticeGenerator locale={locale} />
         <p className="text-center text-gray-600 dark:text-gray-400 mb-10 max-w-2xl mx-auto">
           Pick a difficulty level and work through curated problem sets. Every problem links to a full step-by-step AI solution.
         </p>

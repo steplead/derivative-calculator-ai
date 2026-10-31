@@ -1,6 +1,8 @@
 import Calculator from '@/components/Calculator';
 import DynamicRecommendations from '@/components/DynamicRecommendations';
 import HomeGuideSection from '@/components/HomeGuide';
+import PracticeGenerator from '@/components/PracticeGenerator';
+import EmbedSnippet from '@/components/EmbedSnippet';
 import StructuredData, { generateFAQData } from '@/components/StructuredData';
 import Link from 'next/link';
 import { Suspense } from 'react';
@@ -109,8 +111,10 @@ export default async function Home() {
       </div>
 
       <Suspense fallback={<div className="text-gray-900 dark:text-white text-center">{dict.common.loading}</div>}>
-        <Calculator dict={dict.calculator} showShare shareUrl={alternates.canonical} />
+        <Calculator dict={dict.calculator} showShare shareUrl={alternates.canonical} locale={locale} />
       </Suspense>
+      <EmbedSnippet path="/" locale={locale} />
+      <PracticeGenerator locale={locale} />
 
       {/* Quick Links Section - Protocol 2 Compliance */}
       <div className="max-w-4xl mx-auto mt-8 flex justify-center gap-4">

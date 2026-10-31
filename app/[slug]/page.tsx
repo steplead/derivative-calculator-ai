@@ -32,6 +32,8 @@ import {
 import { getInverseTrigLesson } from '@/content/inverse-trig-lessons';
 import InverseTrigLesson from '@/components/InverseTrigLesson';
 import TrigHubLink from '@/components/TrigHubLink';
+import DerivativeLessonView, { LinksOnlySupplement } from '@/components/DerivativeLesson';
+import { getDerivativeLesson } from '@/content/derivative-lesson';
 import { TRIG_CLUSTER_SLUGS } from '@/lib/trig-cluster';
 
 const INDEXABLE_PROBLEM_SLUGS = new Set<string>(indexableProblemSlugs);
@@ -226,6 +228,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 
     const t = getLocalizedContent(locale, problem.formula, problem.type);
     const lesson = libraryProblem ? getInverseTrigLesson(libraryProblem.slug, locale) : null;
+    const indexLesson = libraryProblem ? getDerivativeLesson(libraryProblem.slug, locale) : null;
 
     // P2-G: derivative near-duplicates (same formula -> identical title+content)
     // point their canonical at the group's primary slug to consolidate indexing
@@ -249,7 +252,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     const lockedNoindex = !forceIndex && ((NOINDEX_SLUGS.has(librarySlug) && !derivDupSlugs.has(librarySlug)) || isOutOfLibrary);
     const alternates = localeAlternates(`/${canonicalSlug}`, locale);
     const title = keywordTitle(lesson?.title ?? t.title);
-    const description = lesson?.description ?? t.description;
+    const description = lesson?.description ?? indexLesson?.description ?? t.description;
 
     return {
         title: { absolute: title },
@@ -409,11 +412,13 @@ export default async function ProblemPage({ params }: { params: { slug: string }
             solution_raw: ssrSolution.solutionRaw,
             steps: ssrSolution.steps.map((s, i) => `**Step ${i + 1}:** ${s}`).join('\n\n'),
             ai_explanation: ssrSolution.rule ? `Rule used: ${ssrSolution.rule}.` : 'Deterministic step-by-step solution.',
+            rule: ssrSolution.rule,
             _ssr: true,
         } : undefined;
 
         const t = getLocalizedContent(locale, safeProblem.formula, safeProblem.type);
         const pageLesson = getInverseTrigLesson(safeProblem.slug, locale);
+        const indexLesson = getDerivativeLesson(safeProblem.slug, locale);
         const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://derivativecalculatorai.com';
         const url = `${siteUrl}${problemHref(slug, locale)}`;
 
@@ -479,6 +484,8 @@ export default async function ProblemPage({ params }: { params: { slug: string }
                         initialLimitTo={safeProblem.limitTo}
                         mode={safeProblem.type as any}
                         initialResult={initialResult}
+                        locale={locale}
+                        deferGraph={safeProblem.type === 'derivative' || !safeProblem.type}
                     />
                 </Suspense>
 
@@ -544,7 +551,15 @@ export default async function ProblemPage({ params }: { params: { slug: string }
                             { name: t.h1, href: problemHref(safeProblem.slug, locale) },
                         ]}
                     />
-                ) : TRIG_CLUSTER_SLUGS.has(safeProblem.slug) ? (
+                ) : null}
+
+                {indexLesson ? (
+                    <DerivativeLessonView lesson={indexLesson} locale={locale} />
+                ) : (
+                    <LinksOnlySupplement slug={safeProblem.slug} locale={locale} />
+                )}
+
+                {!pageLesson && !indexLesson && TRIG_CLUSTER_SLUGS.has(safeProblem.slug) ? (
                     <TrigHubLink locale={locale} />
                 ) : null}
 

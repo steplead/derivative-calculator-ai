@@ -68,17 +68,26 @@ export async function GET(req: NextRequest) {
         let solutionRaw = "";
         let ruleUsed = "";
         let deterministicSteps: string[] = [];
+        let derivativeValid = false;
         try {
             const solution = calculateDerivative(expression);
             solutionLatex = solution.solutionLatex;
             solutionRaw = solution.solutionRaw;
             ruleUsed = solution.rule;
             deterministicSteps = solution.steps;
+            derivativeValid = solution.isValid;
         } catch (nerdError: any) {
             console.error("Math Core Error:", nerdError?.message || nerdError);
             // Deterministic calculation failed → let the AI/fallback explain, but
             // do NOT return a wrong answer. solutionRaw stays empty → 500 below
             // if no fallback is available.
+        }
+
+        if (!derivativeValid || !solutionRaw) {
+            return NextResponse.json(
+                { error: "This expression does not have an ordinary derivative.", code: "not_differentiable" },
+                { status: 422, headers: { 'Cache-Control': 'private, no-store' } }
+            );
         }
 
         // RC-4: Always surface deterministic steps from the shared math core.
@@ -242,7 +251,8 @@ You can verify this result by:
             solution_raw: solutionRaw,
             steps: stepsContent,
             ai_explanation: aiExplanation,
-            _version: "v3.1-cache-no-store"
+            rule: ruleUsed,
+            _version: "v3.2-rule"
         }, { headers: { 'Cache-Control': 'private, no-store' } });
 
     } catch (e: any) {

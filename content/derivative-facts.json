@@ -1,0 +1,1979 @@
+[
+  {
+    "slug": "derivative-of-x-squared",
+    "display": "x^2",
+    "engine": "x^2",
+    "nice": "2*x",
+    "ruleWiki": "power-rule",
+    "cluster": "power-poly",
+    "copy": {
+      "en": {
+        "angle": "x^2 is the first derivative worth deriving from the definition. The difference quotient [(x+h)^2-x^2]/h simplifies to 2x+h, and the leftover h disappears, so the exponent 2 falls in front and then shrinks by one.",
+        "algebra": "Apply the power rule to x^2. The form to remember, already simplified, is 2*x.",
+        "mistakeTitle": "Answering x",
+        "mistake": "The exponent never stays put. Writing x keeps the 2 upstairs and reports a slope that is half of the true one at every point.",
+        "mistake2Title": "Forgetting to lower the exponent of x^2",
+        "mistake2": "The front coefficient of x^2 is only half the work. The exponent itself has to decrease by 1. Leaving the original power in place describes a different curve.",
+        "domain": "The expression is built from polynomials, sine, cosine, or exponentials, so the derivative exists for every real x.",
+        "check": "At x = 3, substitute into the simplified form 2*x. That number is the slope of x^2 there; a secant over a small step in x lands next to it."
+      },
+      "es": {
+        "angle": "x^2 es la primera derivada que conviene sacar desde la definición. El cociente [(x+h)^2-x^2]/h se reduce a 2x+h, y la h sobrante desaparece: el exponente 2 baja al frente y luego disminuye en uno.",
+        "algebra": "Aplica la regla de la potencia a x^2. La forma que hay que recordar, ya simplificada, es 2*x.",
+        "mistakeTitle": "Responder x",
+        "mistake": "El exponente no se queda arriba. Escribir x deja el 2 en el aire y da una pendiente que es la mitad de la real.",
+        "mistake2Title": "Olvidar bajar el exponente de x^2",
+        "mistake2": "El coeficiente de x^2 es solo la mitad del trabajo. El exponente tiene que bajar 1. Dejar la potencia original describe otra curva.",
+        "domain": "La expresión está hecha de polinomios, seno, coseno o exponenciales, así que la derivada existe para todo x real.",
+        "check": "En x = 3, sustituye en la forma simplificada 2*x. Ese número es la pendiente de x^2 en ese punto; una secante con un paso pequeño de x cae al lado."
+      },
+      "pt": {
+        "angle": "x^2 é a primeira derivada que vale a pena tirar da definição. O quociente [(x+h)^2-x^2]/h vira 2x+h, e o h que sobra some: o expoente 2 desce à frente e depois diminui um.",
+        "algebra": "Aplique a regra da potência a x^2. A forma para memorizar, já simplificada, é 2*x.",
+        "mistakeTitle": "Responder x",
+        "mistake": "O expoente não fica lá em cima. Escrever x deixa o 2 no ar e dá uma inclinação que é a metade da verdadeira.",
+        "mistake2Title": "Esquecer de baixar o expoente de x^2",
+        "mistake2": "O coeficiente de x^2 é só metade do trabalho. O expoente tem que diminuir 1. Deixar a potência original descreve outra curva.",
+        "domain": "A expressão é feita de polinômios, seno, cosseno ou exponenciais, então a derivada existe para todo x real.",
+        "check": "Em x = 3, substitua na forma simplificada 2*x. Esse número é a inclinação de x^2 nesse ponto; uma secante com um passo pequeno de x cai ao lado."
+      }
+    }
+  },
+  {
+    "slug": "derivative-of-x-cubed",
+    "display": "x^3",
+    "engine": "x^3",
+    "nice": "3*x^2",
+    "ruleWiki": "power-rule",
+    "cluster": "power-poly",
+    "copy": {
+      "en": {
+        "angle": "x^3 needs the binomial theorem, not the square case copied forward. (x+h)^3 = x^3 + 3x^2 h + 3x h^2 + h^3, so after subtracting x^3 and dividing by h the terms with h vanish and 3x^2 remains. The 3 is the number of ways to pick which factor of x supplied the h.",
+        "algebra": "Apply the power rule to x^3. The form to remember, already simplified, is 3*x^2.",
+        "mistakeTitle": "Answering 2*x^2",
+        "mistake": "2x^2 looks plausible if you remember x^2 but forget that the front factor is the old exponent, which is 3 here, not 2.",
+        "mistake2Title": "Forgetting to lower the exponent of x^3",
+        "mistake2": "The front coefficient of x^3 is only half the work. The exponent itself has to decrease by 1. Leaving the original power in place describes a different curve.",
+        "domain": "The expression is built from polynomials, sine, cosine, or exponentials, so the derivative exists for every real x.",
+        "check": "At x = 2, substitute into the simplified form 3*x^2. That number is the slope of x^3 there; a secant over a small step in x lands next to it."
+      },
+      "es": {
+        "angle": "x^3 pide el binomio, no copiar el caso del cuadrado. (x+h)^3 = x^3 + 3x^2 h + 3x h^2 + h^3; al restar x^3 y dividir entre h, los términos con h se van y queda 3x^2. El 3 cuenta de cuántas formas se elige el factor que aportó la h.",
+        "algebra": "Aplica la regla de la potencia a x^3. La forma que hay que recordar, ya simplificada, es 3*x^2.",
+        "mistakeTitle": "Responder 2*x^2",
+        "mistake": "2x^2 parece creíble si recuerdas x^2 y olvidas que el factor de delante es el exponente viejo, que aquí es 3 y no 2.",
+        "mistake2Title": "Olvidar bajar el exponente de x^3",
+        "mistake2": "El coeficiente de x^3 es solo la mitad del trabajo. El exponente tiene que bajar 1. Dejar la potencia original describe otra curva.",
+        "domain": "La expresión está hecha de polinomios, seno, coseno o exponenciales, así que la derivada existe para todo x real.",
+        "check": "En x = 2, sustituye en la forma simplificada 3*x^2. Ese número es la pendiente de x^3 en ese punto; una secante con un paso pequeño de x cae al lado."
+      },
+      "pt": {
+        "angle": "x^3 pede o binômio, não uma cópia do caso do quadrado. (x+h)^3 = x^3 + 3x^2 h + 3x h^2 + h^3; ao subtrair x^3 e dividir por h, os termos com h somem e resta 3x^2. O 3 conta de quantos jeitos se escolhe o fator que trouxe o h.",
+        "algebra": "Aplique a regra da potência a x^3. A forma para memorizar, já simplificada, é 3*x^2.",
+        "mistakeTitle": "Responder 2*x^2",
+        "mistake": "2x^2 parece plausível se você lembra x^2 e esquece que o fator da frente é o expoente antigo, que aqui é 3 e não 2.",
+        "mistake2Title": "Esquecer de baixar o expoente de x^3",
+        "mistake2": "O coeficiente de x^3 é só metade do trabalho. O expoente tem que diminuir 1. Deixar a potência original descreve outra curva.",
+        "domain": "A expressão é feita de polinômios, seno, cosseno ou exponenciais, então a derivada existe para todo x real.",
+        "check": "Em x = 2, substitua na forma simplificada 3*x^2. Esse número é a inclinação de x^3 nesse ponto; uma secante com um passo pequeno de x cai ao lado."
+      }
+    }
+  },
+  {
+    "slug": "derivative-of-x-to-the-4",
+    "display": "x^4",
+    "engine": "x^4",
+    "nice": "4*x^3",
+    "ruleWiki": "power-rule",
+    "cluster": "power-poly",
+    "copy": {
+      "en": {
+        "angle": "By the time the power is 4, the pattern is the lesson rather than another binomial expansion. Each of the four factors of x can be the one that produces the small change, so the derivative is 4x^3. Differentiating again would give 12x^2, which is the second-derivative check that the first factor really was 4.",
+        "algebra": "Apply the power rule to x^4. The form to remember, already simplified, is 4*x^3.",
+        "mistakeTitle": "Answering 3*x^3",
+        "mistake": "3x^3 would be right for x^3, and it is the usual off-by-one when the exponent and the front coefficient get swapped in your head.",
+        "mistake2Title": "Forgetting to lower the exponent of x^4",
+        "mistake2": "The front coefficient of x^4 is only half the work. The exponent itself has to decrease by 1. Leaving the original power in place describes a different curve.",
+        "domain": "The expression is built from polynomials, sine, cosine, or exponentials, so the derivative exists for every real x.",
+        "check": "At x = 1, substitute into the simplified form 4*x^3. That number is the slope of x^4 there; a secant over a small step in x lands next to it."
+      },
+      "es": {
+        "angle": "Cuando la potencia ya es 4, la lección es el patrón y no otro desarrollo del binomio. Cada uno de los cuatro factores de x puede ser el que produce el cambio pequeño, así que la derivada es 4x^3. Derivar otra vez da 12x^2, y eso confirma que el primer factor era 4.",
+        "algebra": "Aplica la regla de la potencia a x^4. La forma que hay que recordar, ya simplificada, es 4*x^3.",
+        "mistakeTitle": "Responder 3*x^3",
+        "mistake": "3x^3 sería correcto para x^3, y es el error de uno que aparece cuando el exponente y el coeficiente se cambian de sitio.",
+        "mistake2Title": "Olvidar bajar el exponente de x^4",
+        "mistake2": "El coeficiente de x^4 es solo la mitad del trabajo. El exponente tiene que bajar 1. Dejar la potencia original describe otra curva.",
+        "domain": "La expresión está hecha de polinomios, seno, coseno o exponenciales, así que la derivada existe para todo x real.",
+        "check": "En x = 1, sustituye en la forma simplificada 4*x^3. Ese número es la pendiente de x^4 en ese punto; una secante con un paso pequeño de x cae al lado."
+      },
+      "pt": {
+        "angle": "Quando a potência já é 4, a lição é o padrão, não mais uma expansão do binômio. Cada um dos quatro fatores de x pode ser o que produz a pequena mudança, então a derivada é 4x^3. Derivar de novo dá 12x^2, e isso confirma que o primeiro fator era 4.",
+        "algebra": "Aplique a regra da potência a x^4. A forma para memorizar, já simplificada, é 4*x^3.",
+        "mistakeTitle": "Responder 3*x^3",
+        "mistake": "3x^3 estaria certo para x^3, e é o erro de um que aparece quando o expoente e o coeficiente trocam de lugar.",
+        "mistake2Title": "Esquecer de baixar o expoente de x^4",
+        "mistake2": "O coeficiente de x^4 é só metade do trabalho. O expoente tem que diminuir 1. Deixar a potência original descreve outra curva.",
+        "domain": "A expressão é feita de polinômios, seno, cosseno ou exponenciais, então a derivada existe para todo x real.",
+        "check": "Em x = 1, substitua na forma simplificada 4*x^3. Esse número é a inclinação de x^4 nesse ponto; uma secante com um passo pequeno de x cai ao lado."
+      }
+    }
+  },
+  {
+    "slug": "derivative-of-3x-squared",
+    "display": "3x^2",
+    "engine": "3*x^2",
+    "nice": "6*x",
+    "ruleWiki": "power-rule",
+    "cluster": "power-poly",
+    "copy": {
+      "en": {
+        "angle": "The 3 in front of x^2 is a constant stretch, so it survives differentiation, and the power rule still turns x^2 into 2x. The two numbers multiply: 3·2x = 6x. Nothing in the constant is differentiated, because a constant has slope zero and only scales the slope of x^2.",
+        "algebra": "Apply the power rule to 3x^2. The form to remember, already simplified, is 6*x.",
+        "mistakeTitle": "Answering 3*x",
+        "mistake": "3x forgets to differentiate the square. The 3 stays, but the power still contributes a 2, and 3 times 2 is 6, not 3.",
+        "mistake2Title": "Forgetting to lower the exponent of 3x^2",
+        "mistake2": "The front coefficient of 3x^2 is only half the work. The exponent itself has to decrease by 1. Leaving the original power in place describes a different curve.",
+        "domain": "The expression is built from polynomials, sine, cosine, or exponentials, so the derivative exists for every real x.",
+        "check": "At x = 2, substitute into the simplified form 6*x. That number is the slope of 3x^2 there; a secant over a small step in x lands next to it."
+      },
+      "es": {
+        "angle": "El 3 delante de x^2 es un estiramiento constante, así que sobrevive, y la regla de la potencia sigue convirtiendo x^2 en 2x. Los dos números se multiplican: 3·2x = 6x. La constante no se deriva, porque su pendiente es cero y solo escala la de x^2.",
+        "algebra": "Aplica la regla de la potencia a 3x^2. La forma que hay que recordar, ya simplificada, es 6*x.",
+        "mistakeTitle": "Responder 3*x",
+        "mistake": "3x olvida derivar el cuadrado. El 3 se queda, pero la potencia aporta un 2, y 3 por 2 es 6, no 3.",
+        "mistake2Title": "Olvidar bajar el exponente de 3x^2",
+        "mistake2": "El coeficiente de 3x^2 es solo la mitad del trabajo. El exponente tiene que bajar 1. Dejar la potencia original describe otra curva.",
+        "domain": "La expresión está hecha de polinomios, seno, coseno o exponenciales, así que la derivada existe para todo x real.",
+        "check": "En x = 2, sustituye en la forma simplificada 6*x. Ese número es la pendiente de 3x^2 en ese punto; una secante con un paso pequeño de x cae al lado."
+      },
+      "pt": {
+        "angle": "O 3 na frente de x^2 é um esticamento constante, então ele sobrevive, e a regra da potência continua transformando x^2 em 2x. Os dois números se multiplicam: 3·2x = 6x. A constante não se deriva, porque sua inclinação é zero e só escala a de x^2.",
+        "algebra": "Aplique a regra da potência a 3x^2. A forma para memorizar, já simplificada, é 6*x.",
+        "mistakeTitle": "Responder 3*x",
+        "mistake": "3x esquece de derivar o quadrado. O 3 fica, mas a potência contribui com um 2, e 3 vezes 2 é 6, não 3.",
+        "mistake2Title": "Esquecer de baixar o expoente de 3x^2",
+        "mistake2": "O coeficiente de 3x^2 é só metade do trabalho. O expoente tem que diminuir 1. Deixar a potência original descreve outra curva.",
+        "domain": "A expressão é feita de polinômios, seno, cosseno ou exponenciais, então a derivada existe para todo x real.",
+        "check": "Em x = 2, substitua na forma simplificada 6*x. Esse número é a inclinação de 3x^2 nesse ponto; uma secante com um passo pequeno de x cai ao lado."
+      }
+    }
+  },
+  {
+    "slug": "derivative-of-2x",
+    "display": "2x",
+    "engine": "2*x",
+    "nice": "2",
+    "ruleWiki": "power-rule",
+    "cluster": "power-linear",
+    "copy": {
+      "en": {
+        "angle": "2x is a straight line. Its slope is the same number at every point, and that number is the coefficient 2. There is no x left in the derivative because a line does not get steeper as you move; the power rule on x^1 gives 1·x^0 = 1, then the 2 scales it.",
+        "algebra": "Apply the power rule to 2x. The form to remember, already simplified, is 2.",
+        "mistakeTitle": "Answering 2*x",
+        "mistake": "Leaving the answer as 2x copies the original function. The derivative of a line is the constant slope, not another line.",
+        "mistake2Title": "Keeping x in the derivative of 2x",
+        "mistake2": "2x is a line, so the derivative is a constant slope. An answer that still contains x is the original function, not its slope.",
+        "domain": "The expression is built from polynomials, sine, cosine, or exponentials, so the derivative exists for every real x.",
+        "check": "At x = 5, substitute into the simplified form 2. That number is the slope of 2x there; a secant over a small step in x lands next to it."
+      },
+      "es": {
+        "angle": "2x es una recta. Su pendiente es el mismo número en cada punto, y ese número es el coeficiente 2. No queda x en la derivada porque una recta no se empina al avanzar; la regla de la potencia en x^1 da 1·x^0 = 1, y el 2 lo escala.",
+        "algebra": "Aplica la regla de la potencia a 2x. La forma que hay que recordar, ya simplificada, es 2.",
+        "mistakeTitle": "Responder 2*x",
+        "mistake": "Dejar 2x copia la función original. La derivada de una recta es la pendiente constante, no otra recta.",
+        "mistake2Title": "Dejar x en la derivada de 2x",
+        "mistake2": "2x es una recta, así que la derivada es una pendiente constante. Una respuesta que todavía contiene x es la función original, no su pendiente.",
+        "domain": "La expresión está hecha de polinomios, seno, coseno o exponenciales, así que la derivada existe para todo x real.",
+        "check": "En x = 5, sustituye en la forma simplificada 2. Ese número es la pendiente de 2x en ese punto; una secante con un paso pequeño de x cae al lado."
+      },
+      "pt": {
+        "angle": "2x é uma reta. Sua inclinação é o mesmo número em cada ponto, e esse número é o coeficiente 2. Não sobra x na derivada porque uma reta não fica mais íngreme ao avançar; a regra da potência em x^1 dá 1·x^0 = 1, e o 2 escala esse 1.",
+        "algebra": "Aplique a regra da potência a 2x. A forma para memorizar, já simplificada, é 2.",
+        "mistakeTitle": "Responder 2*x",
+        "mistake": "Deixar 2x copia a função original. A derivada de uma reta é a inclinação constante, não outra reta.",
+        "mistake2Title": "Deixar x na derivada de 2x",
+        "mistake2": "2x é uma reta, então a derivada é uma inclinação constante. Uma resposta que ainda contém x é a função original, não a inclinação.",
+        "domain": "A expressão é feita de polinômios, seno, cosseno ou exponenciais, então a derivada existe para todo x real.",
+        "check": "Em x = 5, substitua na forma simplificada 2. Esse número é a inclinação de 2x nesse ponto; uma secante com um passo pequeno de x cai ao lado."
+      }
+    }
+  },
+  {
+    "slug": "derivative-of-5x",
+    "display": "5x",
+    "engine": "5*x",
+    "nice": "5",
+    "ruleWiki": "power-rule",
+    "cluster": "power-linear",
+    "copy": {
+      "en": {
+        "angle": "5x is the same kind of line as 2x, but the slope is 5 rather than 2. The graphs are parallel only if the coefficients match; here they do not. The derivative has to keep the 5 and drop the x, because d/dx(x) = 1 and a constant multiple factors out.",
+        "algebra": "Apply the power rule to 5x. The form to remember, already simplified, is 5.",
+        "mistakeTitle": "Answering 5*x",
+        "mistake": "Answering 2, or any slope borrowed from a different line, ignores the coefficient that is actually written in front of x.",
+        "mistake2Title": "Keeping x in the derivative of 5x",
+        "mistake2": "5x is a line, so the derivative is a constant slope. An answer that still contains x is the original function, not its slope.",
+        "domain": "The expression is built from polynomials, sine, cosine, or exponentials, so the derivative exists for every real x.",
+        "check": "At x = 1, substitute into the simplified form 5. That number is the slope of 5x there; a secant over a small step in x lands next to it."
+      },
+      "es": {
+        "angle": "5x es el mismo tipo de recta que 2x, pero la pendiente es 5 y no 2. Las gráficas solo son paralelas si los coeficientes coinciden; aquí no. La derivada conserva el 5 y suelta la x, porque d/dx(x) = 1 y una constante sale factor común.",
+        "algebra": "Aplica la regla de la potencia a 5x. La forma que hay que recordar, ya simplificada, es 5.",
+        "mistakeTitle": "Responder 5*x",
+        "mistake": "Responder 2, o cualquier pendiente prestada de otra recta, ignora el coeficiente que de verdad está delante de x.",
+        "mistake2Title": "Dejar x en la derivada de 5x",
+        "mistake2": "5x es una recta, así que la derivada es una pendiente constante. Una respuesta que todavía contiene x es la función original, no su pendiente.",
+        "domain": "La expresión está hecha de polinomios, seno, coseno o exponenciales, así que la derivada existe para todo x real.",
+        "check": "En x = 1, sustituye en la forma simplificada 5. Ese número es la pendiente de 5x en ese punto; una secante con un paso pequeño de x cae al lado."
+      },
+      "pt": {
+        "angle": "5x é o mesmo tipo de reta que 2x, mas a inclinação é 5 e não 2. Os gráficos só são paralelos se os coeficientes coincidem; aqui não. A derivada guarda o 5 e larga o x, porque d/dx(x) = 1 e uma constante sai como fator.",
+        "algebra": "Aplique a regra da potência a 5x. A forma para memorizar, já simplificada, é 5.",
+        "mistakeTitle": "Responder 5*x",
+        "mistake": "Responder 2, ou qualquer inclinação emprestada de outra reta, ignora o coeficiente que realmente está na frente de x.",
+        "mistake2Title": "Deixar x na derivada de 5x",
+        "mistake2": "5x é uma reta, então a derivada é uma inclinação constante. Uma resposta que ainda contém x é a função original, não a inclinação.",
+        "domain": "A expressão é feita de polinômios, seno, cosseno ou exponenciais, então a derivada existe para todo x real.",
+        "check": "Em x = 1, substitua na forma simplificada 5. Esse número é a inclinação de 5x nesse ponto; uma secante com um passo pequeno de x cai ao lado."
+      }
+    }
+  },
+  {
+    "slug": "derivative-of-x-plus-1",
+    "display": "x+1",
+    "engine": "x+1",
+    "nice": "1",
+    "ruleWiki": "power-rule",
+    "cluster": "power-linear",
+    "copy": {
+      "en": {
+        "angle": "x+1 is the line y = x shifted up by 1. A vertical shift does not change steepness, so the derivative is 1, the same as the derivative of x. The constant 1 is a height, not a slope, and the sum rule drops it.",
+        "algebra": "Apply the power rule to x+1. The form to remember, already simplified, is 1.",
+        "mistakeTitle": "Answering 1+1",
+        "mistake": "1+1 treats the constant as if it still depended on x. Adding the derivatives of x and of 1 gives 1 + 0, not 1 + 1.",
+        "mistake2Title": "Keeping x in the derivative of x+1",
+        "mistake2": "x+1 is a line, so the derivative is a constant slope. An answer that still contains x is the original function, not its slope.",
+        "domain": "The expression is built from polynomials, sine, cosine, or exponentials, so the derivative exists for every real x.",
+        "check": "At x = 4, substitute into the simplified form 1. That number is the slope of x+1 there; a secant over a small step in x lands next to it."
+      },
+      "es": {
+        "angle": "x+1 es la recta y = x subida una unidad. Un desplazamiento vertical no cambia la inclinación, así que la derivada es 1, igual que la de x. La constante 1 es una altura, no una pendiente, y la regla de la suma la elimina.",
+        "algebra": "Aplica la regla de la potencia a x+1. La forma que hay que recordar, ya simplificada, es 1.",
+        "mistakeTitle": "Responder 1+1",
+        "mistake": "1+1 trata la constante como si todavía dependiera de x. Sumar las derivadas de x y de 1 da 1 + 0, no 1 + 1.",
+        "mistake2Title": "Dejar x en la derivada de x+1",
+        "mistake2": "x+1 es una recta, así que la derivada es una pendiente constante. Una respuesta que todavía contiene x es la función original, no su pendiente.",
+        "domain": "La expresión está hecha de polinomios, seno, coseno o exponenciales, así que la derivada existe para todo x real.",
+        "check": "En x = 4, sustituye en la forma simplificada 1. Ese número es la pendiente de x+1 en ese punto; una secante con un paso pequeño de x cae al lado."
+      },
+      "pt": {
+        "angle": "x+1 é a reta y = x levantada uma unidade. Um deslocamento vertical não muda a inclinação, então a derivada é 1, igual à de x. A constante 1 é uma altura, não uma inclinação, e a regra da soma a elimina.",
+        "algebra": "Aplique a regra da potência a x+1. A forma para memorizar, já simplificada, é 1.",
+        "mistakeTitle": "Responder 1+1",
+        "mistake": "1+1 trata a constante como se ela ainda dependesse de x. Somar as derivadas de x e de 1 dá 1 + 0, não 1 + 1.",
+        "mistake2Title": "Deixar x na derivada de x+1",
+        "mistake2": "x+1 é uma reta, então a derivada é uma inclinação constante. Uma resposta que ainda contém x é a função original, não a inclinação.",
+        "domain": "A expressão é feita de polinômios, seno, cosseno ou exponenciais, então a derivada existe para todo x real.",
+        "check": "Em x = 4, substitua na forma simplificada 1. Esse número é a inclinação de x+1 nesse ponto; uma secante com um passo pequeno de x cai ao lado."
+      }
+    }
+  },
+  {
+    "slug": "derivative-of-1-minus-x",
+    "display": "1-x",
+    "engine": "1-x",
+    "nice": "-1",
+    "ruleWiki": "power-rule",
+    "cluster": "power-linear",
+    "copy": {
+      "en": {
+        "angle": "1-x is a line that falls as x grows. Rewrite it as -x + 1: the slope is the coefficient of x, which is -1, and the constant 1 still contributes nothing. The negative sign is the whole derivative; dropping it describes a line that climbs instead of descending.",
+        "algebra": "Apply the power rule to 1-x. The form to remember, already simplified, is -1.",
+        "mistakeTitle": "Answering 1",
+        "mistake": "Answering 1 keeps the constant and loses the minus on x. The graph decreases through the intercept, so the slope cannot be positive.",
+        "mistake2Title": "Keeping x in the derivative of 1-x",
+        "mistake2": "1-x is a line, so the derivative is a constant slope. An answer that still contains x is the original function, not its slope.",
+        "domain": "The expression is built from polynomials, sine, cosine, or exponentials, so the derivative exists for every real x.",
+        "check": "At x = 0, substitute into the simplified form -1. That number is the slope of 1-x there; a secant over a small step in x lands next to it."
+      },
+      "es": {
+        "angle": "1−x es una recta que baja cuando x crece. Reescríbela como −x + 1: la pendiente es el coeficiente de x, que es −1, y la constante 1 no aporta nada. El signo menos es toda la derivada; quitarlo describe una recta que sube.",
+        "algebra": "Aplica la regla de la potencia a 1-x. La forma que hay que recordar, ya simplificada, es -1.",
+        "mistakeTitle": "Responder 1",
+        "mistake": "Responder 1 conserva la constante y pierde el menos de x. La gráfica baja al cruzar el corte, así que la pendiente no puede ser positiva.",
+        "mistake2Title": "Dejar x en la derivada de 1-x",
+        "mistake2": "1-x es una recta, así que la derivada es una pendiente constante. Una respuesta que todavía contiene x es la función original, no su pendiente.",
+        "domain": "La expresión está hecha de polinomios, seno, coseno o exponenciales, así que la derivada existe para todo x real.",
+        "check": "En x = 0, sustituye en la forma simplificada -1. Ese número es la pendiente de 1-x en ese punto; una secante con un paso pequeño de x cae al lado."
+      },
+      "pt": {
+        "angle": "1−x é uma reta que desce quando x cresce. Reescreva como −x + 1: a inclinação é o coeficiente de x, que é −1, e a constante 1 não contribui. O sinal de menos é a derivada inteira; tirá-lo descreve uma reta que sobe.",
+        "algebra": "Aplique a regra da potência a 1-x. A forma para memorizar, já simplificada, é -1.",
+        "mistakeTitle": "Responder 1",
+        "mistake": "Responder 1 guarda a constante e perde o menos do x. O gráfico desce ao cruzar o intercepto, então a inclinação não pode ser positiva.",
+        "mistake2Title": "Deixar x na derivada de 1-x",
+        "mistake2": "1-x é uma reta, então a derivada é uma inclinação constante. Uma resposta que ainda contém x é a função original, não a inclinação.",
+        "domain": "A expressão é feita de polinômios, seno, cosseno ou exponenciais, então a derivada existe para todo x real.",
+        "check": "Em x = 0, substitua na forma simplificada -1. Esse número é a inclinação de 1-x nesse ponto; uma secante com um passo pequeno de x cai ao lado."
+      }
+    }
+  },
+  {
+    "slug": "derivative-of-minus-x",
+    "display": "-x",
+    "engine": "-x",
+    "nice": "-1",
+    "ruleWiki": "power-rule",
+    "cluster": "power-linear",
+    "copy": {
+      "en": {
+        "angle": "−x is the line through the origin with negative slope. There is no extra constant to drop and no power higher than 1, so the derivative is exactly the coefficient −1. It is the same answer as the derivative of 1−x, because those two lines are vertical shifts of each other.",
+        "algebra": "Apply the power rule to -x. The form to remember, already simplified, is -1.",
+        "mistakeTitle": "Answering 1",
+        "mistake": "Answering 1 loses the sign. The line y = −x falls at 45 degrees, so every secant slope is −1.",
+        "mistake2Title": "Keeping x in the derivative of -x",
+        "mistake2": "-x is a line, so the derivative is a constant slope. An answer that still contains x is the original function, not its slope.",
+        "domain": "The expression is built from polynomials, sine, cosine, or exponentials, so the derivative exists for every real x.",
+        "check": "At x = 2, substitute into the simplified form -1. That number is the slope of -x there; a secant over a small step in x lands next to it."
+      },
+      "es": {
+        "angle": "−x es la recta por el origen con pendiente negativa. No hay constante extra que eliminar ni potencia mayor que 1, así que la derivada es exactamente el coeficiente −1. Es la misma respuesta que la de 1−x, porque esas dos rectas son desplazamientos verticales una de la otra.",
+        "algebra": "Aplica la regla de la potencia a -x. La forma que hay que recordar, ya simplificada, es -1.",
+        "mistakeTitle": "Responder 1",
+        "mistake": "Responder 1 pierde el signo. La recta y = −x baja a 45 grados, así que toda pendiente secante es −1.",
+        "mistake2Title": "Dejar x en la derivada de -x",
+        "mistake2": "-x es una recta, así que la derivada es una pendiente constante. Una respuesta que todavía contiene x es la función original, no su pendiente.",
+        "domain": "La expresión está hecha de polinomios, seno, coseno o exponenciales, así que la derivada existe para todo x real.",
+        "check": "En x = 2, sustituye en la forma simplificada -1. Ese número es la pendiente de -x en ese punto; una secante con un paso pequeño de x cae al lado."
+      },
+      "pt": {
+        "angle": "−x é a reta pela origem com inclinação negativa. Não há constante extra para eliminar nem potência maior que 1, então a derivada é exatamente o coeficiente −1. É a mesma resposta que a de 1−x, porque essas duas retas são deslocamentos verticais uma da outra.",
+        "algebra": "Aplique a regra da potência a -x. A forma para memorizar, já simplificada, é -1.",
+        "mistakeTitle": "Responder 1",
+        "mistake": "Responder 1 perde o sinal. A reta y = −x desce a 45 graus, então toda inclinação secante é −1.",
+        "mistake2Title": "Deixar x na derivada de -x",
+        "mistake2": "-x é uma reta, então a derivada é uma inclinação constante. Uma resposta que ainda contém x é a função original, não a inclinação.",
+        "domain": "A expressão é feita de polinômios, seno, cosseno ou exponenciais, então a derivada existe para todo x real.",
+        "check": "Em x = 2, substitua na forma simplificada -1. Esse número é a inclinação de -x nesse ponto; uma secante com um passo pequeno de x cai ao lado."
+      }
+    }
+  },
+  {
+    "slug": "derivative-of-constant",
+    "display": "5",
+    "engine": "5",
+    "nice": "0",
+    "ruleWiki": "power-rule",
+    "cluster": "power-const",
+    "copy": {
+      "en": {
+        "angle": "The constant function 5 is a horizontal line. Moving x does not change the output, so the rate of change is 0. This is the prototype for every later constant term: x^2+1, x+1, and pi all lose their constant piece for the same reason.",
+        "algebra": "Apply the power rule to 5. The form to remember, already simplified, is 0.",
+        "mistakeTitle": "Answering 5",
+        "mistake": "Answering 5 confuses the height of the line with its slope. Height can be 5 while the slope stays 0.",
+        "mistake2Title": "Treating 5 as a variable",
+        "mistake2": "A symbol in the input is a variable only if it is x. Anything else that does not change with x has slope 0.",
+        "domain": "The expression is built from polynomials, sine, cosine, or exponentials, so the derivative exists for every real x.",
+        "check": "At x = 7, substitute into the simplified form 0. That number is the slope of 5 there; a secant over a small step in x lands next to it."
+      },
+      "es": {
+        "angle": "La función constante 5 es una recta horizontal. Mover x no cambia el valor, así que la tasa de cambio es 0. Es el prototipo de cada término constante posterior: x^2+1, x+1 y pi pierden su trozo constante por la misma razón.",
+        "algebra": "Aplica la regla de la potencia a 5. La forma que hay que recordar, ya simplificada, es 0.",
+        "mistakeTitle": "Responder 5",
+        "mistake": "Responder 5 confunde la altura de la recta con su pendiente. La altura puede ser 5 y la pendiente seguir en 0.",
+        "mistake2Title": "Tratar 5 como variable",
+        "mistake2": "Un símbolo es variable solo si es x. Cualquier otra cosa que no cambia con x tiene pendiente 0.",
+        "domain": "La expresión está hecha de polinomios, seno, coseno o exponenciales, así que la derivada existe para todo x real.",
+        "check": "En x = 7, sustituye en la forma simplificada 0. Ese número es la pendiente de 5 en ese punto; una secante con un paso pequeño de x cae al lado."
+      },
+      "pt": {
+        "angle": "A função constante 5 é uma reta horizontal. Mexer em x não muda o valor, então a taxa de variação é 0. É o protótipo de cada termo constante depois: x^2+1, x+1 e pi perdem o pedaço constante pelo mesmo motivo.",
+        "algebra": "Aplique a regra da potência a 5. A forma para memorizar, já simplificada, é 0.",
+        "mistakeTitle": "Responder 5",
+        "mistake": "Responder 5 confunde a altura da reta com a inclinação. A altura pode ser 5 e a inclinação continuar 0.",
+        "mistake2Title": "Tratar 5 como variável",
+        "mistake2": "Um símbolo é variável só se for x. Qualquer outra coisa que não muda com x tem inclinação 0.",
+        "domain": "A expressão é feita de polinômios, seno, cosseno ou exponenciais, então a derivada existe para todo x real.",
+        "check": "Em x = 7, substitua na forma simplificada 0. Esse número é a inclinação de 5 nesse ponto; uma secante com um passo pequeno de x cai ao lado."
+      }
+    }
+  },
+  {
+    "slug": "derivative-of-pi",
+    "display": "pi",
+    "engine": "pi",
+    "nice": "0",
+    "ruleWiki": "power-rule",
+    "cluster": "power-const",
+    "copy": {
+      "en": {
+        "angle": "Pi is a number, about 3.1416, even though it is written as a Greek letter. A letter is not automatically a variable. Because pi does not depend on x, its derivative is 0, just like the derivative of 5. The two pages differ in the trap: here the trap is treating a famous constant as if it were a function of x.",
+        "algebra": "Apply the power rule to pi. The form to remember, already simplified, is 0.",
+        "mistakeTitle": "Answering 1",
+        "mistake": "Answering 1, or cos of something, treats pi as if it were the variable or an angle that still changes. In d/dx, pi is fixed.",
+        "mistake2Title": "Treating pi as a variable",
+        "mistake2": "A symbol in the input is a variable only if it is x. Anything else that does not change with x has slope 0.",
+        "domain": "The expression is built from polynomials, sine, cosine, or exponentials, so the derivative exists for every real x.",
+        "check": "At x = 1, substitute into the simplified form 0. That number is the slope of pi there; a secant over a small step in x lands next to it."
+      },
+      "es": {
+        "angle": "Pi es un número, cerca de 3.1416, aunque se escriba con una letra griega. Una letra no es automáticamente una variable. Como pi no depende de x, su derivada es 0, igual que la de 5. Las dos páginas se distinguen por la trampa: aquí la trampa es tratar una constante famosa como si fuera función de x.",
+        "algebra": "Aplica la regla de la potencia a pi. La forma que hay que recordar, ya simplificada, es 0.",
+        "mistakeTitle": "Responder 1",
+        "mistake": "Responder 1, o el coseno de algo, trata pi como si fuera la variable o un ángulo que todavía cambia. En d/dx, pi está fijo.",
+        "mistake2Title": "Tratar pi como variable",
+        "mistake2": "Un símbolo es variable solo si es x. Cualquier otra cosa que no cambia con x tiene pendiente 0.",
+        "domain": "La expresión está hecha de polinomios, seno, coseno o exponenciales, así que la derivada existe para todo x real.",
+        "check": "En x = 1, sustituye en la forma simplificada 0. Ese número es la pendiente de pi en ese punto; una secante con un paso pequeño de x cae al lado."
+      },
+      "pt": {
+        "angle": "Pi é um número, cerca de 3,1416, embora se escreva com uma letra grega. Uma letra não é automaticamente uma variável. Como pi não depende de x, sua derivada é 0, igual à de 5. As duas páginas diferem na armadilha: aqui a armadilha é tratar uma constante famosa como se fosse função de x.",
+        "algebra": "Aplique a regra da potência a pi. A forma para memorizar, já simplificada, é 0.",
+        "mistakeTitle": "Responder 1",
+        "mistake": "Responder 1, ou o cosseno de algo, trata pi como se fosse a variável ou um ângulo que ainda muda. Em d/dx, pi está fixo.",
+        "mistake2Title": "Tratar pi como variável",
+        "mistake2": "Um símbolo é variável só se for x. Qualquer outra coisa que não muda com x tem inclinação 0.",
+        "domain": "A expressão é feita de polinômios, seno, cosseno ou exponenciais, então a derivada existe para todo x real.",
+        "check": "Em x = 1, substitua na forma simplificada 0. Esse número é a inclinação de pi nesse ponto; uma secante com um passo pequeno de x cai ao lado."
+      }
+    }
+  },
+  {
+    "slug": "derivative-of-sqrt-x",
+    "display": "sqrt(x)",
+    "engine": "sqrt(x)",
+    "nice": "(1/2)*x^(-1/2)",
+    "ruleWiki": "power-rule",
+    "cluster": "power-radical",
+    "copy": {
+      "en": {
+        "angle": "Square root is the power x^(1/2). The power rule multiplies by 1/2 and subtracts 1 from the exponent, leaving (1/2) x^(−1/2), which is 1/(2 sqrt(x)). The 2 in the denominator is the old exponent turned upside down; it is not an extra chain-rule factor.",
+        "algebra": "Apply the power rule to sqrt(x). The form to remember, already simplified, is (1/2)*x^(-1/2).",
+        "mistakeTitle": "Answering 1/(2*x)",
+        "mistake": "1/(2x) puts the 2 next to x instead of next to the square root. At x = 4 that wrong answer is 1/8, while the true slope is 1/4.",
+        "mistake2Title": "Ignoring the domain of sqrt(x)",
+        "mistake2": "A fractional power can blow up at 0 or refuse negative inputs. The algebraic formula is not a license to evaluate it where the original root is not real.",
+        "domain": "The expression needs x > 0. At 0 and on the negatives it is undefined as a real function, so the derivative is too.",
+        "check": "At x = 4, substitute into the simplified form (1/2)*x^(-1/2). That number is the slope of sqrt(x) there; a secant over a small step in x lands next to it."
+      },
+      "es": {
+        "angle": "La raíz cuadrada es la potencia x^(1/2). La regla de la potencia multiplica por 1/2 y resta 1 al exponente, y queda (1/2) x^(−1/2), o sea 1/(2 sqrt(x)). El 2 del denominador es el exponente viejo invertido; no es un factor extra de la regla de la cadena.",
+        "algebra": "Aplica la regla de la potencia a sqrt(x). La forma que hay que recordar, ya simplificada, es (1/2)*x^(-1/2).",
+        "mistakeTitle": "Responder 1/(2*x)",
+        "mistake": "1/(2x) pone el 2 junto a x y no junto a la raíz. En x = 4 esa respuesta falsa es 1/8, y la pendiente real es 1/4.",
+        "mistake2Title": "Ignorar el dominio de sqrt(x)",
+        "mistake2": "Una potencia fraccionaria puede dispararse en 0 o rechazar negativos. La fórmula algebraica no autoriza a evaluarla donde la raíz original no es real.",
+        "domain": "La expresión exige x > 0. En 0 y en los negativos no está definida como función real, y la derivada tampoco.",
+        "check": "En x = 4, sustituye en la forma simplificada (1/2)*x^(-1/2). Ese número es la pendiente de sqrt(x) en ese punto; una secante con un paso pequeño de x cae al lado."
+      },
+      "pt": {
+        "angle": "A raiz quadrada é a potência x^(1/2). A regra da potência multiplica por 1/2 e subtrai 1 do expoente, deixando (1/2) x^(−1/2), isto é 1/(2 sqrt(x)). O 2 do denominador é o expoente antigo invertido; não é um fator extra da regra da cadeia.",
+        "algebra": "Aplique a regra da potência a sqrt(x). A forma para memorizar, já simplificada, é (1/2)*x^(-1/2).",
+        "mistakeTitle": "Responder 1/(2*x)",
+        "mistake": "1/(2x) põe o 2 junto de x e não junto da raiz. Em x = 4 essa resposta falsa é 1/8, e a inclinação real é 1/4.",
+        "mistake2Title": "Ignorar o domínio de sqrt(x)",
+        "mistake2": "Uma potência fracionária pode disparar em 0 ou recusar negativos. A fórmula algébrica não autoriza avaliá-la onde a raiz original não é real.",
+        "domain": "A expressão exige x > 0. Em 0 e nos negativos ela não está definida como função real, e a derivada também não.",
+        "check": "Em x = 4, substitua na forma simplificada (1/2)*x^(-1/2). Esse número é a inclinação de sqrt(x) nesse ponto; uma secante com um passo pequeno de x cai ao lado."
+      }
+    }
+  },
+  {
+    "slug": "derivative-of-root-x",
+    "display": "x^(1/2)",
+    "engine": "x^(1/2)",
+    "nice": "(1/2)*x^(-1/2)",
+    "ruleWiki": "power-rule",
+    "cluster": "power-radical",
+    "copy": {
+      "en": {
+        "angle": "This page writes the square root as the rational exponent 1/2 instead of the radical sign. The algebra is the same function as sqrt(x), and the derivative matches, but the steps start from n = 1/2: multiply by 1/2, then the new exponent is 1/2 − 1 = −1/2. Students who searched the exponent form need to see that subtraction, not a rewritten radical, as the first move.",
+        "algebra": "Apply the power rule to x^(1/2). The form to remember, already simplified, is (1/2)*x^(-1/2).",
+        "mistakeTitle": "Answering (1/2)*x^(1/2)",
+        "mistake": "Multiplying by 1/2 without changing the exponent leaves (1/2) sqrt(x), which still grows, while the true derivative shrinks as x gets large.",
+        "mistake2Title": "Ignoring the domain of x^(1/2)",
+        "mistake2": "A fractional power can blow up at 0 or refuse negative inputs. The algebraic formula is not a license to evaluate it where the original root is not real.",
+        "domain": "The expression needs x > 0. At 0 and on the negatives it is undefined as a real function, so the derivative is too.",
+        "check": "At x = 9, substitute into the simplified form (1/2)*x^(-1/2). That number is the slope of x^(1/2) there; a secant over a small step in x lands next to it."
+      },
+      "es": {
+        "angle": "Esta página escribe la raíz como el exponente racional 1/2, no con el signo radical. Es la misma función que sqrt(x) y la derivada coincide, pero los pasos arrancan de n = 1/2: se multiplica por 1/2 y el nuevo exponente es 1/2 − 1 = −1/2. Quien buscó la forma con exponente necesita ver esa resta, no un radical reescrito, como primer paso.",
+        "algebra": "Aplica la regla de la potencia a x^(1/2). La forma que hay que recordar, ya simplificada, es (1/2)*x^(-1/2).",
+        "mistakeTitle": "Responder (1/2)*x^(1/2)",
+        "mistake": "Multiplicar por 1/2 sin cambiar el exponente deja (1/2) sqrt(x), que sigue creciendo, mientras la derivada verdadera se achica cuando x crece.",
+        "mistake2Title": "Ignorar el dominio de x^(1/2)",
+        "mistake2": "Una potencia fraccionaria puede dispararse en 0 o rechazar negativos. La fórmula algebraica no autoriza a evaluarla donde la raíz original no es real.",
+        "domain": "La expresión exige x > 0. En 0 y en los negativos no está definida como función real, y la derivada tampoco.",
+        "check": "En x = 9, sustituye en la forma simplificada (1/2)*x^(-1/2). Ese número es la pendiente de x^(1/2) en ese punto; una secante con un paso pequeño de x cae al lado."
+      },
+      "pt": {
+        "angle": "Esta página escreve a raiz como o expoente racional 1/2, não com o sinal de radical. É a mesma função que sqrt(x) e a derivada coincide, mas os passos começam de n = 1/2: multiplica-se por 1/2 e o novo expoente é 1/2 − 1 = −1/2. Quem buscou a forma com expoente precisa ver essa subtração, não um radical reescrito, como primeiro passo.",
+        "algebra": "Aplique a regra da potência a x^(1/2). A forma para memorizar, já simplificada, é (1/2)*x^(-1/2).",
+        "mistakeTitle": "Responder (1/2)*x^(1/2)",
+        "mistake": "Multiplicar por 1/2 sem mudar o expoente deixa (1/2) sqrt(x), que continua crescendo, enquanto a derivada verdadeira encolhe quando x cresce.",
+        "mistake2Title": "Ignorar o domínio de x^(1/2)",
+        "mistake2": "Uma potência fracionária pode disparar em 0 ou recusar negativos. A fórmula algébrica não autoriza avaliá-la onde a raiz original não é real.",
+        "domain": "A expressão exige x > 0. Em 0 e nos negativos ela não está definida como função real, e a derivada também não.",
+        "check": "Em x = 9, substitua na forma simplificada (1/2)*x^(-1/2). Esse número é a inclinação de x^(1/2) nesse ponto; uma secante com um passo pequeno de x cai ao lado."
+      }
+    }
+  },
+  {
+    "slug": "derivative-of-cbrt-x",
+    "display": "cbrt(x)",
+    "engine": "x^(1/3)",
+    "nice": "(1/3)*x^(-2/3)",
+    "ruleWiki": "power-rule",
+    "cluster": "power-radical",
+    "copy": {
+      "en": {
+        "angle": "The cube root is x^(1/3), and unlike the square root it is defined for negative x. The power rule multiplies by 1/3 and the new exponent is 1/3 − 1 = −2/3, so the derivative is 1/(3 x^(2/3)). The exponent on the denominator is 2/3, not 1/3, because you subtracted 1 rather than copying the original power.",
+        "algebra": "Apply the power rule to cbrt(x). The form to remember, already simplified, is (1/3)*x^(-2/3).",
+        "mistakeTitle": "Answering (1/3)*x^(1/3)",
+        "mistake": "Keeping the exponent at 1/3 after multiplying by 1/3 skips the subtraction. The derivative must blow up at zero; (1/3) cbrt(x) does not.",
+        "mistake2Title": "Ignoring the domain of cbrt(x)",
+        "mistake2": "A fractional power can blow up at 0 or refuse negative inputs. The algebraic formula is not a license to evaluate it where the original root is not real.",
+        "domain": "The derivative exists for every real x except 0, where a denominator vanishes or a negative power blows up.",
+        "check": "At x = 8, substitute into the simplified form (1/3)*x^(-2/3). That number is the slope of cbrt(x) there; a secant over a small step in x lands next to it."
+      },
+      "es": {
+        "angle": "La raíz cúbica es x^(1/3) y, a diferencia de la cuadrada, está definida para x negativo. La regla de la potencia multiplica por 1/3 y el nuevo exponente es 1/3 − 1 = −2/3, así que la derivada es 1/(3 x^(2/3)). El exponente del denominador es 2/3, no 1/3, porque restaste 1 en lugar de copiar la potencia original.",
+        "algebra": "Aplica la regla de la potencia a cbrt(x). La forma que hay que recordar, ya simplificada, es (1/3)*x^(-2/3).",
+        "mistakeTitle": "Responder (1/3)*x^(1/3)",
+        "mistake": "Dejar el exponente en 1/3 después de multiplicar por 1/3 se salta la resta. La derivada tiene que dispararse en cero; (1/3) cbrt(x) no lo hace.",
+        "mistake2Title": "Ignorar el dominio de cbrt(x)",
+        "mistake2": "Una potencia fraccionaria puede dispararse en 0 o rechazar negativos. La fórmula algebraica no autoriza a evaluarla donde la raíz original no es real.",
+        "domain": "La derivada existe para todo x real salvo 0, donde un denominador se anula o una potencia negativa se dispara.",
+        "check": "En x = 8, sustituye en la forma simplificada (1/3)*x^(-2/3). Ese número es la pendiente de cbrt(x) en ese punto; una secante con un paso pequeño de x cae al lado."
+      },
+      "pt": {
+        "angle": "A raiz cúbica é x^(1/3) e, ao contrário da quadrada, está definida para x negativo. A regra da potência multiplica por 1/3 e o novo expoente é 1/3 − 1 = −2/3, então a derivada é 1/(3 x^(2/3)). O expoente do denominador é 2/3, não 1/3, porque você subtraiu 1 em vez de copiar a potência original.",
+        "algebra": "Aplique a regra da potência a cbrt(x). A forma para memorizar, já simplificada, é (1/3)*x^(-2/3).",
+        "mistakeTitle": "Responder (1/3)*x^(1/3)",
+        "mistake": "Manter o expoente em 1/3 depois de multiplicar por 1/3 pula a subtração. A derivada tem que disparar em zero; (1/3) cbrt(x) não dispara.",
+        "mistake2Title": "Ignorar o domínio de cbrt(x)",
+        "mistake2": "Uma potência fracionária pode disparar em 0 ou recusar negativos. A fórmula algébrica não autoriza avaliá-la onde a raiz original não é real.",
+        "domain": "A derivada existe para todo x real exceto 0, onde um denominador se anula ou uma potência negativa dispara.",
+        "check": "Em x = 8, substitua na forma simplificada (1/3)*x^(-2/3). Esse número é a inclinação de cbrt(x) nesse ponto; uma secante com um passo pequeno de x cai ao lado."
+      }
+    }
+  },
+  {
+    "slug": "derivative-of-1-over-x",
+    "display": "1/x",
+    "engine": "1/x",
+    "nice": "-x^(-2)",
+    "ruleWiki": "quotient-rule",
+    "cluster": "quotient",
+    "copy": {
+      "en": {
+        "angle": "1/x is the power x^(−1). Multiplying by the exponent −1 and subtracting 1 produces −x^(−2), which is −1/x^2. The quotient rule on 1/x gives the same fraction: numerator 0·x − 1·1, over x^2. The minus sign is the whole story of this derivative; without it the reciprocal would be described as increasing.",
+        "algebra": "Apply the quotient rule to 1/x. The form to remember, already simplified, is -x^(-2).",
+        "mistakeTitle": "Answering 1/x^2",
+        "mistake": "1/x^2 has the right denominator and the wrong sign. For positive x the reciprocal falls as x grows, so the slope is negative.",
+        "mistake2Title": "Dropping the minus on 1/x",
+        "mistake2": "Rewriting as a negative power makes the minus sign come from the exponent. A positive answer describes a reciprocal that grows, and these reciprocals do not.",
+        "domain": "The derivative exists for every real x except 0, where a denominator vanishes or a negative power blows up.",
+        "check": "At x = 2, substitute into the simplified form -x^(-2). That number is the slope of 1/x there; a secant over a small step in x lands next to it."
+      },
+      "es": {
+        "angle": "1/x es la potencia x^(−1). Multiplicar por el exponente −1 y restar 1 produce −x^(−2), o sea −1/x^2. La regla del cociente en 1/x da la misma fracción: numerador 0·x − 1·1, sobre x^2. El signo menos es toda la historia; sin él la recíproca se describiría como creciente.",
+        "algebra": "Aplica la regla del cociente a 1/x. La forma que hay que recordar, ya simplificada, es -x^(-2).",
+        "mistakeTitle": "Responder 1/x^2",
+        "mistake": "1/x^2 tiene el denominador correcto y el signo mal. Para x positivo la recíproca baja cuando x crece, así que la pendiente es negativa.",
+        "mistake2Title": "Perder el menos de 1/x",
+        "mistake2": "Reescribir como potencia negativa hace que el menos salga del exponente. Una respuesta positiva describe una recíproca que crece, y estas no crecen.",
+        "domain": "La derivada existe para todo x real salvo 0, donde un denominador se anula o una potencia negativa se dispara.",
+        "check": "En x = 2, sustituye en la forma simplificada -x^(-2). Ese número es la pendiente de 1/x en ese punto; una secante con un paso pequeño de x cae al lado."
+      },
+      "pt": {
+        "angle": "1/x é a potência x^(−1). Multiplicar pelo expoente −1 e subtrair 1 produz −x^(−2), isto é −1/x^2. A regra do quociente em 1/x dá a mesma fração: numerador 0·x − 1·1, sobre x^2. O sinal de menos é a história inteira; sem ele a recíproca seria descrita como crescente.",
+        "algebra": "Aplique a regra do quociente a 1/x. A forma para memorizar, já simplificada, é -x^(-2).",
+        "mistakeTitle": "Responder 1/x^2",
+        "mistake": "1/x^2 tem o denominador certo e o sinal errado. Para x positivo a recíproca desce quando x cresce, então a inclinação é negativa.",
+        "mistake2Title": "Perder o menos de 1/x",
+        "mistake2": "Reescrever como potência negativa faz o menos sair do expoente. Uma resposta positiva descreve uma recíproca que cresce, e estas não crescem.",
+        "domain": "A derivada existe para todo x real exceto 0, onde um denominador se anula ou uma potência negativa dispara.",
+        "check": "Em x = 2, substitua na forma simplificada -x^(-2). Esse número é a inclinação de 1/x nesse ponto; uma secante com um passo pequeno de x cai ao lado."
+      }
+    },
+    "alsoWiki": [
+      "power-rule"
+    ]
+  },
+  {
+    "slug": "derivative-of-1-over-x-squared",
+    "display": "1/x^2",
+    "engine": "1/x^2",
+    "nice": "-2*x^(-3)",
+    "ruleWiki": "quotient-rule",
+    "cluster": "quotient",
+    "copy": {
+      "en": {
+        "angle": "1/x^2 is x^(−2). The exponent −2 comes down and then becomes −3, so the derivative is −2 x^(−3), or −2/x^3. The extra 2 is the old exponent, not a chain-rule accident. This is the striking-distance page for queries such as the derivative of 1/x^2: the sign and the 2 both have to be there.",
+        "algebra": "Apply the quotient rule to 1/x^2. The form to remember, already simplified, is -2*x^(-3).",
+        "mistakeTitle": "Answering -1/x^3",
+        "mistake": "−1/x^3 drops the factor 2. The power was −2, so the coefficient in front of the derivative has to be −2, not −1.",
+        "mistake2Title": "Dropping the minus on 1/x^2",
+        "mistake2": "Rewriting as a negative power makes the minus sign come from the exponent. A positive answer describes a reciprocal that grows, and these reciprocals do not.",
+        "domain": "The derivative exists for every real x except 0, where a denominator vanishes or a negative power blows up.",
+        "check": "At x = 1, substitute into the simplified form -2*x^(-3). That number is the slope of 1/x^2 there; a secant over a small step in x lands next to it."
+      },
+      "es": {
+        "angle": "1/x^2 es x^(−2). El exponente −2 baja y luego pasa a −3, así que la derivada es −2 x^(−3), o −2/x^3. El 2 extra es el exponente viejo, no un accidente de la regla de la cadena. En esta página importan el signo y el 2 a la vez.",
+        "algebra": "Aplica la regla del cociente a 1/x^2. La forma que hay que recordar, ya simplificada, es -2*x^(-3).",
+        "mistakeTitle": "Responder -1/x^3",
+        "mistake": "−1/x^3 pierde el factor 2. La potencia era −2, así que el coeficiente delante de la derivada tiene que ser −2, no −1.",
+        "mistake2Title": "Perder el menos de 1/x^2",
+        "mistake2": "Reescribir como potencia negativa hace que el menos salga del exponente. Una respuesta positiva describe una recíproca que crece, y estas no crecen.",
+        "domain": "La derivada existe para todo x real salvo 0, donde un denominador se anula o una potencia negativa se dispara.",
+        "check": "En x = 1, sustituye en la forma simplificada -2*x^(-3). Ese número es la pendiente de 1/x^2 en ese punto; una secante con un paso pequeño de x cae al lado."
+      },
+      "pt": {
+        "angle": "1/x^2 é x^(−2). O expoente −2 desce e depois vira −3, então a derivada é −2 x^(−3), ou −2/x^3. O 2 extra é o expoente antigo, não um acidente da regra da cadeia. Nesta página o sinal e o 2 precisam estar juntos.",
+        "algebra": "Aplique a regra do quociente a 1/x^2. A forma para memorizar, já simplificada, é -2*x^(-3).",
+        "mistakeTitle": "Responder -1/x^3",
+        "mistake": "−1/x^3 perde o fator 2. A potência era −2, então o coeficiente na frente da derivada tem que ser −2, não −1.",
+        "mistake2Title": "Perder o menos de 1/x^2",
+        "mistake2": "Reescrever como potência negativa faz o menos sair do expoente. Uma resposta positiva descreve uma recíproca que cresce, e estas não crescem.",
+        "domain": "A derivada existe para todo x real exceto 0, onde um denominador se anula ou uma potência negativa dispara.",
+        "check": "Em x = 1, substitua na forma simplificada -2*x^(-3). Esse número é a inclinação de 1/x^2 nesse ponto; uma secante com um passo pequeno de x cai ao lado."
+      }
+    },
+    "alsoWiki": [
+      "power-rule"
+    ]
+  },
+  {
+    "slug": "derivative-of-sin-x",
+    "display": "sin(x)",
+    "engine": "sin(x)",
+    "nice": "cos(x)",
+    "ruleWiki": "trigonometric-derivatives",
+    "cluster": "trig-basic",
+    "copy": {
+      "en": {
+        "angle": "Sine starts at the origin with slope 1, and that slope is the value of cosine. The derivative of sin(x) is cos(x) with no minus and no extra factor, because the inside is x itself and the chain-rule factor is 1. A minus sign belongs to the derivative of cosine, not of sine.",
+        "algebra": "Apply the trigonometric derivative to sin(x). The form to remember, already simplified, is cos(x).",
+        "mistakeTitle": "Answering -cos(x)",
+        "mistake": "−cos(x) is the derivative of cos(x), borrowed by mistake. Sine is increasing at zero, so its derivative there is +1, not −1.",
+        "mistake2Title": "Swapping sin(x) with its cofunction",
+        "mistake2": "Sine and cosine, tangent and cotangent, secant and cosecant are not interchangeable. The minus sign lives on the cofunction side.",
+        "domain": "The expression is built from polynomials, sine, cosine, or exponentials, so the derivative exists for every real x.",
+        "check": "At x = 0, substitute into the simplified form cos(x). That number is the slope of sin(x) there; a secant over a small step in x lands next to it."
+      },
+      "es": {
+        "angle": "El seno arranca en el origen con pendiente 1, y esa pendiente es el valor del coseno. La derivada de sin(x) es cos(x), sin menos y sin factor extra, porque el interior es x y el factor de la cadena es 1. El signo menos pertenece a la derivada del coseno, no del seno.",
+        "algebra": "Aplica la derivada trigonométrica a sin(x). La forma que hay que recordar, ya simplificada, es cos(x).",
+        "mistakeTitle": "Responder -cos(x)",
+        "mistake": "−cos(x) es la derivada de cos(x), tomada por error. El seno crece en cero, así que su derivada ahí es +1, no −1.",
+        "mistake2Title": "Cambiar sin(x) por su cofunción",
+        "mistake2": "Seno y coseno, tangente y cotangente, secante y cosecante no se intercambian. El signo menos vive en el lado de la cofunción.",
+        "domain": "La expresión está hecha de polinomios, seno, coseno o exponenciales, así que la derivada existe para todo x real.",
+        "check": "En x = 0, sustituye en la forma simplificada cos(x). Ese número es la pendiente de sin(x) en ese punto; una secante con un paso pequeño de x cae al lado."
+      },
+      "pt": {
+        "angle": "O seno começa na origem com inclinação 1, e essa inclinação é o valor do cosseno. A derivada de sin(x) é cos(x), sem menos e sem fator extra, porque o interior é x e o fator da cadeia é 1. O sinal de menos pertence à derivada do cosseno, não do seno.",
+        "algebra": "Aplique a derivada trigonométrica a sin(x). A forma para memorizar, já simplificada, é cos(x).",
+        "mistakeTitle": "Responder -cos(x)",
+        "mistake": "−cos(x) é a derivada de cos(x), tomada por engano. O seno cresce em zero, então sua derivada ali é +1, não −1.",
+        "mistake2Title": "Trocar sin(x) pela cofunção",
+        "mistake2": "Seno e cosseno, tangente e cotangente, secante e cossecante não se trocam. O sinal de menos vive no lado da cofunção.",
+        "domain": "A expressão é feita de polinômios, seno, cosseno ou exponenciais, então a derivada existe para todo x real.",
+        "check": "Em x = 0, substitua na forma simplificada cos(x). Esse número é a inclinação de sin(x) nesse ponto; uma secante com um passo pequeno de x cai ao lado."
+      }
+    }
+  },
+  {
+    "slug": "derivative-of-cos-x",
+    "display": "cos(x)",
+    "engine": "cos(x)",
+    "nice": "-sin(x)",
+    "ruleWiki": "trigonometric-derivatives",
+    "cluster": "trig-basic",
+    "copy": {
+      "en": {
+        "angle": "Cosine is sine shifted, and the shift puts a descending slope at the origin. The derivative is −sin(x). The minus is not optional decoration: cos(x) is already decreasing at x = 0, where sin(0) = 0 but the slope of cosine is 0 only at the peaks, and just to the right of zero cosine is falling.",
+        "algebra": "Apply the trigonometric derivative to cos(x). The form to remember, already simplified, is -sin(x).",
+        "mistakeTitle": "Answering sin(x)",
+        "mistake": "sin(x) without the minus is the derivative of sine, read in the wrong direction. The cofunction is the one that carries the minus.",
+        "mistake2Title": "Swapping cos(x) with its cofunction",
+        "mistake2": "Sine and cosine, tangent and cotangent, secant and cosecant are not interchangeable. The minus sign lives on the cofunction side.",
+        "domain": "The expression is built from polynomials, sine, cosine, or exponentials, so the derivative exists for every real x.",
+        "check": "At x = 0, substitute into the simplified form -sin(x). That number is the slope of cos(x) there; a secant over a small step in x lands next to it."
+      },
+      "es": {
+        "angle": "El coseno es el seno desplazado, y el desplazamiento deja una pendiente de bajada en el origen. La derivada es −sin(x). El menos no es adorno: cos(x) ya decrece en x = 0 en el sentido de que a la derecha de cero el coseno baja.",
+        "algebra": "Aplica la derivada trigonométrica a cos(x). La forma que hay que recordar, ya simplificada, es -sin(x).",
+        "mistakeTitle": "Responder sin(x)",
+        "mistake": "sin(x) sin el menos es la derivada del seno, leída al revés. La cofunción es la que lleva el menos.",
+        "mistake2Title": "Cambiar cos(x) por su cofunción",
+        "mistake2": "Seno y coseno, tangente y cotangente, secante y cosecante no se intercambian. El signo menos vive en el lado de la cofunción.",
+        "domain": "La expresión está hecha de polinomios, seno, coseno o exponenciales, así que la derivada existe para todo x real.",
+        "check": "En x = 0, sustituye en la forma simplificada -sin(x). Ese número es la pendiente de cos(x) en ese punto; una secante con un paso pequeño de x cae al lado."
+      },
+      "pt": {
+        "angle": "O cosseno é o seno deslocado, e o deslocamento deixa uma inclinação de descida na origem. A derivada é −sin(x). O menos não é enfeite: logo à direita de zero o cosseno está caindo.",
+        "algebra": "Aplique a derivada trigonométrica a cos(x). A forma para memorizar, já simplificada, é -sin(x).",
+        "mistakeTitle": "Responder sin(x)",
+        "mistake": "sin(x) sem o menos é a derivada do seno, lida ao contrário. A cofunção é que carrega o menos.",
+        "mistake2Title": "Trocar cos(x) pela cofunção",
+        "mistake2": "Seno e cosseno, tangente e cotangente, secante e cossecante não se trocam. O sinal de menos vive no lado da cofunção.",
+        "domain": "A expressão é feita de polinômios, seno, cosseno ou exponenciais, então a derivada existe para todo x real.",
+        "check": "Em x = 0, substitua na forma simplificada -sin(x). Esse número é a inclinação de cos(x) nesse ponto; uma secante com um passo pequeno de x cai ao lado."
+      }
+    }
+  },
+  {
+    "slug": "derivative-of-tan-x",
+    "display": "tan(x)",
+    "engine": "tan(x)",
+    "nice": "sec(x)^2",
+    "ruleWiki": "trigonometric-derivatives",
+    "cluster": "trig-basic",
+    "copy": {
+      "en": {
+        "angle": "Tangent is sin(x)/cos(x). The quotient rule gives (cos·cos − sin·(−sin))/cos^2 = (cos^2 + sin^2)/cos^2 = 1/cos^2, which is sec^2(x). The identity cos^2 + sin^2 = 1 is what collapses the numerator; without it the derivative still looks like a messy quotient. Near x = 0, sec^2 is about 1, matching the slope of tan.",
+        "algebra": "Apply the trigonometric derivative to tan(x). The form to remember, already simplified, is sec(x)^2.",
+        "mistakeTitle": "Answering sec(x)",
+        "mistake": "sec(x) without the square is a different function. The quotient rule produces cos^2 in the denominator, and 1/cos^2 is sec squared, not sec.",
+        "mistake2Title": "Swapping tan(x) with its cofunction",
+        "mistake2": "Sine and cosine, tangent and cotangent, secant and cosecant are not interchangeable. The minus sign lives on the cofunction side.",
+        "domain": "The derivative exists on the same open intervals as the function, and it blows up at the vertical asymptotes.",
+        "check": "At x = 0, substitute into the simplified form sec(x)^2. That number is the slope of tan(x) there; a secant over a small step in x lands next to it."
+      },
+      "es": {
+        "angle": "La tangente es sin(x)/cos(x). La regla del cociente da (cos·cos − sin·(−sin))/cos^2 = (cos^2 + sin^2)/cos^2 = 1/cos^2, o sea sec^2(x). La identidad cos^2 + sin^2 = 1 es lo que simplifica el numerador. Cerca de x = 0, sec^2 vale cerca de 1, como la pendiente de tan.",
+        "algebra": "Aplica la derivada trigonométrica a tan(x). La forma que hay que recordar, ya simplificada, es sec(x)^2.",
+        "mistakeTitle": "Responder sec(x)",
+        "mistake": "sec(x) sin el cuadrado es otra función. La regla del cociente deja cos^2 en el denominador, y 1/cos^2 es secante al cuadrado, no secante.",
+        "mistake2Title": "Cambiar tan(x) por su cofunción",
+        "mistake2": "Seno y coseno, tangente y cotangente, secante y cosecante no se intercambian. El signo menos vive en el lado de la cofunción.",
+        "domain": "La derivada existe en los mismos intervalos abiertos que la función, y se dispara en las asíntotas verticales.",
+        "check": "En x = 0, sustituye en la forma simplificada sec(x)^2. Ese número es la pendiente de tan(x) en ese punto; una secante con un paso pequeño de x cae al lado."
+      },
+      "pt": {
+        "angle": "A tangente é sin(x)/cos(x). A regra do quociente dá (cos·cos − sin·(−sin))/cos^2 = (cos^2 + sin^2)/cos^2 = 1/cos^2, isto é sec^2(x). A identidade cos^2 + sin^2 = 1 é o que simplifica o numerador. Perto de x = 0, sec^2 vale cerca de 1, como a inclinação de tan.",
+        "algebra": "Aplique a derivada trigonométrica a tan(x). A forma para memorizar, já simplificada, é sec(x)^2.",
+        "mistakeTitle": "Responder sec(x)",
+        "mistake": "sec(x) sem o quadrado é outra função. A regra do quociente deixa cos^2 no denominador, e 1/cos^2 é secante ao quadrado, não secante.",
+        "mistake2Title": "Trocar tan(x) pela cofunção",
+        "mistake2": "Seno e cosseno, tangente e cotangente, secante e cossecante não se trocam. O sinal de menos vive no lado da cofunção.",
+        "domain": "A derivada existe nos mesmos intervalos abertos que a função, e dispara nas assíntotas verticais.",
+        "check": "Em x = 0, substitua na forma simplificada sec(x)^2. Esse número é a inclinação de tan(x) nesse ponto; uma secante com um passo pequeno de x cai ao lado."
+      }
+    },
+    "alsoWiki": [
+      "quotient-rule"
+    ]
+  },
+  {
+    "slug": "derivative-of-sec-x",
+    "display": "sec(x)",
+    "engine": "sec(x)",
+    "nice": "sec(x)*tan(x)",
+    "ruleWiki": "trigonometric-derivatives",
+    "cluster": "trig-basic",
+    "copy": {
+      "en": {
+        "angle": "Secant is 1/cos(x). Differentiating the reciprocal brings −1/cos^2 times the derivative of cosine, which is −sin, so the two minuses cancel and you get sin/cos^2. That splits as (1/cos)·(sin/cos) = sec(x) tan(x). The product, not a lone tangent, is the derivative.",
+        "algebra": "Apply the trigonometric derivative to sec(x). The form to remember, already simplified, is sec(x)*tan(x).",
+        "mistakeTitle": "Answering tan(x)",
+        "mistake": "tan(x) alone drops the secant factor. Both pieces come from sin/cos^2, and neither is optional.",
+        "mistake2Title": "Swapping sec(x) with its cofunction",
+        "mistake2": "Sine and cosine, tangent and cotangent, secant and cosecant are not interchangeable. The minus sign lives on the cofunction side.",
+        "domain": "The derivative exists on the same open intervals as the function, and it blows up at the vertical asymptotes.",
+        "check": "At x = 0.5, substitute into the simplified form sec(x)*tan(x). That number is the slope of sec(x) there; a secant over a small step in x lands next to it."
+      },
+      "es": {
+        "angle": "La secante es 1/cos(x). Derivar la recíproca trae −1/cos^2 por la derivada del coseno, que es −sin, así que los dos menos se cancelan y queda sin/cos^2. Eso se parte en (1/cos)·(sin/cos) = sec(x) tan(x). El producto, no la tangente sola, es la derivada.",
+        "algebra": "Aplica la derivada trigonométrica a sec(x). La forma que hay que recordar, ya simplificada, es sec(x)*tan(x).",
+        "mistakeTitle": "Responder tan(x)",
+        "mistake": "tan(x) sola pierde el factor secante. Las dos piezas salen de sin/cos^2, y ninguna es opcional.",
+        "mistake2Title": "Cambiar sec(x) por su cofunción",
+        "mistake2": "Seno y coseno, tangente y cotangente, secante y cosecante no se intercambian. El signo menos vive en el lado de la cofunción.",
+        "domain": "La derivada existe en los mismos intervalos abiertos que la función, y se dispara en las asíntotas verticales.",
+        "check": "En x = 0.5, sustituye en la forma simplificada sec(x)*tan(x). Ese número es la pendiente de sec(x) en ese punto; una secante con un paso pequeño de x cae al lado."
+      },
+      "pt": {
+        "angle": "A secante é 1/cos(x). Derivar a recíproca traz −1/cos^2 vezes a derivada do cosseno, que é −sin, então os dois menos se cancelam e fica sin/cos^2. Isso se parte em (1/cos)·(sin/cos) = sec(x) tan(x). O produto, não a tangente sozinha, é a derivada.",
+        "algebra": "Aplique a derivada trigonométrica a sec(x). A forma para memorizar, já simplificada, é sec(x)*tan(x).",
+        "mistakeTitle": "Responder tan(x)",
+        "mistake": "tan(x) sozinha perde o fator secante. Os dois pedaços saem de sin/cos^2, e nenhum é opcional.",
+        "mistake2Title": "Trocar sec(x) pela cofunção",
+        "mistake2": "Seno e cosseno, tangente e cotangente, secante e cossecante não se trocam. O sinal de menos vive no lado da cofunção.",
+        "domain": "A derivada existe nos mesmos intervalos abertos que a função, e dispara nas assíntotas verticais.",
+        "check": "Em x = 0.5, substitua na forma simplificada sec(x)*tan(x). Esse número é a inclinação de sec(x) nesse ponto; uma secante com um passo pequeno de x cai ao lado."
+      }
+    },
+    "alsoWiki": [
+      "quotient-rule"
+    ]
+  },
+  {
+    "slug": "derivative-of-csc-x",
+    "display": "csc(x)",
+    "engine": "csc(x)",
+    "nice": "-cot(x)*csc(x)",
+    "ruleWiki": "trigonometric-derivatives",
+    "cluster": "trig-basic",
+    "copy": {
+      "en": {
+        "angle": "Cosecant is 1/sin(x), the reciprocal partner of secant. The same reciprocal differentiation now multiplies by the derivative of sine, which is +cos, so one minus remains: −cos/sin^2 = −cot(x) csc(x). The minus is the difference between csc and sec. Secant lost its minus because cosine's derivative already had one; sine's derivative does not.",
+        "algebra": "Apply the trigonometric derivative to csc(x). The form to remember, already simplified, is -cot(x)*csc(x).",
+        "mistakeTitle": "Answering cot(x)*csc(x)",
+        "mistake": "Dropping the minus copies the shape of sec·tan. Cosecant is the cofunction, and cofunctions pick up the minus.",
+        "mistake2Title": "Swapping csc(x) with its cofunction",
+        "mistake2": "Sine and cosine, tangent and cotangent, secant and cosecant are not interchangeable. The minus sign lives on the cofunction side.",
+        "domain": "The derivative exists on the same open intervals as the function, and it blows up at the vertical asymptotes.",
+        "check": "At x = 1, substitute into the simplified form -cot(x)*csc(x). That number is the slope of csc(x) there; a secant over a small step in x lands next to it."
+      },
+      "es": {
+        "angle": "La cosecante es 1/sin(x), la pareja recíproca de la secante. La misma derivación de la recíproca ahora multiplica por la derivada del seno, que es +cos, así que queda un menos: −cos/sin^2 = −cot(x) csc(x). El menos es la diferencia entre csc y sec.",
+        "algebra": "Aplica la derivada trigonométrica a csc(x). La forma que hay que recordar, ya simplificada, es -cot(x)*csc(x).",
+        "mistakeTitle": "Responder cot(x)*csc(x)",
+        "mistake": "Quitar el menos copia la forma de sec·tan. La cosecante es la cofunción, y las cofunciones llevan el menos.",
+        "mistake2Title": "Cambiar csc(x) por su cofunción",
+        "mistake2": "Seno y coseno, tangente y cotangente, secante y cosecante no se intercambian. El signo menos vive en el lado de la cofunción.",
+        "domain": "La derivada existe en los mismos intervalos abiertos que la función, y se dispara en las asíntotas verticales.",
+        "check": "En x = 1, sustituye en la forma simplificada -cot(x)*csc(x). Ese número es la pendiente de csc(x) en ese punto; una secante con un paso pequeño de x cae al lado."
+      },
+      "pt": {
+        "angle": "A cossecante é 1/sin(x), a parceira recíproca da secante. A mesma derivação da recíproca agora multiplica pela derivada do seno, que é +cos, então sobra um menos: −cos/sin^2 = −cot(x) csc(x). O menos é a diferença entre csc e sec.",
+        "algebra": "Aplique a derivada trigonométrica a csc(x). A forma para memorizar, já simplificada, é -cot(x)*csc(x).",
+        "mistakeTitle": "Responder cot(x)*csc(x)",
+        "mistake": "Tirar o menos copia a forma de sec·tan. A cossecante é a cofunção, e as cofunções levam o menos.",
+        "mistake2Title": "Trocar csc(x) pela cofunção",
+        "mistake2": "Seno e cosseno, tangente e cotangente, secante e cossecante não se trocam. O sinal de menos vive no lado da cofunção.",
+        "domain": "A derivada existe nos mesmos intervalos abertos que a função, e dispara nas assíntotas verticais.",
+        "check": "Em x = 1, substitua na forma simplificada -cot(x)*csc(x). Esse número é a inclinação de csc(x) nesse ponto; uma secante com um passo pequeno de x cai ao lado."
+      }
+    },
+    "alsoWiki": [
+      "quotient-rule"
+    ]
+  },
+  {
+    "slug": "derivative-of-cot-x",
+    "display": "cot(x)",
+    "engine": "cot(x)",
+    "nice": "-csc(x)^2",
+    "ruleWiki": "trigonometric-derivatives",
+    "cluster": "trig-basic",
+    "copy": {
+      "en": {
+        "angle": "Cotangent is cos/sin, the cofunction of tangent. The quotient rule produces a numerator −sin^2 − cos^2 = −1, over sin^2, which is −csc^2(x). Every term in the numerator is negative, so there is no cancellation into a plus the way tangent's numerator became +1. Queries for the derivative of cot land on this sign.",
+        "algebra": "Apply the trigonometric derivative to cot(x). The form to remember, already simplified, is -csc(x)^2.",
+        "mistakeTitle": "Answering csc(x)^2",
+        "mistake": "csc^2(x) without the minus is the derivative of −cot, or the pattern of sec^2 copied onto the wrong function. Cotangent decreases on (0, π).",
+        "mistake2Title": "Swapping cot(x) with its cofunction",
+        "mistake2": "Sine and cosine, tangent and cotangent, secant and cosecant are not interchangeable. The minus sign lives on the cofunction side.",
+        "domain": "The derivative exists on the same open intervals as the function, and it blows up at the vertical asymptotes.",
+        "check": "At x = 1, substitute into the simplified form -csc(x)^2. That number is the slope of cot(x) there; a secant over a small step in x lands next to it."
+      },
+      "es": {
+        "angle": "La cotangente es cos/sin, la cofunción de la tangente. La regla del cociente deja un numerador −sin^2 − cos^2 = −1, sobre sin^2, o sea −csc^2(x). Cada término del numerador es negativo, así que no hay una cancelación hacia el más como en la tangente.",
+        "algebra": "Aplica la derivada trigonométrica a cot(x). La forma que hay que recordar, ya simplificada, es -csc(x)^2.",
+        "mistakeTitle": "Responder csc(x)^2",
+        "mistake": "csc^2(x) sin el menos es la derivada de −cot, o el patrón de sec^2 copiado en la función equivocada. La cotangente decrece en (0, π).",
+        "mistake2Title": "Cambiar cot(x) por su cofunción",
+        "mistake2": "Seno y coseno, tangente y cotangente, secante y cosecante no se intercambian. El signo menos vive en el lado de la cofunción.",
+        "domain": "La derivada existe en los mismos intervalos abiertos que la función, y se dispara en las asíntotas verticales.",
+        "check": "En x = 1, sustituye en la forma simplificada -csc(x)^2. Ese número es la pendiente de cot(x) en ese punto; una secante con un paso pequeño de x cae al lado."
+      },
+      "pt": {
+        "angle": "A cotangente é cos/sin, a cofunção da tangente. A regra do quociente deixa um numerador −sin^2 − cos^2 = −1, sobre sin^2, isto é −csc^2(x). Cada termo do numerador é negativo, então não há um cancelamento para o mais como na tangente.",
+        "algebra": "Aplique a derivada trigonométrica a cot(x). A forma para memorizar, já simplificada, é -csc(x)^2.",
+        "mistakeTitle": "Responder csc(x)^2",
+        "mistake": "csc^2(x) sem o menos é a derivada de −cot, ou o padrão de sec^2 copiado na função errada. A cotangente decresce em (0, π).",
+        "mistake2Title": "Trocar cot(x) pela cofunção",
+        "mistake2": "Seno e cosseno, tangente e cotangente, secante e cossecante não se trocam. O sinal de menos vive no lado da cofunção.",
+        "domain": "A derivada existe nos mesmos intervalos abertos que a função, e dispara nas assíntotas verticais.",
+        "check": "Em x = 1, substitua na forma simplificada -csc(x)^2. Esse número é a inclinação de cot(x) nesse ponto; uma secante com um passo pequeno de x cai ao lado."
+      }
+    },
+    "alsoWiki": [
+      "quotient-rule"
+    ]
+  },
+  {
+    "slug": "derivative-of-sin-2x",
+    "display": "sin(2x)",
+    "engine": "sin(2*x)",
+    "nice": "2*cos(2*x)",
+    "ruleWiki": "chain-rule",
+    "cluster": "trig-chain",
+    "copy": {
+      "en": {
+        "angle": "sin(2x) is sine of a doubled angle, not twice sine. The input 2x moves twice as fast as x, so every slope of sine is multiplied by 2. The outer derivative is cos(2x) and the inner derivative is 2, and the product is 2 cos(2x). Leaving the 2 off is the single most common miss on this page.",
+        "algebra": "Apply the chain rule to sin(2x). The form to remember, already simplified, is 2*cos(2*x).",
+        "mistakeTitle": "Answering cos(2*x)",
+        "mistake": "cos(2x) differentiates the outside and ignores the inside. At x = 0 the true slope is 2, and cos(0) is only 1.",
+        "mistake2Title": "Dropping the inside derivative of sin(2x)",
+        "mistake2": "If the inside is not exactly x, its derivative multiplies the outside derivative. Copying a basic trig formula onto a composed inside misses that factor.",
+        "domain": "The expression is built from polynomials, sine, cosine, or exponentials, so the derivative exists for every real x.",
+        "check": "At x = 0, substitute into the simplified form 2*cos(2*x). That number is the slope of sin(2x) there; a secant over a small step in x lands next to it."
+      },
+      "es": {
+        "angle": "sin(2x) es el seno de un ángulo doble, no el doble del seno. La entrada 2x se mueve el doble de rápido que x, así que cada pendiente del seno se multiplica por 2. La derivada exterior es cos(2x) y la interior es 2; el producto es 2 cos(2x). Olvidar el 2 es el fallo más común en esta página.",
+        "algebra": "Aplica la regla de la cadena a sin(2x). La forma que hay que recordar, ya simplificada, es 2*cos(2*x).",
+        "mistakeTitle": "Responder cos(2*x)",
+        "mistake": "cos(2x) deriva el exterior e ignora el interior. En x = 0 la pendiente real es 2, y cos(0) solo vale 1.",
+        "mistake2Title": "Olvidar la derivada interior de sin(2x)",
+        "mistake2": "Si el interior no es exactamente x, su derivada multiplica a la derivada exterior. Copiar una fórmula trigonométrica básica en un interior compuesto pierde ese factor.",
+        "domain": "La expresión está hecha de polinomios, seno, coseno o exponenciales, así que la derivada existe para todo x real.",
+        "check": "En x = 0, sustituye en la forma simplificada 2*cos(2*x). Ese número es la pendiente de sin(2x) en ese punto; una secante con un paso pequeño de x cae al lado."
+      },
+      "pt": {
+        "angle": "sin(2x) é o seno de um ângulo dobrado, não o dobro do seno. A entrada 2x anda duas vezes mais rápido que x, então cada inclinação do seno é multiplicada por 2. A derivada externa é cos(2x) e a interna é 2; o produto é 2 cos(2x). Esquecer o 2 é o erro mais comum nesta página.",
+        "algebra": "Aplique a regra da cadeia a sin(2x). A forma para memorizar, já simplificada, é 2*cos(2*x).",
+        "mistakeTitle": "Responder cos(2*x)",
+        "mistake": "cos(2x) deriva o exterior e ignora o interior. Em x = 0 a inclinação real é 2, e cos(0) vale só 1.",
+        "mistake2Title": "Esquecer a derivada interna de sin(2x)",
+        "mistake2": "Se o interior não é exatamente x, a derivada dele multiplica a derivada externa. Copiar uma fórmula trigonométrica básica num interior composto perde esse fator.",
+        "domain": "A expressão é feita de polinômios, seno, cosseno ou exponenciais, então a derivada existe para todo x real.",
+        "check": "Em x = 0, substitua na forma simplificada 2*cos(2*x). Esse número é a inclinação de sin(2x) nesse ponto; uma secante com um passo pequeno de x cai ao lado."
+      }
+    },
+    "alsoWiki": [
+      "trigonometric-derivatives"
+    ]
+  },
+  {
+    "slug": "derivative-of-cos-2x",
+    "display": "cos(2x)",
+    "engine": "cos(2*x)",
+    "nice": "-2*sin(2*x)",
+    "ruleWiki": "chain-rule",
+    "cluster": "trig-chain",
+    "copy": {
+      "en": {
+        "angle": "cos(2x) stacks two minuses worth of structure: cosine already contributes a minus, and the inside 2x contributes a factor 2 that is positive. The product is −2 sin(2x). The 2 does not cancel the minus. Compared with sin(2x), the sign flips and sine replaces cosine, which is the same relationship as between cos(x) and sin(x), scaled by 2.",
+        "algebra": "Apply the chain rule to cos(2x). The form to remember, already simplified, is -2*sin(2*x).",
+        "mistakeTitle": "Answering -sin(2*x)",
+        "mistake": "−sin(2x) remembers the minus from cosine and forgets that the inside still has derivative 2. The slope at a small positive x is about −4x, not −2x.",
+        "mistake2Title": "Dropping the inside derivative of cos(2x)",
+        "mistake2": "If the inside is not exactly x, its derivative multiplies the outside derivative. Copying a basic trig formula onto a composed inside misses that factor.",
+        "domain": "The expression is built from polynomials, sine, cosine, or exponentials, so the derivative exists for every real x.",
+        "check": "At x = 0, substitute into the simplified form -2*sin(2*x). That number is the slope of cos(2x) there; a secant over a small step in x lands next to it."
+      },
+      "es": {
+        "angle": "cos(2x) junta dos piezas de signo: el coseno ya aporta un menos, y el interior 2x aporta un factor 2 positivo. El producto es −2 sin(2x). El 2 no cancela el menos. Frente a sin(2x), el signo se invierte y el seno reemplaza al coseno, la misma relación que entre cos(x) y sin(x), escalada por 2.",
+        "algebra": "Aplica la regla de la cadena a cos(2x). La forma que hay que recordar, ya simplificada, es -2*sin(2*x).",
+        "mistakeTitle": "Responder -sin(2*x)",
+        "mistake": "−sin(2x) recuerda el menos del coseno y olvida que el interior todavía tiene derivada 2. La pendiente para x positivo pequeño es cerca de −4x, no −2x.",
+        "mistake2Title": "Olvidar la derivada interior de cos(2x)",
+        "mistake2": "Si el interior no es exactamente x, su derivada multiplica a la derivada exterior. Copiar una fórmula trigonométrica básica en un interior compuesto pierde ese factor.",
+        "domain": "La expresión está hecha de polinomios, seno, coseno o exponenciales, así que la derivada existe para todo x real.",
+        "check": "En x = 0, sustituye en la forma simplificada -2*sin(2*x). Ese número es la pendiente de cos(2x) en ese punto; una secante con un paso pequeño de x cae al lado."
+      },
+      "pt": {
+        "angle": "cos(2x) junta duas peças de sinal: o cosseno já traz um menos, e o interior 2x traz um fator 2 positivo. O produto é −2 sin(2x). O 2 não cancela o menos. Perto de sin(2x), o sinal inverte e o seno substitui o cosseno, a mesma relação que entre cos(x) e sin(x), escalada por 2.",
+        "algebra": "Aplique a regra da cadeia a cos(2x). A forma para memorizar, já simplificada, é -2*sin(2*x).",
+        "mistakeTitle": "Responder -sin(2*x)",
+        "mistake": "−sin(2x) lembra o menos do cosseno e esquece que o interior ainda tem derivada 2. A inclinação para x positivo pequeno fica perto de −4x, não −2x.",
+        "mistake2Title": "Esquecer a derivada interna de cos(2x)",
+        "mistake2": "Se o interior não é exatamente x, a derivada dele multiplica a derivada externa. Copiar uma fórmula trigonométrica básica num interior composto perde esse fator.",
+        "domain": "A expressão é feita de polinômios, seno, cosseno ou exponenciais, então a derivada existe para todo x real.",
+        "check": "Em x = 0, substitua na forma simplificada -2*sin(2*x). Esse número é a inclinação de cos(2x) nesse ponto; uma secante com um passo pequeno de x cai ao lado."
+      }
+    },
+    "alsoWiki": [
+      "trigonometric-derivatives"
+    ]
+  },
+  {
+    "slug": "derivative-of-sin-squared-x",
+    "display": "sin^2(x)",
+    "engine": "sin(x)^2",
+    "nice": "2*cos(x)*sin(x)",
+    "ruleWiki": "chain-rule",
+    "cluster": "trig-chain",
+    "copy": {
+      "en": {
+        "angle": "sin^2(x) means (sin x)^2, a power on the outside and sine inside. The outer power gives 2 sin(x), and the derivative of the inside, cos(x), still multiplies, so the result is 2 sin(x) cos(x). That product is also sin(2x) by the double-angle identity, which is a useful check rather than a different answer.",
+        "algebra": "Apply the chain rule to sin^2(x). The form to remember, already simplified, is 2*cos(x)*sin(x).",
+        "mistakeTitle": "Answering 2*sin(x)",
+        "mistake": "2 sin(x) differentiates the square and treats the inside as if it were x. Sine's derivative is cosine, and it has to appear.",
+        "mistake2Title": "Dropping the inside derivative of sin^2(x)",
+        "mistake2": "If the inside is not exactly x, its derivative multiplies the outside derivative. Copying a basic trig formula onto a composed inside misses that factor.",
+        "domain": "The expression is built from polynomials, sine, cosine, or exponentials, so the derivative exists for every real x.",
+        "check": "At x = 0, substitute into the simplified form 2*cos(x)*sin(x). That number is the slope of sin^2(x) there; a secant over a small step in x lands next to it."
+      },
+      "es": {
+        "angle": "sin^2(x) significa (sin x)^2, una potencia fuera y el seno dentro. La potencia exterior da 2 sin(x), y la derivada del interior, cos(x), todavía multiplica, así que el resultado es 2 sin(x) cos(x). Ese producto también es sin(2x) por el ángulo doble, y eso sirve de comprobación, no de otra respuesta.",
+        "algebra": "Aplica la regla de la cadena a sin^2(x). La forma que hay que recordar, ya simplificada, es 2*cos(x)*sin(x).",
+        "mistakeTitle": "Responder 2*sin(x)",
+        "mistake": "2 sin(x) deriva el cuadrado y trata el interior como si fuera x. La derivada del seno es el coseno, y tiene que aparecer.",
+        "mistake2Title": "Olvidar la derivada interior de sin^2(x)",
+        "mistake2": "Si el interior no es exactamente x, su derivada multiplica a la derivada exterior. Copiar una fórmula trigonométrica básica en un interior compuesto pierde ese factor.",
+        "domain": "La expresión está hecha de polinomios, seno, coseno o exponenciales, así que la derivada existe para todo x real.",
+        "check": "En x = 0, sustituye en la forma simplificada 2*cos(x)*sin(x). Ese número es la pendiente de sin^2(x) en ese punto; una secante con un paso pequeño de x cae al lado."
+      },
+      "pt": {
+        "angle": "sin^2(x) significa (sin x)^2, uma potência fora e o seno dentro. A potência externa dá 2 sin(x), e a derivada do interior, cos(x), ainda multiplica, então o resultado é 2 sin(x) cos(x). Esse produto também é sin(2x) pelo ângulo duplo, e isso serve de conferência, não de outra resposta.",
+        "algebra": "Aplique a regra da cadeia a sin^2(x). A forma para memorizar, já simplificada, é 2*cos(x)*sin(x).",
+        "mistakeTitle": "Responder 2*sin(x)",
+        "mistake": "2 sin(x) deriva o quadrado e trata o interior como se fosse x. A derivada do seno é o cosseno, e ela tem que aparecer.",
+        "mistake2Title": "Esquecer a derivada interna de sin^2(x)",
+        "mistake2": "Se o interior não é exatamente x, a derivada dele multiplica a derivada externa. Copiar uma fórmula trigonométrica básica num interior composto perde esse fator.",
+        "domain": "A expressão é feita de polinômios, seno, cosseno ou exponenciais, então a derivada existe para todo x real.",
+        "check": "Em x = 0, substitua na forma simplificada 2*cos(x)*sin(x). Esse número é a inclinação de sin^2(x) nesse ponto; uma secante com um passo pequeno de x cai ao lado."
+      }
+    },
+    "alsoWiki": [
+      "trigonometric-derivatives"
+    ]
+  },
+  {
+    "slug": "derivative-of-cos-squared-x",
+    "display": "cos^2(x)",
+    "engine": "cos(x)^2",
+    "nice": "-2*cos(x)*sin(x)",
+    "ruleWiki": "chain-rule",
+    "cluster": "trig-chain",
+    "copy": {
+      "en": {
+        "angle": "cos^2(x) is the same outer power as sin^2(x), but the inside derivative is −sin(x). The minus travels to the front and the answer is −2 cos(x) sin(x), which is −sin(2x). It is the negative of the derivative of sin^2(x). That sign is predicted by the identity sin^2 + cos^2 = 1, whose derivative must be zero, so the two derivatives are opposites.",
+        "algebra": "Apply the chain rule to cos^2(x). The form to remember, already simplified, is -2*cos(x)*sin(x).",
+        "mistakeTitle": "Answering 2*cos(x)",
+        "mistake": "2 cos(x) misses both the minus from cosine and the inner sine. The identity check fails immediately: this would not cancel the derivative of sin^2.",
+        "mistake2Title": "Dropping the inside derivative of cos^2(x)",
+        "mistake2": "If the inside is not exactly x, its derivative multiplies the outside derivative. Copying a basic trig formula onto a composed inside misses that factor.",
+        "domain": "The expression is built from polynomials, sine, cosine, or exponentials, so the derivative exists for every real x.",
+        "check": "At x = 0, substitute into the simplified form -2*cos(x)*sin(x). That number is the slope of cos^2(x) there; a secant over a small step in x lands next to it."
+      },
+      "es": {
+        "angle": "cos^2(x) tiene la misma potencia exterior que sin^2(x), pero la derivada interior es −sin(x). El menos pasa al frente y la respuesta es −2 cos(x) sin(x), o sea −sin(2x). Es la negativa de la derivada de sin^2(x). Ese signo lo anuncia la identidad sin^2 + cos^2 = 1, cuya derivada es cero, así que las dos derivadas son opuestas.",
+        "algebra": "Aplica la regla de la cadena a cos^2(x). La forma que hay que recordar, ya simplificada, es -2*cos(x)*sin(x).",
+        "mistakeTitle": "Responder 2*cos(x)",
+        "mistake": "2 cos(x) pierde el menos del coseno y el seno interior. La prueba de la identidad falla enseguida: eso no cancelaría la derivada de sin^2.",
+        "mistake2Title": "Olvidar la derivada interior de cos^2(x)",
+        "mistake2": "Si el interior no es exactamente x, su derivada multiplica a la derivada exterior. Copiar una fórmula trigonométrica básica en un interior compuesto pierde ese factor.",
+        "domain": "La expresión está hecha de polinomios, seno, coseno o exponenciales, así que la derivada existe para todo x real.",
+        "check": "En x = 0, sustituye en la forma simplificada -2*cos(x)*sin(x). Ese número es la pendiente de cos^2(x) en ese punto; una secante con un paso pequeño de x cae al lado."
+      },
+      "pt": {
+        "angle": "cos^2(x) tem a mesma potência externa que sin^2(x), mas a derivada interna é −sin(x). O menos vai para a frente e a resposta é −2 cos(x) sin(x), isto é −sin(2x). É o negativo da derivada de sin^2(x). Esse sinal é previsto pela identidade sin^2 + cos^2 = 1, cuja derivada é zero, então as duas derivadas são opostas.",
+        "algebra": "Aplique a regra da cadeia a cos^2(x). A forma para memorizar, já simplificada, é -2*cos(x)*sin(x).",
+        "mistakeTitle": "Responder 2*cos(x)",
+        "mistake": "2 cos(x) perde o menos do cosseno e o seno interno. O teste da identidade falha na hora: isso não cancelaria a derivada de sin^2.",
+        "mistake2Title": "Esquecer a derivada interna de cos^2(x)",
+        "mistake2": "Se o interior não é exatamente x, a derivada dele multiplica a derivada externa. Copiar uma fórmula trigonométrica básica num interior composto perde esse fator.",
+        "domain": "A expressão é feita de polinômios, seno, cosseno ou exponenciais, então a derivada existe para todo x real.",
+        "check": "Em x = 0, substitua na forma simplificada -2*cos(x)*sin(x). Esse número é a inclinação de cos^2(x) nesse ponto; uma secante com um passo pequeno de x cai ao lado."
+      }
+    },
+    "alsoWiki": [
+      "trigonometric-derivatives"
+    ]
+  },
+  {
+    "slug": "derivative-of-tan-squared-x",
+    "display": "tan^2(x)",
+    "engine": "tan(x)^2",
+    "nice": "2*sec(x)^2*tan(x)",
+    "ruleWiki": "chain-rule",
+    "cluster": "trig-chain",
+    "copy": {
+      "en": {
+        "angle": "tan^2(x) is an outer square whose inside derivative is sec^2(x), not 1. The chain rule multiplies 2 tan(x) by sec^2(x). Both factors are required: the 2 from the square, and sec^2 because tangent does not have derivative 1 except at isolated points. The result is undefined wherever cosine is zero, same as tangent itself.",
+        "algebra": "Apply the chain rule to tan^2(x). The form to remember, already simplified, is 2*sec(x)^2*tan(x).",
+        "mistakeTitle": "Answering 2*tan(x)",
+        "mistake": "2 tan(x) would be correct if the inside were x. Tangent's derivative is sec^2, and at x = 0.2 that factor is already bigger than 1.",
+        "mistake2Title": "Dropping the inside derivative of tan^2(x)",
+        "mistake2": "If the inside is not exactly x, its derivative multiplies the outside derivative. Copying a basic trig formula onto a composed inside misses that factor.",
+        "domain": "The derivative exists on the same open intervals as the function, and it blows up at the vertical asymptotes.",
+        "check": "At x = 0.2, substitute into the simplified form 2*sec(x)^2*tan(x). That number is the slope of tan^2(x) there; a secant over a small step in x lands next to it."
+      },
+      "es": {
+        "angle": "tan^2(x) es un cuadrado exterior cuya derivada interior es sec^2(x), no 1. La regla de la cadena multiplica 2 tan(x) por sec^2(x). Hacen falta los dos factores: el 2 del cuadrado y sec^2 porque la tangente no tiene derivada 1 salvo en puntos aislados. El resultado no existe donde el coseno es cero, igual que la tangente.",
+        "algebra": "Aplica la regla de la cadena a tan^2(x). La forma que hay que recordar, ya simplificada, es 2*sec(x)^2*tan(x).",
+        "mistakeTitle": "Responder 2*tan(x)",
+        "mistake": "2 tan(x) sería correcto si el interior fuera x. La derivada de la tangente es sec^2, y en x = 0.2 ese factor ya es mayor que 1.",
+        "mistake2Title": "Olvidar la derivada interior de tan^2(x)",
+        "mistake2": "Si el interior no es exactamente x, su derivada multiplica a la derivada exterior. Copiar una fórmula trigonométrica básica en un interior compuesto pierde ese factor.",
+        "domain": "La derivada existe en los mismos intervalos abiertos que la función, y se dispara en las asíntotas verticales.",
+        "check": "En x = 0.2, sustituye en la forma simplificada 2*sec(x)^2*tan(x). Ese número es la pendiente de tan^2(x) en ese punto; una secante con un paso pequeño de x cae al lado."
+      },
+      "pt": {
+        "angle": "tan^2(x) é um quadrado externo cuja derivada interna é sec^2(x), não 1. A regra da cadeia multiplica 2 tan(x) por sec^2(x). Os dois fatores são obrigatórios: o 2 do quadrado e sec^2 porque a tangente não tem derivada 1 salvo em pontos isolados. O resultado não existe onde o cosseno é zero, como a própria tangente.",
+        "algebra": "Aplique a regra da cadeia a tan^2(x). A forma para memorizar, já simplificada, é 2*sec(x)^2*tan(x).",
+        "mistakeTitle": "Responder 2*tan(x)",
+        "mistake": "2 tan(x) estaria certo se o interior fosse x. A derivada da tangente é sec^2, e em x = 0.2 esse fator já é maior que 1.",
+        "mistake2Title": "Esquecer a derivada interna de tan^2(x)",
+        "mistake2": "Se o interior não é exatamente x, a derivada dele multiplica a derivada externa. Copiar uma fórmula trigonométrica básica num interior composto perde esse fator.",
+        "domain": "A derivada existe nos mesmos intervalos abertos que a função, e dispara nas assíntotas verticais.",
+        "check": "Em x = 0.2, substitua na forma simplificada 2*sec(x)^2*tan(x). Esse número é a inclinação de tan^2(x) nesse ponto; uma secante com um passo pequeno de x cai ao lado."
+      }
+    },
+    "alsoWiki": [
+      "trigonometric-derivatives"
+    ]
+  },
+  {
+    "slug": "derivative-of-x-sin-x",
+    "display": "x sin(x)",
+    "engine": "x*sin(x)",
+    "nice": "cos(x)*x+sin(x)",
+    "ruleWiki": "product-rule",
+    "cluster": "product",
+    "copy": {
+      "en": {
+        "angle": "x sin(x) is a product of two functions that both depend on x. Differentiate x and leave sin(x), then differentiate sin(x) and leave x: the sum is sin(x) + x cos(x). Neither term is optional. At x = 0 the second term vanishes and the derivative equals sin's value, which is 0, matching the flat start of x sin(x).",
+        "algebra": "Apply the product rule to x sin(x). The form to remember, already simplified, is cos(x)*x+sin(x).",
+        "mistakeTitle": "Answering x*cos(x)",
+        "mistake": "x cos(x) differentiates only the sine and keeps x in front, dropping the sin(x) term that comes from differentiating the x.",
+        "mistake2Title": "Differentiating only one factor of x sin(x)",
+        "mistake2": "Both factors depend on x. Differentiating one and copying the other, then stopping, drops a whole term.",
+        "domain": "The expression is built from polynomials, sine, cosine, or exponentials, so the derivative exists for every real x.",
+        "check": "At x = 0, substitute into the simplified form cos(x)*x+sin(x). That number is the slope of x sin(x) there; a secant over a small step in x lands next to it."
+      },
+      "es": {
+        "angle": "x sin(x) es un producto de dos funciones que dependen de x. Deriva x y deja sin(x); luego deriva sin(x) y deja x: la suma es sin(x) + x cos(x). Ningún término es opcional. En x = 0 el segundo término se anula y la derivada vale lo que vale el seno, 0.",
+        "algebra": "Aplica la regla del producto a x sin(x). La forma que hay que recordar, ya simplificada, es cos(x)*x+sin(x).",
+        "mistakeTitle": "Responder x*cos(x)",
+        "mistake": "x cos(x) deriva solo el seno y deja la x delante, y pierde el término sin(x) que sale de derivar la x.",
+        "mistake2Title": "Derivar un solo factor de x sin(x)",
+        "mistake2": "Los dos factores dependen de x. Derivar uno y copiar el otro, y parar, pierde un término entero.",
+        "domain": "La expresión está hecha de polinomios, seno, coseno o exponenciales, así que la derivada existe para todo x real.",
+        "check": "En x = 0, sustituye en la forma simplificada cos(x)*x+sin(x). Ese número es la pendiente de x sin(x) en ese punto; una secante con un paso pequeño de x cae al lado."
+      },
+      "pt": {
+        "angle": "x sin(x) é um produto de duas funções que dependem de x. Derive x e deixe sin(x); depois derive sin(x) e deixe x: a soma é sin(x) + x cos(x). Nenhum termo é opcional. Em x = 0 o segundo termo some e a derivada vale o que o seno vale, 0.",
+        "algebra": "Aplique a regra do produto a x sin(x). A forma para memorizar, já simplificada, é cos(x)*x+sin(x).",
+        "mistakeTitle": "Responder x*cos(x)",
+        "mistake": "x cos(x) deriva só o seno e deixa o x na frente, e perde o termo sin(x) que vem de derivar o x.",
+        "mistake2Title": "Derivar só um fator de x sin(x)",
+        "mistake2": "Os dois fatores dependem de x. Derivar um e copiar o outro, e parar, perde um termo inteiro.",
+        "domain": "A expressão é feita de polinômios, seno, cosseno ou exponenciais, então a derivada existe para todo x real.",
+        "check": "Em x = 0, substitua na forma simplificada cos(x)*x+sin(x). Esse número é a inclinação de x sin(x) nesse ponto; uma secante com um passo pequeno de x cai ao lado."
+      }
+    }
+  },
+  {
+    "slug": "derivative-of-x-cos-x",
+    "display": "x cos(x)",
+    "engine": "x*cos(x)",
+    "nice": "-sin(x)*x+cos(x)",
+    "ruleWiki": "product-rule",
+    "cluster": "product",
+    "copy": {
+      "en": {
+        "angle": "x cos(x) uses the same product rule, but cosine's derivative is −sin(x), so one term arrives with a minus: cos(x) + x(−sin(x)) = cos(x) − x sin(x). The plus in front of cos(x) is the derivative of the factor x. Swapping the signs mixes this up with the derivative of x sin(x).",
+        "algebra": "Apply the product rule to x cos(x). The form to remember, already simplified, is -sin(x)*x+cos(x).",
+        "mistakeTitle": "Answering -x*sin(x)",
+        "mistake": "−x sin(x) keeps only the cosine's contribution and drops cos(x). At x = 0 the true derivative is 1, and −x sin(x) is 0.",
+        "mistake2Title": "Differentiating only one factor of x cos(x)",
+        "mistake2": "Both factors depend on x. Differentiating one and copying the other, then stopping, drops a whole term.",
+        "domain": "The expression is built from polynomials, sine, cosine, or exponentials, so the derivative exists for every real x.",
+        "check": "At x = 0, substitute into the simplified form -sin(x)*x+cos(x). That number is the slope of x cos(x) there; a secant over a small step in x lands next to it."
+      },
+      "es": {
+        "angle": "x cos(x) usa la misma regla del producto, pero la derivada del coseno es −sin(x), así que un término llega con menos: cos(x) + x(−sin(x)) = cos(x) − x sin(x). El más delante de cos(x) es la derivada del factor x. Cambiar los signos lo confunde con la derivada de x sin(x).",
+        "algebra": "Aplica la regla del producto a x cos(x). La forma que hay que recordar, ya simplificada, es -sin(x)*x+cos(x).",
+        "mistakeTitle": "Responder -x*sin(x)",
+        "mistake": "−x sin(x) se queda solo con lo que aporta el coseno y pierde cos(x). En x = 0 la derivada real es 1, y −x sin(x) vale 0.",
+        "mistake2Title": "Derivar un solo factor de x cos(x)",
+        "mistake2": "Los dos factores dependen de x. Derivar uno y copiar el otro, y parar, pierde un término entero.",
+        "domain": "La expresión está hecha de polinomios, seno, coseno o exponenciales, así que la derivada existe para todo x real.",
+        "check": "En x = 0, sustituye en la forma simplificada -sin(x)*x+cos(x). Ese número es la pendiente de x cos(x) en ese punto; una secante con un paso pequeño de x cae al lado."
+      },
+      "pt": {
+        "angle": "x cos(x) usa a mesma regra do produto, mas a derivada do cosseno é −sin(x), então um termo chega com menos: cos(x) + x(−sin(x)) = cos(x) − x sin(x). O mais na frente de cos(x) é a derivada do fator x. Trocar os sinais confunde com a derivada de x sin(x).",
+        "algebra": "Aplique a regra do produto a x cos(x). A forma para memorizar, já simplificada, é -sin(x)*x+cos(x).",
+        "mistakeTitle": "Responder -x*sin(x)",
+        "mistake": "−x sin(x) fica só com o que o cosseno contribui e perde cos(x). Em x = 0 a derivada real é 1, e −x sin(x) vale 0.",
+        "mistake2Title": "Derivar só um fator de x cos(x)",
+        "mistake2": "Os dois fatores dependem de x. Derivar um e copiar o outro, e parar, perde um termo inteiro.",
+        "domain": "A expressão é feita de polinômios, seno, cosseno ou exponenciais, então a derivada existe para todo x real.",
+        "check": "Em x = 0, substitua na forma simplificada -sin(x)*x+cos(x). Esse número é a inclinação de x cos(x) nesse ponto; uma secante com um passo pequeno de x cai ao lado."
+      }
+    }
+  },
+  {
+    "slug": "derivative-of-x-e-to-the-x",
+    "display": "x e^x",
+    "engine": "x*e^x",
+    "nice": "e^x+e^x*x",
+    "ruleWiki": "product-rule",
+    "cluster": "product",
+    "copy": {
+      "en": {
+        "angle": "x e^x is the standard product of x and the exponential. Because e^x is its own derivative, both terms contain e^x: one from differentiating x, and one from differentiating the exponential. Factor e^x(x + 1). Answering x e^x again means only one factor was differentiated.",
+        "algebra": "Apply the product rule to x e^x. The form to remember, already simplified, is e^x+e^x*x.",
+        "mistakeTitle": "Answering x*e^x",
+        "mistake": "x e^x is the original function. The product rule adds a second copy of e^x, the one that comes from the derivative of x.",
+        "mistake2Title": "Differentiating only one factor of x e^x",
+        "mistake2": "Both factors depend on x. Differentiating one and copying the other, then stopping, drops a whole term.",
+        "domain": "The expression is built from polynomials, sine, cosine, or exponentials, so the derivative exists for every real x.",
+        "check": "At x = 0, substitute into the simplified form e^x+e^x*x. That number is the slope of x e^x there; a secant over a small step in x lands next to it."
+      },
+      "es": {
+        "angle": "x e^x es el producto típico de x y la exponencial. Como e^x es su propia derivada, los dos términos contienen e^x: uno al derivar x y otro al derivar la exponencial. Se factoriza e^x(x + 1). Responder otra vez x e^x significa que solo se derivó un factor.",
+        "algebra": "Aplica la regla del producto a x e^x. La forma que hay que recordar, ya simplificada, es e^x+e^x*x.",
+        "mistakeTitle": "Responder x*e^x",
+        "mistake": "x e^x es la función original. La regla del producto suma otra copia de e^x, la que viene de la derivada de x.",
+        "mistake2Title": "Derivar un solo factor de x e^x",
+        "mistake2": "Los dos factores dependen de x. Derivar uno y copiar el otro, y parar, pierde un término entero.",
+        "domain": "La expresión está hecha de polinomios, seno, coseno o exponenciales, así que la derivada existe para todo x real.",
+        "check": "En x = 0, sustituye en la forma simplificada e^x+e^x*x. Ese número es la pendiente de x e^x en ese punto; una secante con un paso pequeño de x cae al lado."
+      },
+      "pt": {
+        "angle": "x e^x é o produto típico de x e da exponencial. Como e^x é a própria derivada, os dois termos contêm e^x: um ao derivar x e outro ao derivar a exponencial. Fatora-se e^x(x + 1). Responder de novo x e^x significa que só um fator foi derivado.",
+        "algebra": "Aplique a regra do produto a x e^x. A forma para memorizar, já simplificada, é e^x+e^x*x.",
+        "mistakeTitle": "Responder x*e^x",
+        "mistake": "x e^x é a função original. A regra do produto soma outra cópia de e^x, a que vem da derivada de x.",
+        "mistake2Title": "Derivar só um fator de x e^x",
+        "mistake2": "Os dois fatores dependem de x. Derivar um e copiar o outro, e parar, perde um termo inteiro.",
+        "domain": "A expressão é feita de polinômios, seno, cosseno ou exponenciais, então a derivada existe para todo x real.",
+        "check": "Em x = 0, substitua na forma simplificada e^x+e^x*x. Esse número é a inclinação de x e^x nesse ponto; uma secante com um passo pequeno de x cai ao lado."
+      }
+    },
+    "alsoWiki": [
+      "exponential-derivatives"
+    ]
+  },
+  {
+    "slug": "derivative-of-x-ln-x",
+    "display": "x ln(x)",
+    "engine": "x*ln(x)",
+    "nice": "1+log(x)",
+    "ruleWiki": "product-rule",
+    "cluster": "product",
+    "copy": {
+      "en": {
+        "angle": "x ln(x) is a product. Differentiating ln(x) produces 1/x, and x·(1/x) collapses to 1. Differentiating the x and leaving ln(x) produces the other term, ln(x). The sum is ln(x) + 1. On this site log means the natural log, so the engine prints 1+log(x), which is the same expression. The bare 1 is the part students drop.",
+        "algebra": "Apply the product rule to x ln(x). The form to remember, already simplified, is 1+log(x).",
+        "mistakeTitle": "Answering x*(1/x)",
+        "mistake": "Stopping at x·(1/x) = 1 forgets the term from differentiating x. The answer is not the constant 1; ln(x) is still there.",
+        "mistake2Title": "Differentiating only one factor of x ln(x)",
+        "mistake2": "Both factors depend on x. Differentiating one and copying the other, then stopping, drops a whole term.",
+        "domain": "The expression needs x > 0. At 0 and on the negatives it is undefined as a real function, so the derivative is too.",
+        "check": "At x = 1, substitute into the simplified form 1+log(x). That number is the slope of x ln(x) there; a secant over a small step in x lands next to it."
+      },
+      "es": {
+        "angle": "x ln(x) es un producto. Derivar ln(x) produce 1/x, y x·(1/x) se cancela a 1. Derivar la x y dejar ln(x) produce el otro término, ln(x). La suma es ln(x) + 1. En este sitio log es el logaritmo natural, así que el motor escribe 1+log(x), la misma expresión. El 1 suelto es la parte que se suele perder.",
+        "algebra": "Aplica la regla del producto a x ln(x). La forma que hay que recordar, ya simplificada, es 1+log(x).",
+        "mistakeTitle": "Responder x*(1/x)",
+        "mistake": "Parar en x·(1/x) = 1 olvida el término que sale de derivar x. La respuesta no es la constante 1; ln(x) sigue ahí.",
+        "mistake2Title": "Derivar un solo factor de x ln(x)",
+        "mistake2": "Los dos factores dependen de x. Derivar uno y copiar el otro, y parar, pierde un término entero.",
+        "domain": "La expresión exige x > 0. En 0 y en los negativos no está definida como función real, y la derivada tampoco.",
+        "check": "En x = 1, sustituye en la forma simplificada 1+log(x). Ese número es la pendiente de x ln(x) en ese punto; una secante con un paso pequeño de x cae al lado."
+      },
+      "pt": {
+        "angle": "x ln(x) é um produto. Derivar ln(x) produz 1/x, e x·(1/x) cancela para 1. Derivar o x e deixar ln(x) produz o outro termo, ln(x). A soma é ln(x) + 1. Neste site log é o logaritmo natural, então o motor escreve 1+log(x), a mesma expressão. O 1 solto é a parte que se costuma perder.",
+        "algebra": "Aplique a regra do produto a x ln(x). A forma para memorizar, já simplificada, é 1+log(x).",
+        "mistakeTitle": "Responder x*(1/x)",
+        "mistake": "Parar em x·(1/x) = 1 esquece o termo que vem de derivar x. A resposta não é a constante 1; ln(x) continua lá.",
+        "mistake2Title": "Derivar só um fator de x ln(x)",
+        "mistake2": "Os dois fatores dependem de x. Derivar um e copiar o outro, e parar, perde um termo inteiro.",
+        "domain": "A expressão exige x > 0. Em 0 e nos negativos ela não está definida como função real, e a derivada também não.",
+        "check": "Em x = 1, substitua na forma simplificada 1+log(x). Esse número é a inclinação de x ln(x) nesse ponto; uma secante com um passo pequeno de x cai ao lado."
+      }
+    },
+    "alsoWiki": [
+      "logarithmic-derivatives"
+    ]
+  },
+  {
+    "slug": "derivative-of-e-to-the-x",
+    "display": "e^x",
+    "engine": "e^x",
+    "nice": "e^x",
+    "ruleWiki": "exponential-derivatives",
+    "cluster": "exp",
+    "copy": {
+      "en": {
+        "angle": "e^x is the function whose slope equals its height at every x. That is the definition that makes its derivative equal to itself. No coefficient appears, because the inside is x and the chain-rule factor is 1. If the answer grew an extra x, that would be the derivative of x e^x, a different page.",
+        "algebra": "Apply the exponential rule to e^x. The form to remember, already simplified, is e^x.",
+        "mistakeTitle": "Answering x*e^x",
+        "mistake": "x e^x multiplies by a factor that is not there. The exponential of x, with inside exactly x, does not pick up an x in front.",
+        "mistake2Title": "Treating e^x as if the base were e with inside x",
+        "mistake2": "Only e^x is its own derivative with no extra factor. A coefficient in the exponent, or a base other than e, changes the answer.",
+        "domain": "The expression is built from polynomials, sine, cosine, or exponentials, so the derivative exists for every real x.",
+        "check": "At x = 0, substitute into the simplified form e^x. That number is the slope of e^x there; a secant over a small step in x lands next to it."
+      },
+      "es": {
+        "angle": "e^x es la función cuya pendiente es igual a su altura en cada x. Esa es la propiedad que hace que su derivada sea ella misma. No aparece coeficiente, porque el interior es x y el factor de la cadena es 1. Si la respuesta ganara una x de más, sería la derivada de x e^x, que es otra página.",
+        "algebra": "Aplica la regla exponencial a e^x. La forma que hay que recordar, ya simplificada, es e^x.",
+        "mistakeTitle": "Responder x*e^x",
+        "mistake": "x e^x multiplica por un factor que no está. La exponencial de x, con interior exactamente x, no gana una x delante.",
+        "mistake2Title": "Tratar e^x como si la base fuera e con interior x",
+        "mistake2": "Solo e^x es su propia derivada sin factor extra. Un coeficiente en el exponente, u otra base, cambia la respuesta.",
+        "domain": "La expresión está hecha de polinomios, seno, coseno o exponenciales, así que la derivada existe para todo x real.",
+        "check": "En x = 0, sustituye en la forma simplificada e^x. Ese número es la pendiente de e^x en ese punto; una secante con un paso pequeño de x cae al lado."
+      },
+      "pt": {
+        "angle": "e^x é a função cuja inclinação é igual à sua altura em cada x. Essa é a propriedade que faz a derivada ser ela mesma. Não aparece coeficiente, porque o interior é x e o fator da cadeia é 1. Se a resposta ganhasse um x a mais, seria a derivada de x e^x, que é outra página.",
+        "algebra": "Aplique a regra exponencial a e^x. A forma para memorizar, já simplificada, é e^x.",
+        "mistakeTitle": "Responder x*e^x",
+        "mistake": "x e^x multiplica por um fator que não está. A exponencial de x, com interior exatamente x, não ganha um x na frente.",
+        "mistake2Title": "Tratar e^x como se a base fosse e com interior x",
+        "mistake2": "Só e^x é a própria derivada sem fator extra. Um coeficiente no expoente, ou outra base, muda a resposta.",
+        "domain": "A expressão é feita de polinômios, seno, cosseno ou exponenciais, então a derivada existe para todo x real.",
+        "check": "Em x = 0, substitua na forma simplificada e^x. Esse número é a inclinação de e^x nesse ponto; uma secante com um passo pequeno de x cai ao lado."
+      }
+    }
+  },
+  {
+    "slug": "derivative-of-e-to-the-minus-x",
+    "display": "e^(-x)",
+    "engine": "exp(-x)",
+    "nice": "-e^(-x)",
+    "ruleWiki": "chain-rule",
+    "cluster": "exp",
+    "copy": {
+      "en": {
+        "angle": "e^(−x) is a decaying exponential. The outer derivative of e^u is e^u, and u = −x has derivative −1, so the chain rule multiplies by −1. The function and its derivative are opposites: the slope is negative wherever the function is positive, which is everywhere. Forgetting the minus describes growth instead of decay.",
+        "algebra": "Apply the chain rule to e^(-x). The form to remember, already simplified, is -e^(-x).",
+        "mistakeTitle": "Answering e^(-x)",
+        "mistake": "e^(−x) without the minus copies the function. Decay means the slope has the opposite sign of the height.",
+        "mistake2Title": "Treating e^(-x) as if the base were e with inside x",
+        "mistake2": "Only e^x is its own derivative with no extra factor. A coefficient in the exponent, or a base other than e, changes the answer.",
+        "domain": "The expression is built from polynomials, sine, cosine, or exponentials, so the derivative exists for every real x.",
+        "check": "At x = 0, substitute into the simplified form -e^(-x). That number is the slope of e^(-x) there; a secant over a small step in x lands next to it."
+      },
+      "es": {
+        "angle": "e^(−x) es una exponencial que decae. La derivada exterior de e^u es e^u, y u = −x tiene derivada −1, así que la regla de la cadena multiplica por −1. La función y su derivada son opuestas: la pendiente es negativa donde la función es positiva, o sea en todas partes. Olvidar el menos describe crecimiento en lugar de decaimiento.",
+        "algebra": "Aplica la regla de la cadena a e^(-x). La forma que hay que recordar, ya simplificada, es -e^(-x).",
+        "mistakeTitle": "Responder e^(-x)",
+        "mistake": "e^(−x) sin el menos copia la función. Decaer significa que la pendiente tiene el signo opuesto a la altura.",
+        "mistake2Title": "Tratar e^(-x) como si la base fuera e con interior x",
+        "mistake2": "Solo e^x es su propia derivada sin factor extra. Un coeficiente en el exponente, u otra base, cambia la respuesta.",
+        "domain": "La expresión está hecha de polinomios, seno, coseno o exponenciales, así que la derivada existe para todo x real.",
+        "check": "En x = 0, sustituye en la forma simplificada -e^(-x). Ese número es la pendiente de e^(-x) en ese punto; una secante con un paso pequeño de x cae al lado."
+      },
+      "pt": {
+        "angle": "e^(−x) é uma exponencial que decai. A derivada externa de e^u é e^u, e u = −x tem derivada −1, então a regra da cadeia multiplica por −1. A função e a derivada são opostas: a inclinação é negativa onde a função é positiva, ou seja em todo lugar. Esquecer o menos descreve crescimento em vez de decaimento.",
+        "algebra": "Aplique a regra da cadeia a e^(-x). A forma para memorizar, já simplificada, é -e^(-x).",
+        "mistakeTitle": "Responder e^(-x)",
+        "mistake": "e^(−x) sem o menos copia a função. Decair significa que a inclinação tem o sinal oposto ao da altura.",
+        "mistake2Title": "Tratar e^(-x) como se a base fosse e com interior x",
+        "mistake2": "Só e^x é a própria derivada sem fator extra. Um coeficiente no expoente, ou outra base, muda a resposta.",
+        "domain": "A expressão é feita de polinômios, seno, cosseno ou exponenciais, então a derivada existe para todo x real.",
+        "check": "Em x = 0, substitua na forma simplificada -e^(-x). Esse número é a inclinação de e^(-x) nesse ponto; uma secante com um passo pequeno de x cai ao lado."
+      }
+    },
+    "alsoWiki": [
+      "exponential-derivatives"
+    ]
+  },
+  {
+    "slug": "derivative-of-e-to-the-2x",
+    "display": "e^(2x)",
+    "engine": "exp(2*x)",
+    "nice": "2*e^(2*x)",
+    "ruleWiki": "chain-rule",
+    "cluster": "exp",
+    "copy": {
+      "en": {
+        "angle": "e^(2x) grows twice as fast in the exponent as e^x. The chain rule multiplies e^(2x) by the derivative of 2x, which is 2. The 2 stays in front and does not move into the exponent. At x = 0 the function equals 1 and the slope equals 2, which is the numerical check that the factor survived.",
+        "algebra": "Apply the chain rule to e^(2x). The form to remember, already simplified, is 2*e^(2*x).",
+        "mistakeTitle": "Answering e^(2*x)",
+        "mistake": "e^(2x) forgets the inner derivative. The exponent is not x, so the factor 2 has to appear in the slope.",
+        "mistake2Title": "Treating e^(2x) as if the base were e with inside x",
+        "mistake2": "Only e^x is its own derivative with no extra factor. A coefficient in the exponent, or a base other than e, changes the answer.",
+        "domain": "The expression is built from polynomials, sine, cosine, or exponentials, so the derivative exists for every real x.",
+        "check": "At x = 0, substitute into the simplified form 2*e^(2*x). That number is the slope of e^(2x) there; a secant over a small step in x lands next to it."
+      },
+      "es": {
+        "angle": "e^(2x) crece el doble de rápido en el exponente que e^x. La regla de la cadena multiplica e^(2x) por la derivada de 2x, que es 2. El 2 se queda delante y no se mete en el exponente. En x = 0 la función vale 1 y la pendiente vale 2, y eso comprueba que el factor sobrevivió.",
+        "algebra": "Aplica la regla de la cadena a e^(2x). La forma que hay que recordar, ya simplificada, es 2*e^(2*x).",
+        "mistakeTitle": "Responder e^(2*x)",
+        "mistake": "e^(2x) olvida la derivada interior. El exponente no es x, así que el factor 2 tiene que aparecer en la pendiente.",
+        "mistake2Title": "Tratar e^(2x) como si la base fuera e con interior x",
+        "mistake2": "Solo e^x es su propia derivada sin factor extra. Un coeficiente en el exponente, u otra base, cambia la respuesta.",
+        "domain": "La expresión está hecha de polinomios, seno, coseno o exponenciales, así que la derivada existe para todo x real.",
+        "check": "En x = 0, sustituye en la forma simplificada 2*e^(2*x). Ese número es la pendiente de e^(2x) en ese punto; una secante con un paso pequeño de x cae al lado."
+      },
+      "pt": {
+        "angle": "e^(2x) cresce duas vezes mais rápido no expoente que e^x. A regra da cadeia multiplica e^(2x) pela derivada de 2x, que é 2. O 2 fica na frente e não entra no expoente. Em x = 0 a função vale 1 e a inclinação vale 2, e isso confere que o fator sobreviveu.",
+        "algebra": "Aplique a regra da cadeia a e^(2x). A forma para memorizar, já simplificada, é 2*e^(2*x).",
+        "mistakeTitle": "Responder e^(2*x)",
+        "mistake": "e^(2x) esquece a derivada interna. O expoente não é x, então o fator 2 tem que aparecer na inclinação.",
+        "mistake2Title": "Tratar e^(2x) como se a base fosse e com interior x",
+        "mistake2": "Só e^x é a própria derivada sem fator extra. Um coeficiente no expoente, ou outra base, muda a resposta.",
+        "domain": "A expressão é feita de polinômios, seno, cosseno ou exponenciais, então a derivada existe para todo x real.",
+        "check": "Em x = 0, substitua na forma simplificada 2*e^(2*x). Esse número é a inclinação de e^(2x) nesse ponto; uma secante com um passo pequeno de x cai ao lado."
+      }
+    },
+    "alsoWiki": [
+      "exponential-derivatives"
+    ]
+  },
+  {
+    "slug": "derivative-of-2-to-the-x",
+    "display": "2^x",
+    "engine": "2^x",
+    "nice": "2^x*log(2)",
+    "ruleWiki": "exponential-derivatives",
+    "cluster": "exp",
+    "copy": {
+      "en": {
+        "angle": "2^x is not e^x. Write it as e^(x ln 2); the chain rule then multiplies by ln 2. The derivative is 2^x ln 2. The engine prints log for the natural log, so the raw form is 2^x*log(2). The ln 2 is a constant about 0.693, which is why 2^x grows more slowly than e^x.",
+        "algebra": "Apply the exponential rule to 2^x. The form to remember, already simplified, is 2^x*log(2).",
+        "mistakeTitle": "Answering 2^x",
+        "mistake": "2^x without ln 2 treats every exponential as its own derivative. Only base e has that property.",
+        "mistake2Title": "Treating 2^x as if the base were e with inside x",
+        "mistake2": "Only e^x is its own derivative with no extra factor. A coefficient in the exponent, or a base other than e, changes the answer.",
+        "domain": "The expression is built from polynomials, sine, cosine, or exponentials, so the derivative exists for every real x.",
+        "check": "At x = 0, substitute into the simplified form 2^x*log(2). That number is the slope of 2^x there; a secant over a small step in x lands next to it."
+      },
+      "es": {
+        "angle": "2^x no es e^x. Escríbela como e^(x ln 2); la regla de la cadena multiplica entonces por ln 2. La derivada es 2^x ln 2. El motor escribe log para el logaritmo natural, así que la forma cruda es 2^x*log(2). ln 2 es una constante cercana a 0.693, y por eso 2^x crece más despacio que e^x.",
+        "algebra": "Aplica la regla exponencial a 2^x. La forma que hay que recordar, ya simplificada, es 2^x*log(2).",
+        "mistakeTitle": "Responder 2^x",
+        "mistake": "2^x sin ln 2 trata toda exponencial como su propia derivada. Solo la base e tiene esa propiedad.",
+        "mistake2Title": "Tratar 2^x como si la base fuera e con interior x",
+        "mistake2": "Solo e^x es su propia derivada sin factor extra. Un coeficiente en el exponente, u otra base, cambia la respuesta.",
+        "domain": "La expresión está hecha de polinomios, seno, coseno o exponenciales, así que la derivada existe para todo x real.",
+        "check": "En x = 0, sustituye en la forma simplificada 2^x*log(2). Ese número es la pendiente de 2^x en ese punto; una secante con un paso pequeño de x cae al lado."
+      },
+      "pt": {
+        "angle": "2^x não é e^x. Escreva como e^(x ln 2); a regra da cadeia multiplica então por ln 2. A derivada é 2^x ln 2. O motor escreve log para o logaritmo natural, então a forma crua é 2^x*log(2). ln 2 é uma constante perto de 0,693, e por isso 2^x cresce mais devagar que e^x.",
+        "algebra": "Aplique a regra exponencial a 2^x. A forma para memorizar, já simplificada, é 2^x*log(2).",
+        "mistakeTitle": "Responder 2^x",
+        "mistake": "2^x sem ln 2 trata toda exponencial como a própria derivada. Só a base e tem essa propriedade.",
+        "mistake2Title": "Tratar 2^x como se a base fosse e com interior x",
+        "mistake2": "Só e^x é a própria derivada sem fator extra. Um coeficiente no expoente, ou outra base, muda a resposta.",
+        "domain": "A expressão é feita de polinômios, seno, cosseno ou exponenciais, então a derivada existe para todo x real.",
+        "check": "Em x = 0, substitua na forma simplificada 2^x*log(2). Esse número é a inclinação de 2^x nesse ponto; uma secante com um passo pequeno de x cai ao lado."
+      }
+    }
+  },
+  {
+    "slug": "derivative-of-10-to-the-x",
+    "display": "10^x",
+    "engine": "10^x",
+    "nice": "10^x*log(10)",
+    "ruleWiki": "exponential-derivatives",
+    "cluster": "exp",
+    "copy": {
+      "en": {
+        "angle": "10^x works like 2^x with a larger base. The extra factor is ln 10, about 2.302, so 10^x climbs faster than e^x. The derivative is 10^x ln 10, printed by the engine as 10^x*log(10). The same rewrite, 10^x = e^(x ln 10), produces the factor; nothing about base 10 cancels it.",
+        "algebra": "Apply the exponential rule to 10^x. The form to remember, already simplified, is 10^x*log(10).",
+        "mistakeTitle": "Answering 10^x",
+        "mistake": "10^x alone would be right only for base e. Base 10 contributes ln 10, and that constant is not 1.",
+        "mistake2Title": "Treating 10^x as if the base were e with inside x",
+        "mistake2": "Only e^x is its own derivative with no extra factor. A coefficient in the exponent, or a base other than e, changes the answer.",
+        "domain": "The expression is built from polynomials, sine, cosine, or exponentials, so the derivative exists for every real x.",
+        "check": "At x = 0, substitute into the simplified form 10^x*log(10). That number is the slope of 10^x there; a secant over a small step in x lands next to it."
+      },
+      "es": {
+        "angle": "10^x funciona como 2^x con una base más grande. El factor extra es ln 10, cerca de 2.302, así que 10^x sube más rápido que e^x. La derivada es 10^x ln 10, y el motor la imprime como 10^x*log(10). La misma reescritura, 10^x = e^(x ln 10), produce el factor; nada de la base 10 lo cancela.",
+        "algebra": "Aplica la regla exponencial a 10^x. La forma que hay que recordar, ya simplificada, es 10^x*log(10).",
+        "mistakeTitle": "Responder 10^x",
+        "mistake": "10^x sola sería correcta solo con base e. La base 10 aporta ln 10, y esa constante no es 1.",
+        "mistake2Title": "Tratar 10^x como si la base fuera e con interior x",
+        "mistake2": "Solo e^x es su propia derivada sin factor extra. Un coeficiente en el exponente, u otra base, cambia la respuesta.",
+        "domain": "La expresión está hecha de polinomios, seno, coseno o exponenciales, así que la derivada existe para todo x real.",
+        "check": "En x = 0, sustituye en la forma simplificada 10^x*log(10). Ese número es la pendiente de 10^x en ese punto; una secante con un paso pequeño de x cae al lado."
+      },
+      "pt": {
+        "angle": "10^x funciona como 2^x com uma base maior. O fator extra é ln 10, cerca de 2,302, então 10^x sobe mais rápido que e^x. A derivada é 10^x ln 10, e o motor imprime 10^x*log(10). A mesma reescrita, 10^x = e^(x ln 10), produz o fator; nada da base 10 o cancela.",
+        "algebra": "Aplique a regra exponencial a 10^x. A forma para memorizar, já simplificada, é 10^x*log(10).",
+        "mistakeTitle": "Responder 10^x",
+        "mistake": "10^x sozinha estaria certa só com base e. A base 10 contribui com ln 10, e essa constante não é 1.",
+        "mistake2Title": "Tratar 10^x como se a base fosse e com interior x",
+        "mistake2": "Só e^x é a própria derivada sem fator extra. Um coeficiente no expoente, ou outra base, muda a resposta.",
+        "domain": "A expressão é feita de polinômios, seno, cosseno ou exponenciais, então a derivada existe para todo x real.",
+        "check": "Em x = 0, substitua na forma simplificada 10^x*log(10). Esse número é a inclinação de 10^x nesse ponto; uma secante com um passo pequeno de x cai ao lado."
+      }
+    }
+  },
+  {
+    "slug": "derivative-of-ln-x",
+    "display": "ln(x)",
+    "engine": "ln(x)",
+    "nice": "x^(-1)",
+    "ruleWiki": "logarithmic-derivatives",
+    "cluster": "log",
+    "copy": {
+      "en": {
+        "angle": "ln(x) is the inverse of e^x. Differentiating e^(ln x) = x by the chain rule gives e^(ln x) · (ln x)' = 1, and e^(ln x) is x, so (ln x)' = 1/x. The engine writes that as x^(−1). The derivative is a reciprocal, not another logarithm.",
+        "algebra": "Apply the logarithm rule to ln(x). The form to remember, already simplified, is x^(-1).",
+        "mistakeTitle": "Answering ln(x)",
+        "mistake": "ln(x) as its own derivative copies the exponential's special property onto the wrong function. Logarithms do not reproduce themselves.",
+        "mistake2Title": "Confusing the base of ln(x)",
+        "mistake2": "Natural log differentiates to 1/x. A constant inside the log often cancels. Base 10 is a different function and needs log10.",
+        "domain": "The expression needs x > 0. At 0 and on the negatives it is undefined as a real function, so the derivative is too.",
+        "check": "At x = 1, substitute into the simplified form x^(-1). That number is the slope of ln(x) there; a secant over a small step in x lands next to it."
+      },
+      "es": {
+        "angle": "ln(x) es la inversa de e^x. Derivar e^(ln x) = x con la regla de la cadena da e^(ln x) · (ln x)' = 1, y e^(ln x) es x, así que (ln x)' = 1/x. El motor lo escribe como x^(−1). La derivada es una recíproca, no otro logaritmo.",
+        "algebra": "Aplica la regla del logaritmo a ln(x). La forma que hay que recordar, ya simplificada, es x^(-1).",
+        "mistakeTitle": "Responder ln(x)",
+        "mistake": "Dejar ln(x) como su propia derivada copia la propiedad de la exponencial en la función equivocada. Los logaritmos no se reproducen.",
+        "mistake2Title": "Confundir la base de ln(x)",
+        "mistake2": "El logaritmo natural deriva a 1/x. Una constante dentro del logaritmo a menudo se cancela. La base 10 es otra función y exige log10.",
+        "domain": "La expresión exige x > 0. En 0 y en los negativos no está definida como función real, y la derivada tampoco.",
+        "check": "En x = 1, sustituye en la forma simplificada x^(-1). Ese número es la pendiente de ln(x) en ese punto; una secante con un paso pequeño de x cae al lado."
+      },
+      "pt": {
+        "angle": "ln(x) é a inversa de e^x. Derivar e^(ln x) = x com a regra da cadeia dá e^(ln x) · (ln x)' = 1, e e^(ln x) é x, então (ln x)' = 1/x. O motor escreve isso como x^(−1). A derivada é um recíproco, não outro logaritmo.",
+        "algebra": "Aplique a regra do logaritmo a ln(x). A forma para memorizar, já simplificada, é x^(-1).",
+        "mistakeTitle": "Responder ln(x)",
+        "mistake": "Deixar ln(x) como a própria derivada copia a propriedade da exponencial na função errada. Logaritmos não se reproduzem.",
+        "mistake2Title": "Confundir a base de ln(x)",
+        "mistake2": "O logaritmo natural deriva para 1/x. Uma constante dentro do log muitas vezes se cancela. A base 10 é outra função e exige log10.",
+        "domain": "A expressão exige x > 0. Em 0 e nos negativos ela não está definida como função real, e a derivada também não.",
+        "check": "Em x = 1, substitua na forma simplificada x^(-1). Esse número é a inclinação de ln(x) nesse ponto; uma secante com um passo pequeno de x cai ao lado."
+      }
+    },
+    "alsoWiki": [
+      "exponential-derivatives"
+    ]
+  },
+  {
+    "slug": "derivative-of-ln-2x",
+    "display": "ln(2x)",
+    "engine": "ln(2*x)",
+    "nice": "x^(-1)",
+    "ruleWiki": "chain-rule",
+    "cluster": "log",
+    "copy": {
+      "en": {
+        "angle": "ln(2x) looks like it should carry a 2, but the log property says ln(2x) = ln 2 + ln x. The derivative of the constant ln 2 is 0, so the derivative is 1/x, the same as the derivative of ln x. The chain rule agrees: the derivative of ln(u) is 1/u, times u' = 2, and 2/(2x) cancels to 1/x. The 2 is real and then it cancels.",
+        "algebra": "Apply the chain rule to ln(2x). The form to remember, already simplified, is x^(-1).",
+        "mistakeTitle": "Answering 1/(2*x)",
+        "mistake": "1/(2x) stops before canceling. The chain rule really does multiply by 2, and that 2 cancels the 2 in the denominator.",
+        "mistake2Title": "Confusing the base of ln(2x)",
+        "mistake2": "Natural log differentiates to 1/x. A constant inside the log often cancels. Base 10 is a different function and needs log10.",
+        "domain": "The expression needs x > 0. At 0 and on the negatives it is undefined as a real function, so the derivative is too.",
+        "check": "At x = 2, substitute into the simplified form x^(-1). That number is the slope of ln(2x) there; a secant over a small step in x lands next to it."
+      },
+      "es": {
+        "angle": "ln(2x) parece que debería arrastrar un 2, pero la propiedad del logaritmo dice ln(2x) = ln 2 + ln x. La derivada de la constante ln 2 es 0, así que la derivada es 1/x, igual que la de ln x. La regla de la cadena coincide: la derivada de ln(u) es 1/u, por u' = 2, y 2/(2x) se cancela a 1/x. El 2 existe y luego se cancela.",
+        "algebra": "Aplica la regla de la cadena a ln(2x). La forma que hay que recordar, ya simplificada, es x^(-1).",
+        "mistakeTitle": "Responder 1/(2*x)",
+        "mistake": "1/(2x) se detiene antes de cancelar. La regla de la cadena sí multiplica por 2, y ese 2 cancela el 2 del denominador.",
+        "mistake2Title": "Confundir la base de ln(2x)",
+        "mistake2": "El logaritmo natural deriva a 1/x. Una constante dentro del logaritmo a menudo se cancela. La base 10 es otra función y exige log10.",
+        "domain": "La expresión exige x > 0. En 0 y en los negativos no está definida como función real, y la derivada tampoco.",
+        "check": "En x = 2, sustituye en la forma simplificada x^(-1). Ese número es la pendiente de ln(2x) en ese punto; una secante con un paso pequeño de x cae al lado."
+      },
+      "pt": {
+        "angle": "ln(2x) parece que deveria carregar um 2, mas a propriedade do log diz ln(2x) = ln 2 + ln x. A derivada da constante ln 2 é 0, então a derivada é 1/x, igual à de ln x. A regra da cadeia concorda: a derivada de ln(u) é 1/u, vezes u' = 2, e 2/(2x) cancela para 1/x. O 2 existe e depois se cancela.",
+        "algebra": "Aplique a regra da cadeia a ln(2x). A forma para memorizar, já simplificada, é x^(-1).",
+        "mistakeTitle": "Responder 1/(2*x)",
+        "mistake": "1/(2x) para antes de cancelar. A regra da cadeia realmente multiplica por 2, e esse 2 cancela o 2 do denominador.",
+        "mistake2Title": "Confundir a base de ln(2x)",
+        "mistake2": "O logaritmo natural deriva para 1/x. Uma constante dentro do log muitas vezes se cancela. A base 10 é outra função e exige log10.",
+        "domain": "A expressão exige x > 0. Em 0 e nos negativos ela não está definida como função real, e a derivada também não.",
+        "check": "Em x = 2, substitua na forma simplificada x^(-1). Esse número é a inclinação de ln(2x) nesse ponto; uma secante com um passo pequeno de x cai ao lado."
+      }
+    },
+    "alsoWiki": [
+      "logarithmic-derivatives"
+    ]
+  },
+  {
+    "slug": "derivative-of-log-x",
+    "display": "log(x)",
+    "engine": "log(x)",
+    "nice": "x^(-1)",
+    "ruleWiki": "logarithmic-derivatives",
+    "cluster": "log",
+    "copy": {
+      "en": {
+        "angle": "On this calculator log(x) means the natural logarithm, the same function as ln(x). The derivative is 1/x. Base-10 log is written log10(x), and that one does carry a factor 1/ln(10). Mixing the two notations is the point of this page: the symbol log is not automatically base 10 here, because the math engine treats log as ln.",
+        "algebra": "Apply the logarithm rule to log(x). The form to remember, already simplified, is x^(-1).",
+        "mistakeTitle": "Answering 1/(x*ln(10))",
+        "mistake": "1/(x ln 10) is the derivative of log10(x), not of the natural log that this page computes. If you wanted base 10, the input has to be log10(x).",
+        "mistake2Title": "Confusing the base of log(x)",
+        "mistake2": "Natural log differentiates to 1/x. A constant inside the log often cancels. Base 10 is a different function and needs log10.",
+        "domain": "The expression needs x > 0. At 0 and on the negatives it is undefined as a real function, so the derivative is too.",
+        "check": "At x = 1, substitute into the simplified form x^(-1). That number is the slope of log(x) there; a secant over a small step in x lands next to it."
+      },
+      "es": {
+        "angle": "En esta calculadora log(x) significa el logaritmo natural, la misma función que ln(x). La derivada es 1/x. El logaritmo en base 10 se escribe log10(x), y ese sí lleva un factor 1/ln(10). Mezclar las dos notaciones es el tema de esta página: aquí el símbolo log no es automáticamente base 10, porque el motor trata log como ln.",
+        "algebra": "Aplica la regla del logaritmo a log(x). La forma que hay que recordar, ya simplificada, es x^(-1).",
+        "mistakeTitle": "Responder 1/(x*ln(10))",
+        "mistake": "1/(x ln 10) es la derivada de log10(x), no del logaritmo natural que calcula esta página. Si querías base 10, la entrada tiene que ser log10(x).",
+        "mistake2Title": "Confundir la base de log(x)",
+        "mistake2": "El logaritmo natural deriva a 1/x. Una constante dentro del logaritmo a menudo se cancela. La base 10 es otra función y exige log10.",
+        "domain": "La expresión exige x > 0. En 0 y en los negativos no está definida como función real, y la derivada tampoco.",
+        "check": "En x = 1, sustituye en la forma simplificada x^(-1). Ese número es la pendiente de log(x) en ese punto; una secante con un paso pequeño de x cae al lado."
+      },
+      "pt": {
+        "angle": "Nesta calculadora log(x) significa o logaritmo natural, a mesma função que ln(x). A derivada é 1/x. O logaritmo na base 10 se escreve log10(x), e esse sim carrega um fator 1/ln(10). Misturar as duas notações é o ponto desta página: aqui o símbolo log não é automaticamente base 10, porque o motor trata log como ln.",
+        "algebra": "Aplique a regra do logaritmo a log(x). A forma para memorizar, já simplificada, é x^(-1).",
+        "mistakeTitle": "Responder 1/(x*ln(10))",
+        "mistake": "1/(x ln 10) é a derivada de log10(x), não do logaritmo natural que esta página calcula. Se você queria base 10, a entrada tem que ser log10(x).",
+        "mistake2Title": "Confundir a base de log(x)",
+        "mistake2": "O logaritmo natural deriva para 1/x. Uma constante dentro do log muitas vezes se cancela. A base 10 é outra função e exige log10.",
+        "domain": "A expressão exige x > 0. Em 0 e nos negativos ela não está definida como função real, e a derivada também não.",
+        "check": "Em x = 1, substitua na forma simplificada x^(-1). Esse número é a inclinação de log(x) nesse ponto; uma secante com um passo pequeno de x cai ao lado."
+      }
+    }
+  },
+  {
+    "slug": "derivative-of-sinh-x",
+    "display": "sinh(x)",
+    "engine": "sinh(x)",
+    "nice": "cosh(x)",
+    "ruleWiki": "exponential-derivatives",
+    "cluster": "hyperbolic",
+    "copy": {
+      "en": {
+        "angle": "sinh(x) = (e^x − e^(−x))/2. Differentiating term by term gives (e^x − (−e^(−x)))/2 = (e^x + e^(−x))/2, which is cosh(x). There is no minus in the final answer, unlike cosine. The minus inside the definition is canceled by the derivative of e^(−x).",
+        "algebra": "Apply the exponential rule to sinh(x). The form to remember, already simplified, is cosh(x).",
+        "mistakeTitle": "Answering cosh(x)+sinh(x)",
+        "mistake": "Adding sinh and cosh produces e^x, which is a different identity. The derivative of sinh is cosh alone.",
+        "mistake2Title": "Copying a trigonometric minus onto sinh(x)",
+        "mistake2": "Hyperbolic sine and cosine come from exponentials. The minus signs inside those definitions do not leave a minus in front of the derivative the way cosine does.",
+        "domain": "The expression is built from polynomials, sine, cosine, or exponentials, so the derivative exists for every real x.",
+        "check": "At x = 0, substitute into the simplified form cosh(x). That number is the slope of sinh(x) there; a secant over a small step in x lands next to it."
+      },
+      "es": {
+        "angle": "sinh(x) = (e^x − e^(−x))/2. Derivar término a término da (e^x − (−e^(−x)))/2 = (e^x + e^(−x))/2, que es cosh(x). No hay un menos en la respuesta final, a diferencia del coseno. El menos de la definición se cancela con la derivada de e^(−x).",
+        "algebra": "Aplica la regla exponencial a sinh(x). La forma que hay que recordar, ya simplificada, es cosh(x).",
+        "mistakeTitle": "Responder cosh(x)+sinh(x)",
+        "mistake": "Sumar sinh y cosh produce e^x, que es otra identidad. La derivada de sinh es solo cosh.",
+        "mistake2Title": "Copiar un menos trigonométrico en sinh(x)",
+        "mistake2": "El seno y el coseno hiperbólicos salen de exponenciales. Los menos de esas definiciones no dejan un menos delante de la derivada como le pasa al coseno.",
+        "domain": "La expresión está hecha de polinomios, seno, coseno o exponenciales, así que la derivada existe para todo x real.",
+        "check": "En x = 0, sustituye en la forma simplificada cosh(x). Ese número es la pendiente de sinh(x) en ese punto; una secante con un paso pequeño de x cae al lado."
+      },
+      "pt": {
+        "angle": "sinh(x) = (e^x − e^(−x))/2. Derivar termo a termo dá (e^x − (−e^(−x)))/2 = (e^x + e^(−x))/2, que é cosh(x). Não há um menos na resposta final, ao contrário do cosseno. O menos da definição se cancela com a derivada de e^(−x).",
+        "algebra": "Aplique a regra exponencial a sinh(x). A forma para memorizar, já simplificada, é cosh(x).",
+        "mistakeTitle": "Responder cosh(x)+sinh(x)",
+        "mistake": "Somar sinh e cosh produz e^x, que é outra identidade. A derivada de sinh é só cosh.",
+        "mistake2Title": "Copiar um menos trigonométrico em sinh(x)",
+        "mistake2": "O seno e o cosseno hiperbólicos vêm de exponenciais. Os menos dessas definições não deixam um menos na frente da derivada como acontece com o cosseno.",
+        "domain": "A expressão é feita de polinômios, seno, cosseno ou exponenciais, então a derivada existe para todo x real.",
+        "check": "Em x = 0, substitua na forma simplificada cosh(x). Esse número é a inclinação de sinh(x) nesse ponto; uma secante com um passo pequeno de x cai ao lado."
+      }
+    },
+    "alsoWiki": [
+      "trigonometric-derivatives"
+    ]
+  },
+  {
+    "slug": "derivative-of-cosh-x",
+    "display": "cosh(x)",
+    "engine": "cosh(x)",
+    "nice": "sinh(x)",
+    "ruleWiki": "exponential-derivatives",
+    "cluster": "hyperbolic",
+    "copy": {
+      "en": {
+        "angle": "cosh(x) = (e^x + e^(−x))/2. Differentiating gives (e^x − e^(−x))/2, which is sinh(x), with no minus in front. Cosine's derivative has a minus; cosh's does not, because the two exponential terms add in the definition and the minus from e^(−x) creates sinh rather than −sinh.",
+        "algebra": "Apply the exponential rule to cosh(x). The form to remember, already simplified, is sinh(x).",
+        "mistakeTitle": "Answering -sinh(x)",
+        "mistake": "−sinh(x) imports the sign from cosine. Hyperbolic cosine is always at least 1 and its slope at zero is 0, but just to the right the slope is positive.",
+        "mistake2Title": "Copying a trigonometric minus onto cosh(x)",
+        "mistake2": "Hyperbolic sine and cosine come from exponentials. The minus signs inside those definitions do not leave a minus in front of the derivative the way cosine does.",
+        "domain": "The expression is built from polynomials, sine, cosine, or exponentials, so the derivative exists for every real x.",
+        "check": "At x = 0, substitute into the simplified form sinh(x). That number is the slope of cosh(x) there; a secant over a small step in x lands next to it."
+      },
+      "es": {
+        "angle": "cosh(x) = (e^x + e^(−x))/2. Derivar da (e^x − e^(−x))/2, que es sinh(x), sin un menos delante. La derivada del coseno tiene un menos; la de cosh no, porque los dos términos exponenciales se suman en la definición y el menos de e^(−x) fabrica sinh y no −sinh.",
+        "algebra": "Aplica la regla exponencial a cosh(x). La forma que hay que recordar, ya simplificada, es sinh(x).",
+        "mistakeTitle": "Responder -sinh(x)",
+        "mistake": "−sinh(x) importa el signo del coseno. El coseno hiperbólico siempre vale al menos 1 y su pendiente en cero es 0, pero justo a la derecha la pendiente es positiva.",
+        "mistake2Title": "Copiar un menos trigonométrico en cosh(x)",
+        "mistake2": "El seno y el coseno hiperbólicos salen de exponenciales. Los menos de esas definiciones no dejan un menos delante de la derivada como le pasa al coseno.",
+        "domain": "La expresión está hecha de polinomios, seno, coseno o exponenciales, así que la derivada existe para todo x real.",
+        "check": "En x = 0, sustituye en la forma simplificada sinh(x). Ese número es la pendiente de cosh(x) en ese punto; una secante con un paso pequeño de x cae al lado."
+      },
+      "pt": {
+        "angle": "cosh(x) = (e^x + e^(−x))/2. Derivar dá (e^x − e^(−x))/2, que é sinh(x), sem um menos na frente. A derivada do cosseno tem um menos; a de cosh não, porque os dois termos exponenciais se somam na definição e o menos de e^(−x) fabrica sinh e não −sinh.",
+        "algebra": "Aplique a regra exponencial a cosh(x). A forma para memorizar, já simplificada, é sinh(x).",
+        "mistakeTitle": "Responder -sinh(x)",
+        "mistake": "−sinh(x) importa o sinal do cosseno. O cosseno hiperbólico vale sempre pelo menos 1 e sua inclinação em zero é 0, mas logo à direita a inclinação é positiva.",
+        "mistake2Title": "Copiar um menos trigonométrico em cosh(x)",
+        "mistake2": "O seno e o cosseno hiperbólicos vêm de exponenciais. Os menos dessas definições não deixam um menos na frente da derivada como acontece com o cosseno.",
+        "domain": "A expressão é feita de polinômios, seno, cosseno ou exponenciais, então a derivada existe para todo x real.",
+        "check": "Em x = 0, substitua na forma simplificada sinh(x). Esse número é a inclinação de cosh(x) nesse ponto; uma secante com um passo pequeno de x cai ao lado."
+      }
+    },
+    "alsoWiki": [
+      "trigonometric-derivatives"
+    ]
+  },
+  {
+    "slug": "derivative-of-tanh-x",
+    "display": "tanh(x)",
+    "engine": "tanh(x)",
+    "nice": "sech(x)^2",
+    "ruleWiki": "exponential-derivatives",
+    "cluster": "hyperbolic",
+    "copy": {
+      "en": {
+        "angle": "tanh(x) = sinh/cosh. The quotient rule produces cosh^2 − sinh^2 in the numerator, which equals 1, over cosh^2. That is sech^2(x). It is the hyperbolic analogue of sec^2, and the sign stays positive because cosh^2 − sinh^2 = 1 rather than the minus that showed up for cotangent.",
+        "algebra": "Apply the exponential rule to tanh(x). The form to remember, already simplified, is sech(x)^2.",
+        "mistakeTitle": "Answering -sech(x)^2",
+        "mistake": "A leading minus copies cotangent's derivative onto tanh. The identity for cosh and sinh is a difference equal to +1, so the numerator does not change sign.",
+        "mistake2Title": "Copying a trigonometric minus onto tanh(x)",
+        "mistake2": "Hyperbolic sine and cosine come from exponentials. The minus signs inside those definitions do not leave a minus in front of the derivative the way cosine does.",
+        "domain": "The expression is built from polynomials, sine, cosine, or exponentials, so the derivative exists for every real x.",
+        "check": "At x = 0, substitute into the simplified form sech(x)^2. That number is the slope of tanh(x) there; a secant over a small step in x lands next to it."
+      },
+      "es": {
+        "angle": "tanh(x) = sinh/cosh. La regla del cociente produce cosh^2 − sinh^2 en el numerador, que vale 1, sobre cosh^2. Eso es sech^2(x). Es el análogo hiperbólico de sec^2, y el signo queda positivo porque cosh^2 − sinh^2 = 1, no el menos que apareció en la cotangente.",
+        "algebra": "Aplica la regla exponencial a tanh(x). La forma que hay que recordar, ya simplificada, es sech(x)^2.",
+        "mistakeTitle": "Responder -sech(x)^2",
+        "mistake": "Un menos delante copia la derivada de la cotangente en tanh. La identidad de cosh y sinh es una diferencia igual a +1, así que el numerador no cambia de signo.",
+        "mistake2Title": "Copiar un menos trigonométrico en tanh(x)",
+        "mistake2": "El seno y el coseno hiperbólicos salen de exponenciales. Los menos de esas definiciones no dejan un menos delante de la derivada como le pasa al coseno.",
+        "domain": "La expresión está hecha de polinomios, seno, coseno o exponenciales, así que la derivada existe para todo x real.",
+        "check": "En x = 0, sustituye en la forma simplificada sech(x)^2. Ese número es la pendiente de tanh(x) en ese punto; una secante con un paso pequeño de x cae al lado."
+      },
+      "pt": {
+        "angle": "tanh(x) = sinh/cosh. A regra do quociente produz cosh^2 − sinh^2 no numerador, que vale 1, sobre cosh^2. Isso é sech^2(x). É o análogo hiperbólico de sec^2, e o sinal fica positivo porque cosh^2 − sinh^2 = 1, não o menos que apareceu na cotangente.",
+        "algebra": "Aplique a regra exponencial a tanh(x). A forma para memorizar, já simplificada, é sech(x)^2.",
+        "mistakeTitle": "Responder -sech(x)^2",
+        "mistake": "Um menos na frente copia a derivada da cotangente em tanh. A identidade de cosh e sinh é uma diferença igual a +1, então o numerador não troca de sinal.",
+        "mistake2Title": "Copiar um menos trigonométrico em tanh(x)",
+        "mistake2": "O seno e o cosseno hiperbólicos vêm de exponenciais. Os menos dessas definições não deixam um menos na frente da derivada como acontece com o cosseno.",
+        "domain": "A expressão é feita de polinômios, seno, cosseno ou exponenciais, então a derivada existe para todo x real.",
+        "check": "Em x = 0, substitua na forma simplificada sech(x)^2. Esse número é a inclinação de tanh(x) nesse ponto; uma secante com um passo pequeno de x cai ao lado."
+      }
+    },
+    "alsoWiki": [
+      "quotient-rule"
+    ]
+  },
+  {
+    "slug": "derivative-of-x-squared-minus-1",
+    "display": "x^2-1",
+    "engine": "x^2-1",
+    "nice": "2*x",
+    "ruleWiki": "power-rule",
+    "cluster": "power-shift",
+    "copy": {
+      "en": {
+        "angle": "x^2 − 1 is the parabola x^2 dropped by 1. Vertical shifts do not change slope, so the derivative is 2x, the same as the derivative of x^2. The −1 is a constant and the sum rule gives it derivative 0. The pages differ because the functions differ: these two parabolas are not the same curve, they just share a steepness at each x.",
+        "algebra": "Apply the power rule to x^2-1. The form to remember, already simplified, is 2*x.",
+        "mistakeTitle": "Answering 2*x-1",
+        "mistake": "2x − 1 differentiates the constant as if it were −x. A bare −1 has slope 0, so it cannot contribute a −1 to the derivative.",
+        "mistake2Title": "Differentiating the constant in x^2-1",
+        "mistake2": "The constant in x^2-1 changes height only. Its derivative is 0, so it cannot leave a +1 or a −1 in the slope.",
+        "domain": "The expression is built from polynomials, sine, cosine, or exponentials, so the derivative exists for every real x.",
+        "check": "At x = 3, substitute into the simplified form 2*x. That number is the slope of x^2-1 there; a secant over a small step in x lands next to it."
+      },
+      "es": {
+        "angle": "x^2 − 1 es la parábola x^2 bajada una unidad. Los desplazamientos verticales no cambian la pendiente, así que la derivada es 2x, igual que la de x^2. El −1 es constante y la regla de la suma le da derivada 0. Las páginas difieren porque las funciones difieren: no son la misma curva, solo comparten la inclinación en cada x.",
+        "algebra": "Aplica la regla de la potencia a x^2-1. La forma que hay que recordar, ya simplificada, es 2*x.",
+        "mistakeTitle": "Responder 2*x-1",
+        "mistake": "2x − 1 deriva la constante como si fuera −x. Un −1 pelado tiene pendiente 0, así que no puede aportar un −1 a la derivada.",
+        "mistake2Title": "Derivar la constante de x^2-1",
+        "mistake2": "La constante de x^2-1 solo cambia la altura. Su derivada es 0, así que no puede dejar un +1 o un −1 en la pendiente.",
+        "domain": "La expresión está hecha de polinomios, seno, coseno o exponenciales, así que la derivada existe para todo x real.",
+        "check": "En x = 3, sustituye en la forma simplificada 2*x. Ese número es la pendiente de x^2-1 en ese punto; una secante con un paso pequeño de x cae al lado."
+      },
+      "pt": {
+        "angle": "x^2 − 1 é a parábola x^2 descida uma unidade. Deslocamentos verticais não mudam a inclinação, então a derivada é 2x, igual à de x^2. O −1 é constante e a regra da soma dá derivada 0. As páginas diferem porque as funções diferem: não são a mesma curva, só compartilham a inclinação em cada x.",
+        "algebra": "Aplique a regra da potência a x^2-1. A forma para memorizar, já simplificada, é 2*x.",
+        "mistakeTitle": "Responder 2*x-1",
+        "mistake": "2x − 1 deriva a constante como se fosse −x. Um −1 sozinho tem inclinação 0, então não pode contribuir com um −1 na derivada.",
+        "mistake2Title": "Derivar a constante de x^2-1",
+        "mistake2": "A constante de x^2-1 só muda a altura. Sua derivada é 0, então não pode deixar um +1 ou um −1 na inclinação.",
+        "domain": "A expressão é feita de polinômios, seno, cosseno ou exponenciais, então a derivada existe para todo x real.",
+        "check": "Em x = 3, substitua na forma simplificada 2*x. Esse número é a inclinação de x^2-1 nesse ponto; uma secante com um passo pequeno de x cai ao lado."
+      }
+    }
+  },
+  {
+    "slug": "derivative-of-x-squared-plus-1",
+    "display": "x^2+1",
+    "engine": "x^2+1",
+    "nice": "2*x",
+    "ruleWiki": "power-rule",
+    "cluster": "power-shift",
+    "copy": {
+      "en": {
+        "angle": "x^2 + 1 sits one unit above x^2. The added 1 changes height and does not change slope, so the derivative is again 2x. It matches the derivative of x^2 − 1 for the same reason, and it does not match the function x^2 + 1 itself. A quick check: at x = 0 both shifted parabolas have a horizontal tangent, and 2x is 0 there.",
+        "algebra": "Apply the power rule to x^2+1. The form to remember, already simplified, is 2*x.",
+        "mistakeTitle": "Answering 2*x+1",
+        "mistake": "2x + 1 keeps the constant alive. Constants disappear when you differentiate; they do not turn into 1.",
+        "mistake2Title": "Differentiating the constant in x^2+1",
+        "mistake2": "The constant in x^2+1 changes height only. Its derivative is 0, so it cannot leave a +1 or a −1 in the slope.",
+        "domain": "The expression is built from polynomials, sine, cosine, or exponentials, so the derivative exists for every real x.",
+        "check": "At x = 3, substitute into the simplified form 2*x. That number is the slope of x^2+1 there; a secant over a small step in x lands next to it."
+      },
+      "es": {
+        "angle": "x^2 + 1 está una unidad por encima de x^2. El 1 añadido cambia la altura y no la pendiente, así que la derivada vuelve a ser 2x. Coincide con la de x^2 − 1 por la misma razón, y no coincide con la función x^2 + 1. Comprobación: en x = 0 las dos parábolas desplazadas tienen tangente horizontal, y 2x vale 0.",
+        "algebra": "Aplica la regla de la potencia a x^2+1. La forma que hay que recordar, ya simplificada, es 2*x.",
+        "mistakeTitle": "Responder 2*x+1",
+        "mistake": "2x + 1 mantiene viva la constante. Las constantes desaparecen al derivar; no se convierten en 1.",
+        "mistake2Title": "Derivar la constante de x^2+1",
+        "mistake2": "La constante de x^2+1 solo cambia la altura. Su derivada es 0, así que no puede dejar un +1 o un −1 en la pendiente.",
+        "domain": "La expresión está hecha de polinomios, seno, coseno o exponenciales, así que la derivada existe para todo x real.",
+        "check": "En x = 3, sustituye en la forma simplificada 2*x. Ese número es la pendiente de x^2+1 en ese punto; una secante con un paso pequeño de x cae al lado."
+      },
+      "pt": {
+        "angle": "x^2 + 1 fica uma unidade acima de x^2. O 1 somado muda a altura e não a inclinação, então a derivada é de novo 2x. Coincide com a de x^2 − 1 pelo mesmo motivo, e não coincide com a função x^2 + 1. Conferência: em x = 0 as duas parábolas deslocadas têm tangente horizontal, e 2x vale 0.",
+        "algebra": "Aplique a regra da potência a x^2+1. A forma para memorizar, já simplificada, é 2*x.",
+        "mistakeTitle": "Responder 2*x+1",
+        "mistake": "2x + 1 mantém a constante viva. Constantes somem ao derivar; elas não viram 1.",
+        "mistake2Title": "Derivar a constante de x^2+1",
+        "mistake2": "A constante de x^2+1 só muda a altura. Sua derivada é 0, então não pode deixar um +1 ou um −1 na inclinação.",
+        "domain": "A expressão é feita de polinômios, seno, cosseno ou exponenciais, então a derivada existe para todo x real.",
+        "check": "Em x = 3, substitua na forma simplificada 2*x. Esse número é a inclinação de x^2+1 nesse ponto; uma secante com um passo pequeno de x cai ao lado."
+      }
+    }
+  },
+  {
+    "slug": "derivative-of-abs-x",
+    "display": "|x|",
+    "engine": "Abs(x)",
+    "nice": "abs(x)^(-1)*x",
+    "ruleWiki": "definition-of-derivative",
+    "cluster": "special",
+    "copy": {
+      "en": {
+        "angle": "Absolute value is the line y = x for x > 0 and y = −x for x < 0. The slope is therefore +1 on the right and −1 on the left, which is x/|x|, the same as the sign of x. The engine writes that as x/abs(x). At x = 0 the left-hand slope and the right-hand slope disagree, so the derivative does not exist at the corner, even though the function is continuous there.",
+        "algebra": "Apply the definition as a limit to |x|. The form to remember, already simplified, is abs(x)^(-1)*x.",
+        "mistakeTitle": "Answering 1",
+        "mistake": "Answering 1 describes only the right-hand ray. For negative x the graph is falling, and the slope is −1.",
+        "mistake2Title": "Claiming |x| has a derivative at the bad point",
+        "mistake2": "Corners and jumps are exactly where a formula that works on each piece fails. State the pieces and then state the exception.",
+        "domain": "The derivative exists for every x except 0, where the graph has a corner and the one-sided slopes disagree.",
+        "check": "At x = 2, substitute into the simplified form abs(x)^(-1)*x. That number is the slope of |x| there; a secant over a small step in x lands next to it."
+      },
+      "es": {
+        "angle": "El valor absoluto es la recta y = x para x > 0 y y = −x para x < 0. La pendiente es +1 a la derecha y −1 a la izquierda, o sea x/|x|, el signo de x. El motor lo escribe como x/abs(x). En x = 0 las pendientes laterales no coinciden, así que la derivada no existe en la esquina, aunque la función sea continua.",
+        "algebra": "Aplica la definición como límite a |x|. La forma que hay que recordar, ya simplificada, es abs(x)^(-1)*x.",
+        "mistakeTitle": "Responder 1",
+        "mistake": "Responder 1 describe solo la semirrecta derecha. Para x negativo la gráfica baja, y la pendiente es −1.",
+        "mistake2Title": "Afirmar que |x| tiene derivada en el punto malo",
+        "mistake2": "Las esquinas y los saltos son justo donde una fórmula que funciona en cada trozo falla. Di los trozos y después la excepción.",
+        "domain": "La derivada existe para todo x salvo 0, donde la gráfica tiene una esquina y las pendientes laterales no coinciden.",
+        "check": "En x = 2, sustituye en la forma simplificada abs(x)^(-1)*x. Ese número es la pendiente de |x| en ese punto; una secante con un paso pequeño de x cae al lado."
+      },
+      "pt": {
+        "angle": "O valor absoluto é a reta y = x para x > 0 e y = −x para x < 0. A inclinação é +1 à direita e −1 à esquerda, isto é x/|x|, o sinal de x. O motor escreve isso como x/abs(x). Em x = 0 as inclinações laterais não coincidem, então a derivada não existe na quina, embora a função seja contínua.",
+        "algebra": "Aplique a definição como limite a |x|. A forma para memorizar, já simplificada, é abs(x)^(-1)*x.",
+        "mistakeTitle": "Responder 1",
+        "mistake": "Responder 1 descreve só a semirreta da direita. Para x negativo o gráfico desce, e a inclinação é −1.",
+        "mistake2Title": "Afirmar que |x| tem derivada no ponto ruim",
+        "mistake2": "Quinas e saltos são exatamente onde uma fórmula que funciona em cada pedaço falha. Diga os pedaços e depois a exceção.",
+        "domain": "A derivada existe para todo x exceto 0, onde o gráfico tem uma quina e as inclinações laterais não coincidem.",
+        "check": "Em x = 2, substitua na forma simplificada abs(x)^(-1)*x. Esse número é a inclinação de |x| nesse ponto; uma secante com um passo pequeno de x cai ao lado."
+      }
+    }
+  },
+  {
+    "slug": "derivative-of-sign-x",
+    "display": "sign(x)",
+    "engine": "sign(x)",
+    "nice": "0",
+    "ruleWiki": "definition-of-derivative",
+    "cluster": "special",
+    "copy": {
+      "en": {
+        "angle": "sign(x) is −1 on the negatives, undefined or zero at the origin depending on convention, and +1 on the positives. On each open half-line the function is constant, so the slope is 0. The engine reports 0, and that answer is right only away from zero. At x = 0 the function jumps, and a jump has no derivative. Do not read the printed 0 as a derivative at the origin.",
+        "algebra": "Apply the definition as a limit to sign(x). The form to remember, already simplified, is 0.",
+        "mistakeTitle": "Answering 1",
+        "mistake": "Answering 1 confuses the value of the function on the right with its slope. The pieces are horizontal, so the slope is 0, not 1.",
+        "mistake2Title": "Claiming sign(x) has a derivative at the bad point",
+        "mistake2": "Corners and jumps are exactly where a formula that works on each piece fails. State the pieces and then state the exception.",
+        "domain": "The derivative is 0 for x < 0 and for x > 0. It does not exist at x = 0, where sign(x) jumps.",
+        "check": "At x = 2, substitute into the simplified form 0. That number is the slope of sign(x) there; a secant over a small step in x lands next to it."
+      },
+      "es": {
+        "angle": "sign(x) vale −1 en los negativos, no está definida o vale cero en el origen según el convenio, y +1 en los positivos. En cada semirrecta abierta la función es constante, así que la pendiente es 0. El motor informa 0, y esa respuesta solo vale lejos de cero. En x = 0 la función salta, y un salto no tiene derivada. No leas el 0 impreso como una derivada en el origen.",
+        "algebra": "Aplica la definición como límite a sign(x). La forma que hay que recordar, ya simplificada, es 0.",
+        "mistakeTitle": "Responder 1",
+        "mistake": "Responder 1 confunde el valor de la función a la derecha con su pendiente. Los trozos son horizontales, así que la pendiente es 0, no 1.",
+        "mistake2Title": "Afirmar que sign(x) tiene derivada en el punto malo",
+        "mistake2": "Las esquinas y los saltos son justo donde una fórmula que funciona en cada trozo falla. Di los trozos y después la excepción.",
+        "domain": "La derivada es 0 para x < 0 y para x > 0. No existe en x = 0, donde sign(x) salta.",
+        "check": "En x = 2, sustituye en la forma simplificada 0. Ese número es la pendiente de sign(x) en ese punto; una secante con un paso pequeño de x cae al lado."
+      },
+      "pt": {
+        "angle": "sign(x) vale −1 nos negativos, não está definida ou vale zero na origem conforme a convenção, e +1 nos positivos. Em cada semirreta aberta a função é constante, então a inclinação é 0. O motor informa 0, e essa resposta só vale longe de zero. Em x = 0 a função salta, e um salto não tem derivada. Não leia o 0 impresso como derivada na origem.",
+        "algebra": "Aplique a definição como limite a sign(x). A forma para memorizar, já simplificada, é 0.",
+        "mistakeTitle": "Responder 1",
+        "mistake": "Responder 1 confunde o valor da função à direita com a inclinação. Os pedaços são horizontais, então a inclinação é 0, não 1.",
+        "mistake2Title": "Afirmar que sign(x) tem derivada no ponto ruim",
+        "mistake2": "Quinas e saltos são exatamente onde uma fórmula que funciona em cada pedaço falha. Diga os pedaços e depois a exceção.",
+        "domain": "A derivada é 0 para x < 0 e para x > 0. Não existe em x = 0, onde sign(x) salta.",
+        "check": "Em x = 2, substitua na forma simplificada 0. Esse número é a inclinação de sign(x) nesse ponto; uma secante com um passo pequeno de x cai ao lado."
+      }
+    }
+  },
+  {
+    "slug": "derivative-of-floor-x",
+    "display": "floor(x)",
+    "engine": "floor(x)",
+    "nice": "undefined at integers",
+    "ruleWiki": "definition-of-derivative",
+    "cluster": "special",
+    "copy": {
+      "en": {
+        "angle": "floor(x) is constant between integers and jumps by 1 at each integer. On each open interval (n, n+1) the slope is 0. At each integer the jump means the derivative does not exist: the difference quotient does not approach a single number. This calculator will not print a derivative for floor(x), because an unevaluated diff() is not an answer. The honest result is: 0 between integers, undefined at integers.",
+        "algebra": "Apply the definition as a limit to floor(x). The form to remember, already simplified, is undefined.",
+        "mistakeTitle": "Answering 0",
+        "mistake": "Printing 0 everywhere, including at the integers, hides the jumps. The derivative is 0 only on the flat steps, not at the endpoints.",
+        "mistake2Title": "Claiming floor(x) has a derivative at the bad point",
+        "mistake2": "Corners and jumps are exactly where a formula that works on each piece fails. State the pieces and then state the exception.",
+        "domain": "Between consecutive integers the derivative is 0. At each integer the jump means the derivative does not exist.",
+        "check": "At x = 1.5, substitute into the simplified form undefined. That number is the slope of floor(x) there; a secant over a small step in x lands next to it."
+      },
+      "es": {
+        "angle": "floor(x) es constante entre enteros y salta 1 en cada entero. En cada intervalo abierto (n, n+1) la pendiente es 0. En cada entero el salto hace que la derivada no exista: el cociente de diferencias no se acerca a un solo número. Esta calculadora no imprime una derivada de floor(x), porque un diff() sin evaluar no es una respuesta. El resultado honesto es: 0 entre enteros, no definida en los enteros.",
+        "algebra": "Aplica la definición como límite a floor(x). La forma que hay que recordar, ya simplificada, es undefined.",
+        "mistakeTitle": "Responder 0",
+        "mistake": "Imprimir 0 en todas partes, incluidos los enteros, esconde los saltos. La derivada es 0 solo en los escalones planos, no en los extremos.",
+        "mistake2Title": "Afirmar que floor(x) tiene derivada en el punto malo",
+        "mistake2": "Las esquinas y los saltos son justo donde una fórmula que funciona en cada trozo falla. Di los trozos y después la excepción.",
+        "domain": "Entre enteros consecutivos la derivada es 0. En cada entero el salto hace que la derivada no exista.",
+        "check": "En x = 1.5, sustituye en la forma simplificada undefined. Ese número es la pendiente de floor(x) en ese punto; una secante con un paso pequeño de x cae al lado."
+      },
+      "pt": {
+        "angle": "floor(x) é constante entre inteiros e salta 1 em cada inteiro. Em cada intervalo aberto (n, n+1) a inclinação é 0. Em cada inteiro o salto faz a derivada não existir: o quociente de diferenças não se aproxima de um único número. Esta calculadora não imprime uma derivada de floor(x), porque um diff() não avaliado não é resposta. O resultado honesto é: 0 entre inteiros, indefinida nos inteiros.",
+        "algebra": "Aplique a definição como limite a floor(x). A forma para memorizar, já simplificada, é undefined.",
+        "mistakeTitle": "Responder 0",
+        "mistake": "Imprimir 0 em todo lugar, inclusive nos inteiros, esconde os saltos. A derivada é 0 só nos degraus planos, não nas extremidades.",
+        "mistake2Title": "Afirmar que floor(x) tem derivada no ponto ruim",
+        "mistake2": "Quinas e saltos são exatamente onde uma fórmula que funciona em cada pedaço falha. Diga os pedaços e depois a exceção.",
+        "domain": "Entre inteiros consecutivos a derivada é 0. Em cada inteiro o salto faz a derivada não existir.",
+        "check": "Em x = 1.5, substitua na forma simplificada undefined. Esse número é a inclinação de floor(x) nesse ponto; uma secante com um passo pequeno de x cai ao lado."
+      }
+    },
+    "nondiff": true
+  },
+  {
+    "slug": "derivative-of-arcsin-x",
+    "display": "arcsin(x)",
+    "engine": "asin(x)",
+    "nice": "sqrt(-x^2+1)^(-1)",
+    "ruleWiki": "trigonometric-derivatives",
+    "cluster": "inverse",
+    "alsoWiki": [
+      "implicit-differentiation"
+    ],
+    "linksOnly": true
+  },
+  {
+    "slug": "derivative-of-arccos-x",
+    "display": "arccos(x)",
+    "engine": "acos(x)",
+    "nice": "-sqrt(-x^2+1)^(-1)",
+    "ruleWiki": "trigonometric-derivatives",
+    "cluster": "inverse",
+    "alsoWiki": [
+      "implicit-differentiation"
+    ],
+    "linksOnly": true
+  },
+  {
+    "slug": "derivative-of-arctan-x",
+    "display": "arctan(x)",
+    "engine": "atan(x)",
+    "nice": "(1+x^2)^(-1)",
+    "ruleWiki": "trigonometric-derivatives",
+    "cluster": "inverse",
+    "alsoWiki": [
+      "implicit-differentiation"
+    ],
+    "linksOnly": true
+  }
+]

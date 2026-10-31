@@ -5,7 +5,8 @@ import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 
 import wikiData from '@/data/wiki.json';
-import { keywordTitle, localeAlternates, normalizeLocale } from '@/lib/seo';
+import { examplesForRule } from '@/content/derivative-lesson';
+import { keywordTitle, localeAlternates, localePath, normalizeLocale } from '@/lib/seo';
 
 export const runtime = 'edge';
 
@@ -149,16 +150,33 @@ export default async function WikiTopicPage({ params }: { params: { slug: string
                         Solve Examples with {topic.title}
                     </h2>
                     <div className="grid sm:grid-cols-2 gap-4">
-                        {topic.relatedProblems.map((pSlug) => (
+                        {(examplesForRule(topic.slug).length > 0 ? examplesForRule(topic.slug) : topic.relatedProblems).map((pSlug) => (
                             <Link
                                 key={pSlug}
-                                href={`/${locale === 'en' ? '' : locale + '/'}${pSlug}`}
+                                href={localePath(`/${pSlug}`, locale)}
                                 className="bg-white dark:bg-slate-900 p-4 rounded-lg border border-gray-200 dark:border-slate-700 hover:border-blue-500 transition-colors text-blue-600 dark:text-blue-400 font-medium"
                             >
                                 {pSlug.replace(/-/g, ' ').replace(/^derivative of /i, 'd/dx ')} &rarr;
                             </Link>
                         ))}
                     </div>
+                    {topic.slug === 'partial-derivatives' || topic.slug === 'implicit-differentiation' || topic.slug === 'chain-rule' ? (
+                        <p className="mt-6">
+                            <Link
+                                href={localePath(
+                                    topic.slug === 'partial-derivatives'
+                                        ? '/partial-derivative-calculator'
+                                        : topic.slug === 'implicit-differentiation'
+                                            ? '/implicit-differentiation-calculator'
+                                            : '/chain-rule-calculator',
+                                    locale
+                                )}
+                                className="font-semibold text-blue-600 dark:text-blue-400 hover:underline"
+                            >
+                                Open the calculator
+                            </Link>
+                        </p>
+                    ) : null}
                 </section>
 
                 {/* More in Wiki */}

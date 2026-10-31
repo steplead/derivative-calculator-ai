@@ -36,6 +36,9 @@ const STATIC_PATHS = [
   { path: '/wiki', file: 'app/wiki/page.tsx', priority: '0.7' },
   { path: '/practice', file: 'app/practice/page.tsx', priority: '0.7' },
   { path: '/derivatives-of-trig-functions', file: 'app/derivatives-of-trig-functions/page.tsx', priority: '0.8' },
+  { path: '/partial-derivative-calculator', file: 'app/partial-derivative-calculator/page.tsx', priority: '0.9' },
+  { path: '/implicit-differentiation-calculator', file: 'app/implicit-differentiation-calculator/page.tsx', priority: '0.9' },
+  { path: '/chain-rule-calculator', file: 'app/chain-rule-calculator/page.tsx', priority: '0.9' },
 ];
 
 function gitLastmod(relFile) {

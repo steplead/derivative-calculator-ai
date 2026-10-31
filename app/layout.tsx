@@ -6,11 +6,11 @@ import { getDictionary } from "./dictionaries";
 import { GoogleAnalytics } from '@next/third-parties/google';
 import Footer from "@/components/Footer";
 import { headers } from 'next/headers';
-import { getBaseUrl } from '@/utils/robust-url';
 import { loadStaticProblemsSafe } from '@/lib/problems-source';
 import { TurnstileProvider } from "@/components/TurnstileProvider";
+import wikiData from '@/data/wiki.json';
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ subsets: ['latin'], display: 'swap' });
 
 export const runtime = 'edge';
 
@@ -59,28 +59,16 @@ export default async function RootLayout({
   const headersList = await headers();
   const locale = headersList.get("x-next-locale") || "en";
   const dict = getDictionary(locale);
-  const baseUrl = getBaseUrl();
 
-  let wikiTopics: any[] = [];
-  let popularProblems: any[] = [];
-
-  // Fetch global data for footer.
-  //
-  // RC-8 FIX: this layout runs on EVERY page view. It used to issue
-  // `/api/problems?limit=100` (100 D1 rows read per page view, on the whole
-  // site) and both fetches used `cache: 'force-cache'` + `next: { revalidate }`,
-  // which never returns data on Cloudflare Pages. The footer therefore rendered
-  // empty AND burned D1 quota on every single request.
-  // The footer now reads the memoised static library (0 D1 rows).
+  // Footer links are a fixed slice of the static library. Do not ship the
+  // whole problem list through the layout payload, and do not fetch wiki.json
+  // over HTTP on every page.
+  const wikiTopics = wikiData;
+  let popularProblems: { slug: string; formula: string }[] = [];
   try {
-    const [wikiRes, problems] = await Promise.all([
-      fetch(`${baseUrl}/wiki.json`),
-      loadStaticProblemsSafe(),
-    ]);
-    if (wikiRes.ok) wikiTopics = await wikiRes.json();
-    popularProblems = problems.slice(0, 100);
+    popularProblems = (await loadStaticProblemsSafe()).slice(0, 6);
   } catch (e) {
-    console.error("Global layout fetch failed:", e);
+    console.error("Global layout library read failed:", e);
   }
 
   return (

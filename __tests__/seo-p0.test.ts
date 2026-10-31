@@ -86,7 +86,17 @@ describe('curated sitemap', () => {
         execSync('node scripts/generate-sitemap.js', { cwd: path.resolve(__dirname, '..'), stdio: 'pipe' });
         const xml = fs.readFileSync(path.resolve(__dirname, '..', 'public', 'sitemap.xml'), 'utf8');
         const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
-        expect(locs.length).toBe(222);
+        expect(locs.length).toBe(234);
+        for (const path of [
+            '/partial-derivative-calculator',
+            '/implicit-differentiation-calculator',
+            '/chain-rule-calculator',
+            '/wiki/logarithmic-derivatives',
+        ]) {
+            expect(locs.filter((url) => url.endsWith(path) || url.includes(`${path}<`) || url.endsWith(path))).toContain(`https://derivativecalculatorai.com${path}`);
+            expect(xml).toContain(`https://derivativecalculatorai.com/es${path}`);
+            expect(xml).toContain(`https://derivativecalculatorai.com/pt${path}`);
+        }
         expect(locs.filter((url) => url.endsWith('/derivatives-of-trig-functions')).length).toBe(3);
         expect(xml).not.toContain('/derivative-of-x-e-x<');
         expect(xml).not.toContain('+');

@@ -10,8 +10,12 @@ export default function Graph({ equation, derivative }: GraphProps) {
     const rootEl = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
+        const node = rootEl.current;
+        if (!node) return;
+        let cancel = false;
         const loadGraph = async () => {
             try {
+                if (cancel || !rootEl.current) return;
                 if (rootEl.current) {
                     // Dynamically import function-plot to avoid SSR crash in Edge Runtime
                     const functionPlot = (await import('function-plot')).default;
@@ -52,7 +56,17 @@ export default function Graph({ equation, derivative }: GraphProps) {
             }
         };
 
-        loadGraph();
+        const observer = new IntersectionObserver((entries) => {
+            if (entries.some((entry) => entry.isIntersecting)) {
+                observer.disconnect();
+                void loadGraph();
+            }
+        }, { rootMargin: '200px' });
+        observer.observe(node);
+        return () => {
+            cancel = true;
+            observer.disconnect();
+        };
     }, [equation, derivative]);
 
     return <div ref={rootEl} className="w-full h-[400px] flex justify-center items-center overflow-hidden bg-white rounded-lg" />;

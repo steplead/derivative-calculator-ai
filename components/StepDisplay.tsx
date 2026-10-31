@@ -1,14 +1,18 @@
 'use client';
 import 'katex/dist/katex.min.css';
 import dynamic from 'next/dynamic';
+import AskWhyButton from '@/components/AskWhyButton';
 
 const Latex = dynamic(() => import('react-latex-next'), { ssr: false });
 
 interface StepDisplayProps {
     content: string | string[];
+    equation?: string;
+    rule?: string;
+    locale?: string;
 }
 
-export default function StepDisplay({ content }: StepDisplayProps) {
+export default function StepDisplay({ content, equation, rule, locale }: StepDisplayProps) {
     if (!content) return null;
 
     // Handle both string and array formats
@@ -37,6 +41,9 @@ export default function StepDisplay({ content }: StepDisplayProps) {
                         <div className="text-gray-700 dark:text-gray-300">
                             <Latex>{step}</Latex>
                         </div>
+                        {equation ? (
+                            <AskWhyButton equation={equation} step={step} rule={rule} locale={locale} />
+                        ) : null}
                     </div>
                 );
             })}

@@ -10,6 +10,7 @@ const Graph = dynamic(() => import('./Graph'), { ssr: false });
 const StepDisplay = dynamic(() => import('./StepDisplay'), { ssr: false });
 import AdShell from './AdShell';
 import ShareResultCard from './ShareResultCard';
+import AnswerCheck from './AnswerCheck';
 import { useTurnstile, addTokenToUrl } from './TurnstileProvider';
 import { trackEvent } from '@/lib/analytics';
 
@@ -24,9 +25,12 @@ type CalculatorProps = {
     /** Render the share card under a successful result (homepage). Problem pages pass their own. */
     showShare?: boolean;
     shareUrl?: string;
+    locale?: string;
+    /** Skip the interactive graph. Problem pages already ship an inline SVG. */
+    deferGraph?: boolean;
 };
 
-export default function Calculator({ initialEquation = '', initialLimitTo = '0', mode = 'derivative', initialResult, dict, embedded = false, showShare = false, shareUrl = '' }: CalculatorProps) {
+export default function Calculator({ initialEquation = '', initialLimitTo = '0', mode = 'derivative', initialResult, dict, embedded = false, showShare = false, shareUrl = '', locale = 'en', deferGraph = false }: CalculatorProps) {
     const searchParams = useSearchParams();
     const equationParam = searchParams.get('equation');
     const limitToParam = searchParams.get('to');
@@ -268,11 +272,15 @@ export default function Calculator({ initialEquation = '', initialLimitTo = '0',
                                     </svg>
                                     {t.steps}
                                 </h3>
-                                <StepDisplay content={result.steps} />
+                                <StepDisplay content={result.steps} equation={mode === 'derivative' ? input : undefined} rule={result.rule} locale={locale} />
                             </div>
                         </div>
 
-                        {mode === 'derivative' && (
+                        {mode === 'derivative' && result.solution_raw ? (
+                            <AnswerCheck equation={input} locale={locale} />
+                        ) : null}
+
+                        {mode === 'derivative' && !deferGraph && (
                             <div className="bg-gray-50 dark:bg-slate-900/50 p-6 rounded-xl border border-gray-200 dark:border-slate-700/50 transition-colors">
                                 <h3 className="text-sm uppercase tracking-wider text-green-600 dark:text-green-400 mb-4 font-semibold">{t.graph}</h3>
                                 <div className="h-64 w-full">

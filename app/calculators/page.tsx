@@ -67,6 +67,30 @@ export default function CalculatorsPage() {
       color: 'red',
       features: ['Matrix multiplication', 'Inverse & determinant', 'Row reduction', 'Step-by-step results'],
     },
+    {
+      name: 'Partial Derivative Calculator',
+      description: 'Differentiate in x, y, or z while the other variables stay constant.',
+      href: '/partial-derivative-calculator',
+      icon: FunctionSquare,
+      color: 'blue',
+      features: ['One variable at a time', 'x, y, and z', 'Symbolic result', 'Step-by-step'],
+    },
+    {
+      name: 'Implicit Differentiation',
+      description: 'Find dy/dx from an equation F(x, y) = 0, including circles.',
+      href: '/implicit-differentiation-calculator',
+      icon: Minus,
+      color: 'green',
+      features: ['Equations with x and y', 'dy/dx = −Fx/Fy', 'Worked steps'],
+    },
+    {
+      name: 'Chain Rule Calculator',
+      description: 'Split a composite into an outer function and an inner derivative.',
+      href: '/chain-rule-calculator',
+      icon: Calculator,
+      color: 'purple',
+      features: ['Outer and inner', 'sin(2x), e^(2x)', 'Check your answer'],
+    },
   ];
 
   const colorClasses = {

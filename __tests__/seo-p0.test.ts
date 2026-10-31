@@ -86,8 +86,9 @@ describe('curated sitemap', () => {
         execSync('node scripts/generate-sitemap.js', { cwd: path.resolve(__dirname, '..'), stdio: 'pipe' });
         const xml = fs.readFileSync(path.resolve(__dirname, '..', 'public', 'sitemap.xml'), 'utf8');
         const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
-        expect(locs.length).toBeGreaterThanOrEqual(100);
-        expect(locs.length).toBeLessThanOrEqual(300);
+        expect(locs.length).toBe(222);
+        expect(locs.filter((url) => url.endsWith('/derivatives-of-trig-functions')).length).toBe(3);
+        expect(xml).not.toContain('/derivative-of-x-e-x<');
         expect(xml).not.toContain('+');
         expect(xml).not.toContain('integral-of-');
         expect(xml).not.toContain('/derivative-of-e-x<');

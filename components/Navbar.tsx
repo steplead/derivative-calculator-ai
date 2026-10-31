@@ -26,6 +26,7 @@ export default function Navbar({ dict }: { dict: any }) {
         { name: dict.navShort.matrix, href: '/matrix', id: 'nav-mat' },
         { name: dict.navShort.ode, href: '/ode', id: 'nav-ode' },
         { name: dict.navShort.wiki, href: '/wiki', id: 'nav-wiki' },
+        { name: dict.navShort.trig, href: '/derivatives-of-trig-functions', id: 'nav-trig' },
         { name: dict.navShort.directory, href: '/directory', id: 'nav-dir' },
     ];
 

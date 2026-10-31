@@ -20,6 +20,7 @@ export const dictionaries = {
             matrix: "Matrix",
             ode: "ODE",
             wiki: "Wiki",
+            trig: "Trig",
             directory: "Directory",
         },
         wiki: {
@@ -135,6 +136,7 @@ export const dictionaries = {
             matrix: "Matrices",
             ode: "EDO",
             wiki: "Wiki",
+            trig: "Trig",
             directory: "Directorio",
         },
         wiki: {
@@ -250,6 +252,7 @@ export const dictionaries = {
             matrix: "Matrizes",
             ode: "EDO",
             wiki: "Wiki",
+            trig: "Trig",
             directory: "Diretório",
         },
         wiki: {

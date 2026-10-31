@@ -35,6 +35,7 @@ const STATIC_PATHS = [
   { path: '/calculators', file: 'app/calculators/page.tsx', priority: '0.8' },
   { path: '/wiki', file: 'app/wiki/page.tsx', priority: '0.7' },
   { path: '/practice', file: 'app/practice/page.tsx', priority: '0.7' },
+  { path: '/derivatives-of-trig-functions', file: 'app/derivatives-of-trig-functions/page.tsx', priority: '0.8' },
 ];
 
 function gitLastmod(relFile) {

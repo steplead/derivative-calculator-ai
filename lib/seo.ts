@@ -70,6 +70,21 @@ export function problemHref(slug: string, locale: string = 'en'): string {
     return loc === 'en' ? `/${s}` : `/${loc}/${s}`;
 }
 
+/** Site path for a locale. `path` is "/" or "/practice". */
+export function localePath(path: string, locale: string = 'en'): string {
+    const loc = normalizeLocale(locale);
+    const clean = !path || path === '/' ? '' : (path.startsWith('/') ? path : `/${path}`);
+    if (loc === 'en') return clean || '/';
+    return clean ? `/${loc}${clean}` : `/${loc}`;
+}
+
+/** Homepage calculator with the expression already filled in. */
+export function calculatorHref(formula: string, locale: string = 'en'): string {
+    const base = localePath('/', locale);
+    const query = `equation=${encodeURIComponent(formula)}`;
+    return base === '/' ? `/?${query}` : `${base}?${query}`;
+}
+
 /** Path is site-root relative, "" or "/" for the homepage. */
 export function localeAlternates(path: string, locale: string): {
     canonical: string;

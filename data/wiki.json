@@ -18,7 +18,7 @@
         "content": "In calculus, the product rule is a formula used to find the derivatives of products of two or more functions. It may be stated as: (fg)' = f'g + fg'. It is often used with the <a href=\"/wiki/chain-rule\">Chain Rule</a>.",
         "relatedProblems": [
             "derivative-of-x-sin-x",
-            "derivative-of-x-e-x"
+            "derivative-of-x-e-to-the-x"
         ]
     },
     {
@@ -125,7 +125,7 @@
         "title": "Trigonometric Derivatives",
         "description": "A guide to the derivatives of sine, cosine, tangent, and other trig functions.",
         "category": "Derivatives",
-        "content": "Derivatives of trigonometric functions are essential for solving problems involving periodic motion or geometry. Basic formulas include d/dx(sin x) = cos x and d/dx(cos x) = -sin x. For complex functions, these are often combined with the <a href=\"/wiki/chain-rule\">Chain Rule</a>.",
+        "content": "Derivatives of trigonometric functions are essential for solving problems involving periodic motion or geometry. Basic formulas include d/dx(sin x) = cos x and d/dx(cos x) = -sin x. For complex functions, these are often combined with the <a href=\"/wiki/chain-rule\">Chain Rule</a>. The full table, including sec, csc, cot, and the inverse functions, is on the <a href=\"/derivatives-of-trig-functions\">derivatives of trigonometric functions</a> page.",
         "relatedProblems": [
             "derivative-of-tan-x",
             "derivative-of-sin-2x"
@@ -138,7 +138,7 @@
         "category": "Derivatives",
         "content": "The natural exponential function f(x) = e^x is unique because its derivative is also e^x. For general bases, d/dx(a^x) = a^x * ln(a). These functions appear in growth models and are differentiated using the <a href=\"/wiki/product-rule\">Product Rule</a> and <a href=\"/wiki/chain-rule\">Chain Rule</a>.",
         "relatedProblems": [
-            "derivative-of-e-x",
+            "derivative-of-e-to-the-x",
             "derivative-of-2-x"
         ]
     },

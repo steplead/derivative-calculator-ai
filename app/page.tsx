@@ -9,7 +9,7 @@ import { getDictionary } from './dictionaries';
 import { getBaseUrl } from '@/utils/robust-url';
 import { loadStaticProblemsSafe } from '@/lib/problems-source';
 import { homeGuide } from '@/content/home-guide';
-import { HOME_DESCRIPTIONS, localeAlternates, normalizeLocale, pageTitle, problemHref, SITE_URL } from '@/lib/seo';
+import { HOME_DESCRIPTIONS, localeAlternates, localePath, normalizeLocale, pageTitle, problemHref, SITE_URL } from '@/lib/seo';
 import type { Metadata } from 'next';
 
 export const runtime = 'edge';
@@ -198,7 +198,7 @@ export default async function Home() {
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {[
                 { slug: 'derivative-of-x-squared', label: 'Derivative of x^2' },
-                { slug: 'derivative-of-e-x', label: 'Derivative of e^x' },
+                { slug: 'derivative-of-e-to-the-x', label: 'Derivative of e^x' },
                 { slug: 'derivative-of-sin-x', label: 'Derivative of sin(x)' },
                 { slug: 'derivative-of-cos-x', label: 'Derivative of cos(x)' },
                 { slug: 'derivative-of-ln-x', label: 'Derivative of ln(x)' },
@@ -237,13 +237,14 @@ export default async function Home() {
 
           <section aria-labelledby="gsc-topics">
             <h2 id="gsc-topics" className="text-2xl font-bold text-gray-900 dark:text-white mb-6 text-center">Explore by topic</h2>
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {[
                 { label: 'Polynomial', href: '/problems/tag/polynomial' },
                 { label: 'Trigonometric', href: '/problems/tag/trigonometric' },
                 { label: 'Logarithmic', href: '/problems/tag/logarithmic' },
                 { label: 'Exponential', href: '/problems/tag/exponential' },
                 { label: 'Fraction', href: '/problems/tag/fraction' },
+                { label: 'Trig derivatives', href: localePath('/derivatives-of-trig-functions', locale) },
               ].map((item) => (
                 <Link
                   key={item.href}

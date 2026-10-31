@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { performSecurityCheck } from "@/utils/security";
 import { applySecurityHeaders } from "@/lib/security-headers";
+import { exponentialAliasRedirect, localeRewriteTarget } from "@/lib/redirects";
 
 // Note: middleware in Next.js always runs on the edge runtime. We intentionally
 // do NOT export `runtime` here — declaring `edge` triggers a build error in
@@ -72,6 +73,13 @@ export async function middleware(request: NextRequest) {
 
     const earlyRedirect = redirectToApexOrPlusFree(request);
     if (earlyRedirect) return earlyRedirect;
+
+    const aliasTarget = exponentialAliasRedirect(pathname);
+    if (aliasTarget) {
+        const url = request.nextUrl.clone();
+        url.pathname = aliasTarget;
+        return withSecurityHeaders(NextResponse.redirect(url, 301));
+    }
 
     // Static SEO files must 301 off www (handled above) but must not spend a
     // D1 rate-limit write on every crawler fetch.
@@ -158,8 +166,7 @@ export async function middleware(request: NextRequest) {
     );
 
     if (locale) {
-        let newPath = pathname.replace(`/${locale}`, "");
-        if (newPath === "") newPath = "/";
+        const newPath = localeRewriteTarget(pathname, request.nextUrl.search) || "/";
 
         const requestHeaders = new Headers(request.headers);
         requestHeaders.set("x-next-locale", locale);

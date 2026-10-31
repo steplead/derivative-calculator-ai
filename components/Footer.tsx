@@ -1,6 +1,6 @@
 
 import Link from 'next/link';
-import { problemHref } from '@/lib/seo';
+import { localePath, problemHref } from '@/lib/seo';
 
 type WikiTopic = {
     slug: string;
@@ -103,6 +103,9 @@ export default function Footer({ wikiTopics, problems, locale }: FooterProps) {
                             Quick Links
                         </h4>
                         <ul className="space-y-2">
+                            <li>
+                                <Link href={localePath('/derivatives-of-trig-functions', locale)} className="text-gray-600 dark:text-gray-400 hover:text-blue-600 text-sm">Trigonometric derivatives</Link>
+                            </li>
                             <li>
                                 <Link href={`${baseUrl}/directory`} className="text-gray-600 dark:text-gray-400 hover:text-blue-600 text-sm">Problem Directory</Link>
                             </li>

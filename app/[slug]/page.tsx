@@ -29,6 +29,10 @@ import {
     resolveLibraryProblem,
     safeDecodeSlug,
 } from '@/lib/seo';
+import { getInverseTrigLesson } from '@/content/inverse-trig-lessons';
+import InverseTrigLesson from '@/components/InverseTrigLesson';
+import TrigHubLink from '@/components/TrigHubLink';
+import { TRIG_CLUSTER_SLUGS } from '@/lib/trig-cluster';
 
 const INDEXABLE_PROBLEM_SLUGS = new Set<string>(indexableProblemSlugs);
 import { parseSlugToMath } from '@/lib/slug-math';
@@ -221,6 +225,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     }
 
     const t = getLocalizedContent(locale, problem.formula, problem.type);
+    const lesson = libraryProblem ? getInverseTrigLesson(libraryProblem.slug, locale) : null;
 
     // P2-G: derivative near-duplicates (same formula -> identical title+content)
     // point their canonical at the group's primary slug to consolidate indexing
@@ -243,11 +248,12 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     const forceIndex = Boolean(libraryProblem) && selfCanonical && INDEXABLE_PROBLEM_SLUGS.has(canonicalSlug);
     const lockedNoindex = !forceIndex && ((NOINDEX_SLUGS.has(librarySlug) && !derivDupSlugs.has(librarySlug)) || isOutOfLibrary);
     const alternates = localeAlternates(`/${canonicalSlug}`, locale);
-    const title = keywordTitle(t.title);
+    const title = keywordTitle(lesson?.title ?? t.title);
+    const description = lesson?.description ?? t.description;
 
     return {
         title: { absolute: title },
-        description: t.description,
+        description,
         robots: lockedNoindex ? {
             index: false,
             follow: true,
@@ -255,7 +261,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
         alternates,
         openGraph: {
             title,
-            description: t.description,
+            description,
             url: alternates.canonical,
             type: 'website',
         },
@@ -407,13 +413,14 @@ export default async function ProblemPage({ params }: { params: { slug: string }
         } : undefined;
 
         const t = getLocalizedContent(locale, safeProblem.formula, safeProblem.type);
+        const pageLesson = getInverseTrigLesson(safeProblem.slug, locale);
         const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://derivativecalculatorai.com';
         const url = `${siteUrl}${problemHref(slug, locale)}`;
 
         // Generate Schema.org structured data
         const mathSolverSchema = generateMathSolverData({
-            name: t.title,
-            description: t.description,
+            name: pageLesson?.title ?? t.title,
+            description: pageLesson?.description ?? t.description,
             url: url,
             educationalLevel: "College"
         });
@@ -433,7 +440,7 @@ export default async function ProblemPage({ params }: { params: { slug: string }
                     />
                 </div>
                 <div className="max-w-4xl mx-auto text-center mb-12 mt-8">
-                    <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-4">
+                    <h1 id={safeProblem.slug} className="text-4xl sm:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-4">
                         {t.h1}
                     </h1>
                     <p className="text-xl text-gray-600 dark:text-gray-400">
@@ -525,6 +532,21 @@ export default async function ProblemPage({ params }: { params: { slug: string }
                     <h3 className="text-gray-900 dark:text-white font-bold text-xl mb-2">{t.howToTitle}</h3>
                     <p className="text-gray-600 dark:text-gray-400" dangerouslySetInnerHTML={{ __html: t.howToText }} />
                 </div>
+
+                {pageLesson ? (
+                    <InverseTrigLesson
+                        lesson={pageLesson}
+                        locale={locale}
+                        breadcrumbs={[
+                            { name: 'Home', href: '/' },
+                            { name: 'Problems', href: '/problems' },
+                            { name: safeProblem.type || 'Derivative', href: `/problems/${safeProblem.type || 'derivative'}` },
+                            { name: t.h1, href: problemHref(safeProblem.slug, locale) },
+                        ]}
+                    />
+                ) : TRIG_CLUSTER_SLUGS.has(safeProblem.slug) ? (
+                    <TrigHubLink locale={locale} />
+                ) : null}
 
                 {/* Related Problems */}
                 <div className="max-w-4xl mx-auto mt-16 pt-8 border-t border-gray-200 dark:border-slate-800">

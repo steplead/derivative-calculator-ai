@@ -11,6 +11,7 @@ const StepDisplay = dynamic(() => import('./StepDisplay'), { ssr: false });
 import AdShell from './AdShell';
 import ShareResultCard from './ShareResultCard';
 import AnswerCheck from './AnswerCheck';
+import AskWhyButton from './AskWhyButton';
 import { useTurnstile, addTokenToUrl } from './TurnstileProvider';
 import { trackEvent } from '@/lib/analytics';
 
@@ -29,6 +30,28 @@ type CalculatorProps = {
     /** Skip the interactive graph. Problem pages already ship an inline SVG. */
     deferGraph?: boolean;
 };
+
+function plainSteps(content: string | string[]): string[] {
+    if (Array.isArray(content)) return content.filter((step) => step.trim().length > 0);
+    if (typeof content === 'string') return content.split('\n').filter((step) => step.trim().length > 0);
+    return [];
+}
+
+/** Server-rendered steps as text. Katex stays unloaded until the user recalculates. */
+function PlainSteps({ content, equation, rule, locale }: { content: string | string[]; equation: string; rule?: string; locale?: string }) {
+    const steps = plainSteps(content);
+    if (steps.length === 0) return null;
+    return (
+        <div className="space-y-3">
+            {steps.map((step, index) => (
+                <div key={`${index}-${step.slice(0, 24)}`}>
+                    <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">{step}</p>
+                    {equation ? <AskWhyButton equation={equation} step={step} rule={rule} locale={locale} /> : null}
+                </div>
+            ))}
+        </div>
+    );
+}
 
 export default function Calculator({ initialEquation = '', initialLimitTo = '0', mode = 'derivative', initialResult, dict, embedded = false, showShare = false, shareUrl = '', locale = 'en', deferGraph = false }: CalculatorProps) {
     const searchParams = useSearchParams();
@@ -101,8 +124,8 @@ export default function Calculator({ initialEquation = '', initialLimitTo = '0',
                 baseUrl = `/api/ode?equation=${encodeURIComponent(formula)}`;
             }
 
-            // Step 1: Fast fetch (Math only)
-            const urlWithToken = addTokenToUrl(`${baseUrl}&include_ai=false`, turnstileToken);
+            // Step 1: Fast fetch (Math only). includeAi is the name the routes read.
+            const urlWithToken = addTokenToUrl(`${baseUrl}&includeAi=false`, turnstileToken);
             console.log('[Calculator] Fetching URL:', urlWithToken);
             const resFast = await fetch(urlWithToken);
             if (!resFast.ok) {
@@ -139,7 +162,7 @@ export default function Calculator({ initialEquation = '', initialLimitTo = '0',
             // Step 2: Slow fetch (AI Explanation)
             // We keep the result but maybe show a loading indicator for the explanation part
             try {
-                const resFull = await fetch(addTokenToUrl(`${baseUrl}&include_ai=true`, turnstileToken));
+                const resFull = await fetch(addTokenToUrl(`${baseUrl}&includeAi=true`, turnstileToken));
                 if (resFull.ok) {
                     const dataFull = await resFull.json();
                     setResult(dataFull); // Update with full data including AI
@@ -243,7 +266,11 @@ export default function Calculator({ initialEquation = '', initialLimitTo = '0',
                         <div className="bg-gray-50 dark:bg-slate-900/50 p-6 rounded-xl border border-gray-200 dark:border-slate-700/50 transition-colors">
                             <h3 className="text-sm uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-4 font-semibold">{t.solution}</h3>
                             <div className="text-3xl text-gray-900 dark:text-white font-math overflow-x-auto">
-                                <MathDisplay latex={result.solution} />
+                                {result._ssr ? (
+                                    <span className="font-mono text-2xl">{result.solution_raw || result.solution}</span>
+                                ) : (
+                                    <MathDisplay latex={result.solution} />
+                                )}
                             </div>
                         </div>
 
@@ -272,12 +299,16 @@ export default function Calculator({ initialEquation = '', initialLimitTo = '0',
                                     </svg>
                                     {t.steps}
                                 </h3>
-                                <StepDisplay content={result.steps} equation={mode === 'derivative' ? input : undefined} rule={result.rule} locale={locale} />
+                                {result._ssr ? (
+                                    <PlainSteps content={result.steps} equation={input} rule={result.rule} locale={locale} />
+                                ) : (
+                                    <StepDisplay content={result.steps} equation={mode === 'ode' ? undefined : input} rule={result.rule} locale={locale} />
+                                )}
                             </div>
                         </div>
 
-                        {mode === 'derivative' && result.solution_raw ? (
-                            <AnswerCheck equation={input} locale={locale} />
+                        {(mode === 'derivative' || mode === 'integral' || mode === 'limit') && result.solution_raw ? (
+                            <AnswerCheck equation={input} locale={locale} mode={mode} limitTo={limitTo} />
                         ) : null}
 
                         {mode === 'derivative' && !deferGraph && (

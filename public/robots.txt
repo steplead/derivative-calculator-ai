@@ -3,3 +3,5 @@ Allow: /
 Disallow: /api/
 
 Sitemap: https://derivativecalculatorai.com/sitemap.xml
+
+# https://derivativecalculatorai.com/llms.txt

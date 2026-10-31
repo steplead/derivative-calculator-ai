@@ -1,11 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import nerdamer from 'nerdamer';
-import 'nerdamer/Calculus';
 import { OpenAI } from 'openai';
 import { getCachedExplanation, setCachedExplanation } from '@/utils/cache';
 import { performSecurityCheck } from '@/utils/security';
 import { extractRealContent } from '@/utils/validate-ai-content';
-import { normalizeExpression } from '@/lib/math/math-core';
+import { calculateIntegral } from '@/lib/math/integral-limit';
 
 export const runtime = 'edge';
 
@@ -14,7 +12,7 @@ export async function GET(req: NextRequest) {
     const expression = searchParams.get('equation');
     // AI explanation: controlled by ?includeAi=false query param or OPENROUTER_API_KEY env var.
     // includeAi=false → no AI call, no cache read/write, symbolic result only.
-    const includeAiParam = searchParams.get('includeAi');
+    const includeAiParam = searchParams.get('includeAi') ?? searchParams.get('include_ai');
     const includeAi = includeAiParam === 'false' ? false : !!process.env.OPENROUTER_API_KEY;
 
     if (!expression) {
@@ -57,19 +55,27 @@ export async function GET(req: NextRequest) {
     }
 
     try {
-        // 1. Calculate Integral with Nerdamer
+        // 1. Deterministic integral. AI may enrich the explanation later, but the
+        //    steps already say which rule applies and why.
         let solutionLatex = "";
         let solutionRaw = "";
+        let ruleUsed = "";
+        let deterministicSteps: string[] = [];
         try {
-            // RC-4: normalize ln( → log( (nerdamer natural log) before integrating
-            const integral = nerdamer(`integrate(${normalizeExpression(expression)}, x)`);
-            solutionLatex = integral.toTeX() + " + C";
-            solutionRaw = integral.toString();
+            const solved = calculateIntegral(expression);
+            if (solved.isValid) {
+                solutionLatex = solved.solutionLatex;
+                solutionRaw = solved.solutionRaw;
+                ruleUsed = solved.rule;
+                deterministicSteps = solved.steps;
+            }
         } catch (nerdError) {
             console.error("Nerdamer Integral Error:", nerdError);
         }
 
-        let stepsContent = "Step-by-step solution unavailable.";
+        let stepsContent = deterministicSteps.length > 0
+            ? deterministicSteps.map((step, index) => `**Step ${index + 1}:** ${step}`).join('\n\n')
+            : "Step-by-step solution unavailable.";
         let aiExplanation = "AI explanation unavailable.";
         const symbolicResult = solutionLatex || solutionRaw || "unavailable";
 
@@ -201,7 +207,8 @@ Output Format (strict JSON):
             solution: solutionLatex,
             solution_raw: solutionRaw,
             steps: stepsContent,
-            ai_explanation: aiExplanation
+            ai_explanation: aiExplanation,
+            rule: ruleUsed,
         }, { headers: { 'Cache-Control': 'private, no-store' } });
 
     } catch (e: any) {

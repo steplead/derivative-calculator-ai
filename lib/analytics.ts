@@ -1,8 +1,8 @@
 // P3-OBS-3: minimal GA4 custom-event helper.
 //
 // Design constraints (from the approved prompt):
-// - No new dependency; GA4 pageview is already installed in app/layout.tsx
-//   via @next/third-parties (<GoogleAnalytics gaId="G-3WHC12TKH4" />).
+// - No new dependency. GA4 pageview is installed by components/DeferredAnalytics
+//   (measurement id G-3WHC12TKH4), after idle, and not for obvious bots.
 // - This helper ONLY sends custom events; it never touches the GA install,
 //   the Measurement ID, or pageview tracking.
 // - Fail-silent: if gtag is not present (e.g. blocked, SSR), do nothing.

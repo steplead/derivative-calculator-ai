@@ -16,6 +16,7 @@ export type HomeSection = {
 
 export type HomeGuide = {
     lede: string;
+    positioning: string;
     sections: HomeSection[];
     faqs: HomeFaq[];
     examplesHeading: string;
@@ -24,6 +25,7 @@ export type HomeGuide = {
 
 const en: HomeGuide = {
     lede: 'Use this derivative solver when you need the derivative, the rule that produced it, and the steps in between. It is free, it does not ask you to create an account, and the same calculator runs in English, Spanish, and Portuguese.',
+    positioning: 'Derivative Calculator AI is free and needs no sign-up. A computer-algebra system differentiates, integrates, and evaluates limits with full step-by-step work. Ask why a step is valid and an explanation answers, using AI when it is configured. Check an answer or practice a rule in English, Spanish, or Portuguese without an account.',
     sections: [
         {
             id: 'how-to-calculate-a-derivative',
@@ -78,6 +80,10 @@ const en: HomeGuide = {
     ],
     faqs: [
         {
+            question: 'Is Derivative Calculator AI free?',
+            answer: 'Derivative Calculator AI is free and needs no sign-up. A computer-algebra system differentiates, integrates, and evaluates limits with full step-by-step work. Ask why a step is valid and an explanation answers, using AI when it is configured. Check an answer or practice a rule in English, Spanish, or Portuguese without an account.',
+        },
+        {
             question: 'What is a derivative calculator?',
             answer: 'A derivative calculator differentiates a function you type and shows the resulting formula. This one also names the rule and lists the steps, so you can use it to check homework rather than only to copy a final expression.',
         },
@@ -106,6 +112,7 @@ const en: HomeGuide = {
 
 const es: HomeGuide = {
     lede: 'Esta calculadora de derivadas resuelve la derivada, indica la regla que se usó y muestra los pasos. Es gratis, no pide cuenta, y la misma herramienta está en español, inglés y portugués.',
+    positioning: 'Derivative Calculator AI es gratis y no pide registro. Un sistema de álgebra simbólica deriva, integra y calcula límites con el desarrollo completo paso a paso. Puedes preguntar por qué un paso es válido y una explicación responde, con IA cuando está configurada. Comprueba una respuesta o practica una regla en español, inglés o portugués sin crear una cuenta.',
     sections: [
         {
             id: 'como-calcular-una-derivada',
@@ -160,6 +167,10 @@ const es: HomeGuide = {
     ],
     faqs: [
         {
+            question: '¿La calculadora de derivadas es gratis?',
+            answer: 'Derivative Calculator AI es gratis y no pide registro. Un sistema de álgebra simbólica deriva, integra y calcula límites con el desarrollo completo paso a paso. Puedes preguntar por qué un paso es válido y una explicación responde, con IA cuando está configurada. Comprueba una respuesta o practica una regla en español, inglés o portugués sin crear una cuenta.',
+        },
+        {
             question: '¿Qué es una calculadora de derivadas?',
             answer: 'Una calculadora de derivadas deriva la función que escribes y muestra la fórmula resultante. Esta además nombra la regla y lista los pasos, para revisar un ejercicio y no solo copiar el resultado.',
         },
@@ -188,6 +199,7 @@ const es: HomeGuide = {
 
 const pt: HomeGuide = {
     lede: 'Esta calculadora de derivadas entrega a derivada, a regra usada e os passos. É grátis, não pede conta, e a mesma ferramenta funciona em português, inglês e espanhol.',
+    positioning: 'Derivative Calculator AI é grátis e não pede cadastro. Um sistema de álgebra simbólica deriva, integra e calcula limites com o desenvolvimento completo passo a passo. Você pode perguntar por que um passo é válido e uma explicação responde, com IA quando ela está configurada. Confira uma resposta ou pratique uma regra em português, inglês ou espanhol sem conta.',
     sections: [
         {
             id: 'como-calcular-uma-derivada',
@@ -242,6 +254,10 @@ const pt: HomeGuide = {
     ],
     faqs: [
         {
+            question: 'A Derivative Calculator AI é grátis?',
+            answer: 'Derivative Calculator AI é grátis e não pede cadastro. Um sistema de álgebra simbólica deriva, integra e calcula limites com o desenvolvimento completo passo a passo. Você pode perguntar por que um passo é válido e uma explicação responde, com IA quando ela está configurada. Confira uma resposta ou pratique uma regra em português, inglês ou espanhol sem conta.',
+        },
+        {
             question: 'O que é uma calculadora de derivadas?',
             answer: 'Uma calculadora de derivadas deriva a função que você digita e mostra a fórmula resultante. Esta também nomeia a regra e lista os passos, para conferir um exercício e não só copiar o resultado.',
         },
@@ -259,7 +275,7 @@ const pt: HomeGuide = {
         },
         {
             question: 'Os passos são grátis?',
-            answer: 'Sim. A derivada passo a passo, a calculadora de integrais e a calculadora de limites funcionam sem criar uma conta.',
+            answer: 'Sim. A derivada passo a passo, a calculadora de integrais e a calculadora de limites funcionam sem conta.',
         },
         {
             question: 'Qual é a derivada de uma constante como pi?',

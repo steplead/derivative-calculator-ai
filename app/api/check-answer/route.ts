@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { performSecurityCheck } from '@/utils/security';
 import { calculateDerivative } from '@/lib/math/math-core';
-import { answersEquivalent } from '@/lib/math/compare';
+import { calculateIntegral, calculateLimit } from '@/lib/math/integral-limit';
+import { answersEquivalent, integralAnswersEquivalent, limitAnswersEquivalent } from '@/lib/math/compare';
 
 export const runtime = 'edge';
 
@@ -19,11 +20,44 @@ export async function GET(req: NextRequest) {
 
   const equation = url.searchParams.get('equation') || '';
   const answer = url.searchParams.get('answer') || '';
+  const mode = url.searchParams.get('mode') || 'derivative';
+  const target = url.searchParams.get('to') || '0';
   if (!equation || !answer) {
     return NextResponse.json({ error: 'Provide both an equation and an answer.' }, { status: 400, headers: PRIVATE });
   }
+  if (mode !== 'derivative' && mode !== 'integral' && mode !== 'limit') {
+    return NextResponse.json({ error: 'Unknown mode.' }, { status: 400, headers: PRIVATE });
+  }
 
   try {
+    if (mode === 'integral') {
+      const solved = calculateIntegral(equation);
+      if (!solved.isValid) {
+        return NextResponse.json(
+          { error: 'This expression does not have an elementary antiderivative to check against.' },
+          { status: 422, headers: PRIVATE }
+        );
+      }
+      const verdict = integralAnswersEquivalent(solved.solutionRaw, answer, equation);
+      return NextResponse.json(
+        { match: verdict.match, method: verdict.method, expected: `${solved.solutionRaw} + C`, rule: solved.rule },
+        { headers: PRIVATE }
+      );
+    }
+    if (mode === 'limit') {
+      const solved = calculateLimit(equation, target);
+      if (!solved.isValid) {
+        return NextResponse.json(
+          { error: 'This limit could not be checked.' },
+          { status: 422, headers: PRIVATE }
+        );
+      }
+      const verdict = limitAnswersEquivalent(solved.solutionRaw, answer);
+      return NextResponse.json(
+        { match: verdict.match, method: verdict.method, expected: solved.solutionRaw, rule: solved.rule },
+        { headers: PRIVATE }
+      );
+    }
     const solved = calculateDerivative(equation);
     if (!solved.isValid) {
       return NextResponse.json(

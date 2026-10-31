@@ -1,7 +1,8 @@
 import { Suspense } from 'react';
 import { headers } from 'next/headers';
 import Calculator from '@/components/Calculator';
-// EmbedWidget removed to prevent API abuse
+import EmbedSnippet from '@/components/EmbedSnippet';
+import PracticeGenerator from '@/components/PracticeGenerator';
 import { getDictionary } from '../dictionaries';
 import { localeAlternates, normalizeLocale, pageTitle } from '@/lib/seo';
 
@@ -67,8 +68,10 @@ export default async function LimitPage() {
             </div>
 
             <Suspense fallback={<div className="text-gray-900 dark:text-white text-center">{dict.common.loading}</div>}>
-                <Calculator mode="limit" dict={dict.calculator} />
+                <Calculator mode="limit" dict={dict.calculator} locale={locale} showShare shareUrl={localeAlternates('/limit', locale).canonical} />
             </Suspense>
+            <EmbedSnippet path="/limit" locale={locale} />
+            <PracticeGenerator locale={locale} topic="limit" />
 
             <div className="max-w-4xl mx-auto mt-20 prose prose-invert">
                 <div className="grid md:grid-cols-2 gap-12">

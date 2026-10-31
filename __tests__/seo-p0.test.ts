@@ -86,12 +86,14 @@ describe('curated sitemap', () => {
         execSync('node scripts/generate-sitemap.js', { cwd: path.resolve(__dirname, '..'), stdio: 'pipe' });
         const xml = fs.readFileSync(path.resolve(__dirname, '..', 'public', 'sitemap.xml'), 'utf8');
         const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
-        expect(locs.length).toBe(234);
+        expect(locs.length).toBe(240);
         for (const path of [
             '/partial-derivative-calculator',
             '/implicit-differentiation-calculator',
             '/chain-rule-calculator',
             '/wiki/logarithmic-derivatives',
+            '/symbolab-alternative',
+            '/derivative-calculator-comparison',
         ]) {
             expect(locs.filter((url) => url.endsWith(path) || url.includes(`${path}<`) || url.endsWith(path))).toContain(`https://derivativecalculatorai.com${path}`);
             expect(xml).toContain(`https://derivativecalculatorai.com/es${path}`);

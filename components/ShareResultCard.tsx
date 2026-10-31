@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Share2, Copy, Check, Twitter } from 'lucide-react';
 import { trackEvent } from '@/lib/analytics';
+import { buildSharePath } from '@/lib/share-link';
 
 type ShareResultCardProps = {
     /** The math expression being solved, e.g. "x^2 * sin(x)". */
@@ -13,6 +14,7 @@ type ShareResultCardProps = {
     url: string;
     /** Problem type: 'derivative' | 'integral' | 'limit' | 'ode'. */
     type?: string;
+    limitTo?: string;
 };
 
 function verb(type?: string): string {
@@ -29,7 +31,7 @@ function verb(type?: string): string {
  * - Purely presentational; does not touch the SSR math content or the
  *   canonical/noindex strategy of the host page.
  */
-export default function ShareResultCard({ formula, result, url, type }: ShareResultCardProps) {
+export default function ShareResultCard({ formula, result, url, type, limitTo }: ShareResultCardProps) {
     const [copied, setCopied] = useState(false);
     // Start false on both server and first client render to avoid hydration mismatch;
     // flip to true only after mount if the Web Share API is available.
@@ -43,6 +45,9 @@ export default function ShareResultCard({ formula, result, url, type }: ShareRes
         ? `${verb(type)} of ${formula} = ${result}\nSolve step-by-step for free: ${url}`
         : `${verb(type)} of ${formula}\nSolve step-by-step for free: ${url}`;
 
+    const resultPath = buildSharePath({ type, equation: formula, result, limitTo });
+    const origin = typeof window !== 'undefined' ? window.location.origin : 'https://derivativecalculatorai.com';
+    const resultLink = `${origin}${resultPath}`;
     const twitterHref = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
 
     const handleCopy = async () => {
@@ -93,6 +98,28 @@ export default function ShareResultCard({ formula, result, url, type }: ShareRes
                     <span className="font-semibold text-sm">Share this result</span>
                 </div>
                 <div className="flex flex-wrap gap-2 sm:ml-auto">
+                    <button
+                        type="button"
+                        onClick={async () => {
+                            try {
+                                await navigator.clipboard.writeText(resultLink);
+                                setCopied(true);
+                                window.setTimeout(() => setCopied(false), 2000);
+                                trackEvent('share_result_copy', {
+                                    type,
+                                    formula_length: formula.length,
+                                    result_length: (result || '').length,
+                                });
+                            } catch {
+                                // clipboard may be blocked
+                            }
+                        }}
+                        aria-label="Copy share link"
+                        className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 text-gray-700 dark:text-gray-200 text-sm font-medium hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors"
+                    >
+                        <Copy className="w-4 h-4" />
+                        Link
+                    </button>
                     <button
                         type="button"
                         onClick={handleCopy}

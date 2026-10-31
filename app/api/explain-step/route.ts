@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  let body: { equation?: unknown; step?: unknown; rule?: unknown };
+  let body: { equation?: unknown; step?: unknown; rule?: unknown; locale?: unknown };
   try {
     body = await req.json();
   } catch {
@@ -26,11 +26,12 @@ export async function POST(req: NextRequest) {
   const equation = String(body.equation || '').slice(0, 200);
   const step = String(body.step || '').slice(0, 500);
   const rule = String(body.rule || 'Power Rule').slice(0, 80);
+  const locale = body.locale === 'es' || body.locale === 'pt' ? body.locale : 'en';
   if (!equation || !step) {
     return NextResponse.json({ error: 'Provide the equation and the step.' }, { status: 400, headers: PRIVATE });
   }
 
-  const fallback = explainStepDeterministic(equation, step, rule);
+  const fallback = explainStepDeterministic(equation, step, rule, locale);
   const apiKey = process.env.OPENROUTER_API_KEY;
   if (!apiKey) {
     return NextResponse.json({ why: fallback, source: 'deterministic' }, { headers: PRIVATE });
@@ -48,7 +49,7 @@ export async function POST(req: NextRequest) {
       messages: [
         {
           role: 'system',
-          content: 'You explain one calculus step to a student. Say why the step is valid. Do not invent a different derivative. Plain text, at most 90 words. No preamble.',
+          content: `You explain one calculus step to a student. Say why the step is valid. Do not invent a different result. Plain text, at most 90 words. No preamble. Write in ${locale === 'es' ? 'Spanish' : locale === 'pt' ? 'Portuguese' : 'English'}.`,
         },
         {
           role: 'user',

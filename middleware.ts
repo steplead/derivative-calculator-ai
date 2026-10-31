@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { performSecurityCheck } from "@/utils/security";
+import { applySecurityHeaders } from "@/lib/security-headers";
 
 // Note: middleware in Next.js always runs on the edge runtime. We intentionally
 // do NOT export `runtime` here — declaring `edge` triggers a build error in
@@ -58,7 +59,12 @@ function redirectToApexOrPlusFree(request: NextRequest): NextResponse | null {
         url.hostname = hostname.replace(/^www\./i, "");
     }
 
-    return NextResponse.redirect(url, 301);
+    return withSecurityHeaders(NextResponse.redirect(url, 301));
+}
+
+function withSecurityHeaders(response: NextResponse): NextResponse {
+    applySecurityHeaders(response.headers);
+    return response;
 }
 
 export async function middleware(request: NextRequest) {
@@ -70,7 +76,7 @@ export async function middleware(request: NextRequest) {
     // Static SEO files must 301 off www (handled above) but must not spend a
     // D1 rate-limit write on every crawler fetch.
     if (pathname === "/sitemap.xml" || pathname === "/robots.txt") {
-        return NextResponse.next();
+        return withSecurityHeaders(NextResponse.next());
     }
 
     // --- Early blocking of scripted abuse (before any expensive processing) ---
@@ -78,19 +84,19 @@ export async function middleware(request: NextRequest) {
 
     // Block requests without User-Agent (almost always bots)
     if (!userAgent || userAgent.trim() === '') {
-        return NextResponse.json(
+        return withSecurityHeaders(NextResponse.json(
             { error: 'Access denied. User-Agent required.' },
             { status: 403, headers: { 'Cache-Control': 'no-store' } }
-        );
+        ));
     }
 
     // Block scripted HTTP clients only (preserves search engine crawlers)
     const lowerUA = userAgent.toLowerCase();
     if (ABUSE_UA_PATTERNS.some(pattern => lowerUA.includes(pattern))) {
-        return NextResponse.json(
+        return withSecurityHeaders(NextResponse.json(
             { error: 'Access denied. Automated requests not allowed.' },
             { status: 403, headers: { 'Cache-Control': 'no-store' } }
-        );
+        ));
     }
 
     // API referer check: allow same-site and localhost; skip in diagnostic mode.
@@ -107,10 +113,10 @@ export async function middleware(request: NextRequest) {
         // (covers same-origin requests where some browsers strip referer).
         const hostAllowed = ALLOWED_API_HOSTS.some(h => host === h || host.endsWith('.' + h));
         if (!isSameSite && !hostAllowed) {
-            return NextResponse.json(
+            return withSecurityHeaders(NextResponse.json(
                 { error: 'Access denied. API requests must come from the website.' },
                 { status: 403, headers: { 'Cache-Control': 'no-store' } }
-            );
+            ));
         }
     }
 
@@ -131,7 +137,7 @@ export async function middleware(request: NextRequest) {
         );
 
         if (!securityResult.success) {
-            return NextResponse.json(
+            return withSecurityHeaders(NextResponse.json(
                 { error: securityResult.error },
                 {
                     status: securityResult.blocked ? 403 : 429,
@@ -142,7 +148,7 @@ export async function middleware(request: NextRequest) {
                         } : {})
                     }
                 }
-            );
+            ));
         }
     }
 
@@ -168,7 +174,7 @@ export async function middleware(request: NextRequest) {
             response.headers.set('Cache-Control', 'public, s-maxage=7200, max-age=3600, stale-while-revalidate=86400');
         }
 
-        return response;
+        return withSecurityHeaders(response);
     }
 
     const response = NextResponse.next();
@@ -176,7 +182,7 @@ export async function middleware(request: NextRequest) {
         response.headers.set('Cache-Control', 'public, s-maxage=7200, max-age=3600, stale-while-revalidate=86400');
     }
 
-    return response;
+    return withSecurityHeaders(response);
 }
 
 export const config = {

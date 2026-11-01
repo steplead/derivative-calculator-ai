@@ -8,6 +8,7 @@ import CopyLatexButton from '@/components/CopyLatexButton';
 import { sanitizeMathFormula, sanitizeLimitValue } from '@/utils/sanitize';
 import { useTurnstile, addTokenToUrl } from './TurnstileProvider';
 import { calculationEventName, trackEvent } from '@/lib/analytics';
+import { errorFromResponse, fetchWithTimeout } from '@/lib/fetch-timeout';
 
 const MathDisplay = dynamic(() => import('./MathDisplay'));
 const Graph = dynamic(() => import('./Graph'));
@@ -124,15 +125,9 @@ export default function Calculator({
 
             const urlWithToken = addTokenToUrl(`${baseUrl}&includeAi=false`, turnstileToken);
             console.log('[Calculator] Fetching URL:', urlWithToken);
-            const resFast = await fetch(urlWithToken);
+            const resFast = await fetchWithTimeout(urlWithToken, { method: 'GET' });
             if (!resFast.ok) {
-                const text = await resFast.text();
-                try {
-                    const json = JSON.parse(text);
-                    throw new Error(json.error || `Server Error (${resFast.status})`);
-                } catch {
-                    throw new Error(`Server Error (${resFast.status}): ${text.substring(0, 100)}...`);
-                }
+                throw new Error(await errorFromResponse(resFast));
             }
             const dataFast = await resFast.json();
 
@@ -147,18 +142,12 @@ export default function Calculator({
             });
 
             try {
-                const resFull = await fetch(addTokenToUrl(`${baseUrl}&includeAi=true`, turnstileToken));
+                const resFull = await fetchWithTimeout(addTokenToUrl(`${baseUrl}&includeAi=true`, turnstileToken), { method: 'GET' }, 20000);
                 if (resFull.ok) {
                     const dataFull = await resFull.json();
                     setResult(dataFull);
                 } else {
-                    const text = await resFull.text();
-                    try {
-                        const json = JSON.parse(text);
-                        console.error("AI fetch failed:", json.error || `Server Error (${resFull.status})`);
-                    } catch {
-                        console.error(`AI fetch failed: Server Error (${resFull.status}): ${text.substring(0, 100)}...`);
-                    }
+                    console.error("AI fetch failed:", await errorFromResponse(resFull));
                 }
             } catch (aiErr) {
                 console.error("AI fetch failed", aiErr);
@@ -180,7 +169,8 @@ export default function Calculator({
                 console.error('Failed to save history', e);
             }
         } catch (err) {
-            setError(`Connection Error: ${err instanceof Error ? err.message : String(err)}`);
+            setError(err instanceof Error ? err.message : String(err));
+        } finally {
             setLoading(false);
         }
     };

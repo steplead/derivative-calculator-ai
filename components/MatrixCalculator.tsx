@@ -4,6 +4,7 @@ import { useState } from 'react';
 import MatrixInput from '@/components/MatrixInput';
 import MatrixResult from '@/components/MatrixResult';
 import EmbedWidget from '@/components/EmbedWidget';
+import { errorFromResponse, fetchWithTimeout } from '@/lib/fetch-timeout';
 
 type Operation = 'determinant' | 'inverse' | 'transpose' | 'rank' | 'rref' | 'eigenvals';
 
@@ -28,17 +29,16 @@ export default function MatrixCalculator({ dict }: MatrixCalculatorProps) {
         setSteps(null);
 
         try {
-            const response = await fetch('/api/matrix', {
+            const response = await fetchWithTimeout('/api/matrix', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ matrix: matrixData, operation: op }),
             });
 
-            const data = await response.json();
-
             if (!response.ok) {
-                throw new Error(data.error || 'Calculation failed');
+                throw new Error(await errorFromResponse(response));
             }
+            const data = await response.json();
 
             setResult(data.solution);
             setSteps(data.steps);

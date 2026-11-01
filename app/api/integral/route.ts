@@ -4,6 +4,7 @@ import { getCachedExplanation, setCachedExplanation } from '@/utils/cache';
 import { performSecurityCheck } from '@/utils/security';
 import { extractRealContent } from '@/utils/validate-ai-content';
 import { calculateIntegral } from '@/lib/math/integral-limit';
+import { requestWithBodyQuery } from '@/lib/api-method';
 
 export const runtime = 'edge';
 
@@ -214,4 +215,8 @@ Output Format (strict JSON):
     } catch (e: any) {
         return NextResponse.json({ error: `Calculation error: ${e.message}` }, { status: 500, headers: { 'Cache-Control': 'no-store' } });
     }
+}
+
+export async function POST(req: NextRequest) {
+    return GET(await requestWithBodyQuery(req));
 }

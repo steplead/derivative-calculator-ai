@@ -60,3 +60,15 @@
 | 10 | 长尾题目页套用同一模板：H1 下方直接给答案 | 低：保留现有 H1/H2 和内部链接 |
 
 注：竞品首屏的共同做法是：输入框在最上方、示例或符号面板、结果按步骤展开（Symbolab、derivative-calculator.net、Wolfram|Alpha、Mathway）。我们要在「无注册、无付费墙、步骤全部免费」这一点上做出差异。
+
+## 品牌
+
+标志是原创的切线记号，不是计算器模板，也不是字母 D。一条墨水蓝的拱（二次曲线）在顶点与一条青绿切线相切，切点是一个圆点。它表示「导数就是这一点的斜率」。
+
+- **语气**：冷静、精确、对学生耐心。像草稿纸旁边的助教，不吆喝，不装成实验室。
+- **声音**：短句，先给答案，再解释为什么。避免「世界上最先进」这类营销腔。英文界面用日常课堂用语（step, rule, answer）。
+- **配色**：纸白 `#FAFAF7`，墨水蓝 `#2F5BD3`（悬停 `#2448AD`），切线青绿 `#0F766E`。正文 `#1F2937`，次要 `#6B7280`。暗色背景 `#0F1115`，暗色主色 `#7FA2FF`。
+- **字体**：界面 Inter，输入与 `d/dx` 用 JetBrains Mono，公式用 KaTeX。
+- **用法**：页头用内联记号加「Derivative Calculator AI」字标，颜色跟主题变量走。图标、苹果触摸图标、PWA 和社交头像用纸白底的同一记号。
+
+文件：`public/icon.svg`，`public/favicon.ico`，`public/apple-touch-icon.png`，`public/icon-192.png`，`public/icon-512.png`，`public/brand/mark.svg`，`public/brand/logo.svg`，`public/brand/avatar-400.png`，`public/og-image.webp`。

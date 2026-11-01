@@ -1,9 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import AnswerCheck from '@/components/AnswerCheck';
 import AskWhyButton from '@/components/AskWhyButton';
+import MathKeyStrip from '@/components/MathKeyStrip';
+import { parseSteps, renderMathAndText } from '@/lib/steps/format-steps';
 
 const MathDisplay = dynamic(() => import('./MathDisplay'), { ssr: false });
 
@@ -41,6 +43,7 @@ function loc(locale: string | undefined): Locale {
 
 export default function AdvancedCalculator({ mode, locale, initialEquation }: AdvancedCalculatorProps) {
   const t = COPY[loc(locale)][mode];
+  const inputRef = useRef<HTMLInputElement>(null);
   const [input, setInput] = useState(initialEquation || '');
   const [variable, setVariable] = useState('x');
   const [loading, setLoading] = useState(false);
@@ -70,10 +73,23 @@ export default function AdvancedCalculator({ mode, locale, initialEquation }: Ad
     }
   };
 
-  const steps = result?.steps?.split('\n').map((line) => line.trim()).filter(Boolean) || [];
+  const steps = result ? parseSteps(result.steps) : [];
+
+  const insertSymbol = (snippet: string) => {
+    const el = inputRef.current;
+    const start = el?.selectionStart ?? input.length;
+    const end = el?.selectionEnd ?? input.length;
+    const next = `${input.slice(0, start)}${snippet}${input.slice(end)}`;
+    setInput(next);
+    requestAnimationFrame(() => {
+      el?.focus();
+      const pos = start + snippet.length;
+      el?.setSelectionRange(pos, pos);
+    });
+  };
 
   return (
-    <div className="max-w-4xl mx-auto bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-gray-200 dark:border-slate-700 p-8">
+    <div className="calc-card">
       <form
         onSubmit={(event) => {
           event.preventDefault();
@@ -84,14 +100,18 @@ export default function AdvancedCalculator({ mode, locale, initialEquation }: Ad
           {t.h}
         </label>
         <div className="flex flex-col md:flex-row gap-3">
+          <div className="flex-grow">
           <input
             id={`${mode}-input`}
+            ref={inputRef}
             value={input}
             onChange={(event) => setInput(event.target.value)}
             placeholder={t.ph}
             aria-label={t.h}
-            className="flex-grow px-4 py-3 rounded-xl border border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-900 font-mono text-gray-900 dark:text-white"
+            className="calc-input"
           />
+          <MathKeyStrip onInsert={insertSymbol} />
+          </div>
           {mode === 'partial' ? (
             <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">
               {t.variable}
@@ -111,7 +131,7 @@ export default function AdvancedCalculator({ mode, locale, initialEquation }: Ad
             type="submit"
             disabled={loading}
             aria-label={t.go}
-            className="px-6 py-3 bg-blue-600 text-white font-bold rounded-xl disabled:opacity-50"
+            className="solve-btn disabled:opacity-50"
           >
             {loading ? '…' : t.go}
           </button>
@@ -131,11 +151,16 @@ export default function AdvancedCalculator({ mode, locale, initialEquation }: Ad
               <div><dt className="font-semibold">du/dx</dt><dd className="font-mono">{result.inner_derivative}</dd></div>
             </dl>
           ) : null}
-          <ol className="space-y-3">
-            {steps.map((step) => (
-              <li key={step} className="text-gray-700 dark:text-gray-300">
-                {step.replace(/\*\*/g, '')}
-                <AskWhyButton equation={input} step={step} rule={result.rule} locale={locale} />
+          <ol className="step-list">
+            {steps.map((step, index) => (
+              <li key={`${step.label}-${index}`}>
+                <div className="step-copy">
+                  {step.title ? <p className="step-title">{step.title}</p> : null}
+                  {step.body ? (
+                    <div className="step-body" dangerouslySetInnerHTML={{ __html: renderMathAndText(step.body) }} />
+                  ) : null}
+                  <AskWhyButton equation={input} step={step.body || step.label} rule={result.rule} locale={locale} />
+                </div>
               </li>
             ))}
           </ol>

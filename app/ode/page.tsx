@@ -1,4 +1,5 @@
 import Calculator from '@/components/Calculator';
+import AdShell from '@/components/AdShell';
 import PopularDerivatives from '@/components/PopularDerivatives';
 // EmbedWidget removed to prevent API abuse
 import { Suspense } from 'react';
@@ -78,7 +79,7 @@ export default async function ODEPage() {
             </Suspense>
             <PopularDerivatives locale={locale} id="ode-popular-derivatives" />
 
-            <div className="max-w-4xl mx-auto mt-20 prose prose-invert">
+            <div className="mt-16">
                 <div className="grid md:grid-cols-2 gap-12">
                     <div>
                         <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">{dict.ode.howToTitle}</h2>
@@ -92,6 +93,9 @@ export default async function ODEPage() {
                         </ul>
                     </div>
                 </div>
+            </div>
+            <div className="mt-16">
+                <AdShell type="donation" />
             </div>
         </div>
     );

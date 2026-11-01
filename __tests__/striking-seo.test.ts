@@ -93,6 +93,7 @@ describe('popular derivatives and crawl paths', () => {
     expect(home).toContain('href="/directory"');
     expect(footer).toContain('PopularDerivatives');
     expect(integral).toContain('PopularDerivatives');
+    expect(integral).toContain('Popular integrals');
     expect(limit).toContain('PopularDerivatives');
   });
 });

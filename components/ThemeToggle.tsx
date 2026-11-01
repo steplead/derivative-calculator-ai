@@ -8,37 +8,30 @@ export default function ThemeToggle() {
 
     useEffect(() => {
         setMounted(true);
-        // Check local storage or system preference
-        const isDark = localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        const stored = localStorage.getItem('theme');
+        const isDark = stored === 'dark' || (stored !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches);
         setDarkMode(isDark);
-        if (isDark) {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
+        document.documentElement.classList.toggle('dark', isDark);
+        document.documentElement.classList.toggle('light', !isDark);
     }, []);
 
     const toggleTheme = () => {
-        if (darkMode) {
-            document.documentElement.classList.remove('dark');
-            localStorage.theme = 'light';
-            setDarkMode(false);
-        } else {
-            document.documentElement.classList.add('dark');
-            localStorage.theme = 'dark';
-            setDarkMode(true);
-        }
+        const nextDark = !darkMode;
+        document.documentElement.classList.toggle('dark', nextDark);
+        document.documentElement.classList.toggle('light', !nextDark);
+        localStorage.setItem('theme', nextDark ? 'dark' : 'light');
+        setDarkMode(nextDark);
     };
 
     // Don't render until mounted to avoid hydration mismatch
     if (!mounted) {
-        return <div className="w-10 h-10" />; // Placeholder to maintain layout
+        return <div className="nav-tap" aria-hidden="true" />;
     }
 
     return (
         <button
             onClick={toggleTheme}
-            className="p-2 rounded-lg bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+            className="nav-tap inline-flex items-center justify-center rounded-xl border border-line bg-card text-muted hover:text-ink hover:bg-hover transition-colors duration-200"
             aria-label="Toggle Dark Mode"
         >
             {darkMode ? (

@@ -87,7 +87,8 @@ export async function performSecurityCheck(
     const ip = getClientIp(headers);
     const userAgent = headers.get('user-agent');
     const turnstileToken = searchParams.get('turnstile_token');
-    const host = headers.get('host') || '';
+    // Host includes a port in local dev (`localhost:3000`). Compare the hostname only.
+    const host = (headers.get('host') || '').split(':')[0].replace(/^\[|\]$/g, '');
 
     // ========== 0. SKIP_SECURITY bypass (diagnostic only) ==========
     const env = getRequestContext()?.env as any;

@@ -1,20 +1,15 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import ThemeToggle from './ThemeToggle';
 import LanguageSwitcher from './LanguageSwitcher';
+import LogoMark from './LogoMark';
 
 export default function Navbar({ dict }: { dict: any }) {
     const [isOpen, setIsOpen] = useState(false);
-    const [logoSrc, setLogoSrc] = useState('/logo-light.webp');
     const pathname = usePathname();
-
-    useEffect(() => {
-        const dark = document.documentElement.classList.contains('dark');
-        setLogoSrc(dark ? '/logo-dark.webp' : '/logo-light.webp');
-    }, []);
 
     // Helper to check if a link is active
     const isActive = (path: string) => {
@@ -37,21 +32,15 @@ export default function Navbar({ dict }: { dict: any }) {
     ];
 
     return (
-        <nav className="sticky top-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-gray-200 dark:border-slate-800 transition-all duration-200">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <nav className="sticky top-0 z-50 bg-card/90 backdrop-blur-md border-b border-line">
+            <div className="max-w-6xl mx-auto px-4">
                 <div className="flex justify-between items-center h-16">
-                    {/* Logo Section */}
                     <div className="flex-shrink-0 flex items-center pr-4">
-                        <Link href="/" className="transition-transform hover:scale-105 active:scale-95">
-                            <img
-                                src={logoSrc}
-                                alt="Derivative Calculator AI"
-                                width={157}
-                                height={48}
-                                decoding="async"
-                                fetchPriority="low"
-                                className="h-10 sm:h-12 w-auto"
-                            />
+                        <Link href="/" className="flex items-center gap-2 min-h-12" aria-label="Derivative Calculator AI">
+                            <LogoMark className="h-9 w-9 text-primary" />
+                            <span className="text-sm font-semibold leading-tight text-ink">
+                                Derivative Calculator <span className="text-primary">AI</span>
+                            </span>
                         </Link>
                     </div>
 
@@ -61,15 +50,15 @@ export default function Navbar({ dict }: { dict: any }) {
                             <Link
                                 key={item.id}
                                 href={item.href}
-                                className={`px-3 py-2 rounded-lg text-sm font-semibold transition-all duration-200 relative group
+                                className={`px-3 py-2 rounded-lg text-sm font-semibold transition-colors duration-200 relative group
                                     ${isActive(item.href)
-                                        ? 'text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-900/20'
-                                        : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100/50 dark:hover:bg-slate-800/50'
+                                        ? 'text-primary bg-answer-bg'
+                                        : 'text-muted hover:text-ink hover:bg-hover'
                                     }`}
                             >
                                 {item.name}
                                 {isActive(item.href) && (
-                                    <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/2 h-0.5 bg-blue-600 dark:bg-blue-400 rounded-full" />
+                                    <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/2 h-0.5 bg-primary rounded-full" />
                                 )}
                             </Link>
                         ))}
@@ -87,9 +76,10 @@ export default function Navbar({ dict }: { dict: any }) {
                         <ThemeToggle />
                         <button
                             onClick={() => setIsOpen(!isOpen)}
-                            className="inline-flex items-center justify-center p-2 rounded-xl text-gray-500 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-slate-800 transition-colors focus:outline-none ring-1 ring-gray-200 dark:ring-slate-700"
+                            className="nav-tap inline-flex items-center justify-center rounded-xl text-muted hover:text-ink hover:bg-hover transition-colors duration-200 focus:outline-none border border-line"
+                            aria-label={isOpen ? 'Close main menu' : 'Open main menu'}
                         >
-                            <span className="sr-only">Open main menu</span>
+                            <span className="sr-only">{isOpen ? 'Close main menu' : 'Open main menu'}</span>
                             {isOpen ? (
                                 <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
                             ) : (
@@ -102,17 +92,17 @@ export default function Navbar({ dict }: { dict: any }) {
 
             {/* Mobile Menu Panel - Elegant Slide Down */}
             {isOpen && (
-                <div className="lg:hidden bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border-t border-gray-100 dark:border-slate-800 shadow-2xl animate-in slide-in-from-top duration-300">
+                <div className="lg:hidden bg-card border-t border-line">
                     <div className="px-4 pt-4 pb-6 space-y-2">
                         {navItems.map((item) => (
                             <Link
                                 key={item.id}
                                 href={item.href}
                                 onClick={() => setIsOpen(false)}
-                                className={`block px-4 py-3 rounded-xl text-base font-bold transition-colors
+                                className={`nav-tap block px-4 rounded-xl text-base font-semibold transition-colors duration-200
                                     ${isActive(item.href)
-                                        ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
-                                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-800'
+                                        ? 'bg-answer-bg text-primary'
+                                        : 'text-ink hover:bg-hover'
                                     }`}
                             >
                                 {item.name}

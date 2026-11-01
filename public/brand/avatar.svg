@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" fill="none">
+  <rect width="400" height="400" fill="#FAFAF7"/>
+  <g transform="translate(52 48) scale(4.6)">
+    <path d="M16 42Q32 2 48 42" stroke="#2F5BD3" stroke-width="3" stroke-linecap="round"/>
+    <path d="M18 22H46" stroke="#0F766E" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="32" cy="22" r="3.2" fill="#0F766E"/>
+  </g>
+  <text x="200" y="348" text-anchor="middle" fill="#2F5BD3" font-family="JetBrains Mono, monospace" font-size="28">d/dx</text>
+</svg>

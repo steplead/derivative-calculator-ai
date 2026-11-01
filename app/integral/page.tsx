@@ -1,11 +1,18 @@
 import { Suspense } from 'react';
 import { headers } from 'next/headers';
 import Calculator from '@/components/Calculator';
+import AdShell from '@/components/AdShell';
 import EmbedSnippet from '@/components/EmbedSnippet';
 import PopularDerivatives from '@/components/PopularDerivatives';
 import PracticeGenerator from '@/components/PracticeGenerator';
 import { getDictionary } from '../dictionaries';
-import { localeAlternates, normalizeLocale, pageTitle } from '@/lib/seo';
+import { localeAlternates, normalizeLocale, pageTitle, type Locale } from '@/lib/seo';
+
+const INTEGRAL_HEADING: Record<Locale, string> = {
+    en: 'Popular integrals',
+    es: 'Integrales populares',
+    pt: 'Integrais populares',
+};
 
 export const runtime = 'edge';
 // OPTIMIZED: Allow caching to reduce quota usage
@@ -47,7 +54,7 @@ export default async function IntegralPage() {
 
     try {
         const headersList = await headers();
-        locale = headersList.get("x-next-locale") || "en";
+        locale = normalizeLocale(headersList.get("x-next-locale"));
         dict = getDictionary(locale);
     } catch (e) {
         console.error("Integral page header error:", e);
@@ -58,38 +65,52 @@ export default async function IntegralPage() {
     }
 
     return (
-        <div className="py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-200">
-            <div className="max-w-4xl mx-auto text-center mb-12 mt-10">
-                <h1 id="integral-calculator" className="text-4xl sm:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-4">
-                    {dict.integral.h1} <span className="text-purple-600 dark:text-purple-500">AI</span>
+        <div className="py-12">
+            <div className="text-center mb-8">
+                <h1 id="integral-calculator" className="text-4xl font-semibold text-ink tracking-tight mb-4">
+                    {dict.integral.h1} <span className="text-primary">AI</span>
                 </h1>
-                <p className="text-xl text-gray-600 dark:text-gray-400">
+                <p className="text-lg text-muted">
                     {dict.integral.subtitle}
                 </p>
             </div>
 
-            <Suspense fallback={<div className="text-gray-900 dark:text-white text-center">{dict.common.loading}</div>}>
-                <Calculator mode="integral" dict={dict.calculator} locale={locale} showShare shareUrl={localeAlternates('/integral', locale).canonical} />
+            <Suspense fallback={<div className="text-ink text-center">{dict.common.loading}</div>}>
+                <Calculator
+                    mode="integral"
+                    dict={dict.calculator}
+                    locale={locale}
+                    showShare
+                    shareUrl={localeAlternates('/integral', locale).canonical}
+                    examples={['x^2', 'sin(x)', 'e^x', '1/x']}
+                />
             </Suspense>
-            <EmbedSnippet path="/integral" locale={locale} />
-            <PopularDerivatives locale={locale} id="integral-popular-derivatives" />
+            <PopularDerivatives
+                locale={locale}
+                id="integral-popular-derivatives"
+                heading={INTEGRAL_HEADING[normalizeLocale(locale)]}
+            />
             <PracticeGenerator locale={locale} topic="integral" />
 
-            <div className="max-w-4xl mx-auto mt-20 prose prose-invert">
+            <div className="mt-16">
                 <div className="grid md:grid-cols-2 gap-12">
                     <div>
-                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">{dict.integral.howToTitle}</h2>
-                        <p className="text-gray-600 dark:text-gray-400 mb-4">
+                        <h2 className="text-2xl font-semibold text-ink mb-4">{dict.integral.howToTitle}</h2>
+                        <p className="text-muted mb-4">
                             {dict.integral.howToText}
                         </p>
-                        <ul className="list-disc pl-5 text-gray-600 dark:text-gray-400 space-y-2">
-                            <li>{dict.integral.bullet1} <code className="bg-gray-100 dark:bg-slate-800 px-1 rounded text-gray-800 dark:text-gray-200">x^2 + 3x</code></li>
-                            <li>{dict.integral.bullet2} <code className="bg-gray-100 dark:bg-slate-800 px-1 rounded text-gray-800 dark:text-gray-200">sin(x)</code></li>
-                            <li>{dict.integral.bullet3} <code className="bg-gray-100 dark:bg-slate-800 px-1 rounded text-gray-800 dark:text-gray-200">e^x</code></li>
+                        <ul className="list-disc pl-5 text-muted space-y-2">
+                            <li>{dict.integral.bullet1} <code className="bg-chip px-1 rounded text-ink">x^2 + 3x</code></li>
+                            <li>{dict.integral.bullet2} <code className="bg-chip px-1 rounded text-ink">sin(x)</code></li>
+                            <li>{dict.integral.bullet3} <code className="bg-chip px-1 rounded text-ink">e^x</code></li>
                         </ul>
                     </div>
                 </div>
             </div>
+            <div className="mt-16">
+                <AdShell type="donation" />
+            </div>
+            <EmbedSnippet path="/integral" locale={locale} />
         </div>
     );
 }

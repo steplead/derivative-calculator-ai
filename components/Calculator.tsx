@@ -1,19 +1,19 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import dynamic from 'next/dynamic';
+import MathKeyStrip from '@/components/MathKeyStrip';
+import CopyLatexButton from '@/components/CopyLatexButton';
 import { sanitizeMathFormula, sanitizeLimitValue } from '@/utils/sanitize';
-
-const MathDisplay = dynamic(() => import('./MathDisplay'), { ssr: false });
-const Graph = dynamic(() => import('./Graph'), { ssr: false });
-const StepDisplay = dynamic(() => import('./StepDisplay'), { ssr: false });
-import AdShell from './AdShell';
-import ShareResultCard from './ShareResultCard';
-import AnswerCheck from './AnswerCheck';
-import AskWhyButton from './AskWhyButton';
 import { useTurnstile, addTokenToUrl } from './TurnstileProvider';
 import { calculationEventName, trackEvent } from '@/lib/analytics';
+
+const MathDisplay = dynamic(() => import('./MathDisplay'));
+const Graph = dynamic(() => import('./Graph'));
+const StepDisplay = dynamic(() => import('./StepDisplay'));
+const ShareResultCard = dynamic(() => import('./ShareResultCard'));
+const AnswerCheck = dynamic(() => import('./AnswerCheck'));
 
 type CalculatorProps = {
     initialEquation?: string;
@@ -29,43 +29,42 @@ type CalculatorProps = {
     locale?: string;
     /** Skip the interactive graph. Problem pages already ship an inline SVG. */
     deferGraph?: boolean;
+    /** Example chips under the input. Homepage and tool pages. */
+    examples?: string[];
+    /**
+     * Long-tail pages render the answer in a server card under the H1.
+     * Keep initialResult so the first paint does not refetch, but do not
+     * repeat that answer inside the input card.
+     */
+    showInitialResult?: boolean;
 };
 
-function plainSteps(content: string | string[]): string[] {
-    if (Array.isArray(content)) return content.filter((step) => step.trim().length > 0);
-    if (typeof content === 'string') return content.split('\n').filter((step) => step.trim().length > 0);
-    return [];
-}
-
-/** Server-rendered steps as text. Katex stays unloaded until the user recalculates. */
-function PlainSteps({ content, equation, rule, locale }: { content: string | string[]; equation: string; rule?: string; locale?: string }) {
-    const steps = plainSteps(content);
-    if (steps.length === 0) return null;
-    return (
-        <div className="space-y-3">
-            {steps.map((step, index) => (
-                <div key={`${index}-${step.slice(0, 24)}`}>
-                    <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">{step}</p>
-                    {equation ? <AskWhyButton equation={equation} step={step} rule={rule} locale={locale} /> : null}
-                </div>
-            ))}
-        </div>
-    );
-}
-
-export default function Calculator({ initialEquation = '', initialLimitTo = '0', mode = 'derivative', initialResult, dict, embedded = false, showShare = false, shareUrl = '', locale = 'en', deferGraph = false }: CalculatorProps) {
+export default function Calculator({
+    initialEquation = '',
+    initialLimitTo = '0',
+    mode = 'derivative',
+    initialResult,
+    dict,
+    embedded = false,
+    showShare = false,
+    shareUrl = '',
+    locale = 'en',
+    deferGraph = false,
+    examples,
+    showInitialResult = true,
+}: CalculatorProps) {
     const searchParams = useSearchParams();
     const equationParam = searchParams.get('equation');
     const limitToParam = searchParams.get('to');
     const { token } = useTurnstile();
+    const inputRef = useRef<HTMLInputElement>(null);
 
     const [input, setInput] = useState((equationParam || initialEquation || '').toString().replace(/^null$/i, ''));
     const [limitTo, setLimitTo] = useState((limitToParam || initialLimitTo || '0').toString().replace(/^null$/i, '0'));
-    const [result, setResult] = useState<any>(initialResult || null);
+    const [result, setResult] = useState<any>(showInitialResult ? (initialResult || null) : null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
-    // Default English strings if dict is missing (fallback)
     const t = dict || {
         placeholder: "e.g. x^2, sin(x), ln(x)",
         solve: "Solve",
@@ -105,7 +104,6 @@ export default function Calculator({ initialEquation = '', initialLimitTo = '0',
         setResult(null);
 
         try {
-            // Try to get Turnstile token if available (optional)
             let turnstileToken = token;
             if (token) {
                 console.log('[Calculator] Using existing Turnstile token');
@@ -124,7 +122,6 @@ export default function Calculator({ initialEquation = '', initialLimitTo = '0',
                 baseUrl = `/api/ode?equation=${encodeURIComponent(formula)}`;
             }
 
-            // Step 1: Fast fetch (Math only). includeAi is the name the routes read.
             const urlWithToken = addTokenToUrl(`${baseUrl}&includeAi=false`, turnstileToken);
             console.log('[Calculator] Fetching URL:', urlWithToken);
             const resFast = await fetch(urlWithToken);
@@ -139,13 +136,9 @@ export default function Calculator({ initialEquation = '', initialLimitTo = '0',
             }
             const dataFast = await resFast.json();
 
-            // Show math result immediately
             setResult(dataFast);
-            setLoading(false); // Stop main loading spinner
+            setLoading(false);
 
-            // Successful calculation only. The raw formula is never sent.
-            // integral_calculate, limit_calculate, and ode_calculate use the
-            // same trackEvent path as derivative_calculate, including send_to.
             trackEvent(calculationEventName(mode), {
                 type: mode,
                 mode,
@@ -153,13 +146,11 @@ export default function Calculator({ initialEquation = '', initialLimitTo = '0',
                 source: 'client',
             });
 
-            // Step 2: Slow fetch (AI Explanation)
-            // We keep the result but maybe show a loading indicator for the explanation part
             try {
                 const resFull = await fetch(addTokenToUrl(`${baseUrl}&includeAi=true`, turnstileToken));
                 if (resFull.ok) {
                     const dataFull = await resFull.json();
-                    setResult(dataFull); // Update with full data including AI
+                    setResult(dataFull);
                 } else {
                     const text = await resFull.text();
                     try {
@@ -171,10 +162,8 @@ export default function Calculator({ initialEquation = '', initialLimitTo = '0',
                 }
             } catch (aiErr) {
                 console.error("AI fetch failed", aiErr);
-                // Don't fail the whole request if AI fails, just keep the math result
             }
 
-            // Save to history
             try {
                 const historyItem = {
                     equation: equationToSolve,
@@ -196,6 +185,19 @@ export default function Calculator({ initialEquation = '', initialLimitTo = '0',
         }
     };
 
+    const insertSymbol = (snippet: string) => {
+        const el = inputRef.current;
+        const start = el?.selectionStart ?? input.length;
+        const end = el?.selectionEnd ?? input.length;
+        const next = `${input.slice(0, start)}${snippet}${input.slice(end)}`;
+        setInput(next);
+        requestAnimationFrame(() => {
+            el?.focus();
+            const pos = start + snippet.length;
+            el?.setSelectionRange(pos, pos);
+        });
+    };
+
     const getPlaceholder = () => {
         if (mode === 'limit') return 'e.g. (sin(x))/x';
         if (mode === 'ode') return "e.g. y' + y = x";
@@ -211,128 +213,128 @@ export default function Calculator({ initialEquation = '', initialLimitTo = '0',
     };
 
     return (
-        <div className="max-w-4xl mx-auto bg-white dark:bg-slate-800 rounded-2xl shadow-xl overflow-hidden border border-gray-200 dark:border-slate-700 transition-colors duration-200">
-            <div className="p-8">
-                <div className="flex flex-col md:flex-row gap-4">
-                    <div className="flex-grow">
-                        <input
-                            type="text"
-                            value={input}
-                            onChange={(e) => setInput(e.target.value)}
-                            placeholder={getPlaceholder()}
-                            className="w-full px-6 py-4 bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg font-mono transition-colors"
-                            onKeyDown={(e) => e.key === 'Enter' && handleCalculate()}
-                        />
-                    </div>
-
-                    {mode === 'limit' && (
-                        <div className="flex items-center gap-2 bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl px-4 transition-colors">
-                            <span className="text-gray-400 whitespace-nowrap">x &rarr;</span>
-                            <input
-                                type="text"
-                                value={limitTo}
-                                onChange={(e) => setLimitTo(e.target.value)}
-                                className="w-16 bg-transparent text-gray-900 dark:text-white focus:outline-none font-mono"
-                            />
-                        </div>
-                    )}
-
-                    <button
-                        type="button"
-                        onClick={() => handleCalculate()}
-                        disabled={loading}
-                        aria-label={getButtonText()}
-                        className="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed min-w-[120px] h-[52px]"
-                        style={{ minHeight: '52px' }}
-                    >
-                        {getButtonText()}
-                    </button>
+        <div className={`calc-card ${embedded ? '' : ''}`}>
+            <div className="flex flex-col md:flex-row gap-4">
+                <div className="flex-grow">
+                    <label className="sr-only" htmlFor={`calc-input-${mode}`}>Expression</label>
+                    <input
+                        id={`calc-input-${mode}`}
+                        ref={inputRef}
+                        type="text"
+                        value={input}
+                        onChange={(e) => setInput(e.target.value)}
+                        placeholder={getPlaceholder()}
+                        className="calc-input"
+                        onKeyDown={(e) => e.key === 'Enter' && handleCalculate()}
+                        autoCapitalize="off"
+                        autoCorrect="off"
+                        spellCheck={false}
+                    />
+                    <MathKeyStrip onInsert={insertSymbol} />
                 </div>
 
-                {error && (
-                    <div className="mt-6 p-4 bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 rounded-xl text-red-600 dark:text-red-400">
-                        {error}
+                {mode === 'limit' && (
+                    <div className="flex items-center gap-2 min-h-12 px-4 rounded-xl border border-line bg-chip">
+                        <span className="text-muted whitespace-nowrap">x &rarr;</span>
+                        <input
+                            type="text"
+                            value={limitTo}
+                            aria-label="Limit target"
+                            onChange={(e) => setLimitTo(e.target.value)}
+                            className="w-16 bg-transparent text-ink font-mono focus:outline-none"
+                        />
                     </div>
                 )}
 
-                {result && (
-                    <div className="mt-8 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                        <div className="bg-gray-50 dark:bg-slate-900/50 p-6 rounded-xl border border-gray-200 dark:border-slate-700/50 transition-colors">
-                            <h3 className="text-sm uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-4 font-semibold">{t.solution}</h3>
-                            <div className="text-3xl text-gray-900 dark:text-white font-math overflow-x-auto">
-                                {result._ssr ? (
-                                    <span className="font-mono text-2xl">{result.solution_raw || result.solution}</span>
-                                ) : (
-                                    <MathDisplay latex={result.solution} />
-                                )}
-                            </div>
+                <button
+                    type="button"
+                    onClick={() => handleCalculate()}
+                    disabled={loading}
+                    aria-label={getButtonText()}
+                    className="solve-btn"
+                >
+                    {getButtonText()}
+                </button>
+            </div>
+
+            {examples && examples.length > 0 ? (
+                <div className="flex flex-wrap gap-2 mt-4" role="list" aria-label="Examples">
+                    {examples.map((example) => (
+                        <button
+                            key={example}
+                            type="button"
+                            className="example-chip"
+                            aria-label={`Solve ${example}`}
+                            onClick={() => {
+                                setInput(example);
+                                handleCalculate(example, limitTo);
+                            }}
+                        >
+                            {example}
+                        </button>
+                    ))}
+                </div>
+            ) : null}
+
+            {error && (
+                <div className="error-banner" role="alert">
+                    {error}
+                </div>
+            )}
+
+            {result && (
+                <div className="mt-8 space-y-6 result-enter">
+                    <div className="answer-panel answer-flash">
+                        <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
+                            <h3 className="answer-kicker m-0">{t.solution}</h3>
+                            <CopyLatexButton latex={result.solution || result.solution_raw || ''} />
                         </div>
-
-                        <div className="grid md:grid-cols-2 gap-8">
-                            <div className="bg-gray-50 dark:bg-slate-900/50 p-6 rounded-xl border border-gray-200 dark:border-slate-700/50 transition-colors">
-                                <h3 className="text-sm uppercase tracking-wider text-blue-600 dark:text-blue-400 mb-4 font-semibold flex items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
-                                        <path d="M12 15a3 3 0 100-6 3 3 0 000 6z" />
-                                        <path fillRule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 010-1.113zM17.25 12a5.25 5.25 0 11-10.5 0 5.25 5.25 0 0110.5 0z" clipRule="evenodd" />
-                                    </svg>
-                                    {t.ai}
-                                </h3>
-                                <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                                    {result.ai_explanation && result.ai_explanation.toLowerCase().includes("generating") || result.ai_explanation?.toLowerCase().includes("processing") ? (
-                                        <span className="animate-pulse text-gray-500">Generating explanation...</span>
-                                    ) : (
-                                        result.ai_explanation || "No explanation available."
-                                    )}
-                                </p>
-                            </div>
-
-                            <div className="bg-gray-50 dark:bg-slate-900/50 p-6 rounded-xl border border-gray-200 dark:border-slate-700/50 transition-colors">
-                                <h3 className="text-sm uppercase tracking-wider text-purple-600 dark:text-purple-400 mb-4 font-semibold flex items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
-                                        <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 01.67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 11-.671-1.34l.041-.022zM12 9a.75.75 0 100-1.5.75.75 0 000 1.5z" clipRule="evenodd" />
-                                    </svg>
-                                    {t.steps}
-                                </h3>
-                                {result._ssr ? (
-                                    <PlainSteps content={result.steps} equation={input} rule={result.rule} locale={locale} />
-                                ) : (
-                                    <StepDisplay content={result.steps} equation={mode === 'ode' ? undefined : input} rule={result.rule} locale={locale} />
-                                )}
-                            </div>
-                        </div>
-
-                        {(mode === 'derivative' || mode === 'integral' || mode === 'limit') && result.solution_raw ? (
-                            <AnswerCheck equation={input} locale={locale} mode={mode} limitTo={limitTo} />
-                        ) : null}
-
-                        {mode === 'derivative' && !deferGraph && (
-                            <div className="bg-gray-50 dark:bg-slate-900/50 p-6 rounded-xl border border-gray-200 dark:border-slate-700/50 transition-colors">
-                                <h3 className="text-sm uppercase tracking-wider text-green-600 dark:text-green-400 mb-4 font-semibold">{t.graph}</h3>
-                                <div className="h-64 w-full">
-                                    <Graph equation={input} derivative={result.solution_raw} />
-                                </div>
-                            </div>
+                        {result.solution ? (
+                            <MathDisplay latex={result.solution} />
+                        ) : (
+                            <p className="answer-math font-mono">{result.solution_raw}</p>
                         )}
                     </div>
-                )}
 
-                {showShare && result && (
-                    <ShareResultCard
-                        formula={input}
-                        result={result.solution_raw || result.solution}
-                        url={shareUrl || (typeof window !== 'undefined' ? window.location.href : '')}
-                        type={mode}
-                    />
-                )}
-
-                {/* Ad Unit - Hide in embedded mode */}
-                {!embedded && (
-                    <div className="mt-8">
-                        {/* Use a placeholder slot ID for now */}
-                        <AdShell type="donation" className="mt-8" />
+                    <div>
+                        <h3 className="text-sm font-semibold text-ink mb-4">{t.steps}</h3>
+                        <StepDisplay content={result.steps} equation={mode === 'ode' ? undefined : input} rule={result.rule} locale={locale} />
                     </div>
-                )}
-            </div>
+
+                    <div>
+                        <h3 className="text-sm font-semibold text-muted mb-2">{t.ai}</h3>
+                        <p className="text-ink leading-relaxed">
+                            {result.ai_explanation && result.ai_explanation.toLowerCase().includes("generating") || result.ai_explanation?.toLowerCase().includes("processing") ? (
+                                <span className="text-muted">Generating explanation...</span>
+                            ) : (
+                                result.ai_explanation || "No explanation available."
+                            )}
+                        </p>
+                    </div>
+
+                    {(mode === 'derivative' || mode === 'integral' || mode === 'limit') && result.solution_raw ? (
+                        <AnswerCheck equation={input} locale={locale} mode={mode} limitTo={limitTo} />
+                    ) : null}
+
+                    {mode === 'derivative' && !deferGraph && (
+                        <div>
+                            <h3 className="text-sm font-semibold text-ink mb-4">{t.graph}</h3>
+                            <div className="h-64 w-full overflow-hidden">
+                                <Graph equation={input} derivative={result.solution_raw} />
+                            </div>
+                        </div>
+                    )}
+                </div>
+            )}
+
+            {showShare && result && !embedded && (
+                <ShareResultCard
+                    formula={input}
+                    result={result.solution_raw || result.solution}
+                    url={shareUrl || (typeof window !== 'undefined' ? window.location.href : '')}
+                    type={mode}
+                />
+            )}
         </div>
     );
 }

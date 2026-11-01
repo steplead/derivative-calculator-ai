@@ -64,28 +64,30 @@ type PopularDerivativesProps = {
   locale: string;
   id?: string;
   embedded?: boolean;
+  /** Overrides the section heading. The link list stays the same. */
+  heading?: string;
 };
 
-const PopularDerivatives = ({ locale, id = 'popular-derivatives', embedded = false }: PopularDerivativesProps) => {
+const PopularDerivatives = ({ locale, id = 'popular-derivatives', embedded = false, heading }: PopularDerivativesProps) => {
   const loc = normalizeLocale(locale);
   return (
     <section
       aria-labelledby={id}
-      className={embedded ? 'mb-12' : 'max-w-4xl mx-auto mt-16'}
+      className={embedded ? 'mb-12' : 'mt-16'}
     >
-      <h2 id={id} className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-        {HEADING[loc]}
+      <h2 id={id} className="text-2xl font-semibold text-ink mb-6">
+        {heading || HEADING[loc]}
       </h2>
-      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <ul className="grid grid-cols-1 gap-4">
         {POPULAR_DERIVATIVES.map((item) => (
-          <li key={item.href} className="text-gray-700 dark:text-gray-300 leading-relaxed">
+          <li key={item.href} className="text-ink leading-relaxed">
             <Link
               href={localePath(item.href, loc)}
-              className="font-semibold text-blue-600 dark:text-blue-400 hover:underline"
+              className="link hover:underline"
             >
               {item.anchor[loc]}
             </Link>
-            <span>{` — ${item.note[loc]}`}</span>
+            <span className="text-muted">{` — ${item.note[loc]}`}</span>
           </li>
         ))}
       </ul>

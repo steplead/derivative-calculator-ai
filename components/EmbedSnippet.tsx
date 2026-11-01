@@ -28,10 +28,10 @@ export default function EmbedSnippet({ path, locale }: EmbedSnippetProps) {
   const href = loc === 'en' ? `${SITE_URL}${clean || '/'}` : `${SITE_URL}/${loc}${clean}`;
   const code = `<iframe src="${href}" title="Derivative Calculator AI" width="100%" height="640" style="border:0"></iframe>`;
   return (
-    <details className="max-w-4xl mx-auto mt-8">
-      <summary className="cursor-pointer font-semibold text-blue-600 dark:text-blue-400">{t.summary}</summary>
-      <p className="mt-3 text-sm text-gray-600 dark:text-gray-300">{t.note}</p>
-      <pre className="mt-3 p-4 overflow-x-auto text-xs bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl">
+    <details className="mt-8">
+      <summary className="cursor-pointer font-semibold text-primary min-h-12 inline-flex items-center">{t.summary}</summary>
+      <p className="mt-4 text-sm text-muted">{t.note}</p>
+      <pre className="mt-4 p-4 overflow-x-auto text-xs bg-chip border border-line rounded-xl text-ink">
         <code>{code}</code>
       </pre>
     </details>

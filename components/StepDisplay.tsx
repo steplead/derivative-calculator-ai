@@ -1,52 +1,34 @@
 'use client';
-import 'katex/dist/katex.min.css';
-import dynamic from 'next/dynamic';
-import AskWhyButton from '@/components/AskWhyButton';
 
-const Latex = dynamic(() => import('react-latex-next'), { ssr: false });
+import AskWhyButton from '@/components/AskWhyButton';
+import { parseSteps, renderMathAndText } from '@/lib/steps/format-steps';
 
 interface StepDisplayProps {
-    content: string | string[];
-    equation?: string;
-    rule?: string;
-    locale?: string;
+  content: string | string[];
+  equation?: string;
+  rule?: string;
+  locale?: string;
 }
 
 export default function StepDisplay({ content, equation, rule, locale }: StepDisplayProps) {
-    if (!content) return null;
+  const steps = parseSteps(content);
+  if (steps.length === 0) return null;
 
-    // Handle both string and array formats
-    let steps: string[] = [];
-
-    if (Array.isArray(content)) {
-        // API returned an array
-        steps = content;
-    } else if (typeof content === 'string') {
-        // API returned a string with newlines
-        steps = content.split('\n').filter(step => step.trim().length > 0);
-    } else {
-        // Unexpected type, convert to string
-        steps = [String(content)];
-    }
-
-    if (steps.length === 0) return null;
-
-    return (
-        <div className="space-y-3">
-            {steps.map((step, index) => {
-                const isStepLabel = step.trim().startsWith('Step') || step.trim().startsWith('Final Answer');
-
-                return (
-                    <div key={index} className={`text-sm leading-relaxed ${isStepLabel ? 'pl-2 border-l-2 border-blue-500/30' : ''}`}>
-                        <div className="text-gray-700 dark:text-gray-300">
-                            <Latex>{step}</Latex>
-                        </div>
-                        {equation ? (
-                            <AskWhyButton equation={equation} step={step} rule={rule} locale={locale} />
-                        ) : null}
-                    </div>
-                );
-            })}
-        </div>
-    );
+  return (
+    <ol className="step-list">
+      {steps.map((step, index) => (
+        <li key={`${step.label}-${index}`}>
+          <div className="step-copy">
+            {step.title ? <p className="step-title">{step.title}</p> : null}
+            {step.body ? (
+              <div className="step-body" dangerouslySetInnerHTML={{ __html: renderMathAndText(step.body) }} />
+            ) : null}
+            {equation ? (
+              <AskWhyButton equation={equation} step={step.body || step.label} rule={rule} locale={locale} />
+            ) : null}
+          </div>
+        </li>
+      ))}
+    </ol>
+  );
 }

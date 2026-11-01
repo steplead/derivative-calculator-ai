@@ -35,6 +35,7 @@ import TrigHubLink from '@/components/TrigHubLink';
 import DerivativeLessonView, { LinksOnlySupplement } from '@/components/DerivativeLesson';
 import { getDerivativeLesson } from '@/content/derivative-lesson';
 import { answerFirstLead } from '@/content/answer-lead';
+import { strikingMeta } from '@/content/striking-lessons';
 import { TRIG_CLUSTER_SLUGS } from '@/lib/trig-cluster';
 
 const INDEXABLE_PROBLEM_SLUGS = new Set<string>(indexableProblemSlugs);
@@ -230,6 +231,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     const t = getLocalizedContent(locale, problem.formula, problem.type);
     const lesson = libraryProblem ? getInverseTrigLesson(libraryProblem.slug, locale) : null;
     const indexLesson = libraryProblem ? getDerivativeLesson(libraryProblem.slug, locale) : null;
+    const striking = libraryProblem ? strikingMeta(libraryProblem.slug, locale) : null;
 
     // P2-G: derivative near-duplicates (same formula -> identical title+content)
     // point their canonical at the group's primary slug to consolidate indexing
@@ -252,8 +254,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     const forceIndex = Boolean(libraryProblem) && selfCanonical && INDEXABLE_PROBLEM_SLUGS.has(canonicalSlug);
     const lockedNoindex = !forceIndex && ((NOINDEX_SLUGS.has(librarySlug) && !derivDupSlugs.has(librarySlug)) || isOutOfLibrary);
     const alternates = localeAlternates(`/${canonicalSlug}`, locale);
-    const title = keywordTitle(lesson?.title ?? t.title);
-    const description = lesson?.description ?? indexLesson?.description ?? t.description;
+    const title = keywordTitle(striking?.title ?? lesson?.title ?? t.title);
+    const description = striking?.description ?? lesson?.description ?? indexLesson?.description ?? t.description;
 
     return {
         title: { absolute: title },
@@ -426,13 +428,15 @@ export default async function ProblemPage({ params }: { params: { slug: string }
             : null;
         const pageLesson = getInverseTrigLesson(safeProblem.slug, locale);
         const indexLesson = getDerivativeLesson(safeProblem.slug, locale);
+        const striking = strikingMeta(safeProblem.slug, locale);
+        const pageH1 = striking?.h1 ?? t.h1;
         const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://derivativecalculatorai.com';
         const url = `${siteUrl}${problemHref(slug, locale)}`;
 
         // Generate Schema.org structured data
         const mathSolverSchema = generateMathSolverData({
-            name: pageLesson?.title ?? t.title,
-            description: pageLesson?.description ?? t.description,
+            name: striking?.title ?? pageLesson?.title ?? t.title,
+            description: striking?.description ?? pageLesson?.description ?? indexLesson?.description ?? t.description,
             url: url,
             educationalLevel: "College"
         });
@@ -453,9 +457,14 @@ export default async function ProblemPage({ params }: { params: { slug: string }
                 </div>
                 <div className="max-w-4xl mx-auto text-center mb-12 mt-8">
                     <h1 id={safeProblem.slug} className="text-4xl sm:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-4">
-                        {t.h1}
+                        {pageH1}
                     </h1>
-                    <p className="text-xl text-gray-600 dark:text-gray-400">
+                    {answerLead ? (
+                        <p className="text-lg text-gray-800 dark:text-gray-100 leading-relaxed text-left sm:text-center">
+                            {answerLead}
+                        </p>
+                    ) : null}
+                    <p className="mt-4 text-xl text-gray-600 dark:text-gray-400">
                         {t.subtitle} <code className="bg-gray-100 dark:bg-slate-800 px-2 py-1 rounded text-gray-800 dark:text-gray-200">{safeProblem.formula}</code>
                     </p>
 
@@ -483,11 +492,6 @@ export default async function ProblemPage({ params }: { params: { slug: string }
                             )}
                         </div>
                     )}
-                    {answerLead ? (
-                        <p className="mt-6 text-lg text-gray-800 dark:text-gray-100 leading-relaxed text-left sm:text-center">
-                            {answerLead}
-                        </p>
-                    ) : null}
                 </div>
 
                 <Suspense fallback={<div className="text-gray-900 dark:text-white text-center">Loading Calculator...</div>}>
@@ -547,10 +551,12 @@ export default async function ProblemPage({ params }: { params: { slug: string }
                     type={safeProblem.type}
                 />
 
-                <div className="max-w-2xl mx-auto mt-12 prose prose-invert">
-                    <h3 className="text-gray-900 dark:text-white font-bold text-xl mb-2">{t.howToTitle}</h3>
-                    <p className="text-gray-600 dark:text-gray-400" dangerouslySetInnerHTML={{ __html: t.howToText }} />
-                </div>
+                {!pageLesson && !indexLesson ? (
+                    <div className="max-w-2xl mx-auto mt-12 prose prose-invert">
+                        <h3 className="text-gray-900 dark:text-white font-bold text-xl mb-2">{t.howToTitle}</h3>
+                        <p className="text-gray-600 dark:text-gray-400" dangerouslySetInnerHTML={{ __html: t.howToText }} />
+                    </div>
+                ) : null}
 
                 {pageLesson ? (
                     <InverseTrigLesson

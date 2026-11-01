@@ -43,6 +43,10 @@ const STATIC_PATHS = [
   { path: '/derivative-calculator-comparison', file: 'content/comparisons.ts', priority: '0.6' },
 ];
 
+function latestLastmod(relFiles) {
+  return relFiles.map(gitLastmod).sort().at(-1);
+}
+
 function gitLastmod(relFile) {
   let iso = '';
   try {
@@ -154,7 +158,15 @@ function generateSitemap() {
     entries.push(...urlEntry(`/wiki/${topic.slug}`, wikiLastmod, '0.6'));
   }
 
-  const problemLastmod = gitLastmod('data/problems.json');
+  // Content edits on a lesson must move lastmod, or IndexNow skips the URL.
+  const problemLastmod = latestLastmod([
+    'data/problems.json',
+    'content/derivative-facts.json',
+    'content/striking-lessons.ts',
+    'content/inverse-trig-lessons.ts',
+    'content/derivative-lesson.ts',
+    'app/[slug]/page.tsx',
+  ]);
   const used = new Set();
   for (const slug of allow) {
     if (typeof slug !== 'string' || !slug || slug.includes('+') || slug.includes(' ')) {

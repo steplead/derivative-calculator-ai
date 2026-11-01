@@ -2,6 +2,7 @@ import { Suspense } from 'react';
 import { headers } from 'next/headers';
 import Calculator from '@/components/Calculator';
 import EmbedSnippet from '@/components/EmbedSnippet';
+import PopularDerivatives from '@/components/PopularDerivatives';
 import PracticeGenerator from '@/components/PracticeGenerator';
 import { getDictionary } from '../dictionaries';
 import { localeAlternates, normalizeLocale, pageTitle } from '@/lib/seo';
@@ -71,6 +72,7 @@ export default async function IntegralPage() {
                 <Calculator mode="integral" dict={dict.calculator} locale={locale} showShare shareUrl={localeAlternates('/integral', locale).canonical} />
             </Suspense>
             <EmbedSnippet path="/integral" locale={locale} />
+            <PopularDerivatives locale={locale} id="integral-popular-derivatives" />
             <PracticeGenerator locale={locale} topic="integral" />
 
             <div className="max-w-4xl mx-auto mt-20 prose prose-invert">

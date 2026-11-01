@@ -18,6 +18,7 @@
 import fs from 'fs';
 import path from 'path';
 import { resetStaticProblemsCache } from '@/lib/problems-source';
+import { isSearchEngineCrawler, rateLimitIp } from '@/utils/security';
 
 const ROOT = path.resolve(__dirname, '..');
 
@@ -85,9 +86,11 @@ describe('P1-1: middleware no longer writes path_stats on every request', () => 
         expect(src).not.toMatch(/path-tracker/);
     });
 
-    it('middleware still enforces security (rate limiting + UA block retained)', () => {
+    it('middleware does not rate-limit HTML pages', () => {
         const src = stripComments(fs.readFileSync(path.join(ROOT, 'middleware.ts'), 'utf-8'));
-        expect(src).toMatch(/performSecurityCheck/);
+        expect(src).not.toMatch(/performSecurityCheck/);
+        expect(src).not.toMatch(/rateLimit:\s*30/);
+        expect(src).toMatch(/ABUSE_UA_PATTERNS/);
     });
 });
 
@@ -191,5 +194,27 @@ describe('P1: public problem pages resolve the library before D1', () => {
         expect(libraryIdx).toBeGreaterThan(-1);
         expect(d1Idx).toBeGreaterThan(-1);
         expect(libraryIdx).toBeLessThan(d1Idx);
+    });
+});
+
+describe('rate limit identity', () => {
+    it('keys only on CF-Connecting-IP and never buckets a missing address', () => {
+        const headers = new Headers({
+            'cf-connecting-ip': '203.0.113.8',
+            'x-forwarded-for': '1.1.1.1',
+        });
+        expect(rateLimitIp(headers)).toBe('203.0.113.8');
+        expect(rateLimitIp(new Headers({ 'x-forwarded-for': '1.1.1.1' }))).toBeNull();
+    });
+
+    it('recognises Googlebot and Bingbot', () => {
+        expect(isSearchEngineCrawler('Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)')).toBe(true);
+        expect(isSearchEngineCrawler('Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)')).toBe(true);
+        expect(isSearchEngineCrawler('Mozilla/5.0 Chrome/120.0.0.0 Safari/537.36')).toBe(false);
+    });
+
+    it('does not cap the matrix API at 5 requests a minute', () => {
+        const src = fs.readFileSync(path.join(ROOT, 'app/api/matrix/route.ts'), 'utf8');
+        expect(src).not.toMatch(/rateLimit:\s*5/);
     });
 });

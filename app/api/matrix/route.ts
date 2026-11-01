@@ -75,10 +75,7 @@ function rref(matrix: any): { rrefMatrix: any, rank: number } {
 export async function POST(req: NextRequest) {
     // Unified Security Check (Rate limiting, Bot detection, IP blacklist)
     const { searchParams } = new URL(req.url);
-    const securityResult = await performSecurityCheck(req.headers, searchParams, '/api/matrix', {
-        rateLimit: 5,       // EMERGENCY: Reduced from 10 to 5 requests per minute
-        rateWindow: 60,     // 60 second window
-    });
+    const securityResult = await performSecurityCheck(req.headers, searchParams, '/api/matrix');
 
     if (!securityResult.success) {
         return NextResponse.json(

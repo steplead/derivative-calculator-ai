@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import { GA_MEASUREMENT_ID } from '@/lib/analytics';
 import { isObviousBot } from '@/lib/bot-signal';
 
 type GtagWindow = Window & {
@@ -8,11 +9,11 @@ type GtagWindow = Window & {
   gtag?: (..._args: unknown[]) => void;
 };
 
-const GA_ID = 'G-3WHC12TKH4';
-
 /**
  * Loads GA4 after the page is idle, and skips obvious automation.
- * There is no <link rel="preload"> for gtag.js, so the script is not on the
+ * The gtag shim and the config command run in the same turn as the script
+ * tag so custom events share the destination with derivative_calculate.
+ * There is no link rel="preload" for gtag.js, so the script is not on the
  * LCP path. Real browsers without webdriver still record a page view.
  */
 export default function DeferredAnalytics() {
@@ -30,10 +31,10 @@ export default function DeferredAnalytics() {
         };
       }
       w.gtag('js', new Date());
-      w.gtag('config', GA_ID);
+      w.gtag('config', GA_MEASUREMENT_ID);
       const script = document.createElement('script');
       script.async = true;
-      script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
+      script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
       script.dataset.ga4 = '1';
       document.head.appendChild(script);
     };

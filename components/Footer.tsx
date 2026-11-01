@@ -1,5 +1,6 @@
 
 import Link from 'next/link';
+import PopularDerivatives from '@/components/PopularDerivatives';
 import { localePath, problemHref } from '@/lib/seo';
 
 type WikiTopic = {
@@ -31,6 +32,7 @@ export default function Footer({ wikiTopics, problems, locale }: FooterProps) {
     return (
         <footer className="bg-gray-50 dark:bg-slate-900 border-t border-gray-200 dark:border-slate-800 pt-16 pb-12 mt-20 transition-colors duration-200">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <PopularDerivatives locale={locale} id="footer-popular-derivatives" embedded />
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
                     {/* Brand & Mission */}
                     <div className="space-y-4">

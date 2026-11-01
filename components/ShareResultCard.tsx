@@ -50,25 +50,28 @@ export default function ShareResultCard({ formula, result, url, type, limitTo }:
     const resultLink = `${origin}${resultPath}`;
     const twitterHref = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
 
+    const shareParams = {
+        type,
+        formula_length: formula.length,
+        result_length: (result || '').length,
+    };
+
     const handleCopy = async () => {
+        // Fire on the click. A rejected clipboard write used to swallow the event.
+        trackEvent('share_result_copy', shareParams);
         try {
             if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
                 await navigator.clipboard.writeText(shareText);
                 setCopied(true);
                 window.setTimeout(() => setCopied(false), 2000);
-                // P3-OBS-3: only scalar/derived fields are sent — never the raw formula.
-                trackEvent('share_result_copy', {
-                    type,
-                    formula_length: formula.length,
-                    result_length: (result || '').length,
-                });
             }
         } catch {
-            // clipboard may be blocked (insecure context) — fail silently
+            // clipboard may be blocked (insecure context) — the event already fired
         }
     };
 
     const handleNativeShare = async () => {
+        trackEvent('share_result_native', shareParams);
         try {
             if (typeof navigator !== 'undefined' && navigator.share) {
                 await navigator.share({
@@ -76,14 +79,9 @@ export default function ShareResultCard({ formula, result, url, type, limitTo }:
                     text: shareText,
                     url,
                 });
-                trackEvent('share_result_native', {
-                    type,
-                    formula_length: formula.length,
-                    result_length: (result || '').length,
-                });
             }
         } catch {
-            // user cancelled or share failed — no-op
+            // user cancelled or share failed — the event already fired
         }
     };
 
@@ -101,17 +99,13 @@ export default function ShareResultCard({ formula, result, url, type, limitTo }:
                     <button
                         type="button"
                         onClick={async () => {
+                            trackEvent('share_result_copy', shareParams);
                             try {
                                 await navigator.clipboard.writeText(resultLink);
                                 setCopied(true);
                                 window.setTimeout(() => setCopied(false), 2000);
-                                trackEvent('share_result_copy', {
-                                    type,
-                                    formula_length: formula.length,
-                                    result_length: (result || '').length,
-                                });
                             } catch {
-                                // clipboard may be blocked
+                                // clipboard may be blocked; the event already fired
                             }
                         }}
                         aria-label="Copy share link"
@@ -134,13 +128,7 @@ export default function ShareResultCard({ formula, result, url, type, limitTo }:
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label="Share on X"
-                        onClick={() =>
-                            trackEvent('share_result_x', {
-                                type,
-                                formula_length: formula.length,
-                                result_length: (result || '').length,
-                            })
-                        }
+                        onClick={() => trackEvent('share_result_x', shareParams)}
                         className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 text-sm font-medium hover:opacity-90 transition-opacity"
                     >
                         <Twitter className="w-4 h-4" />

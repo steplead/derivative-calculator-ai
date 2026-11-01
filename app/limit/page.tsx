@@ -2,6 +2,7 @@ import { Suspense } from 'react';
 import { headers } from 'next/headers';
 import Calculator from '@/components/Calculator';
 import EmbedSnippet from '@/components/EmbedSnippet';
+import PopularDerivatives from '@/components/PopularDerivatives';
 import PracticeGenerator from '@/components/PracticeGenerator';
 import { getDictionary } from '../dictionaries';
 import { localeAlternates, normalizeLocale, pageTitle } from '@/lib/seo';
@@ -71,6 +72,7 @@ export default async function LimitPage() {
                 <Calculator mode="limit" dict={dict.calculator} locale={locale} showShare shareUrl={localeAlternates('/limit', locale).canonical} />
             </Suspense>
             <EmbedSnippet path="/limit" locale={locale} />
+            <PopularDerivatives locale={locale} id="limit-popular-derivatives" />
             <PracticeGenerator locale={locale} topic="limit" />
 
             <div className="max-w-4xl mx-auto mt-20 prose prose-invert">

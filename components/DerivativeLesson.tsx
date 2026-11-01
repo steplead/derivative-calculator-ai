@@ -66,6 +66,24 @@ const DerivativeLessonView = ({ lesson, locale }: DerivativeLessonProps) => {
         </ol>
       </section>
 
+      {lesson.example ? (
+        <section aria-labelledby="derivative-example" className="space-y-3">
+          <h2 id="derivative-example" className="text-2xl font-bold text-gray-900 dark:text-white">
+            {lesson.example.heading}
+          </h2>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{lesson.example.title}</h3>
+          <ol className="list-decimal list-inside space-y-2 text-gray-700 dark:text-gray-300">
+            {lesson.example.steps.map((step) => (
+              <li key={step.slice(0, 80)} className="leading-relaxed">{step}</li>
+            ))}
+          </ol>
+          <p className="text-gray-900 dark:text-white">
+            <span className="font-semibold">{loc === 'es' ? 'Respuesta: ' : loc === 'pt' ? 'Resposta: ' : 'Answer: '}</span>
+            {lesson.example.answer}
+          </p>
+        </section>
+      ) : null}
+
       <section aria-labelledby="derivative-mistakes" className="space-y-4">
         <h2 id="derivative-mistakes" className="text-2xl font-bold text-gray-900 dark:text-white">
           {lesson.mistakesHeading}

@@ -13,7 +13,7 @@ import ShareResultCard from './ShareResultCard';
 import AnswerCheck from './AnswerCheck';
 import AskWhyButton from './AskWhyButton';
 import { useTurnstile, addTokenToUrl } from './TurnstileProvider';
-import { trackEvent } from '@/lib/analytics';
+import { calculationEventName, trackEvent } from '@/lib/analytics';
 
 type CalculatorProps = {
     initialEquation?: string;
@@ -144,15 +144,9 @@ export default function Calculator({ initialEquation = '', initialLimitTo = '0',
             setLoading(false); // Stop main loading spinner
 
             // Successful calculation only. The raw formula is never sent.
-            // derivative_calculate is the GA4 key event for the homepage tool.
-            // integral_calculate, limit_calculate, and ode_calculate are the
-            // matching events for the other tools.
-            const eventName =
-                mode === 'integral' ? 'integral_calculate'
-                    : mode === 'limit' ? 'limit_calculate'
-                        : mode === 'ode' ? 'ode_calculate'
-                            : 'derivative_calculate';
-            trackEvent(eventName, {
+            // integral_calculate, limit_calculate, and ode_calculate use the
+            // same trackEvent path as derivative_calculate, including send_to.
+            trackEvent(calculationEventName(mode), {
                 type: mode,
                 mode,
                 formula_length: formula.length,

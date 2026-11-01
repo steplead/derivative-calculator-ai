@@ -12,7 +12,7 @@ import {
     resolveLibraryProblem,
     slugLookupCandidates,
 } from '@/lib/seo';
-import { trackEvent } from '@/lib/analytics';
+import { calculationEventName, GA_MEASUREMENT_ID, trackEvent } from '@/lib/analytics';
 import type { StaticProblem } from '@/lib/problems-source';
 
 describe('plus-free problem URLs', () => {
@@ -78,6 +78,16 @@ describe('GA4 shim', () => {
         trackEvent('derivative_calculate', { mode: 'derivative', formula_length: 3, source: 'client' });
         expect(typeof w.gtag).toBe('function');
         expect(w.dataLayer.length).toBe(1);
+        const queued = w.dataLayer[0] as { 0: string; 1: string; 2: { send_to?: string } };
+        expect(queued[1]).toBe('derivative_calculate');
+        expect(queued[2].send_to).toBe(GA_MEASUREMENT_ID);
+    });
+
+    it('names integral, limit, and ode events the same way as derivative_calculate', () => {
+        expect(calculationEventName('derivative')).toBe('derivative_calculate');
+        expect(calculationEventName('integral')).toBe('integral_calculate');
+        expect(calculationEventName('limit')).toBe('limit_calculate');
+        expect(calculationEventName('ode')).toBe('ode_calculate');
     });
 });
 

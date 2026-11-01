@@ -5,6 +5,7 @@
 
 import { factBySlug } from '@/content/derivative-lesson';
 import { getInverseTrigLesson } from '@/content/inverse-trig-lessons';
+import { strikingLead } from '@/content/striking-lessons';
 import { normalizeLocale } from '@/lib/seo';
 
 export function answerFirstLead(
@@ -12,6 +13,8 @@ export function answerFirstLead(
   locale: string,
   fallback?: { formula?: string; raw?: string | null }
 ): string | null {
+  const custom = strikingLead(slug, locale);
+  if (custom) return custom;
   const loc = normalizeLocale(locale);
   const inverse = getInverseTrigLesson(slug, loc);
   if (inverse) return inverse.formula;

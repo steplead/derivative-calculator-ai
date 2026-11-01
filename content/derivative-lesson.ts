@@ -5,6 +5,7 @@
  */
 
 import factsJson from '@/content/derivative-facts.json';
+import { applyStrikingLesson } from '@/content/striking-lessons';
 import { calculateDerivative } from '@/lib/math/math-core';
 import type { Locale } from '@/lib/seo';
 import { TRIG_CLUSTER_SLUGS, TRIG_HUB_PATH } from '@/lib/trig-cluster';
@@ -101,6 +102,13 @@ const UI = {
 
 export type RelatedLink = { href: string; label: string; note: string };
 
+export type LessonExample = {
+  heading: string;
+  title: string;
+  steps: string[];
+  answer: string;
+};
+
 export type DerivativeLesson = {
   slug: string;
   title: string;
@@ -123,6 +131,7 @@ export type DerivativeLesson = {
   faqs: { question: string; answer: string }[];
   related: RelatedLink[];
   graphDerivative: string | null;
+  example?: LessonExample;
 };
 
 export function allDerivativeFacts(): readonly DerivativeFact[] {
@@ -147,9 +156,13 @@ export function examplesForRule(wikiSlug: string): string[] {
 }
 
 export function lessonPlainText(lesson: DerivativeLesson): string {
+  const example = lesson.example
+    ? `${lesson.example.heading} ${lesson.example.title} ${lesson.example.steps.join(' ')} ${lesson.example.answer}`
+    : '';
   return [
     lesson.paragraphs.join(' '),
     lesson.steps.join(' '),
+    example,
     lesson.mistakes.map((item) => `${item.title} ${item.text}`).join(' '),
     lesson.faqs.map((item) => `${item.question} ${item.answer}`).join(' '),
   ].join(' ');
@@ -220,7 +233,7 @@ export function getDerivativeLesson(slug: string, locale: string): DerivativeLes
         copy.check,
       ];
   const description = copy.angle.length > 155 ? `${copy.angle.slice(0, 152).replace(/\s+\S*$/, '')}.` : copy.angle;
-  return {
+  const lesson: DerivativeLesson = {
     slug: fact.slug,
     title: fact.display,
     description,
@@ -250,4 +263,5 @@ export function getDerivativeLesson(slug: string, locale: string): DerivativeLes
     related: relatedLinks(fact, loc),
     graphDerivative: fact.nondiff ? null : derivativeRaw,
   };
+  return applyStrikingLesson(lesson, loc);
 }

@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { headers } from 'next/headers';
 import type { Metadata } from 'next';
+import PopularDerivatives from '@/components/PopularDerivatives';
 import StructuredData, { generateBreadcrumbData, generateFAQData } from '@/components/StructuredData';
 import { trigHubCopy } from '@/content/trig-hub';
 import {
@@ -130,6 +131,7 @@ export default async function TrigDerivativesPage() {
                     );
                 })}
 
+                <PopularDerivatives locale={locale} id="trig-popular-derivatives" embedded />
                 <section aria-labelledby="trig-hub-faq" className="space-y-5 mb-8">
                     <h2 id="trig-hub-faq" className="text-2xl font-bold text-gray-900 dark:text-white">
                         {copy.faqHeading}

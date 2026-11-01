@@ -26,6 +26,7 @@ export function generateMetadata({ searchParams }: { searchParams: Search }): Me
     title: { absolute: title },
     description: description.slice(0, 160),
     robots: { index: false, follow: false },
+    alternates: { canonical: `${SITE_URL}/result` },
     openGraph: {
       title,
       description: description.slice(0, 160),

@@ -3,6 +3,7 @@ import DynamicRecommendations from '@/components/DynamicRecommendations';
 import HomeGuideSection from '@/components/HomeGuide';
 import PracticeGenerator from '@/components/PracticeGenerator';
 import EmbedSnippet from '@/components/EmbedSnippet';
+import PopularDerivatives from '@/components/PopularDerivatives';
 import StructuredData, { generateFAQData } from '@/components/StructuredData';
 import Link from 'next/link';
 import { Suspense } from 'react';
@@ -125,6 +126,7 @@ export default async function Home() {
       <Suspense fallback={<div className="text-gray-900 dark:text-white text-center">{dict.common.loading}</div>}>
         <Calculator dict={dict.calculator} showShare shareUrl={alternates.canonical} locale={locale} />
       </Suspense>
+      <PopularDerivatives locale={locale} />
       <EmbedSnippet path="/" locale={locale} />
       <PracticeGenerator locale={locale} />
 

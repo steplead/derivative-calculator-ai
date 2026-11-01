@@ -1,4 +1,5 @@
 import Calculator from '@/components/Calculator';
+import PopularDerivatives from '@/components/PopularDerivatives';
 // EmbedWidget removed to prevent API abuse
 import { Suspense } from 'react';
 import { headers } from 'next/headers';
@@ -67,8 +68,15 @@ export default async function ODEPage() {
             </div>
 
             <Suspense fallback={<div className="text-gray-900 dark:text-white text-center">{dict.common.loading}</div>}>
-                <Calculator mode="ode" dict={dict.calculator} />
+                <Calculator
+                    mode="ode"
+                    dict={dict.calculator}
+                    locale={locale}
+                    showShare
+                    shareUrl={localeAlternates('/ode', normalizeLocale(locale)).canonical}
+                />
             </Suspense>
+            <PopularDerivatives locale={locale} id="ode-popular-derivatives" />
 
             <div className="max-w-4xl mx-auto mt-20 prose prose-invert">
                 <div className="grid md:grid-cols-2 gap-12">

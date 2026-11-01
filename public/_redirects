@@ -1,0 +1,3 @@
+# Apex host. Middleware also 301s www HTML; this catches requests before the worker.
+https://www.derivativecalculatorai.com/ https://derivativecalculatorai.com/ 301
+https://www.derivativecalculatorai.com/* https://derivativecalculatorai.com/:splat 301

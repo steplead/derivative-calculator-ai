@@ -27,18 +27,18 @@ const BASE_URL = 'https://derivativecalculatorai.com';
 const LOCALES = ['en', 'es', 'pt'];
 
 const STATIC_PATHS = [
-  { path: '', file: 'app/page.tsx', priority: '1.0' },
-  { path: '/integral', file: 'app/integral/page.tsx', priority: '0.9' },
-  { path: '/limit', file: 'app/limit/page.tsx', priority: '0.9' },
-  { path: '/matrix', file: 'app/matrix/page.tsx', priority: '0.8' },
-  { path: '/ode', file: 'app/ode/page.tsx', priority: '0.8' },
-  { path: '/calculators', file: 'app/calculators/page.tsx', priority: '0.8' },
-  { path: '/wiki', file: 'app/wiki/page.tsx', priority: '0.7' },
-  { path: '/practice', file: 'app/practice/page.tsx', priority: '0.7' },
-  { path: '/derivatives-of-trig-functions', file: 'app/derivatives-of-trig-functions/page.tsx', priority: '0.8' },
-  { path: '/partial-derivative-calculator', file: 'app/partial-derivative-calculator/page.tsx', priority: '0.9' },
-  { path: '/implicit-differentiation-calculator', file: 'app/implicit-differentiation-calculator/page.tsx', priority: '0.9' },
-  { path: '/chain-rule-calculator', file: 'app/chain-rule-calculator/page.tsx', priority: '0.9' },
+  { path: '', file: 'app/(site)/page.tsx', priority: '1.0' },
+  { path: '/integral', file: 'app/(site)/integral/page.tsx', priority: '0.9' },
+  { path: '/limit', file: 'app/(site)/limit/page.tsx', priority: '0.9' },
+  { path: '/matrix', file: 'app/(site)/matrix/page.tsx', priority: '0.8' },
+  { path: '/ode', file: 'app/(site)/ode/page.tsx', priority: '0.8' },
+  { path: '/calculators', file: 'app/(site)/calculators/page.tsx', priority: '0.8' },
+  { path: '/wiki', file: 'app/(site)/wiki/page.tsx', priority: '0.7' },
+  { path: '/practice', file: 'app/(site)/practice/page.tsx', priority: '0.7' },
+  { path: '/derivatives-of-trig-functions', file: 'app/(site)/derivatives-of-trig-functions/page.tsx', priority: '0.8' },
+  { path: '/partial-derivative-calculator', file: 'app/(site)/partial-derivative-calculator/page.tsx', priority: '0.9' },
+  { path: '/implicit-differentiation-calculator', file: 'app/(site)/implicit-differentiation-calculator/page.tsx', priority: '0.9' },
+  { path: '/chain-rule-calculator', file: 'app/(site)/chain-rule-calculator/page.tsx', priority: '0.9' },
   { path: '/symbolab-alternative', file: 'content/comparisons.ts', priority: '0.6' },
   { path: '/derivative-calculator-comparison', file: 'content/comparisons.ts', priority: '0.6' },
 ];
@@ -165,7 +165,7 @@ function generateSitemap() {
     'content/striking-lessons.ts',
     'content/inverse-trig-lessons.ts',
     'content/derivative-lesson.ts',
-    'app/[slug]/page.tsx',
+    'app/(site)/[slug]/page.tsx',
   ]);
   const used = new Set();
   for (const slug of allow) {

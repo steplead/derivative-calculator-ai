@@ -186,7 +186,7 @@ describe('P1-2: problem APIs answer from static without D1', () => {
 describe('P1: public problem pages resolve the library before D1', () => {
     it('the [slug] page consults the library BEFORE its D1 query', () => {
         const src = stripComments(
-            fs.readFileSync(path.join(ROOT, 'app/[slug]/page.tsx'), 'utf-8')
+            fs.readFileSync(path.join(ROOT, 'app/(site)/[slug]/page.tsx'), 'utf-8')
         );
         const body = src.slice(src.indexOf('export default async function ProblemPage'));
         const libraryIdx = body.indexOf('resolveLibraryProblem(library, slug)');

@@ -7,15 +7,15 @@ import * as path from 'path';
 import { HOME_DESCRIPTIONS, PAGE_TITLES, keywordTitle } from '@/lib/seo';
 
 const PAGES: Array<[string, string]> = [
-  ['app/integral/page.tsx', 'generateMetadata'],
-  ['app/limit/page.tsx', 'generateMetadata'],
-  ['app/ode/page.tsx', 'generateMetadata'],
-  ['app/matrix/page.tsx', 'generateMetadata'],
-  ['app/calculators/page.tsx', 'generateMetadata'],
-  ['app/directory/page.tsx', 'generateMetadata'],
-  ['app/problems/page.tsx', 'generateMetadata'],
-  ['app/wiki/page.tsx', 'generateMetadata'],
-  ['app/[slug]/page.tsx', 'generateMetadata'],
+  ['app/(site)/integral/page.tsx', 'generateMetadata'],
+  ['app/(site)/limit/page.tsx', 'generateMetadata'],
+  ['app/(site)/ode/page.tsx', 'generateMetadata'],
+  ['app/(site)/matrix/page.tsx', 'generateMetadata'],
+  ['app/(site)/calculators/page.tsx', 'generateMetadata'],
+  ['app/(site)/directory/page.tsx', 'generateMetadata'],
+  ['app/(site)/problems/page.tsx', 'generateMetadata'],
+  ['app/(site)/wiki/page.tsx', 'generateMetadata'],
+  ['app/(site)/[slug]/page.tsx', 'generateMetadata'],
 ];
 
 describe('A5: Title brand duplication regression', () => {

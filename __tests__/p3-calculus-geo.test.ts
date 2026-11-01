@@ -71,7 +71,7 @@ describe('answer-first derivative leads', () => {
     expect(sin2).toContain('2*cos(2*x)');
     const es = answerFirstLead('derivative-of-sin-2x', 'es')!;
     expect(es).not.toBe(sin2);
-    const page = fs.readFileSync(path.join(ROOT, 'app/[slug]/page.tsx'), 'utf8');
+    const page = fs.readFileSync(path.join(ROOT, 'app/(site)/[slug]/page.tsx'), 'utf8');
     const marker = page.indexOf('const answerLead');
     expect(page.indexOf('{answerLead ?', marker)).toBeGreaterThan(marker);
     expect(page.indexOf('{answerLead ?', marker)).toBeLessThan(page.indexOf('t.howToText', marker));
@@ -90,18 +90,22 @@ describe('homepage positioning and 404 robots', () => {
     expect(homeGuide.en.positioning).toMatch(/no sign-up/i);
     expect(homeGuide.en.positioning).toMatch(/computer-algebra/i);
     expect(homeGuide.en.positioning).toMatch(/step-by-step/i);
+    const shell = fs.readFileSync(path.join(ROOT, 'components/DocumentShell.tsx'), 'utf8');
     const layout = fs.readFileSync(path.join(ROOT, 'app/layout.tsx'), 'utf8');
     // Self-hosted via next/font (swap). Page views use the afterInteractive
     // gtag snippet, not an idle-only client effect.
-    expect(layout).toMatch(/next\/font\/google/);
-    expect(layout).toMatch(/display:\s*'swap'/);
+    expect(shell).toMatch(/next\/font\/google/);
+    expect(shell).toMatch(/display:\s*'swap'/);
     expect(layout).toMatch(/strategy="afterInteractive"/);
     expect(layout).toContain('https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}');
     expect(layout).toContain("gtag('config','${GA_MEASUREMENT_ID}')");
     expect(fs.readFileSync(path.join(ROOT, 'lib/analytics.ts'), 'utf8')).toContain('G-3WHC12TKH4');
+    expect(shell).not.toMatch(/GoogleAnalytics/);
+    expect(shell).not.toContain('DeferredAnalytics');
     expect(layout).not.toMatch(/GoogleAnalytics/);
     expect(layout).not.toContain('DeferredAnalytics');
     expect(layout).not.toMatch(/index:\s*true/);
+    expect(layout).not.toMatch(/runtime = 'edge'/);
     const notFound = fs.readFileSync(path.join(ROOT, 'app/not-found.tsx'), 'utf8');
     expect(notFound).toMatch(/index:\s*false/);
   });

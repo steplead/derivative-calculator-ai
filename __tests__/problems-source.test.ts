@@ -31,11 +31,11 @@ function stripComments(src: string): string {
 }
 
 const PAGE_FILES = [
-    'app/[slug]/page.tsx',
-    'app/page.tsx',
-    'app/problems/page.tsx',
-    'app/problems/[type]/page.tsx',
-    'app/directory/page.tsx',
+    'app/(site)/[slug]/page.tsx',
+    'app/(site)/page.tsx',
+    'app/(site)/problems/page.tsx',
+    'app/(site)/problems/[type]/page.tsx',
+    'app/(site)/directory/page.tsx',
 ];
 
 describe('RC-8: no force-cache/revalidate fetch of /problems.json', () => {
@@ -203,7 +203,7 @@ describe('P2-G: derivative near-duplicate canonical map', () => {
 });
 
 describe('P2-G follow-up: derivative dup-group slugs unlocked from NOINDEX_SLUGS', () => {
-    // Production wiring (app/[slug]/page.tsx generateMetadata) lifts noindex for
+    // Production wiring (app/(site)/[slug]/page.tsx generateMetadata) lifts noindex for
     // any slug that participates in a derivative near-duplicate group, deriving
     // the unlock set from getDerivativeCanonicalMap (keys ∪ values). These guards
     // pin the contract so a future regeneration of lib/noindex-slugs.ts from

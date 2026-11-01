@@ -1,0 +1,26 @@
+[
+  {
+    "slug": "derivative-of-x-squared",
+    "formula": "x^2"
+  },
+  {
+    "slug": "derivative-of-sin-x",
+    "formula": "sin(x)"
+  },
+  {
+    "slug": "derivative-of-cos-x",
+    "formula": "cos(x)"
+  },
+  {
+    "slug": "derivative-of-tan-x",
+    "formula": "tan(x)"
+  },
+  {
+    "slug": "derivative-of-ln-x",
+    "formula": "ln(x)"
+  },
+  {
+    "slug": "derivative-of-e-to-the-x",
+    "formula": "e^x"
+  }
+]

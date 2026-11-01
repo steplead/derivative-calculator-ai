@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import { headers } from 'next/headers';
 import Calculator from '@/components/Calculator';
+import AdShell from '@/components/AdShell';
 import EmbedSnippet from '@/components/EmbedSnippet';
 import PopularDerivatives from '@/components/PopularDerivatives';
 import PracticeGenerator from '@/components/PracticeGenerator';
@@ -75,7 +76,7 @@ export default async function LimitPage() {
             <PopularDerivatives locale={locale} id="limit-popular-derivatives" />
             <PracticeGenerator locale={locale} topic="limit" />
 
-            <div className="max-w-4xl mx-auto mt-20 prose prose-invert">
+            <div className="mt-16">
                 <div className="grid md:grid-cols-2 gap-12">
                     <div>
                         <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">{dict.limit.howToTitle}</h2>
@@ -89,6 +90,9 @@ export default async function LimitPage() {
                         </ul>
                     </div>
                 </div>
+            </div>
+            <div className="mt-16">
+                <AdShell type="donation" />
             </div>
         </div>
     );

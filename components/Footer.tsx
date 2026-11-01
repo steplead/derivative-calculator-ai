@@ -1,5 +1,6 @@
 
 import Link from 'next/link';
+import LogoMark from '@/components/LogoMark';
 import PopularDerivatives from '@/components/PopularDerivatives';
 import { localePath, problemHref } from '@/lib/seo';
 
@@ -30,16 +31,19 @@ export default function Footer({ wikiTopics, problems, locale }: FooterProps) {
     const baseUrl = locale === 'en' ? '' : `/${locale}`;
 
     return (
-        <footer className="bg-gray-50 dark:bg-slate-900 border-t border-gray-200 dark:border-slate-800 pt-16 pb-12 mt-20 transition-colors duration-200">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <footer className="bg-paper border-t border-line pt-16 pb-12 mt-16">
+            <div className="max-w-[760px] mx-auto px-4">
                 <PopularDerivatives locale={locale} id="footer-popular-derivatives" embedded />
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
                     {/* Brand & Mission */}
                     <div className="space-y-4">
-                        <h3 className="text-xl font-bold text-gray-900 dark:text-white">
-                            Derivative<span className="text-blue-600">Calculator</span> AI
-                        </h3>
-                        <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                        <div className="flex items-center gap-3">
+                            <LogoMark className="h-8 w-8 text-primary" />
+                            <h3 className="text-xl font-semibold text-ink">
+                                Derivative<span className="text-primary">Calculator</span> AI
+                            </h3>
+                        </div>
+                        <p className="text-muted text-sm leading-relaxed">
                             Empowering students and professionals with AI-driven calculus solutions.
                             Step-by-step guidance for derivatives, integrals, and more.
                         </p>

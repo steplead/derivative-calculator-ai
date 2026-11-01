@@ -41,6 +41,8 @@ import { TRIG_CLUSTER_SLUGS } from '@/lib/trig-cluster';
 const INDEXABLE_PROBLEM_SLUGS = new Set<string>(indexableProblemSlugs);
 import { parseSlugToMath } from '@/lib/slug-math';
 import Link from 'next/link';
+import SolutionCard from '@/components/SolutionCard';
+import AdShell from '@/components/AdShell';
 
 // Define the type for our problem data.
 // `title` is optional because raw library rows are not guaranteed to carry one;
@@ -413,7 +415,7 @@ export default async function ProblemPage({ params }: { params: { slug: string }
         const initialResult = ssrSolution ? {
             solution: ssrSolution.solutionLatex,
             solution_raw: ssrSolution.solutionRaw,
-            steps: ssrSolution.steps.map((s, i) => `**Step ${i + 1}:** ${s}`).join('\n\n'),
+            steps: ssrSolution.steps,
             ai_explanation: ssrSolution.rule ? `Rule used: ${ssrSolution.rule}.` : 'Deterministic step-by-step solution.',
             rule: ssrSolution.rule,
             _ssr: true,
@@ -444,8 +446,8 @@ export default async function ProblemPage({ params }: { params: { slug: string }
         return (
             <>
                 <StructuredData data={mathSolverSchema} />
-                <div className="py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-200">
-                <div className="max-w-4xl mx-auto">
+                <div className="py-12">
+                <div>
                     <Breadcrumbs
                         items={[
                             { name: 'Home', href: '/' },
@@ -455,17 +457,27 @@ export default async function ProblemPage({ params }: { params: { slug: string }
                         ]}
                     />
                 </div>
-                <div className="max-w-4xl mx-auto text-center mb-12 mt-8">
-                    <h1 id={safeProblem.slug} className="text-4xl sm:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-4">
+                <div className="text-center mb-8 mt-8">
+                    <h1 id={safeProblem.slug} className="text-4xl font-semibold text-ink tracking-tight mb-4">
                         {pageH1}
                     </h1>
+                    {ssrSolution ? (
+                        <SolutionCard
+                            formula={safeProblem.formula}
+                            type={safeProblem.type}
+                            solutionRaw={ssrSolution.solutionRaw}
+                            solutionLatex={ssrSolution.solutionLatex}
+                            rule={ssrSolution.rule}
+                            steps={ssrSolution.steps}
+                        />
+                    ) : null}
                     {answerLead ? (
-                        <p className="text-lg text-gray-800 dark:text-gray-100 leading-relaxed text-left sm:text-center">
+                        <p className="mt-8 text-lg text-ink leading-relaxed text-left">
                             {answerLead}
                         </p>
                     ) : null}
-                    <p className="mt-4 text-xl text-gray-600 dark:text-gray-400">
-                        {t.subtitle} <code className="bg-gray-100 dark:bg-slate-800 px-2 py-1 rounded text-gray-800 dark:text-gray-200">{safeProblem.formula}</code>
+                    <p className="mt-4 text-xl text-muted">
+                        {t.subtitle} <code className="bg-chip px-2 py-1 rounded text-ink">{safeProblem.formula}</code>
                     </p>
 
                     {/* B4: lightweight tags/difficulty badges. Server-rendered,
@@ -494,7 +506,7 @@ export default async function ProblemPage({ params }: { params: { slug: string }
                     )}
                 </div>
 
-                <Suspense fallback={<div className="text-gray-900 dark:text-white text-center">Loading Calculator...</div>}>
+                <Suspense fallback={<div className="text-ink text-center mt-8">Loading Calculator...</div>}>
                     <Calculator
                         initialEquation={safeProblem.formula}
                         initialLimitTo={safeProblem.limitTo}
@@ -502,43 +514,9 @@ export default async function ProblemPage({ params }: { params: { slug: string }
                         initialResult={initialResult}
                         locale={locale}
                         deferGraph={safeProblem.type === 'derivative' || !safeProblem.type}
+                        showInitialResult={false}
                     />
                 </Suspense>
-
-                {/* RC-1 FIX: deterministic answer block rendered in initial HTML.
-                    Gives Googlebot real math content without JS execution. */}
-                {ssrSolution && (
-                    <section
-                        className="max-w-4xl mx-auto mt-8 p-6 bg-gray-50 dark:bg-slate-800 rounded-2xl border border-gray-200 dark:border-slate-700"
-                        aria-label="Solution"
-                    >
-                        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
-                            {safeProblem.type === 'integral' ? 'Integral' : 'Derivative'} of {safeProblem.formula}
-                        </h2>
-                        <dl className="space-y-4">
-                            <div>
-                                <dt className="text-sm font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wide">Answer</dt>
-                                <dd className="mt-1 text-2xl text-gray-900 dark:text-white font-math">
-                                    {ssrSolution.solutionRaw}
-                                </dd>
-                            </div>
-                            <div>
-                                <dt className="text-sm font-semibold text-purple-600 dark:text-purple-400 uppercase tracking-wide">Rule Used</dt>
-                                <dd className="mt-1 text-gray-700 dark:text-gray-300">{ssrSolution.rule}</dd>
-                            </div>
-                            <div>
-                                <dt className="text-sm font-semibold text-green-600 dark:text-green-400 uppercase tracking-wide">Steps</dt>
-                                <dd className="mt-1">
-                                    <ol className="list-decimal list-inside space-y-1 text-gray-700 dark:text-gray-300">
-                                        {ssrSolution.steps.map((s, i) => (
-                                            <li key={i}>{s}</li>
-                                        ))}
-                                    </ol>
-                                </dd>
-                            </div>
-                        </dl>
-                    </section>
-                )}
 
                 {/* P3-P2-3: lightweight share-your-result card. Purely front-end;
                     does not alter SSR math content or the canonical/noindex strategy.
@@ -552,9 +530,9 @@ export default async function ProblemPage({ params }: { params: { slug: string }
                 />
 
                 {!pageLesson && !indexLesson ? (
-                    <div className="max-w-2xl mx-auto mt-12 prose prose-invert">
-                        <h3 className="text-gray-900 dark:text-white font-bold text-xl mb-2">{t.howToTitle}</h3>
-                        <p className="text-gray-600 dark:text-gray-400" dangerouslySetInnerHTML={{ __html: t.howToText }} />
+                    <div className="mt-12">
+                        <h3 className="text-ink font-semibold text-xl mb-2">{t.howToTitle}</h3>
+                        <p className="text-muted" dangerouslySetInnerHTML={{ __html: t.howToText }} />
                     </div>
                 ) : null}
 
@@ -582,11 +560,11 @@ export default async function ProblemPage({ params }: { params: { slug: string }
                 ) : null}
 
                 {/* Related Problems */}
-                <div className="max-w-4xl mx-auto mt-16 pt-8 border-t border-gray-200 dark:border-slate-800">
-                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white text-center mb-6">
+                <div className="mt-16 pt-8 border-t border-line">
+                    <h2 className="text-2xl font-semibold text-ink text-center mb-6">
                         {t.practiceTitle}
                     </h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         {relatedProblems.map((p) => {
                             const pSafeFormula = p.formula || "";
                             const pSafeType = p.type || 'derivative';
@@ -595,18 +573,21 @@ export default async function ProblemPage({ params }: { params: { slug: string }
                                 <a
                                     key={p.slug}
                                     href={problemHref(p.slug, locale)}
-                                    className="block p-4 rounded-lg border border-gray-200 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-400 transition-colors bg-gray-50 dark:bg-slate-800"
+                                    className="surface-link text-left no-underline min-h-12"
                                 >
-                                    <div className="font-semibold text-gray-900 dark:text-white">
+                                    <div className="font-semibold text-ink">
                                         {pT.title}
                                     </div>
-                                    <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                                    <div className="text-sm text-muted mt-1">
                                         {t.solvePrefix} {pSafeFormula}
                                     </div>
                                 </a>
                             );
                         })}
                     </div>
+                </div>
+                <div className="mt-16">
+                    <AdShell type="donation" />
                 </div>
             </div>
             </>

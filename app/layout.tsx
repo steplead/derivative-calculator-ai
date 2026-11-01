@@ -1,4 +1,7 @@
 import type { Metadata } from 'next';
+import { Inter, JetBrains_Mono } from 'next/font/google';
+import Script from 'next/script';
+import 'katex/dist/katex.min.css';
 import './globals.css';
 import Navbar from "@/components/Navbar";
 import { getDictionary } from "./dictionaries";
@@ -8,6 +11,20 @@ import { headers } from 'next/headers';
 import { loadStaticProblemsSafe } from '@/lib/problems-source';
 import { TurnstileProvider } from "@/components/TurnstileProvider";
 import wikiData from '@/data/wiki.json';
+
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
+});
+
+const jetbrains = JetBrains_Mono({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-jetbrains',
+});
+
+const themeBoot = `(function(){try{var t=localStorage.getItem('theme');var d=t==='dark'||(t!=='light'&&window.matchMedia('(prefers-color-scheme: dark)').matches);var r=document.documentElement;if(d){r.classList.add('dark');r.classList.remove('light');}else{r.classList.add('light');r.classList.remove('dark');}}catch(e){}})();`;
 
 export const runtime = 'edge';
 
@@ -20,6 +37,13 @@ export const metadata: Metadata = {
   },
   description: 'AI-powered mathematical toolkit with step-by-step solutions for derivatives, integrals, limits, and matrices using DeepSeek R1/V3.',
   manifest: '/manifest.json',
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: '48x48' },
+      { url: '/icon.svg', type: 'image/svg+xml' },
+    ],
+    apple: [{ url: '/apple-touch-icon.png', sizes: '180x180' }],
+  },
   openGraph: {
     title: 'Derivative Calculator AI',
     description: 'The world\'s most advanced AI-first mathematical toolkit for engineers and students.',
@@ -65,11 +89,12 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang={locale} className="bg-white dark:bg-[#0a0a0a]">
-      <body className="min-h-screen bg-white dark:bg-[#0a0a0a] text-gray-900 dark:text-gray-100 flex flex-col">
+    <html lang={locale} className={`${inter.variable} ${jetbrains.variable}`} suppressHydrationWarning>
+      <body className="min-h-screen bg-paper text-ink flex flex-col font-sans antialiased">
+        <Script id="theme-boot" strategy="beforeInteractive">{themeBoot}</Script>
         <TurnstileProvider>
           <Navbar dict={dict} />
-          <main className="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <main className="flex-grow w-full max-w-[760px] mx-auto px-4">
             {children}
           </main>
           <Footer wikiTopics={wikiTopics} problems={popularProblems} locale={locale} />

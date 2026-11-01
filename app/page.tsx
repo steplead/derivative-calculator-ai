@@ -1,4 +1,5 @@
 import Calculator from '@/components/Calculator';
+import AdShell from '@/components/AdShell';
 import DynamicRecommendations from '@/components/DynamicRecommendations';
 import HomeGuideSection from '@/components/HomeGuide';
 import PracticeGenerator from '@/components/PracticeGenerator';
@@ -99,78 +100,87 @@ export default async function Home() {
   };
 
   return (
-    <div className="py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-200">
+    <div className="py-12">
       <StructuredData data={webAppSchema} />
       <StructuredData data={generateFAQData(guide.faqs)} />
-      <div className="max-w-4xl mx-auto text-center mb-12 mt-10">
-        <h1 id={locale === 'en' ? 'derivative-calculator' : 'calculadora-de-derivadas'} className="text-4xl sm:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-4">
+      <div className="text-center mb-8">
+        <h1 id={locale === 'en' ? 'derivative-calculator' : 'calculadora-de-derivadas'} className="text-4xl font-semibold text-ink tracking-tight mb-4">
           {dict.home.h1}
         </h1>
-        <p className="text-xl text-gray-600 dark:text-gray-400">
+        <p className="text-lg text-muted">
           {dict.home.subtitle}
-        </p>
-        <p className="mt-4 text-base text-gray-700 dark:text-gray-300 leading-relaxed max-w-3xl mx-auto">
-          {guide.positioning}
-        </p>
-        <p className="mt-3 text-sm text-gray-600 dark:text-gray-400">
-          <Link href={localePath('/derivative-calculator-comparison', locale)} className="font-semibold text-blue-600 dark:text-blue-400 hover:underline">
-            {locale === 'es' ? 'Comparación de calculadoras' : locale === 'pt' ? 'Comparação de calculadoras' : 'Calculator comparison'}
-          </Link>
-          <span> · </span>
-          <Link href={localePath('/symbolab-alternative', locale)} className="font-semibold text-blue-600 dark:text-blue-400 hover:underline">
-            {locale === 'es' ? 'Alternativa a Symbolab' : locale === 'pt' ? 'Alternativa ao Symbolab' : 'Symbolab alternative'}
-          </Link>
         </p>
       </div>
 
-      <Suspense fallback={<div className="text-gray-900 dark:text-white text-center">{dict.common.loading}</div>}>
-        <Calculator dict={dict.calculator} showShare shareUrl={alternates.canonical} locale={locale} />
+      <Suspense fallback={<div className="text-ink text-center">{dict.common.loading}</div>}>
+        <Calculator
+          dict={dict.calculator}
+          showShare
+          shareUrl={alternates.canonical}
+          locale={locale}
+          examples={['x^2', 'sin(x)', 'ln(x)', 'e^x', 'tan(x)']}
+        />
       </Suspense>
       <PopularDerivatives locale={locale} />
+      <p className="mt-12 text-base text-ink leading-relaxed">
+        {guide.positioning}
+      </p>
+      <p className="mt-4 text-sm text-muted">
+        <Link href={localePath('/derivative-calculator-comparison', locale)} className="link hover:underline">
+          {locale === 'es' ? 'Comparación de calculadoras' : locale === 'pt' ? 'Comparação de calculadoras' : 'Calculator comparison'}
+        </Link>
+        <span> · </span>
+        <Link href={localePath('/symbolab-alternative', locale)} className="link hover:underline">
+          {locale === 'es' ? 'Alternativa a Symbolab' : locale === 'pt' ? 'Alternativa ao Symbolab' : 'Symbolab alternative'}
+        </Link>
+      </p>
+      <div className="mt-12">
+        <AdShell type="donation" />
+      </div>
       <EmbedSnippet path="/" locale={locale} />
       <PracticeGenerator locale={locale} />
 
       {/* Quick Links Section - Protocol 2 Compliance */}
-      <div className="max-w-4xl mx-auto mt-8 flex justify-center gap-4">
-        <Link href="/problems" className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl transform hover:scale-105">
+      <div className="mt-12 flex flex-col sm:flex-row justify-center gap-4">
+        <Link href="/problems" className="solve-btn inline-flex items-center justify-center">
           <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
           </svg>
           Browse All Problems
         </Link>
-        <Link href="/directory" className="inline-flex items-center px-6 py-3 bg-gray-100 dark:bg-slate-800 text-gray-900 dark:text-white font-semibold rounded-lg hover:bg-gray-200 dark:hover:bg-slate-700 transition-all border border-gray-300 dark:border-slate-600">
+        <Link href="/directory" className="copy-btn inline-flex items-center justify-center font-semibold">
           View Directory
         </Link>
       </div>
 
-      <div className="max-w-4xl mx-auto mt-20 prose prose-invert">
+      <div className="mt-16">
         <div className="grid md:grid-cols-2 gap-12">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">{dict.home.howToTitle}</h2>
-            <p className="text-gray-600 dark:text-gray-400 mb-4">
+            <h2 className="text-2xl font-semibold text-ink mb-4">{dict.home.howToTitle}</h2>
+            <p className="text-muted mb-4">
               {dict.home.howToText}
             </p>
-            <ul className="list-disc pl-5 text-gray-600 dark:text-gray-400 space-y-2">
-              <li>Supports polynomials (e.g., <code className="bg-gray-100 dark:bg-slate-800 px-1 rounded text-gray-800 dark:text-gray-200">x^2 + 3x</code>)</li>
-              <li>Trigonometric functions (e.g., <code className="bg-gray-100 dark:bg-slate-800 px-1 rounded text-gray-800 dark:text-gray-200">sin(x)</code>, <code className="bg-gray-100 dark:bg-slate-800 px-1 rounded text-gray-800 dark:text-gray-200">tan(x)</code>)</li>
-              <li>Logarithmic & Exponential functions (e.g., <code className="bg-gray-100 dark:bg-slate-800 px-1 rounded text-gray-800 dark:text-gray-200">ln(x)</code>, <code className="bg-gray-100 dark:bg-slate-800 px-1 rounded text-gray-800 dark:text-gray-200">e^x</code>)</li>
+            <ul className="list-disc pl-5 text-muted space-y-2">
+              <li>Supports polynomials (e.g., <code className="bg-chip px-1 rounded text-ink">x^2 + 3x</code>)</li>
+              <li>Trigonometric functions (e.g., <code className="bg-chip px-1 rounded text-ink">sin(x)</code>, <code className="bg-chip px-1 rounded text-ink">tan(x)</code>)</li>
+              <li>Logarithmic & Exponential functions (e.g., <code className="bg-chip px-1 rounded text-ink">ln(x)</code>, <code className="bg-chip px-1 rounded text-ink">e^x</code>)</li>
             </ul>
           </div>
 
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">{dict.home.rulesTitle}</h2>
+            <h2 className="text-2xl font-semibold text-ink mb-4">{dict.home.rulesTitle}</h2>
             <div className="space-y-4">
-              <Link href="/wiki/power-rule" className="block bg-gray-100 dark:bg-slate-800 p-4 rounded-lg hover:ring-2 hover:ring-blue-500 transition-all no-underline group">
-                <h3 className="font-semibold text-blue-600 dark:text-blue-400 group-hover:text-blue-700">{dict.home.rules.power.title}</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{dict.home.rules.power.text}</p>
+              <Link href="/wiki/power-rule" className="surface-link text-left no-underline">
+                <h3 className="font-semibold text-primary">{dict.home.rules.power.title}</h3>
+                <p className="text-sm text-muted mt-1">{dict.home.rules.power.text}</p>
               </Link>
-              <Link href="/wiki/product-rule" className="block bg-gray-100 dark:bg-slate-800 p-4 rounded-lg hover:ring-2 hover:ring-purple-500 transition-all no-underline group">
-                <h3 className="font-semibold text-purple-600 dark:text-purple-400 group-hover:text-purple-700">{dict.home.rules.product.title}</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{dict.home.rules.product.text}</p>
+              <Link href="/wiki/product-rule" className="surface-link text-left no-underline">
+                <h3 className="font-semibold text-primary">{dict.home.rules.product.title}</h3>
+                <p className="text-sm text-muted mt-1">{dict.home.rules.product.text}</p>
               </Link>
-              <Link href="/wiki/chain-rule" className="block bg-gray-100 dark:bg-slate-800 p-4 rounded-lg hover:ring-2 hover:ring-green-500 transition-all no-underline group">
-                <h3 className="font-semibold text-green-600 dark:text-green-400 group-hover:text-green-700">{dict.home.rules.chain.title}</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{dict.home.rules.chain.text}</p>
+              <Link href="/wiki/chain-rule" className="surface-link text-left no-underline">
+                <h3 className="font-semibold text-primary">{dict.home.rules.chain.title}</h3>
+                <p className="text-sm text-muted mt-1">{dict.home.rules.chain.text}</p>
               </Link>
             </div>
           </div>
@@ -178,13 +188,13 @@ export default async function Home() {
 
         {/* Popular Calculations Section */}
         <div className="mt-20">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-8 text-center">{dict.home.popularTitle}</h2>
+          <h2 className="text-2xl font-semibold text-ink mb-8 text-center">{dict.home.popularTitle}</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {popularProblems.map((problem: any) => (
               <Link
                 key={problem.slug}
                 href={problemHref(problem.slug, locale)}
-                className="bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 p-3 rounded-lg text-sm text-blue-600 dark:text-blue-300 hover:text-blue-800 dark:hover:text-blue-200 transition-colors text-center block no-underline"
+                className="surface-link text-sm no-underline"
               >
                 {locale === 'en' ? `Derivative of ${problem.formula}` :
                   locale === 'es' ? `Derivada de ${problem.formula}` :
@@ -193,7 +203,7 @@ export default async function Home() {
             ))}
           </div>
           <div className="mt-8 text-center">
-            <Link href="/directory" className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-full transition-colors no-underline">
+            <Link href="/directory" className="solve-btn inline-flex items-center no-underline">
               {dict.home.viewAll} &rarr;
             </Link>
           </div>
@@ -212,7 +222,7 @@ export default async function Home() {
             Goal: let Google discover low-competition inner pages from the homepage. */}
         <div className="mt-16 space-y-12">
           <section aria-labelledby="gsc-popular">
-            <h2 id="gsc-popular" className="text-2xl font-bold text-gray-900 dark:text-white mb-6 text-center">Popular derivative problems</h2>
+            <h2 id="gsc-popular" className="text-2xl font-semibold text-ink mb-6 text-center">Popular derivative problems</h2>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {[
                 { slug: 'derivative-of-x-squared', label: 'Derivative of x^2' },
@@ -225,7 +235,7 @@ export default async function Home() {
                 <Link
                   key={item.slug}
                   href={problemHref(item.slug, locale)}
-                  className="bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 p-3 rounded-lg text-sm text-blue-600 dark:text-blue-300 hover:text-blue-800 dark:hover:text-blue-200 transition-colors text-center block no-underline"
+                  className="surface-link text-sm no-underline"
                 >
                   {item.label}
                 </Link>
@@ -234,7 +244,7 @@ export default async function Home() {
           </section>
 
           <section aria-labelledby="gsc-practice">
-            <h2 id="gsc-practice" className="text-2xl font-bold text-gray-900 dark:text-white mb-6 text-center">Practice paths</h2>
+            <h2 id="gsc-practice" className="text-2xl font-semibold text-ink mb-6 text-center">Practice paths</h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[
                 { label: 'All practice levels', href: '/practice' },
@@ -245,7 +255,7 @@ export default async function Home() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 p-3 rounded-lg text-sm text-blue-600 dark:text-blue-300 hover:text-blue-800 dark:hover:text-blue-200 transition-colors text-center block no-underline"
+                  className="surface-link text-sm no-underline"
                 >
                   {item.label}
                 </Link>
@@ -254,7 +264,7 @@ export default async function Home() {
           </section>
 
           <section aria-labelledby="gsc-topics">
-            <h2 id="gsc-topics" className="text-2xl font-bold text-gray-900 dark:text-white mb-6 text-center">Explore by topic</h2>
+            <h2 id="gsc-topics" className="text-2xl font-semibold text-ink mb-6 text-center">Explore by topic</h2>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {[
                 { label: 'Polynomial', href: '/problems/tag/polynomial' },
@@ -267,7 +277,7 @@ export default async function Home() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 p-3 rounded-lg text-sm text-blue-600 dark:text-blue-300 hover:text-blue-800 dark:hover:text-blue-200 transition-colors text-center block no-underline"
+                  className="surface-link text-sm no-underline"
                 >
                   {item.label}
                 </Link>

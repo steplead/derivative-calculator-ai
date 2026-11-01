@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { performSecurityCheck } from '@/utils/security';
 import { chainBreakdown } from '@/lib/math/advanced';
+import { requestWithBodyQuery } from '@/lib/api-method';
 
 export const runtime = 'edge';
 
@@ -36,4 +37,8 @@ export async function GET(req: NextRequest) {
     const message = error instanceof Error ? error.message : 'Could not apply the chain rule.';
     return NextResponse.json({ error: message }, { status: 400, headers: PRIVATE });
   }
+}
+
+export async function POST(req: NextRequest) {
+  return GET(await requestWithBodyQuery(req));
 }

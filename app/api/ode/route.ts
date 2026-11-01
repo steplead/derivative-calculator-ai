@@ -5,14 +5,16 @@ import 'nerdamer/Calculus';
 import { OpenAI } from 'openai';
 import { getCachedExplanation, setCachedExplanation } from '@/utils/cache';
 import { performSecurityCheck } from '@/utils/security';
+import { requestWithBodyQuery } from '@/lib/api-method';
 
 export const runtime = 'edge';
 
 export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const equation = searchParams.get('equation');
-    // AI explanation enabled when an API key is configured (see derivative route for rationale).
-    const includeAi = !!process.env.OPENROUTER_API_KEY;
+    // includeAi=false is the fast path. Do not block the button on OpenRouter.
+    const includeAiParam = searchParams.get('includeAi') ?? searchParams.get('include_ai');
+    const includeAi = includeAiParam === 'false' ? false : !!process.env.OPENROUTER_API_KEY;
 
     if (!equation) {
         return NextResponse.json({ error: "No equation provided" }, { status: 400, headers: { 'Cache-Control': 'no-store' } });
@@ -140,4 +142,8 @@ export async function GET(req: NextRequest) {
     } catch (e: any) {
         return NextResponse.json({ error: `Calculation error: ${e.message}` }, { status: 500, headers: { 'Cache-Control': 'no-store' } });
     }
+}
+
+export async function POST(req: NextRequest) {
+    return GET(await requestWithBodyQuery(req));
 }

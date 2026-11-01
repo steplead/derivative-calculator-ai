@@ -6,6 +6,7 @@ import AnswerCheck from '@/components/AnswerCheck';
 import AskWhyButton from '@/components/AskWhyButton';
 import MathKeyStrip from '@/components/MathKeyStrip';
 import { parseSteps, renderMathAndText } from '@/lib/steps/format-steps';
+import { errorFromResponse, fetchWithTimeout } from '@/lib/fetch-timeout';
 
 const MathDisplay = dynamic(() => import('./MathDisplay'), { ssr: false });
 
@@ -59,15 +60,15 @@ export default function AdvancedCalculator({ mode, locale, initialEquation }: Ad
     try {
       const params = new URLSearchParams({ equation });
       if (mode === 'partial') params.set('variable', variable);
-      const response = await fetch(`/api/${mode === 'partial' ? 'partial' : mode === 'implicit' ? 'implicit' : 'chain'}?${params}`);
-      const data = await response.json();
+      const response = await fetchWithTimeout(`/api/${mode === 'partial' ? 'partial' : mode === 'implicit' ? 'implicit' : 'chain'}?${params}`, { method: 'GET' });
       if (!response.ok) {
-        setError(data.error || 'Error');
+        setError(await errorFromResponse(response));
         return;
       }
+      const data = await response.json();
       setResult(data);
-    } catch {
-      setError('Error');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Error');
     } finally {
       setLoading(false);
     }

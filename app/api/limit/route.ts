@@ -3,6 +3,7 @@ import { OpenAI } from 'openai';
 import { getCachedExplanation, setCachedExplanation } from '@/utils/cache';
 import { performSecurityCheck } from '@/utils/security';
 import { calculateLimit } from '@/lib/math/integral-limit';
+import { requestWithBodyQuery } from '@/lib/api-method';
 
 export const runtime = 'edge';
 
@@ -134,4 +135,8 @@ export async function GET(req: NextRequest) {
     } catch (e: any) {
         return NextResponse.json({ error: `Calculation error: ${e.message}` }, { status: 500, headers: { 'Cache-Control': 'no-store' } });
     }
+}
+
+export async function POST(req: NextRequest) {
+    return GET(await requestWithBodyQuery(req));
 }

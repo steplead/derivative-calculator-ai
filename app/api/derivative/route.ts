@@ -3,17 +3,18 @@ import { OpenAI } from 'openai';
 import { getCachedExplanation, setCachedExplanation } from '@/utils/cache';
 import { performSecurityCheck } from '@/utils/security';
 import { calculateDerivative } from '@/lib/math/math-core';
+import { requestWithBodyQuery } from '@/lib/api-method';
 
 export const runtime = 'edge';
 
 export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const expression = searchParams.get('equation');
-    // AI explanation is enabled when an API key is configured.
-    // Previously hardcoded to false ("EMERGENCY"), which removed the product's
-    // core step-by-step value. Now controlled by environment so it works in
-    // production and degrades gracefully when no key is set.
-    const includeAi = !!process.env.OPENROUTER_API_KEY;
+    // The first client request sends includeAi=false and must return the
+    // deterministic answer immediately. Ignoring that flag waits on OpenRouter
+    // (several retries) and the Solve button stays on "Solving...".
+    const includeAiParam = searchParams.get('includeAi') ?? searchParams.get('include_ai');
+    const includeAi = includeAiParam === 'false' ? false : !!process.env.OPENROUTER_API_KEY;
 
     if (!expression) {
         return NextResponse.json({ error: "No equation provided" }, { status: 400, headers: { 'Cache-Control': 'no-store' } });
@@ -258,4 +259,8 @@ You can verify this result by:
     } catch (e: any) {
         return NextResponse.json({ error: `Calculation error: ${e.message}` }, { status: 500, headers: { 'Cache-Control': 'no-store' } });
     }
+}
+
+export async function POST(req: NextRequest) {
+    return GET(await requestWithBodyQuery(req));
 }

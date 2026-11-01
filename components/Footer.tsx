@@ -32,25 +32,25 @@ export default function Footer({ wikiTopics, problems, locale }: FooterProps) {
 
     return (
         <footer className="bg-paper border-t border-line pt-16 pb-12 mt-16">
-            <div className="max-w-[760px] mx-auto px-4">
+            <div className="max-w-5xl mx-auto px-4">
                 <PopularDerivatives locale={locale} id="footer-popular-derivatives" embedded />
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
-                    {/* Brand & Mission */}
-                    <div className="space-y-4">
-                        <div className="flex items-center gap-3">
-                            <LogoMark className="h-8 w-8 text-primary" />
-                            <h3 className="text-xl font-semibold text-ink">
+                <div className="mb-10 max-w-xl">
+                    <div className="flex items-start gap-3">
+                        <LogoMark className="h-8 w-8 shrink-0 text-primary" />
+                        <div className="min-w-0">
+                            <h3 className="text-xl font-semibold leading-tight text-ink">
                                 Derivative<span className="text-primary">Calculator</span> AI
                             </h3>
+                            <p className="mt-3 text-muted text-sm leading-relaxed">
+                                Empowering students and professionals with AI-driven calculus solutions.
+                                Step-by-step guidance for derivatives, integrals, and more.
+                            </p>
                         </div>
-                        <p className="text-muted text-sm leading-relaxed">
-                            Empowering students and professionals with AI-driven calculus solutions.
-                            Step-by-step guidance for derivatives, integrals, and more.
-                        </p>
                     </div>
-
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
                     {/* Stir-Fry: Wiki Topics */}
-                    <div>
+                    <div className="min-w-0">
                         <h4 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider mb-4">
                             Math Wiki (Featured)
                         </h4>
@@ -77,7 +77,7 @@ export default function Footer({ wikiTopics, problems, locale }: FooterProps) {
                     </div>
 
                     {/* Stir-Fry: Deep Problems */}
-                    <div>
+                    <div className="min-w-0">
                         <h4 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider mb-4">
                             Practice Problems
                         </h4>
@@ -104,7 +104,7 @@ export default function Footer({ wikiTopics, problems, locale }: FooterProps) {
                     </div>
 
                     {/* Links & Legal */}
-                    <div>
+                    <div className="min-w-0">
                         <h4 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider mb-4">
                             Quick Links
                         </h4>

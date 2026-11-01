@@ -9,7 +9,7 @@
  * 5. Empty UA rejection (block requests without User-Agent)
  * 6. Turnstile verification (optional, REQUIRED=false by default)
  * 7. Browser detection → strict rate limit for non-browser UAs (5/min)
- * 8. D1 rate limiting (20/min default, 30/min for page requests)
+ * 8. D1 rate limiting for API calls only (60/min per CF-Connecting-IP)
  *
  * P1-1 (2026-09-02): the site-wide global quota check (was step 6) was REMOVED.
  * It wrote 2 counter rows to D1 on EVERY request and duplicated Cloudflare's
@@ -44,12 +44,13 @@ interface SecurityCheckResult {
 // Configuration — tuned for real-user friendliness while preventing abuse
 const SECURITY_CONFIG = {
     // Rate limiting: requests per window per IP
-    // Pages override to 30/min via middleware; APIs use 20/min default.
+    // API only. HTML is not counted. One calculator action is two calls
+    // (math, then the explanation), so 60/min is a normal study session.
     RATE_LIMIT: {
-        DEFAULT_LIMIT: 20,        // 20 req/min default (API endpoints)
-        DEFAULT_WINDOW: 60,       // seconds
-        STRICT_LIMIT: 5,          // For non-browser UAs passing middleware
-        STRICT_WINDOW: 60,        // seconds
+        DEFAULT_LIMIT: 60,
+        DEFAULT_WINDOW: 60,
+        STRICT_LIMIT: 20,
+        STRICT_WINDOW: 60,
     },
 
     // Turnstile verification (currently optional)
@@ -59,13 +60,25 @@ const SECURITY_CONFIG = {
 };
 
 /**
- * Extract IP address from request headers
+ * Rate-limit identity. Only the visitor IP Cloudflare sets is safe.
+ * x-forwarded-for can be a shared proxy address, and a missing header must
+ * not collapse every request into one "unknown" bucket.
  */
+export function rateLimitIp(headers: Headers): string | null {
+    const cf = headers.get('cf-connecting-ip')?.trim();
+    if (!cf) return null;
+    return cf;
+}
+
+/** @deprecated Use rateLimitIp. Kept so older call sites still compile. */
 export function getClientIp(headers: Headers): string {
-    return headers.get('cf-connecting-ip') ||
-           headers.get('x-forwarded-for')?.split(',')[0].trim() ||
-           headers.get('x-real-ip') ||
-           'unknown';
+    return rateLimitIp(headers) || 'unknown';
+}
+
+const SEARCH_ENGINE_UA = /googlebot|bingbot|duckduckbot|baiduspider|yandexbot|slurp|applebot/i;
+
+export function isSearchEngineCrawler(userAgent: string | null): boolean {
+    return Boolean(userAgent && SEARCH_ENGINE_UA.test(userAgent));
 }
 
 /**
@@ -84,7 +97,7 @@ export async function performSecurityCheck(
         requireTurnstile?: boolean;
     } = {}
 ): Promise<SecurityCheckResult> {
-    const ip = getClientIp(headers);
+    const ip = rateLimitIp(headers) || 'unknown';
     const userAgent = headers.get('user-agent');
     const turnstileToken = searchParams.get('turnstile_token');
     // Host includes a port in local dev (`localhost:3000`). Compare the hostname only.
@@ -193,33 +206,29 @@ export async function performSecurityCheck(
         };
     }
 
-    // ========== 5. Browser detection ==========
-    // looksLikeLegitimateBrowser() is now reliable (no false positives).
-    // Non-browser UAs that passed middleware UA blacklist get strict rate limiting
-    // instead of outright blocking — this avoids false positives from unusual
-    // but legitimate clients (academic tools, accessibility software, etc.)
-    const { looksLikeLegitimateBrowser } = await import('./turnstile');
-    const isLegitimateBrowser = looksLikeLegitimateBrowser(userAgent, headers);
-
-    if (!isLegitimateBrowser) {
-        const limit = SECURITY_CONFIG.RATE_LIMIT.STRICT_LIMIT;
-        const window = SECURITY_CONFIG.RATE_LIMIT.STRICT_WINDOW;
-        const result = await _checkD1RateLimit(db, ip, limit, window);
-        if (!result.success) {
-            return {
-                success: false,
-                error: 'Too many requests. Please slow down.',
-                retryAfter: Math.ceil((result.resetTime - Date.now()) / 1000),
-            };
-        }
+    // Search engines crawl many HTML and asset URLs. They are never limited.
+    if (isSearchEngineCrawler(userAgent)) {
+        return { success: true };
     }
 
-    // ========== 6. D1 rate limiting (normal) ==========
-    const limit = options.rateLimit ?? SECURITY_CONFIG.RATE_LIMIT.DEFAULT_LIMIT;
+    // No visitor IP: do not share one counter across everyone.
+    const limitIp = rateLimitIp(headers);
+    if (!limitIp) {
+        return { success: true };
+    }
+
+    // ========== 5. One counter per visitor ==========
+    const { looksLikeLegitimateBrowser } = await import('./turnstile');
+    const isLegitimateBrowser = looksLikeLegitimateBrowser(userAgent, headers);
+    const limit = options.rateLimit ?? (
+        isLegitimateBrowser
+            ? SECURITY_CONFIG.RATE_LIMIT.DEFAULT_LIMIT
+            : SECURITY_CONFIG.RATE_LIMIT.STRICT_LIMIT
+    );
     const window = options.rateWindow ?? SECURITY_CONFIG.RATE_LIMIT.DEFAULT_WINDOW;
 
     try {
-        const result = await _checkD1RateLimit(db, ip, limit, window);
+        const result = await _checkD1RateLimit(db, limitIp, limit, window);
 
         if (!result.success) {
             return {

@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { performSecurityCheck } from "@/utils/security";
 import { applySecurityHeaders } from "@/lib/security-headers";
 import { exponentialAliasRedirect, localeRewriteTarget } from "@/lib/redirects";
 
@@ -128,37 +127,10 @@ export async function middleware(request: NextRequest) {
         }
     }
 
-    // Rate limiting for page requests only (NOT API, NOT static assets, NOT /embed/).
-    // Static assets are excluded at the matcher level so they never hit D1.
-    // API routes apply their own limits inside their handlers.
-    // /embed/ route returns a cached 403 immediately, so skip D1 to save quota.
-    if (!pathname.startsWith('/api/') && !pathname.startsWith('/_next/') && !pathname.startsWith('/embed/')) {
-        const searchParams = new URLSearchParams();
-        const securityResult = await performSecurityCheck(
-            request.headers,
-            searchParams,
-            pathname,
-            {
-                rateLimit: 30, // 30 req/min per IP for pages (human-friendly)
-                rateWindow: 60,
-            }
-        );
-
-        if (!securityResult.success) {
-            return withSecurityHeaders(NextResponse.json(
-                { error: securityResult.error },
-                {
-                    status: securityResult.blocked ? 403 : 429,
-                    headers: {
-                        'Cache-Control': 'no-store',
-                        ...(securityResult.retryAfter ? {
-                            'Retry-After': securityResult.retryAfter.toString()
-                        } : {})
-                    }
-                }
-            ));
-        }
-    }
+    // HTML pages are never rate-limited. Next.js prefetches every visible
+    // link, so a 30/min page cap turned a normal visit into
+    // {"error":"Too many requests. Please slow down."}. API routes are
+    // outside this matcher and limit themselves.
 
     // Check if path starts with a locale
     const locale = locales.find(

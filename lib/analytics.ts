@@ -1,8 +1,8 @@
 // P3-OBS-3: minimal GA4 custom-event helper.
 //
 // Design constraints (from the approved prompt):
-// - No new dependency. GA4 pageview is installed by components/DeferredAnalytics
-//   (measurement id G-3WHC12TKH4), after idle, and not for obvious bots.
+// - No new dependency. GA4 pageview is the afterInteractive gtag snippet in
+//   app/layout.tsx (measurement id G-3WHC12TKH4) on every page.
 // - This helper ONLY sends custom events. It does not install the tag or
 //   send page views. Every event sets send_to to GA_MEASUREMENT_ID so a hit
 //   still has a destination if config was skipped as a duplicate.

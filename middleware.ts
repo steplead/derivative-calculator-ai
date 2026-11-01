@@ -178,7 +178,10 @@ export async function middleware(request: NextRequest) {
         });
 
         if (!pathname.startsWith('/api/') && !pathname.startsWith('/_next/')) {
-            response.headers.set('Cache-Control', 'public, s-maxage=7200, max-age=3600, stale-while-revalidate=86400');
+            // HTML must revalidate. A long s-maxage kept the previous deploy
+            // on the edge for up to two hours.
+            response.headers.set('Cache-Control', 'public, max-age=0, must-revalidate');
+            response.headers.set('CDN-Cache-Control', 'public, max-age=0, must-revalidate');
         }
 
         return withSecurityHeaders(response);
@@ -186,7 +189,8 @@ export async function middleware(request: NextRequest) {
 
     const response = NextResponse.next();
     if (!pathname.startsWith('/api/') && !pathname.startsWith('/_next/')) {
-        response.headers.set('Cache-Control', 'public, s-maxage=7200, max-age=3600, stale-while-revalidate=86400');
+        response.headers.set('Cache-Control', 'public, max-age=0, must-revalidate');
+        response.headers.set('CDN-Cache-Control', 'public, max-age=0, must-revalidate');
     }
 
     return withSecurityHeaders(response);

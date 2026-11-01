@@ -80,3 +80,12 @@ jobs:
         # The key file is new on the first deploy, so this submits every sitemap URL.
         # Later pushes submit only URLs whose lastmod changed.
         run: node scripts/indexnow.js
+
+      - name: Purge Cloudflare cache
+        # CLOUDFLARE_API_TOKEN is the same secret the deploy step uses.
+        # Pages:Edit is enough to deploy; Zone Cache Purge is a separate grant.
+        # A 403 is reported and does not fail the deploy. HTML Cache-Control is
+        # max-age=0, must-revalidate either way.
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: python3 scripts/purge-cloudflare-cache.py

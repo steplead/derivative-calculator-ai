@@ -5,8 +5,8 @@ import 'katex/dist/katex.min.css';
 import './globals.css';
 import Navbar from "@/components/Navbar";
 import { getDictionary } from "./dictionaries";
-import DeferredAnalytics from "@/components/DeferredAnalytics";
 import Footer from "@/components/Footer";
+import { GA_MEASUREMENT_ID } from "@/lib/analytics";
 import { headers } from 'next/headers';
 import { loadStaticProblemsSafe } from '@/lib/problems-source';
 import { TurnstileProvider } from "@/components/TurnstileProvider";
@@ -25,6 +25,10 @@ const jetbrains = JetBrains_Mono({
 });
 
 const themeBoot = `(function(){try{var t=localStorage.getItem('theme');var d=t==='dark'||(t!=='light'&&window.matchMedia('(prefers-color-scheme: dark)').matches);var r=document.documentElement;if(d){r.classList.add('dark');r.classList.remove('light');}else{r.classList.add('light');r.classList.remove('dark');}}catch(e){}})();`;
+
+// afterInteractive: present in the HTML of every page, runs after hydration.
+// Custom events still go through trackEvent(), which sets send_to.
+const gaBoot = `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GA_MEASUREMENT_ID}');`;
 
 export const runtime = 'edge';
 
@@ -92,6 +96,12 @@ export default async function RootLayout({
     <html lang={locale} className={`${inter.variable} ${jetbrains.variable}`} suppressHydrationWarning>
       <body className="min-h-screen bg-paper text-ink flex flex-col font-sans antialiased">
         <Script id="theme-boot" strategy="beforeInteractive">{themeBoot}</Script>
+        <Script id="ga4-config" strategy="afterInteractive">{gaBoot}</Script>
+        <Script
+          id="ga4-src"
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+          strategy="afterInteractive"
+        />
         <TurnstileProvider>
           <Navbar dict={dict} />
           <main className="flex-grow w-full max-w-[760px] mx-auto px-4">
@@ -99,7 +109,6 @@ export default async function RootLayout({
           </main>
           <Footer wikiTopics={wikiTopics} problems={popularProblems} locale={locale} />
         </TurnstileProvider>
-        <DeferredAnalytics />
       </body>
     </html>
   );

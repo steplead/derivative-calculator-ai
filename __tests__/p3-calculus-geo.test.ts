@@ -91,11 +91,16 @@ describe('homepage positioning and 404 robots', () => {
     expect(homeGuide.en.positioning).toMatch(/computer-algebra/i);
     expect(homeGuide.en.positioning).toMatch(/step-by-step/i);
     const layout = fs.readFileSync(path.join(ROOT, 'app/layout.tsx'), 'utf8');
-    // Self-hosted via next/font (swap). The GoogleAnalytics component stays out;
-    // page views go through DeferredAnalytics.
+    // Self-hosted via next/font (swap). Page views use the afterInteractive
+    // gtag snippet, not an idle-only client effect.
     expect(layout).toMatch(/next\/font\/google/);
     expect(layout).toMatch(/display:\s*'swap'/);
+    expect(layout).toMatch(/strategy="afterInteractive"/);
+    expect(layout).toContain('https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}');
+    expect(layout).toContain("gtag('config','${GA_MEASUREMENT_ID}')");
+    expect(fs.readFileSync(path.join(ROOT, 'lib/analytics.ts'), 'utf8')).toContain('G-3WHC12TKH4');
     expect(layout).not.toMatch(/GoogleAnalytics/);
+    expect(layout).not.toContain('DeferredAnalytics');
     expect(layout).not.toMatch(/index:\s*true/);
     const notFound = fs.readFileSync(path.join(ROOT, 'app/not-found.tsx'), 'utf8');
     expect(notFound).toMatch(/index:\s*false/);

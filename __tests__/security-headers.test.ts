@@ -77,6 +77,13 @@ describe('public/_headers', () => {
         expect(rules.find((rule) => rule.path === '/_next/static/*')?.headers['Cache-Control']).toContain('immutable');
         expect(rules.find((rule) => rule.path === '/api/*')?.headers['Cache-Control']).toBe('private, no-store');
     });
+
+    it('does not edge-cache HTML for hours', () => {
+        expect(globalRule!.headers['Cache-Control']).toBe('public, max-age=0, must-revalidate');
+        const middleware = fs.readFileSync(path.resolve(__dirname, '..', 'middleware.ts'), 'utf8');
+        expect(middleware).toContain('public, max-age=0, must-revalidate');
+        expect(middleware).not.toContain('s-maxage=7200');
+    });
 });
 
 describe('middleware security policy', () => {

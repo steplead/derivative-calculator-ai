@@ -1,3 +1,12 @@
-# Apex host. Middleware also 301s www HTML; this catches requests before the worker.
+# Apex host. Runs on the platform before any Worker, including prerendered HTML.
 https://www.derivativecalculatorai.com/ https://derivativecalculatorai.com/ 301
 https://www.derivativecalculatorai.com/* https://derivativecalculatorai.com/:splat 301
+
+# Exponential aliases. Middleware used to 301 these; prerendered HTML no longer
+# enters the Worker, so the platform redirect has to keep the canonical URL.
+/derivative-of-e-x /derivative-of-e-to-the-x 301
+/es/derivative-of-e-x /es/derivative-of-e-to-the-x 301
+/pt/derivative-of-e-x /pt/derivative-of-e-to-the-x 301
+/derivative-of-x-e-x /derivative-of-x-e-to-the-x 301
+/es/derivative-of-x-e-x /es/derivative-of-x-e-to-the-x 301
+/pt/derivative-of-x-e-x /pt/derivative-of-x-e-to-the-x 301

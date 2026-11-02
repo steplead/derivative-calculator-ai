@@ -78,10 +78,13 @@ describe('public/_headers', () => {
         expect(rules.find((rule) => rule.path === '/api/*')?.headers['Cache-Control']).toBe('private, no-store');
     });
 
-    it('does not edge-cache HTML for hours', () => {
+    it('revalidates HTML in the browser and allows the edge to cache it', () => {
         expect(globalRule!.headers['Cache-Control']).toBe('public, max-age=0, must-revalidate');
+        expect(globalRule!.headers['CDN-Cache-Control']).toBe('public, s-maxage=3600, stale-while-revalidate=86400');
         const middleware = fs.readFileSync(path.resolve(__dirname, '..', 'middleware.ts'), 'utf8');
         expect(middleware).toContain('public, max-age=0, must-revalidate');
+        expect(middleware).toContain('s-maxage=3600');
+        expect(middleware).not.toContain('CDN-Cache-Control\', \'public, max-age=0');
         expect(middleware).not.toContain('s-maxage=7200');
     });
 });

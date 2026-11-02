@@ -4,7 +4,7 @@ import type { Metadata } from 'next';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { loadStaticProblemsSafe } from '@/lib/problems-source';
 import PracticeGenerator from '@/components/PracticeGenerator';
-import { localeAlternates, pageTitle } from '@/lib/seo';
+import { localeAlternates, localePath, pageTitle } from '@/lib/seo';
 
 export const dynamic = 'force-static';
 
@@ -60,7 +60,7 @@ export default async function PracticeIndex() {
           {LEVELS.map((lvl) => (
             <Link
               key={lvl.slug}
-              href={'/practice/' + lvl.slug}
+              href={localePath('/practice/' + lvl.slug, locale)}
               className="block p-6 border rounded-xl hover:border-blue-500 bg-gray-50 dark:bg-slate-800 transition-colors"
             >
               <h2 className="text-2xl font-bold mb-2">{lvl.title}</h2>

@@ -36,17 +36,9 @@ export async function generateMetadata({ params }: { params: { tag: string } }):
 
   const tagName = tag.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 
-  // B6: unlock noindex ONLY for tags that actually have problems in the static
-  // library. Real tags are thick (hundreds–thousands of unique problems, unique
-  // title/H1, cross-tag links, unique intro) and safe to index. Empty /
-  // nonexistent tags stay noindex,follow so a thin/empty URL never reaches the
-  // index. Fail-closed: if the library fails to load, `hasProblems` is false →
-  // noindex. Uses .some() so a real tag short-circuits on first match.
-  const library = await loadStaticProblemsSafe();
-  const hasProblems = library.some(
-    (p) => p && p.tags && String(p.tags).split(',').map((t) => t.trim()).includes(tag)
-  );
-
+  // Tag pages regroup the same library rows already listed on /problems and
+  // /directory. A one-paragraph intro does not make a distinct document, so
+  // they stay noindex,follow. The hub pages carry the crawl.
   const title = keywordTitle(`${tagName} Calculus Problems`);
   const description = `Browse calculus problems tagged ${tagName}, each with a step-by-step solution.`;
   const alternates = localeAlternates(`/problems/tag/${tag}`, locale);
@@ -54,9 +46,7 @@ export async function generateMetadata({ params }: { params: { tag: string } }):
   return {
     title: { absolute: title },
     description,
-    robots: hasProblems
-      ? { index: true, follow: true }
-      : { index: false, follow: true },
+    robots: { index: false, follow: true },
     alternates,
     openGraph: {
       title,

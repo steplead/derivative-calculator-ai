@@ -96,7 +96,7 @@ describe('curated sitemap', () => {
         execSync('node scripts/generate-sitemap.js', { cwd: path.resolve(__dirname, '..'), stdio: 'pipe' });
         const xml = fs.readFileSync(path.resolve(__dirname, '..', 'public', 'sitemap.xml'), 'utf8');
         const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
-        expect(locs.length).toBe(240);
+        expect(locs.length).toBe(255);
         for (const path of [
             '/partial-derivative-calculator',
             '/implicit-differentiation-calculator',
@@ -110,6 +110,13 @@ describe('curated sitemap', () => {
             expect(xml).toContain(`https://derivativecalculatorai.com/pt${path}`);
         }
         expect(locs.filter((url) => url.endsWith('/derivatives-of-trig-functions')).length).toBe(3);
+        for (const hub of ['/directory', '/problems', '/practice', '/practice/beginner', '/practice/intermediate', '/practice/advanced']) {
+            expect(locs).toContain(`https://derivativecalculatorai.com${hub}`);
+            expect(locs).toContain(`https://derivativecalculatorai.com/es${hub}`);
+            expect(locs).toContain(`https://derivativecalculatorai.com/pt${hub}`);
+        }
+        expect(locs.some((url) => url.includes('/problems/tag/'))).toBe(false);
+        expect(locs.some((url) => /\/problems\/(derivative|integral|limit)$/.test(url))).toBe(false);
         expect(xml).not.toContain('/derivative-of-x-e-x<');
         expect(xml).not.toContain('+');
         expect(xml).not.toContain('integral-of-');

@@ -2,7 +2,7 @@ import { readLocale } from '@/lib/read-locale';
 import Link from 'next/link';
 import { getBaseUrl } from '@/utils/robust-url';
 import { loadStaticProblemsSafe, filterByType } from '@/lib/problems-source';
-import { localeAlternates, pageTitle, problemHref } from '@/lib/seo';
+import { localeAlternates, localePath, pageTitle, problemHref } from '@/lib/seo';
 import type { Metadata } from 'next';
 
 export const dynamic = 'force-static';
@@ -68,19 +68,19 @@ export default async function ProblemsPage() {
 
         {/* Category Navigation */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
-          <Link href="/problems/derivative" className="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-lg hover:ring-2 hover:ring-blue-500 transition-all text-center">
+          <Link href={localePath('/problems/derivative', locale)} className="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-lg hover:ring-2 hover:ring-blue-500 transition-all text-center">
             <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">{categorized.derivative.length}</div>
             <div className="text-sm text-gray-700 dark:text-gray-300 mt-1">Derivatives</div>
           </Link>
-          <Link href="/problems/integral" className="bg-purple-50 dark:bg-purple-900/20 p-6 rounded-lg hover:ring-2 hover:ring-purple-500 transition-all text-center">
+          <Link href={localePath('/problems/integral', locale)} className="bg-purple-50 dark:bg-purple-900/20 p-6 rounded-lg hover:ring-2 hover:ring-purple-500 transition-all text-center">
             <div className="text-3xl font-bold text-purple-600 dark:text-purple-400">{categorized.integral.length}</div>
             <div className="text-sm text-gray-700 dark:text-gray-300 mt-1">Integrals</div>
           </Link>
-          <Link href="/problems/limit" className="bg-green-50 dark:bg-green-900/20 p-6 rounded-lg hover:ring-2 hover:ring-green-500 transition-all text-center">
+          <Link href={localePath('/problems/limit', locale)} className="bg-green-50 dark:bg-green-900/20 p-6 rounded-lg hover:ring-2 hover:ring-green-500 transition-all text-center">
             <div className="text-3xl font-bold text-green-600 dark:text-green-400">{categorized.limit.length}</div>
             <div className="text-sm text-gray-700 dark:text-gray-300 mt-1">Limits</div>
           </Link>
-          <Link href="/problems/ode" className="bg-orange-50 dark:bg-orange-900/20 p-6 rounded-lg hover:ring-2 hover:ring-orange-500 transition-all text-center">
+          <Link href={localePath('/problems/ode', locale)} className="bg-orange-50 dark:bg-orange-900/20 p-6 rounded-lg hover:ring-2 hover:ring-orange-500 transition-all text-center">
             <div className="text-3xl font-bold text-orange-600 dark:text-orange-400">{categorized.ode.length}</div>
             <div className="text-sm text-gray-700 dark:text-gray-300 mt-1">ODEs</div>
           </Link>

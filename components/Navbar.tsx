@@ -20,15 +20,27 @@ export default function Navbar({ dict }: { dict: any }) {
         return pathname.includes(path);
     };
 
+    const locale = pathname === '/es' || pathname.startsWith('/es/')
+        ? 'es'
+        : pathname === '/pt' || pathname.startsWith('/pt/')
+            ? 'pt'
+            : 'en';
+    const hrefFor = (path: string) => {
+        if (locale === 'en') return path;
+        return path === '/' ? `/${locale}` : `/${locale}${path}`;
+    };
+
     const navItems = [
-        { name: dict.navShort.derivative, href: '/', id: 'nav-deriv' },
-        { name: dict.navShort.integral, href: '/integral', id: 'nav-int' },
-        { name: dict.navShort.limit, href: '/limit', id: 'nav-lim' },
-        { name: dict.navShort.matrix, href: '/matrix', id: 'nav-mat' },
-        { name: dict.navShort.ode, href: '/ode', id: 'nav-ode' },
-        { name: dict.navShort.wiki, href: '/wiki', id: 'nav-wiki' },
-        { name: dict.navShort.trig, href: '/derivatives-of-trig-functions', id: 'nav-trig' },
-        { name: dict.navShort.directory, href: '/directory', id: 'nav-dir' },
+        { name: dict.navShort.derivative, href: hrefFor('/'), path: '/', id: 'nav-deriv' },
+        { name: dict.navShort.integral, href: hrefFor('/integral'), path: '/integral', id: 'nav-int' },
+        { name: dict.navShort.limit, href: hrefFor('/limit'), path: '/limit', id: 'nav-lim' },
+        { name: dict.navShort.matrix, href: hrefFor('/matrix'), path: '/matrix', id: 'nav-mat' },
+        { name: dict.navShort.ode, href: hrefFor('/ode'), path: '/ode', id: 'nav-ode' },
+        { name: dict.navShort.wiki, href: hrefFor('/wiki'), path: '/wiki', id: 'nav-wiki' },
+        { name: dict.navShort.trig, href: hrefFor('/derivatives-of-trig-functions'), path: '/derivatives-of-trig-functions', id: 'nav-trig' },
+        { name: dict.navShort.directory, href: hrefFor('/directory'), path: '/directory', id: 'nav-dir' },
+        { name: dict.navShort.problems, href: hrefFor('/problems'), path: '/problems', id: 'nav-problems' },
+        { name: dict.navShort.practice, href: hrefFor('/practice'), path: '/practice', id: 'nav-practice' },
     ];
 
     return (
@@ -36,7 +48,7 @@ export default function Navbar({ dict }: { dict: any }) {
             <div className="max-w-6xl mx-auto px-4">
                 <div className="flex justify-between items-center h-16">
                     <div className="flex-shrink-0 flex items-center pr-4">
-                        <Link href="/" className="flex items-center gap-2 min-h-12" aria-label="Derivative Calculator AI">
+                        <Link href={hrefFor('/')} className="flex items-center gap-2 min-h-12" aria-label="Derivative Calculator AI">
                             <LogoMark className="h-9 w-9 text-primary" />
                             <span className="text-sm font-semibold leading-tight text-ink">
                                 Derivative Calculator <span className="text-primary">AI</span>
@@ -51,7 +63,7 @@ export default function Navbar({ dict }: { dict: any }) {
                                 key={item.id}
                                 href={item.href}
                                 className={`px-3 py-2 rounded-lg text-sm font-semibold transition-colors duration-200 relative group
-                                    ${isActive(item.href)
+                                    ${isActive(item.path)
                                         ? 'text-primary bg-answer-bg'
                                         : 'text-muted hover:text-ink hover:bg-hover'
                                     }`}
@@ -100,7 +112,7 @@ export default function Navbar({ dict }: { dict: any }) {
                                 href={item.href}
                                 onClick={() => setIsOpen(false)}
                                 className={`nav-tap block px-4 rounded-xl text-base font-semibold transition-colors duration-200
-                                    ${isActive(item.href)
+                                    ${isActive(item.path)
                                         ? 'bg-answer-bg text-primary'
                                         : 'text-ink hover:bg-hover'
                                     }`}

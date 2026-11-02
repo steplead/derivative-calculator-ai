@@ -22,6 +22,8 @@ export const dictionaries = {
             wiki: "Wiki",
             trig: "Trig",
             directory: "Directory",
+            problems: "Problems",
+            practice: "Practice",
         },
         wiki: {
             h1: "Math Wiki",
@@ -139,6 +141,8 @@ export const dictionaries = {
             wiki: "Wiki",
             trig: "Trig",
             directory: "Directorio",
+            problems: "Problemas",
+            practice: "Práctica",
         },
         wiki: {
             h1: "Wiki de Matemáticas",
@@ -256,6 +260,8 @@ export const dictionaries = {
             wiki: "Wiki",
             trig: "Trig",
             directory: "Diretório",
+            problems: "Problemas",
+            practice: "Prática",
         },
         wiki: {
             h1: "Wiki de Matemática",

@@ -1,14 +1,12 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { applySecurityHeaders } from "@/lib/security-headers";
-import { exponentialAliasRedirect, localeRewriteTarget } from "@/lib/redirects";
+import { exponentialAliasRedirect } from "@/lib/redirects";
 
 // Note: middleware in Next.js always runs on the edge runtime. We intentionally
 // do NOT export `runtime` here — declaring `edge` triggers a build error in
 // Next.js 14.2.x for the middleware entry, and `experimental-edge` is deprecated.
 // Omitting the export lets Next.js use its default (edge) for middleware.
-
-const locales = ["es", "pt"];
 
 // Allowed referer/origin hosts for API requests (prevents direct API hotlinking abuse).
 // Includes localhost variants so local development is not blocked.
@@ -131,33 +129,10 @@ export async function middleware(request: NextRequest) {
     // link, so a 30/min page cap turned a normal visit into
     // {"error":"Too many requests. Please slow down."}. API routes are
     // outside this matcher and limit themselves.
-
-    // Check if path starts with a locale
-    const locale = locales.find(
-        (l) => pathname.startsWith(`/${l}/`) || pathname === `/${l}`
-    );
-
-    if (locale) {
-        const newPath = localeRewriteTarget(pathname, request.nextUrl.search) || "/";
-
-        const requestHeaders = new Headers(request.headers);
-        requestHeaders.set("x-next-locale", locale);
-
-        const response = NextResponse.rewrite(new URL(newPath, request.url), {
-            request: {
-                headers: requestHeaders,
-            },
-        });
-
-        if (!pathname.startsWith('/api/') && !pathname.startsWith('/_next/')) {
-            // HTML must revalidate. A long s-maxage kept the previous deploy
-            // on the edge for up to two hours.
-            response.headers.set('Cache-Control', 'public, max-age=0, must-revalidate');
-            response.headers.set('CDN-Cache-Control', 'public, max-age=0, must-revalidate');
-        }
-
-        return withSecurityHeaders(response);
-    }
+    //
+    // /es and /pt are real prerendered routes (app/es, app/pt). Do not rewrite
+    // them onto the English page — that forced every locale through one
+    // dynamic render and made uncached HTML exceed the Worker CPU limit.
 
     const response = NextResponse.next();
     if (!pathname.startsWith('/api/') && !pathname.startsWith('/_next/')) {

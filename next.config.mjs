@@ -15,6 +15,12 @@ const nextConfig = {
     images: {
         unoptimized: true,
     },
+    // Prerendering the problem library is CPU-heavy in aggregate. Cap workers
+    // so a parallel static generation pass does not exhaust the build machine.
+    experimental: {
+        cpus: 2,
+    },
+    staticPageGenerationTimeout: 180,
 };
 
 export default nextConfig;

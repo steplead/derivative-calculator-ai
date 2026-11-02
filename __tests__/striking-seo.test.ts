@@ -85,10 +85,10 @@ describe('popular derivatives and crawl paths', () => {
       expect(hrefs).toContain(href);
     }
     expect(new Set(POPULAR_DERIVATIVES.map((item) => item.anchor.en)).size).toBe(POPULAR_DERIVATIVES.length);
-    const home = fs.readFileSync(path.join(ROOT, 'app/page.tsx'), 'utf8');
+    const home = fs.readFileSync(path.join(ROOT, 'app/(site)/page.tsx'), 'utf8');
     const footer = fs.readFileSync(path.join(ROOT, 'components/Footer.tsx'), 'utf8');
-    const integral = fs.readFileSync(path.join(ROOT, 'app/integral/page.tsx'), 'utf8');
-    const limit = fs.readFileSync(path.join(ROOT, 'app/limit/page.tsx'), 'utf8');
+    const integral = fs.readFileSync(path.join(ROOT, 'app/(site)/integral/page.tsx'), 'utf8');
+    const limit = fs.readFileSync(path.join(ROOT, 'app/(site)/limit/page.tsx'), 'utf8');
     expect(home).toContain('PopularDerivatives');
     expect(home).toContain('href="/directory"');
     expect(footer).toContain('PopularDerivatives');
@@ -102,7 +102,7 @@ describe('apex canonical and share events', () => {
   it('redirects www to the apex host and canonicalizes the share page there', () => {
     const redirects = fs.readFileSync(path.join(ROOT, 'public/_redirects'), 'utf8');
     expect(redirects).toContain('https://www.derivativecalculatorai.com/* https://derivativecalculatorai.com/:splat 301');
-    const result = fs.readFileSync(path.join(ROOT, 'app/result/page.tsx'), 'utf8');
+    const result = fs.readFileSync(path.join(ROOT, 'app/(site)/result/page.tsx'), 'utf8');
     expect(result).toContain('canonical: `${SITE_URL}/result`');
     const middleware = fs.readFileSync(path.join(ROOT, 'middleware.ts'), 'utf8');
     expect(middleware).toContain('NextResponse.redirect(url, 301)');
@@ -119,7 +119,7 @@ describe('apex canonical and share events', () => {
     expect(copyEvent).toBeLessThan(clipboard);
     expect(nativeEvent).toBeLessThan(nativeShare);
     expect(xEvent).toBeGreaterThan(-1);
-    const ode = fs.readFileSync(path.join(ROOT, 'app/ode/page.tsx'), 'utf8');
+    const ode = fs.readFileSync(path.join(ROOT, 'app/(site)/ode/page.tsx'), 'utf8');
     expect(ode).toContain('showShare');
     expect(ode).toContain('mode="ode"');
   });

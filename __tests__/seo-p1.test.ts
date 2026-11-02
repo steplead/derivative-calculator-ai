@@ -79,7 +79,7 @@ describe('trigonometric derivatives hub', () => {
             expect(words(trigHubPlainText(copy))).toBeGreaterThanOrEqual(120);
         }
         const page = fs.readFileSync(
-            path.resolve(__dirname, '..', 'app', 'derivatives-of-trig-functions', 'page.tsx'),
+            path.resolve(__dirname, '..', 'app', '(site)', 'derivatives-of-trig-functions', 'page.tsx'),
             'utf8'
         );
         expect(page).toContain('generateFAQData');
@@ -104,7 +104,7 @@ describe('e^x alias redirects', () => {
         const src = fs.readFileSync(path.resolve(__dirname, '..', 'middleware.ts'), 'utf8');
         expect(src).toContain('exponentialAliasRedirect');
         expect(src).toContain('NextResponse.redirect(url, 301)');
-        const home = fs.readFileSync(path.resolve(__dirname, '..', 'app', 'page.tsx'), 'utf8');
+        const home = fs.readFileSync(path.resolve(__dirname, '..', 'app', '(site)', 'page.tsx'), 'utf8');
         expect(home).toContain("slug: 'derivative-of-e-to-the-x'");
         expect(home).not.toContain("slug: 'derivative-of-e-x'");
     });

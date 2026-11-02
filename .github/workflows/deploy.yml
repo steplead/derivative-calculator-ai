@@ -48,6 +48,9 @@ jobs:
         run: npm run build
         env:
           NEXT_PUBLIC_SITE_URL: https://derivativecalculatorai.com
+          # Prerendering the library (en/es/pt) needs a larger heap than the
+          # Node default. The runner has 7 GB; leave room for the OS.
+          NODE_OPTIONS: --max-old-space-size=6144
 
       - name: Build for Cloudflare Pages
         # Produces .vercel/output/static (the Pages deployment artifact)

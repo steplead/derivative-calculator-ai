@@ -13,7 +13,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { fetchRelatedFromD1 } from '@/lib/d1/related-problems';
 
-const PAGE_PATH = path.join(process.cwd(), 'app/[slug]/page.tsx');
+const PAGE_PATH = path.join(process.cwd(), 'app/(site)/[slug]/page.tsx');
 
 /**
  * Strip comments before scanning, otherwise the "BEFORE (removed):" explanatory

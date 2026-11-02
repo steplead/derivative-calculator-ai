@@ -100,11 +100,11 @@ describe('RC-8 task 7: no random-order D1 query anywhere', () => {
         const dataPath = [
             'lib/problems-source.ts',
             'lib/d1/related-problems.ts',
-            'app/[slug]/page.tsx',
-            'app/problems/page.tsx',
-            'app/problems/[type]/page.tsx',
-            'app/directory/page.tsx',
-            'app/page.tsx',
+            'app/(site)/[slug]/page.tsx',
+            'app/(site)/problems/page.tsx',
+            'app/(site)/problems/[type]/page.tsx',
+            'app/(site)/directory/page.tsx',
+            'app/(site)/page.tsx',
             'app/layout.tsx',
         ];
         const offenders = dataPath.filter((rel) =>
@@ -178,30 +178,34 @@ describe('RC-8 task 7: /problems and /problems/derivative render real links', ()
         // P2-B: 'ode' removed — problems.json has zero ode-typed rows, so the
         // category was empty; it now 404s (consistent with /problems/matrix).
         const validTypes = ['derivative', 'integral', 'limit'];
-        const src = fs.readFileSync(path.join(ROOT, 'app/problems/[type]/page.tsx'), 'utf-8');
+        const src = fs.readFileSync(path.join(ROOT, 'app/(site)/problems/[type]/page.tsx'), 'utf-8');
         expect(src).toMatch(/validTypes\s*=\s*\['derivative', 'integral', 'limit'\]/);
         expect(src).toMatch(/notFound\(\)/);
         expect(validTypes).toContain('derivative');
     });
 
     it('both /problems pages read from the shared loader', () => {
-        for (const rel of ['app/problems/page.tsx', 'app/problems/[type]/page.tsx']) {
+        for (const rel of ['app/(site)/problems/page.tsx', 'app/(site)/problems/[type]/page.tsx']) {
             const src = fs.readFileSync(path.join(ROOT, rel), 'utf-8');
             expect(src).toMatch(/loadStaticProblemsSafe\(\)/);
         }
     });
 
-    it('the homepage and layout also read from the shared loader', () => {
-        for (const rel of ['app/page.tsx', 'app/layout.tsx', 'app/directory/page.tsx']) {
+    it('the homepage and directory read from the shared loader', () => {
+        for (const rel of ['app/(site)/page.tsx', 'app/(site)/directory/page.tsx']) {
             const src = fs.readFileSync(path.join(ROOT, rel), 'utf-8');
             expect(src).toMatch(/loadStaticProblemsSafe/);
         }
     });
 
-    it('layout no longer hits D1 for footer problems on every page view', () => {
-        const src = stripComments(fs.readFileSync(path.join(ROOT, 'app/layout.tsx'), 'utf-8'));
+    it('the document shell does not hit D1 or the problems API for footer links', () => {
+        const src = stripComments(fs.readFileSync(path.join(ROOT, 'components/DocumentShell.tsx'), 'utf-8'));
         expect(src).not.toMatch(/\/api\/problems/);
-        expect(src).toMatch(/loadStaticProblemsSafe\(\)/);
+        expect(src).not.toMatch(/getRequestContext/);
+        expect(src).toMatch(/footer-problems\.json/);
+        const layout = stripComments(fs.readFileSync(path.join(ROOT, 'app/layout.tsx'), 'utf-8'));
+        expect(layout).not.toMatch(/headers\(/);
+        expect(layout).not.toMatch(/runtime = 'edge'/);
     });
 });
 
@@ -222,14 +226,14 @@ describe('RC-8 task 4: unknown slugs 404', () => {
 
     it('the [slug] page calls notFound() when no source resolves', () => {
         const src = stripComments(
-            fs.readFileSync(path.join(ROOT, 'app/[slug]/page.tsx'), 'utf-8')
+            fs.readFileSync(path.join(ROOT, 'app/(site)/[slug]/page.tsx'), 'utf-8')
         );
         expect(src).toMatch(/if\s*\(!problem\)\s*\{\s*notFound\(\);/);
     });
 
     it('the [slug] page body consults the library BEFORE the heuristic', () => {
         const src = stripComments(
-            fs.readFileSync(path.join(ROOT, 'app/[slug]/page.tsx'), 'utf-8')
+            fs.readFileSync(path.join(ROOT, 'app/(site)/[slug]/page.tsx'), 'utf-8')
         );
         // Scope to the page component: generateMetadata has its own (correctly
         // ordered) resolution block and would skew a whole-file index check.
@@ -243,7 +247,7 @@ describe('RC-8 task 4: unknown slugs 404', () => {
 
     it('generateMetadata also consults the library BEFORE its own fallbacks', () => {
         const src = stripComments(
-            fs.readFileSync(path.join(ROOT, 'app/[slug]/page.tsx'), 'utf-8')
+            fs.readFileSync(path.join(ROOT, 'app/(site)/[slug]/page.tsx'), 'utf-8')
         );
         const meta = src.slice(
             src.indexOf('export async function generateMetadata'),
@@ -257,7 +261,7 @@ describe('RC-8 task 4: unknown slugs 404', () => {
     });
 
     it('the [slug] page re-throws NEXT_NOT_FOUND so 404s are not swallowed', () => {
-        const src = fs.readFileSync(path.join(ROOT, 'app/[slug]/page.tsx'), 'utf-8');
+        const src = fs.readFileSync(path.join(ROOT, 'app/(site)/[slug]/page.tsx'), 'utf-8');
         expect(src).toMatch(/NEXT_NOT_FOUND/);
     });
 
@@ -265,7 +269,7 @@ describe('RC-8 task 4: unknown slugs 404', () => {
         // Project rule: SELECT * reads columns the renderer never uses and
         // breaks whenever the schema changes.
         const src = stripComments(
-            fs.readFileSync(path.join(ROOT, 'app/[slug]/page.tsx'), 'utf-8')
+            fs.readFileSync(path.join(ROOT, 'app/(site)/[slug]/page.tsx'), 'utf-8')
         );
         expect(src).not.toMatch(/SELECT\s+\*/i);
     });

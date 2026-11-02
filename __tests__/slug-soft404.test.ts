@@ -11,7 +11,7 @@
  */
 
 describe('RC-2 soft-404 fix — catch handler decision logic', () => {
-  // Mirrors the exact logic now in app/[slug]/page.tsx catch block.
+  // Mirrors the exact logic now in app/(site)/[slug]/page.tsx catch block.
   function handleCriticalError(err: any): 'rethrow-notfound' | 'rethrow-error' {
     if (err?.digest === 'NEXT_NOT_FOUND') {
       throw err; // Next.js renders not-found.tsx (real 404)
@@ -47,7 +47,7 @@ describe('RC-2 soft-404 fix — catch handler decision logic', () => {
   it('no longer returns a 200 "Unable to load calculation" fallback', () => {
     // Assert the old fallback string is gone from the page source.
     const fs = require('fs');
-    const src = fs.readFileSync('app/[slug]/page.tsx', 'utf8');
+    const src = fs.readFileSync('app/(site)/[slug]/page.tsx', 'utf8');
     expect(src).not.toContain('Unable to load calculation');
   });
 });

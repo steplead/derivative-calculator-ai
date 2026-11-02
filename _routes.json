@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "description": "Only dynamic endpoints invoke the Worker. Prerendered HTML and assets are served by Pages with no Worker CPU.",
+  "include": [
+    "/api/*",
+    "/embed/*",
+    "/og",
+    "/og/*",
+    "/result",
+    "/result/*"
+  ],
+  "exclude": [
+    "/_next/static/*"
+  ]
+}

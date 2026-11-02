@@ -38,4 +38,13 @@ describe('static HTML prerender', () => {
         expect(CONTENT_SECURITY_POLICY).toContain('https://static.cloudflareinsights.com');
         expect(CONTENT_SECURITY_POLICY).toContain('https://cloudflareinsights.com');
     });
+
+    it('does not send prerendered HTML through the Worker', () => {
+        const routes = JSON.parse(fs.readFileSync(path.join(ROOT, '_routes.json'), 'utf8'));
+        expect(routes.include).toContain('/api/*');
+        expect(routes.include).not.toContain('/*');
+        expect(routes.include.join(' ')).not.toMatch(/derivative-of-|\/integral|\/es/);
+        const middleware = fs.readFileSync(path.join(ROOT, 'middleware.ts'), 'utf8');
+        expect(middleware).not.toMatch(/\(\?!api\|_next\|favicon/);
+    });
 });

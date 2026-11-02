@@ -125,19 +125,16 @@ export async function middleware(request: NextRequest) {
         }
     }
 
-    // HTML pages are never rate-limited. Next.js prefetches every visible
-    // link, so a 30/min page cap turned a normal visit into
-    // {"error":"Too many requests. Please slow down."}. API routes are
-    // outside this matcher and limit themselves.
-    //
-    // /es and /pt are real prerendered routes (app/es, app/pt). Do not rewrite
-    // them onto the English page — that forced every locale through one
-    // dynamic render and made uncached HTML exceed the Worker CPU limit.
-
+    // Prerendered HTML is not in _routes.json include, so this function does
+    // not run for it. Anything that still reaches the Worker must be cacheable
+    // at the edge. CDN-Cache-Control max-age=0 made every document DYNAMIC and
+    // burned the free-plan CPU limit (Cloudflare 1102).
     const response = NextResponse.next();
-    if (!pathname.startsWith('/api/') && !pathname.startsWith('/_next/')) {
+    if (pathname === '/result' || pathname.startsWith('/result/')) {
+        response.headers.set('Cache-Control', 'private, no-store');
+    } else if (!pathname.startsWith('/api/') && !pathname.startsWith('/_next/')) {
         response.headers.set('Cache-Control', 'public, max-age=0, must-revalidate');
-        response.headers.set('CDN-Cache-Control', 'public, max-age=0, must-revalidate');
+        response.headers.set('CDN-Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
     }
 
     return withSecurityHeaders(response);
@@ -145,13 +142,13 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
     matcher: [
-        // Match all paths EXCEPT: api routes, all _next/* (static, chunks, image),
-        // favicon, and common static asset extensions. Previously only excluding
-        // _next/static|_next/image caused /_next/static/chunks/*.js (page JS)
-        // to run through middleware → D1 rate limit → 429 on CSS/JS → broken layout.
-        '/((?!api|_next|favicon.ico|robots.txt|sitemap.xml|manifest.json|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|json|txt|xml|css|js|map|woff|woff2|ttf|eot)$).*)',
-        // Included explicitly so a www request for these files still 301s.
-        // The negative lookahead above excludes them from the general pattern.
+        // Prerendered pages and static files are served by Pages, not this
+        // Worker (see /_routes.json). Only the dynamic surfaces remain.
+        '/result',
+        '/result/:path*',
+        '/embed/:path*',
+        '/og',
+        '/og/:path*',
         '/sitemap.xml',
         '/robots.txt',
     ],

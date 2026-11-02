@@ -27,6 +27,9 @@ export async function generateMetadata({ params }: { params: { type: string } })
   return {
     title: { absolute: title },
     description,
+    // The same rows are already listed on /problems and /directory. This slice
+    // is a duplicate index, so it stays out of the sitemap and out of Google.
+    robots: { index: false, follow: true },
     alternates,
     openGraph: {
       title,

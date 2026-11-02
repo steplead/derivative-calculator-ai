@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { getDictionary } from '@/app/dictionaries';
 import { getBaseUrl } from '@/utils/robust-url';
 import { loadStaticProblemsSafe } from '@/lib/problems-source';
-import { localeAlternates, pageTitle, problemHref } from '@/lib/seo';
+import { localeAlternates, localePath, pageTitle, problemHref } from '@/lib/seo';
 
 export const dynamic = 'force-static';
 
@@ -104,7 +104,7 @@ export default async function DirectoryPage() {
                 </div>
 
                 <div className="mt-12 text-center pb-12">
-                    <Link href="/" className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors">
+                    <Link href={localePath('/', locale)} className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors">
                         &larr; {dict.directory.back}
                     </Link>
                 </div>

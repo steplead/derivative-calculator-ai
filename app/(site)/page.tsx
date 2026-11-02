@@ -140,13 +140,13 @@ export default async function Home() {
 
       {/* Quick Links Section - Protocol 2 Compliance */}
       <div className="mt-12 flex flex-col sm:flex-row justify-center gap-4">
-        <Link href="/problems" className="solve-btn inline-flex items-center justify-center">
+        <Link href={localePath('/problems', locale)} className="solve-btn inline-flex items-center justify-center">
           <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
           </svg>
           Browse All Problems
         </Link>
-        <Link href="/directory" className="copy-btn inline-flex items-center justify-center font-semibold">
+        <Link href={localePath('/directory', locale)} className="copy-btn inline-flex items-center justify-center font-semibold">
           View Directory
         </Link>
       </div>
@@ -168,15 +168,15 @@ export default async function Home() {
           <div>
             <h2 className="text-2xl font-semibold text-ink mb-4">{dict.home.rulesTitle}</h2>
             <div className="space-y-4">
-              <Link href="/wiki/power-rule" className="surface-link text-left no-underline">
+              <Link href={localePath('/wiki/power-rule', locale)} className="surface-link text-left no-underline">
                 <h3 className="font-semibold text-primary">{dict.home.rules.power.title}</h3>
                 <p className="text-sm text-muted mt-1">{dict.home.rules.power.text}</p>
               </Link>
-              <Link href="/wiki/product-rule" className="surface-link text-left no-underline">
+              <Link href={localePath('/wiki/product-rule', locale)} className="surface-link text-left no-underline">
                 <h3 className="font-semibold text-primary">{dict.home.rules.product.title}</h3>
                 <p className="text-sm text-muted mt-1">{dict.home.rules.product.text}</p>
               </Link>
-              <Link href="/wiki/chain-rule" className="surface-link text-left no-underline">
+              <Link href={localePath('/wiki/chain-rule', locale)} className="surface-link text-left no-underline">
                 <h3 className="font-semibold text-primary">{dict.home.rules.chain.title}</h3>
                 <p className="text-sm text-muted mt-1">{dict.home.rules.chain.text}</p>
               </Link>
@@ -201,7 +201,7 @@ export default async function Home() {
             ))}
           </div>
           <div className="mt-8 text-center">
-            <Link href="/directory" className="solve-btn inline-flex items-center no-underline">
+            <Link href={localePath('/directory', locale)} className="solve-btn inline-flex items-center no-underline">
               {dict.home.viewAll} &rarr;
             </Link>
           </div>
@@ -252,7 +252,7 @@ export default async function Home() {
               ].map((item) => (
                 <Link
                   key={item.href}
-                  href={item.href}
+                  href={localePath(item.href, locale)}
                   className="surface-link text-sm no-underline"
                 >
                   {item.label}
@@ -265,11 +265,11 @@ export default async function Home() {
             <h2 id="gsc-topics" className="text-2xl font-semibold text-ink mb-6 text-center">Explore by topic</h2>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {[
-                { label: 'Polynomial', href: '/problems/tag/polynomial' },
-                { label: 'Trigonometric', href: '/problems/tag/trigonometric' },
-                { label: 'Logarithmic', href: '/problems/tag/logarithmic' },
-                { label: 'Exponential', href: '/problems/tag/exponential' },
-                { label: 'Fraction', href: '/problems/tag/fraction' },
+                { label: 'Polynomial', href: localePath('/problems/tag/polynomial', locale) },
+                { label: 'Trigonometric', href: localePath('/problems/tag/trigonometric', locale) },
+                { label: 'Logarithmic', href: localePath('/problems/tag/logarithmic', locale) },
+                { label: 'Exponential', href: localePath('/problems/tag/exponential', locale) },
+                { label: 'Fraction', href: localePath('/problems/tag/fraction', locale) },
                 { label: 'Trig derivatives', href: localePath('/derivatives-of-trig-functions', locale) },
               ].map((item) => (
                 <Link

@@ -116,6 +116,9 @@ export default function Footer({ wikiTopics, problems, locale }: FooterProps) {
                                 <Link href={`${baseUrl}/directory`} className="text-gray-600 dark:text-gray-400 hover:text-blue-600 text-sm">Problem Directory</Link>
                             </li>
                             <li>
+                                <Link href={`${baseUrl}/problems`} className="text-gray-600 dark:text-gray-400 hover:text-blue-600 text-sm">All Problems</Link>
+                            </li>
+                            <li>
                                 <Link href={`${baseUrl}/matrix`} className="text-gray-600 dark:text-gray-400 hover:text-blue-600 text-sm">Matrix Calculator</Link>
                             </li>
                             <li>

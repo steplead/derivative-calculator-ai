@@ -5,7 +5,7 @@ import PracticeFlow from '@/components/PracticeFlow';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { loadStaticProblemsSafe } from '@/lib/problems-source';
-import { keywordTitle, localeAlternates } from '@/lib/seo';
+import { keywordTitle, localeAlternates, localePath, problemHref } from '@/lib/seo';
 
 export const dynamic = 'force-static';
 
@@ -48,6 +48,7 @@ export async function generateMetadata({ params }: { params: { level: string } }
 export default async function LevelPage({ params }: { params: { level: string } }) {
   const info = LEVEL_INFO[params.level];
   if (!info) notFound();
+  const locale = readLocale();
 
   // B5b: read the static library directly and filter by the `difficulty` field
   // (present on every row after the Batch 1-3 backfill). No D1, no API self-fetch.
@@ -61,12 +62,12 @@ export default async function LevelPage({ params }: { params: { level: string } 
   return (
     <div className="py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        <Breadcrumbs items={[{ name: 'Home', href: '/' }, { name: 'Practice', href: '/practice' }, { name: info.title, href: '/practice/' + params.level }]} />
+        <Breadcrumbs items={[{ name: 'Home', href: localePath('/', locale) }, { name: 'Practice', href: localePath('/practice', locale) }, { name: info.title, href: localePath('/practice/' + params.level, locale) }]} />
         <h1 className="text-4xl font-bold text-center mb-4">{info.title}</h1>
         <p className="text-center text-gray-600 dark:text-gray-400 mb-8">{info.description}</p>
         <PracticeFlow problems={problems} level={params.level} />
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">{problems.map((p: any) => (
-          <Link key={p.slug} href={'/' + p.slug} className="block p-4 border rounded hover:border-blue-500 bg-gray-50 dark:bg-slate-800">
+          <Link key={p.slug} href={problemHref(p.slug, locale)} className="block p-4 border rounded hover:border-blue-500 bg-gray-50 dark:bg-slate-800">
             <div className="text-sm text-gray-600">{p.formula}</div>
             <div className="font-medium text-blue-600">{p.title || p.formula}</div>
           </Link>

@@ -18,7 +18,7 @@
  */
 
 const fs = require('fs');
-const { execSync } = require('child_process');
+const { execFileSync } = require('child_process');
 const path = require('path');
 
 const ROOT = path.join(__dirname, '..');
@@ -35,6 +35,8 @@ const STATIC_PATHS = [
   { path: '/calculators', file: 'app/(site)/calculators/page.tsx', priority: '0.8' },
   { path: '/wiki', file: 'app/(site)/wiki/page.tsx', priority: '0.7' },
   { path: '/practice', file: 'app/(site)/practice/page.tsx', priority: '0.7' },
+  { path: '/directory', file: 'app/(site)/directory/page.tsx', priority: '0.8' },
+  { path: '/problems', file: 'app/(site)/problems/page.tsx', priority: '0.8' },
   { path: '/derivatives-of-trig-functions', file: 'app/(site)/derivatives-of-trig-functions/page.tsx', priority: '0.8' },
   { path: '/partial-derivative-calculator', file: 'app/(site)/partial-derivative-calculator/page.tsx', priority: '0.9' },
   { path: '/implicit-differentiation-calculator', file: 'app/(site)/implicit-differentiation-calculator/page.tsx', priority: '0.9' },
@@ -50,7 +52,9 @@ function latestLastmod(relFiles) {
 function gitLastmod(relFile) {
   let iso = '';
   try {
-    iso = execSync(`git log -1 --format=%cI -- ${relFile}`, {
+    // execFileSync avoids the shell. Paths like app/(site)/page.tsx would
+    // otherwise be parsed as a subshell and fall back to "now".
+    iso = execFileSync('git', ['log', '-1', '--format=%cI', '--', relFile], {
       cwd: ROOT,
       encoding: 'utf8',
     }).trim();
@@ -150,6 +154,17 @@ function generateSitemap() {
 
   for (const page of STATIC_PATHS) {
     entries.push(...urlEntry(page.path, gitLastmod(page.file), page.priority));
+  }
+
+  // Difficulty indexes are mutually distinct sets (not a copy of /practice).
+  // /problems/[type] and /problems/tag/* repeat rows already on /problems, so
+  // they stay noindex and out of this file.
+  const levelLastmod = latestLastmod([
+    'app/(site)/practice/[level]/page.tsx',
+    'data/problems.json',
+  ]);
+  for (const level of ['beginner', 'intermediate', 'advanced']) {
+    entries.push(...urlEntry(`/practice/${level}`, levelLastmod, '0.6'));
   }
 
   const wikiLastmod = gitLastmod('data/wiki.json');

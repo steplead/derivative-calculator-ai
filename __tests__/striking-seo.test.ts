@@ -90,7 +90,7 @@ describe('popular derivatives and crawl paths', () => {
     const integral = fs.readFileSync(path.join(ROOT, 'app/(site)/integral/page.tsx'), 'utf8');
     const limit = fs.readFileSync(path.join(ROOT, 'app/(site)/limit/page.tsx'), 'utf8');
     expect(home).toContain('PopularDerivatives');
-    expect(home).toContain('href="/directory"');
+    expect(home).toContain("localePath('/directory', locale)");
     expect(footer).toContain('PopularDerivatives');
     expect(integral).toContain('PopularDerivatives');
     expect(integral).toContain('Popular integrals');

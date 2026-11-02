@@ -94,9 +94,15 @@ export default function Calculator({
     }, [equationParam, limitToParam, initialEquation, initialLimitTo, mode, initialResult]);
 
     const handleCalculate = async (equationToSolve = input, targetToSolve = limitTo) => {
-        const formula = sanitizeMathFormula((equationToSolve || '').toString().replace(/^null$/i, ''));
+        const rawFormula = (equationToSolve || '').toString().replace(/^null$/i, '');
+        const formula = sanitizeMathFormula(rawFormula);
         const target = sanitizeLimitValue((targetToSolve || '0').toString().replace(/^null$/i, '0'));
-        if (!formula) return;
+        if (!formula) {
+            if (rawFormula.trim()) {
+                setError('That expression uses a character this calculator cannot accept.');
+            }
+            return;
+        }
 
         console.log('[Calculator] Starting calculation...');
 
@@ -198,7 +204,7 @@ export default function Calculator({
         if (loading) return t.solving;
         if (mode === 'integral') return t.integrate;
         if (mode === 'limit') return t.limit;
-        if (mode === 'ode') return t.ode;
+        if (mode === 'ode') return t.ode || 'Solve ODE';
         return t.solve;
     };
 

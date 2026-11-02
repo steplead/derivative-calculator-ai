@@ -23,6 +23,8 @@ describe('Input Sanitization Utilities', () => {
             expect(sanitizeMathFormula('ln(x^2 + 1)')).toBe('ln(x^2 + 1)');
             expect(sanitizeMathFormula('sqrt(4) + cbrt(8)')).toBe('sqrt(4) + cbrt(8)');
             expect(sanitizeMathFormula('e^x')).toBe('e^x');
+            expect(sanitizeMathFormula("y' + y = x")).toBe("y' + y = x");
+            expect(sanitizeMathFormula('x^2 + y^2 = 25')).toBe('x^2 + y^2 = 25');
         });
 
         it('should remove HTML tags', () => {

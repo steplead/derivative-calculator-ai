@@ -34,11 +34,13 @@ export function sanitizeMathFormula(input: string): string {
     // Allow only safe mathematical characters
     // Variables: a-z, A-Z
     // Numbers: 0-9, decimal point
-    // Operators: + - * / ^ ( ) { } [ ]
+    // Operators: + - * / ^ ( ) { } [ ] = '
+    // '=' and '\'' are required for equations (y' + y = x, x^2 + y^2 = 25).
+    // Event-handler prefixes (onclick=) are stripped above, before this check.
     // Functions: sin, cos, tan, ln, log, sqrt, cbrt, exp, arcsin, arccos, arctan, sec, csc, cot, abs, floor, ceil, round
     // Constants: pi, e
     // Spaces and commas
-    const safeMathPattern = /^[a-zA-Z0-9\s\+\-\*\/\^\(\)\{\}\[\]\.\,\_\|]+$/;
+    const safeMathPattern = /^[a-zA-Z0-9\s\+\-\*\/\^\(\)\{\}\[\]\.\,\_\|'=]+$/;
 
     // If it contains unsafe characters, return empty string
     if (!safeMathPattern.test(sanitized)) {

@@ -1,16 +1,21 @@
 # Cloudflare Pages ignores a header that is not indented under a URL path.
 # Prerendered HTML is a static asset (see /_routes.json), so this file is what
-# the document receives. A Browser TTL set in the CF dashboard can override
-# Cache-Control, so keep both the edge TTL and the stale window short here:
-# a skipped cache purge must never leave a deploy stale for a full day.
+# the document receives. We deliberately tell BOTH the browser and the Cloudflare
+# edge NOT to cache HTML: this is a small static tool site, origin round-trips are
+# negligible, and caching HTML is what let a stale deploy linger for hours.
+# CAVEAT: a dashboard Edge Cache TTL / Cache Rule (e.g. 14400s) overrides _headers
+# and can still force a 4h edge TTL on text/html. If clean URLs keep serving stale
+# HTML after a deploy+purge, add a CF Cache Rule "Bypass cache" for text/html
+# (higher priority than Edge Cache TTL) — that is the definitive fix; _headers
+# alone cannot lower an Edge Cache TTL that is set in the dashboard.
 /*
   X-Frame-Options: DENY
   X-Content-Type-Options: nosniff
   X-XSS-Protection: 1; mode=block
   Referrer-Policy: strict-origin-when-cross-origin
   Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com https://static.cloudflareinsights.com https://www.googletagmanager.com https://*.googletagmanager.com https://www.google-analytics.com https://ssl.google-analytics.com; script-src-attr 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://challenges.cloudflare.com https://fonts.googleapis.com; img-src 'self' data: blob: https://challenges.cloudflare.com https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com https://*.googletagmanager.com https://*.g.doubleclick.net; font-src 'self' data: https://challenges.cloudflare.com https://fonts.gstatic.com; connect-src 'self' https://challenges.cloudflare.com https://cloudflareinsights.com https://static.cloudflareinsights.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://*.googletagmanager.com https://stats.g.doubleclick.net https://*.g.doubleclick.net; frame-src 'self' https://challenges.cloudflare.com https://www.googletagmanager.com; object-src 'none'; base-uri 'self'; form-action 'self'
-  Cache-Control: public, max-age=0, must-revalidate
-  CDN-Cache-Control: public, s-maxage=300, stale-while-revalidate=60
+  Cache-Control: no-store, must-revalidate
+  CDN-Cache-Control: no-store
 
 # Cache static assets for 1 year (reduces requests)
 # Next.js static assets (highest priority - most specific)

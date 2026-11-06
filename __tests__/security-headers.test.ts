@@ -78,9 +78,9 @@ describe('public/_headers', () => {
         expect(rules.find((rule) => rule.path === '/api/*')?.headers['Cache-Control']).toBe('private, no-store');
     });
 
-    it('revalidates HTML in the browser and allows the edge to cache it', () => {
-        expect(globalRule!.headers['Cache-Control']).toBe('public, max-age=0, must-revalidate');
-        expect(globalRule!.headers['CDN-Cache-Control']).toBe('public, s-maxage=300, stale-while-revalidate=60');
+    it('tells the browser and the Cloudflare edge not to cache HTML (no-store)', () => {
+        expect(globalRule!.headers['Cache-Control']).toBe('no-store, must-revalidate');
+        expect(globalRule!.headers['CDN-Cache-Control']).toBe('no-store');
         const middleware = fs.readFileSync(path.resolve(__dirname, '..', 'middleware.ts'), 'utf8');
         expect(middleware).toContain('public, max-age=0, must-revalidate');
         expect(middleware).toContain('s-maxage=300');
@@ -97,7 +97,7 @@ describe('public/_headers', () => {
         // Pages appends headers from matching rules instead of overriding them;
         // a second CDN-Cache-Control here would make the effective TTL ambiguous.
         expect(sitemap!.headers['CDN-Cache-Control']).toBeUndefined();
-        expect(globalRule!.headers['CDN-Cache-Control']).toBe('public, s-maxage=300, stale-while-revalidate=60');
+        expect(globalRule!.headers['CDN-Cache-Control']).toBe('no-store');
         expect(globalRule!.headers['CDN-Cache-Control']).not.toContain('stale-while-revalidate=86400');
     });
 });

@@ -212,24 +212,25 @@ export function getDerivativeLesson(slug: string, locale: string): DerivativeLes
   }
   const shown = fact.nice || derivativeRaw || '—';
   const paragraphs = [copy.angle, copy.algebra, copy.domain, copy.check];
+  // copy.algebra already states the simplified form ("The form to remember,
+  // already simplified, is <shown>"). A separate generated sentence restating
+  // the same fact used to sit next to it, producing two near-identical steps.
+  // Keep only the hand-written, per-fact algebra line.
   const steps = loc === 'es'
     ? [
       `Escribe f(x) = ${fact.display}.`,
       copy.algebra,
-      `La forma simplificada que hay que recordar es ${shown}.`,
       copy.check,
     ]
     : loc === 'pt'
       ? [
         `Escreva f(x) = ${fact.display}.`,
         copy.algebra,
-        `A forma simplificada para memorizar é ${shown}.`,
         copy.check,
       ]
       : [
         `Write f(x) = ${fact.display}.`,
         copy.algebra,
-        `The simplified form to remember is ${shown}.`,
         copy.check,
       ];
   const description = copy.angle.length > 155 ? `${copy.angle.slice(0, 152).replace(/\s+\S*$/, '')}.` : copy.angle;

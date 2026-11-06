@@ -67,6 +67,17 @@ describe('positions 11-30 pages', () => {
     expect(pi.steps.join(' ')).toMatch(/\(pi - pi\)\/h = 0/);
     expect(pi.example?.answer).toBe('2x');
   });
+
+  it('states the simplified form once in the worked steps (no template restatement)', () => {
+    const en = getDerivativeLesson('derivative-of-2x', 'en')!;
+    const text = en.steps.join(' ').toLowerCase();
+    expect(text.match(/form to remember/g)?.length ?? 0).toBe(1);
+    expect(text).not.toContain('the simplified form to remember is');
+    const es = getDerivativeLesson('derivative-of-2x', 'es')!;
+    const pt = getDerivativeLesson('derivative-of-2x', 'pt')!;
+    expect(es.steps.join(' ')).not.toContain('La forma simplificada que hay que recordar es');
+    expect(pt.steps.join(' ')).not.toContain('A forma simplificada para memorizar é');
+  });
 });
 
 describe('popular derivatives and crawl paths', () => {

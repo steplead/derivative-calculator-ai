@@ -194,7 +194,7 @@ function backSubstituteLatex(s: string): string {
 function backSubstituteEPowersLatex(s: string): string {
   const lowB = E_BASE_LOW;   // 119696244
   const highB = E_BASE_HIGH; // 325368125
-  const normExp = (t: string) => t.replace(/[\\s~\\cdot*]/g, '');
+  const normExp = (t: string) => t.replace(/\s+/g, '').replace(/\\cdot/g, '');
   const negExp = (t: string) => (t.startsWith('-') ? t.slice(1) : '-' + t);
 
   // (1) PRODUCT form:  LOW^{Ea} · HIGH^{Eb}  (or reversed), require Ea = -Eb.
@@ -215,18 +215,30 @@ function backSubstituteEPowersLatex(s: string): string {
     });
   }
 
-  // (2) FRACTION form: \frac{BASE1^{E}}{BASE2^{E}}  (EQUAL exponents). HIGH in the
-  //     numerator ⇒ e^{E}; LOW in the numerator ⇒ e^{-E}.
-  const fracExp = (base: string) => `${base}\\^\\{([^{}]*)\\}`;
+  // (2) FRACTION form: \frac{BASE1^{E}[·extra1]}{BASE2^{E}[·extra2]}  (EQUAL exponents)
+  //   HIGH in the numerator ⇒ e^{E}; LOW in the numerator ⇒ e^{-E} (since LOW/HIGH = 1/e).
+  //   A leading coefficient (e.g. "2 \cdot ") or a trailing factor (e.g. " \cdot x") may
+  //   appear on either side and must be carried through — this is exactly the shape
+  //   nerdamer emits for d/dx(e^{2x})  [leading 2]  and d/dx(x·e^{x})  [trailing \cdot x].
+  const fracSide = (base: string) =>
+    `(?:(\\d+)\\s*\\\\cdot\\s*)?${base}\\^\\{([^{}]*)\\}(?:\\s*\\\\cdot\\s*([^{}/]+))?`;
   const fracSpecs: [RegExp, boolean][] = [
-    [new RegExp(`\\\\frac\\{${fracExp(highB)}\\}\\{${fracExp(lowB)}\\}`, 'g'), true],
-    [new RegExp(`\\\\frac\\{${fracExp(lowB)}\\}\\{${fracExp(highB)}\\}`, 'g'), false],
+    [new RegExp(`\\\\frac\\{${fracSide(highB)}\\}\\{${fracSide(lowB)}\\}`, 'g'), true],
+    [new RegExp(`\\\\frac\\{${fracSide(lowB)}\\}\\{${fracSide(highB)}\\}`, 'g'), false],
   ];
   for (const [re, highNum] of fracSpecs) {
-    s = s.replace(re, (m, numExp: string, denExp: string) => {
-      if (normExp(numExp ?? '') === '' || normExp(numExp ?? '') !== normExp(denExp ?? '')) return m;
-      const e = numExp ?? '';
-      return highNum ? `e^{${e}}` : `e^{${negExp(e)}}`;
+    s = s.replace(re, (m, nc: string, ne: string, nx: string, dc: string, de: string, dx: string) => {
+      ne = ne ?? ''; de = de ?? '';
+      if (normExp(ne) === '' || normExp(ne) !== normExp(de)) return m;
+      const eOut = normExp(ne); // normalized exponent: '2x' / 'x'
+      const base = highNum ? `e^{${eOut}}` : `e^{${negExp(eOut)}}`;
+      // Leading coefficient: \frac{2·HIGH^{E}}{LOW^{E}} ⇒ 2·e^{E}; if in the denominator, divide.
+      let prefix = nc ? String(nc) : '';
+      if (dc) prefix = prefix ? `${prefix}/${dc}` : `1/${dc}`;
+      // Trailing factor: \frac{HIGH^{E}·x}{LOW^{E}} ⇒ e^{E}·x; if in the denominator, divide.
+      let suffix = nx ? String(nx).trim() : '';
+      if (dx) suffix = suffix ? `${suffix}/${String(dx).trim()}` : `1/${String(dx).trim()}`;
+      return `${prefix}${base}${suffix}`;
     });
   }
   return s;

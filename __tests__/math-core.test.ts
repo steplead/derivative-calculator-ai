@@ -146,12 +146,20 @@ describe('prettifyRaw — e written as a ratio of integer powers (prod build)', 
 });
 
 describe('prettifyLatex — e written as a ratio of integer powers (prod build)', () => {
-  // These LaTeX forms were derived from the REAL nerdamer toTeX output of the
-  // integer-power expressions above (the production LaTeX shape is a FRACTION).
+  // EXACT production LaTeX strings captured by the owner on 2026-11-07 (origin fetch,
+  // bypassing CDN). nerdamer emits e as a FRACTION of two integer powers
+  // (325368125/119696244 ≈ e). The fraction may carry a leading coefficient
+  // (e.g. "2 ·" in e^(2x)) or a trailing factor (e.g. "· x" in x·e^x) — both must be
+  // carried through. These tests lock the exact strings so the back-substitution can
+  // never again leak 9-digit integers or an exp( token into the displayed answer.
   const cases: Array<[string, string]> = [
-    ['2\\cdot \\frac{325368125^{2 \\cdot x}}{119696244^{2 \\cdot x}}', '2\\cdot e^{2 \\cdot x}'],
-    ['\\frac{119696244^{x}}{325368125^{x}}', 'e^{-x}'],     // LOW over HIGH = 1/e
-    ['\\frac{325368125^{x}}{119696244^{x}}', 'e^{x}'],       // HIGH over LOW = e
+    // e^(2x): leading coefficient INSIDE the numerator
+    ['\\frac{2 \\cdot 325368125^{2 \\cdot x}}{119696244^{2 \\cdot x}}', '2e^{2x}'],
+    // e^(-x): LOW over HIGH = 1/e  (leading minus stays outside the fraction)
+    ['-\\frac{119696244^{x}}{325368125^{x}}', '-e^{-x}'],
+    // x*e^x: trailing "· x" factor in the numerator  ← owner's 5th / hardest case
+    ['e^{x}+\\frac{325368125^{x} \\cdot x}{119696244^{x}}', 'e^{x}+e^{x}x'],
+    // 2^x / 10^x constant fractions
     ['\\frac{49180508 \\cdot 2^{x}}{70952475}', '2^{x}\\ln(2)'],
     ['\\frac{250513404 \\cdot 10^{x}}{108796589}', '10^{x}\\ln(10)'],
   ];

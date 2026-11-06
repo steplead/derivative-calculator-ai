@@ -22,8 +22,10 @@ import path from 'path';
 import {
     findStaticProblem,
     filterByType,
+    isMachineSlug,
     pickStableRelated,
 } from '@/lib/problems-source';
+import { NOINDEX_SLUGS } from '@/lib/noindex-slugs';
 import { parseSlugToMath } from '@/lib/slug-math';
 
 const ROOT = path.resolve(__dirname, '..');
@@ -308,5 +310,15 @@ describe('RC-6: related problems stay deterministic and library-backed', () => {
         expect(out).toHaveLength(10);
         expect(out.some((p) => p.slug.includes('minus-to-minus-the-minus'))).toBe(false);
         expect(out.some((p) => p.slug.includes('-minus-over-minus-'))).toBe(false);
+    });
+
+    it('every machine-generated near-duplicate slug in the library is noindexed', () => {
+        const machine = library
+            .map((p: { slug: string }) => p.slug)
+            .filter((slug: string) => isMachineSlug(slug));
+        expect(machine.length).toBe(780);
+        for (const slug of machine) {
+            expect(NOINDEX_SLUGS.has(slug)).toBe(true);
+        }
     });
 });

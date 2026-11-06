@@ -134,7 +134,9 @@ export async function middleware(request: NextRequest) {
         response.headers.set('Cache-Control', 'private, no-store');
     } else if (!pathname.startsWith('/api/') && !pathname.startsWith('/_next/')) {
         response.headers.set('Cache-Control', 'public, max-age=0, must-revalidate');
-        response.headers.set('CDN-Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
+        // Keep this identical to public/_headers: a 5-minute edge TTL plus a
+        // 60s stale window makes a deploy visible without a manual purge.
+        response.headers.set('CDN-Cache-Control', 'public, s-maxage=300, stale-while-revalidate=60');
     }
 
     return withSecurityHeaders(response);

@@ -10,7 +10,7 @@
   Referrer-Policy: strict-origin-when-cross-origin
   Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com https://static.cloudflareinsights.com https://www.googletagmanager.com https://*.googletagmanager.com https://www.google-analytics.com https://ssl.google-analytics.com; script-src-attr 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://challenges.cloudflare.com https://fonts.googleapis.com; img-src 'self' data: blob: https://challenges.cloudflare.com https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com https://*.googletagmanager.com https://*.g.doubleclick.net; font-src 'self' data: https://challenges.cloudflare.com https://fonts.gstatic.com; connect-src 'self' https://challenges.cloudflare.com https://cloudflareinsights.com https://static.cloudflareinsights.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://*.googletagmanager.com https://stats.g.doubleclick.net https://*.g.doubleclick.net; frame-src 'self' https://challenges.cloudflare.com https://www.googletagmanager.com; object-src 'none'; base-uri 'self'; form-action 'self'
   Cache-Control: public, max-age=0, must-revalidate
-  CDN-Cache-Control: public, s-maxage=3600, stale-while-revalidate=60
+  CDN-Cache-Control: public, s-maxage=300, stale-while-revalidate=60
 
 # Cache static assets for 1 year (reduces requests)
 # Next.js static assets (highest priority - most specific)
@@ -57,7 +57,8 @@
 # Sitemap is the only discovery channel while just one page is indexed.
 # 2026-11-06: a deploy left the previous 255-URL sitemap cached at the edge
 # for up to 24h because /sitemap.xml inherited the long browser TTL plus the
-# 86400s stale window. Give it its own short, non-stale edge policy.
+# 86400s stale window. The global 300s edge TTL / 60s stale window now applies
+# here too; do not add a second CDN-Cache-Control header (Pages appends rather
+# than overrides, and duplicate directives make the effective TTL ambiguous).
 /sitemap.xml
   Cache-Control: public, max-age=300, must-revalidate
-  CDN-Cache-Control: public, s-maxage=300

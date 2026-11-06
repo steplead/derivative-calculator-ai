@@ -80,21 +80,24 @@ describe('public/_headers', () => {
 
     it('revalidates HTML in the browser and allows the edge to cache it', () => {
         expect(globalRule!.headers['Cache-Control']).toBe('public, max-age=0, must-revalidate');
-        expect(globalRule!.headers['CDN-Cache-Control']).toBe('public, s-maxage=3600, stale-while-revalidate=60');
+        expect(globalRule!.headers['CDN-Cache-Control']).toBe('public, s-maxage=300, stale-while-revalidate=60');
         const middleware = fs.readFileSync(path.resolve(__dirname, '..', 'middleware.ts'), 'utf8');
         expect(middleware).toContain('public, max-age=0, must-revalidate');
-        expect(middleware).toContain('s-maxage=3600');
+        expect(middleware).toContain('s-maxage=300');
+        expect(middleware).toContain('CDN-Cache-Control\', \'public, s-maxage=300, stale-while-revalidate=60');
         expect(middleware).not.toContain('CDN-Cache-Control\', \'public, max-age=0');
         expect(middleware).not.toContain('s-maxage=7200');
+        expect(middleware).not.toContain('stale-while-revalidate=86400');
     });
 
-    it('keeps the sitemap short-lived and non-stale at the edge (2026-11-06)', () => {
+    it('keeps the sitemap short-lived with a single unambiguous edge policy', () => {
         const sitemap = rules.find((rule) => rule.path === '/sitemap.xml');
         expect(sitemap).toBeDefined();
         expect(sitemap!.headers['Cache-Control']).toBe('public, max-age=300, must-revalidate');
-        expect(sitemap!.headers['CDN-Cache-Control']).toBe('public, s-maxage=300');
-        expect(sitemap!.headers['CDN-Cache-Control']).not.toContain('stale-while-revalidate');
-        // The global stale window must be short too, or HTML repeats the incident.
+        // Pages appends headers from matching rules instead of overriding them;
+        // a second CDN-Cache-Control here would make the effective TTL ambiguous.
+        expect(sitemap!.headers['CDN-Cache-Control']).toBeUndefined();
+        expect(globalRule!.headers['CDN-Cache-Control']).toBe('public, s-maxage=300, stale-while-revalidate=60');
         expect(globalRule!.headers['CDN-Cache-Control']).not.toContain('stale-while-revalidate=86400');
     });
 });

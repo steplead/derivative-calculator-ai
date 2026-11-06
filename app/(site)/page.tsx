@@ -282,6 +282,25 @@ export default async function Home() {
               ))}
             </div>
           </section>
+
+          <section aria-labelledby="gsc-longtail">
+            <h2 id="gsc-longtail" className="text-2xl font-semibold text-ink mb-6 text-center">Calculators by differentiation rule</h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              {[
+                { label: 'Chain Rule Calculator', href: '/chain-rule-calculator' },
+                { label: 'Implicit Differentiation Calculator', href: '/implicit-differentiation-calculator' },
+                { label: 'Partial Derivative Calculator', href: '/partial-derivative-calculator' },
+              ].map((item) => (
+                <Link
+                  key={item.href}
+                  href={localePath(item.href, locale)}
+                  className="surface-link text-sm no-underline"
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+          </section>
         </div>
       </div>
 

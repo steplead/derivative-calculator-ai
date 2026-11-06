@@ -56,12 +56,30 @@ export interface DerivativeSolution {
 export function normalizeExpression(expr: string): string {
   if (!expr) return '';
   let s = expr.trim();
+  // Rewrite the natural-base exponential `e^(…)` → `exp(…)`. In some nerdamer
+  // builds the bare symbol `e` is treated as a numeric constant and d/dx e^x is
+  // emitted as a rational approximation (e.g. (325368125/119696244)^x instead of
+  // e^x). Routing through the symbolic `exp` function keeps the result exact.
+  // The display form e^(…) is restored by prettyExp() after differentiation.
+  s = s.replace(/e\^\(/gi, 'exp(').replace(/E\^\(/g, 'exp(');
+  s = s.replace(/e\^([^()]*)/gi, 'exp($1)').replace(/E\^([^()]*)/g, 'exp($1)');
   // Rewrite `ln(` → `log(` (function token only; lookahead for `(` avoids
   // corrupting identifiers like "lnx" if ever present).
   s = s.replace(/ln(?=\s*\()/g, 'log');
   // Rewrite `Abs(` → `abs(` (case-insensitive function token only).
   s = s.replace(/\babs(?=\s*\()/gi, 'abs');
   return s;
+}
+
+/**
+ * Restore the display form `e^(…)` from nerdamer's `exp(…)` output.
+ *   "2*exp(2*x)" → "2*e^(2*x)"
+ *   "exp(x)"     → "e^x"
+ * Belt-and-suspenders: guarantees the natural-base exponential is never shown
+ * as a numeric/rational approximation of e, regardless of the nerdamer build.
+ */
+function prettyExp(s: string): string {
+  return s.replace(/exp\(/g, 'e^(').replace(/e\^\(x\)/g, 'e^x');
 }
 
 const WHOLE_FUNCTION = /^(sin|cos|tan|sec|csc|cot|arcsin|arccos|arctan|asin|acos|atan|sinh|cosh|tanh|log10|log|ln|exp|sqrt|abs)\((.*)\)$/i;
@@ -285,6 +303,7 @@ export function calculateDerivative(expr: string): DerivativeSolution {
     // per-invocation local, so there is no cross-request state or memory growth.
     d = nerdamer(`diff(${engineExpression}, x)`);
     raw = d.toString();
+    raw = prettyExp(raw);
   } catch (e: any) {
     throw new Error(`Nerdamer calculation failed: ${e?.message || String(e)}`);
   }
@@ -294,12 +313,13 @@ export function calculateDerivative(expr: string): DerivativeSolution {
 
   try {
     latex = d.toTeX();
+    latex = prettyExp(latex);
   } catch {
     latex = raw;
   }
 
   const rule = identifyRule(engineExpression);
-  const steps = generateSteps(engineExpression, raw, rule);
+  const steps = generateSteps(engineExpression, raw, rule).map(prettyExp);
 
   // Validation: reject obvious ln-bug outputs (result containing bare `ln` symbol).
   const isValid = validateDerivativeResult(engineExpression, raw);

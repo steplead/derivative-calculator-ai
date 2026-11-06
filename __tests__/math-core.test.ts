@@ -41,6 +41,10 @@ describe('calculateDerivative — required math cases', () => {
     ['log(x)', 'x^(-1)'],                 // natural log alias
     ['log10(x)', '(log(10)*x)^(-1)'],     // base-10 log
     ['exp(2*x)', '2*e^(2*x)'],            // exponential chain
+    ['e^x', 'e^x'],                        // natural-base exp (rational approx in some nerdamer builds)
+    ['e^(2*x)', '2*e^(2*x)'],             // e^ with explicit parens
+    ['2^x', '2^x*log(2)'],                // other base, still symbolic
+    ['10^x', '10^x*log(10)'],             // other base, still symbolic
     ['x*sin(x)', 'cos(x)*x+sin(x)'],      // product rule
   ];
 
@@ -54,6 +58,26 @@ describe('calculateDerivative — required math cases', () => {
     const r = calculateDerivative('ln(x)');
     expect(r.solutionRaw).not.toMatch(/^ln$/);
     expect(validateDerivativeResult('log(x)', r.solutionRaw)).toBe(true);
+  });
+});
+
+describe('calculateDerivative — e^x stays symbolic (no rational approximation)', () => {
+  it('d/dx e^x = e^x, never a numeric/rational approximation of e', () => {
+    const r = calculateDerivative('e^x');
+    expect(r.isValid).toBe(true);
+    expect(r.solutionRaw).toBe('e^x');
+    // Guard against the old nerdamer bug: d/dx e^x must not contain a long digit
+    // run like 325368125/119696244 (≈ e). It must also not leak the internal
+    // `exp(` token into the displayed answer.
+    expect(r.solutionRaw).not.toMatch(/\d{6,}/);
+    expect(r.solutionRaw).not.toMatch(/exp\(/);
+    expect(r.steps.join(' ')).toContain('e^x');
+  });
+
+  it('e^(2*x) and non-e bases stay symbolic', () => {
+    expect(calculateDerivative('e^(2*x)').solutionRaw).toBe('2*e^(2*x)');
+    expect(calculateDerivative('2^x').solutionRaw).toBe('2^x*log(2)');
+    expect(calculateDerivative('10^x').solutionRaw).toBe('10^x*log(10)');
   });
 });
 

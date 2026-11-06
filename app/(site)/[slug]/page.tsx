@@ -42,6 +42,7 @@ import { parseSlugToMath } from '@/lib/slug-math';
 import Link from 'next/link';
 import SolutionCard from '@/components/SolutionCard';
 import AdShell from '@/components/AdShell';
+import FAQ from '@/components/FAQ';
 
 const derivativeMemo = new Map<string, DerivativeSolution | null>();
 
@@ -101,6 +102,48 @@ function difficultyLabel(d: string): string {
         advanced: 'Advanced',
     };
     return map[d] || (d.charAt(0).toUpperCase() + d.slice(1));
+}
+
+// Rec 5: every tool page gets a formula-specific FAQ (question names the exact
+// formula, answer carries the computed result) so the content is unique per
+// page rather than templated filler. Used by derivative pages (SSR-computed
+// answer) and integral/limit pages (calculator-referencing fallback).
+function buildFaqItems(
+    formula: string,
+    type: string,
+    solutionRaw?: string | null,
+    rule?: string | null,
+): { question: string; answer: string }[] {
+    const isIntegral = type === 'integral';
+    const isLimit = type === 'limit';
+    const verb = isIntegral ? 'integral' : isLimit ? 'limit' : 'derivative';
+    const technique = isIntegral ? 'integration' : isLimit ? 'limit' : 'differentiation';
+    const items: { question: string; answer: string }[] = [];
+
+    if (solutionRaw) {
+        items.push({
+            question: `What is the ${verb} of ${formula}?`,
+            answer: `The ${verb} of ${formula} is ${solutionRaw}.`,
+        });
+        items.push({
+            question: `How do you find the ${verb} of ${formula}?`,
+            answer: `Apply the standard ${technique} rules${rule ? ` — the key rule used here is the ${rule}` : ''}. The step-by-step result is ${solutionRaw}.`,
+        });
+        items.push({
+            question: `Why is the ${verb} of ${formula} equal to ${solutionRaw}?`,
+            answer: `Because ${technique} ${isLimit ? 'describes the value a function approaches' : 'measures how a function changes'} — applying the rules to ${formula} yields ${solutionRaw}. See the full step-by-step breakdown above.`,
+        });
+    } else {
+        items.push({
+            question: `What is the ${verb} of ${formula}?`,
+            answer: `Use the ${verb} calculator above to get the step-by-step ${isIntegral ? 'antiderivative' : 'result'} of ${formula}.`,
+        });
+        items.push({
+            question: `How do you compute the ${verb} of ${formula}?`,
+            answer: `Apply the relevant ${technique} techniques to ${formula}. Our tool shows every step so you can follow the work.`,
+        });
+    }
+    return items;
 }
 
 // Prerendered at build time. Locale comes from readLocale() (English by default,
@@ -448,6 +491,15 @@ export default async function ProblemPage({ params }: { params: { slug: string }
         const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://derivativecalculatorai.com';
         const url = `${siteUrl}${problemHref(slug, locale)}`;
 
+        // Rec 5: deterministic, formula-specific FAQ rendered on every tool page
+        // (steps + formula explanation already exist via SolutionCard/howToText).
+        const faqItems = buildFaqItems(
+            safeProblem.formula,
+            safeProblem.type || 'derivative',
+            ssrSolution?.solutionRaw,
+            ssrSolution?.rule,
+        );
+
         // Generate Schema.org structured data
         const mathSolverSchema = generateMathSolverData({
             name: striking?.title ?? pageLesson?.title ?? t.title,
@@ -599,6 +651,12 @@ export default async function ProblemPage({ params }: { params: { slug: string }
                         })}
                     </div>
                 </div>
+
+                {/* Rec 5: formula-specific FAQ (steps + formula explanation already
+                    present via SolutionCard / howToText). Adds crawlable, unique
+                    per-page content to help thin pages earn indexing. */}
+                <FAQ items={faqItems} />
+
                 <div className="mt-16">
                     <AdShell type="donation" />
                 </div>

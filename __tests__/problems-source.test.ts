@@ -215,10 +215,23 @@ describe('P2-G follow-up: derivative dup-group slugs unlocked from NOINDEX_SLUGS
         return new Set<string>([...map.keys(), ...map.values()]);
     }
 
-    it('unlock set = 35 slugs (15 groups), every one currently in NOINDEX_SLUGS', async () => {
+    it('unlock set = 35 slugs (15 groups); Rec 4 unlocked sitemap pages stay unlocked', async () => {
         const unlock = await unlockSet();
         expect(unlock.size).toBe(35);
-        for (const s of unlock) expect(NOINDEX_SLUGS.has(s)).toBe(true);
+        // Rec 4 (2026-11-06) lifted noindex on two indexable sitemap pages.
+        // derivative-of-x-squared is a dup-group primary, so it is in the
+        // unlock set; derivative-of-2x is not.
+        const rec4Unlocked = ['derivative-of-2x', 'derivative-of-x-squared'];
+        for (const s of unlock) {
+            if (rec4Unlocked.includes(s)) {
+                expect(NOINDEX_SLUGS.has(s)).toBe(false);
+            } else {
+                expect(NOINDEX_SLUGS.has(s)).toBe(true);
+            }
+        }
+        for (const s of rec4Unlocked) {
+            expect(NOINDEX_SLUGS.has(s)).toBe(false);
+        }
     });
 
     it('non-group NOINDEX_SLUGS slugs stay locked (not in unlock set)', async () => {

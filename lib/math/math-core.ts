@@ -83,8 +83,8 @@ export function normalizeExpression(expr: string): string {
  */
 const BACKSUB_CONSTANTS: { value: number; display: string; latex: string }[] = [
   { value: Math.E,       display: 'e',       latex: 'e' },
-  { value: Math.log(2),  display: 'ln(2)',   latex: '\\ln\\left(2\\right)' },
-  { value: Math.log(10), display: 'ln(10)',  latex: '\\ln\\left(10\\right)' },
+  { value: Math.log(2),  display: 'ln(2)',   latex: '\\ln(2)' },
+  { value: Math.log(10), display: 'ln(10)',  latex: '\\ln(10)' },
   { value: Math.PI,      display: 'pi',      latex: '\\pi' },
   { value: Math.SQRT2,   display: 'sqrt(2)', latex: '\\sqrt{2}' },
 ];
@@ -114,19 +114,122 @@ function backSubstituteRaw(s: string): string {
   return out;
 }
 
-/** Replace LaTeX \frac{6+digits}{6+digits} (optionally wrapped) equal to a constant. */
+/**
+ * The constant e has no symbolic `exp` token in some nerdamer builds: it is
+ * emitted as the ratio of two large integer powers,
+ *   119696244^(-k*x) * 325368125^(k*x)   (since 325368125 / 119696244 ≈ e).
+ * Restore that exact pair to e^(k*x) so the displayed answer never carries the
+ * 9-digit integers. Those two base integers appear ONLY as this ratio, so the
+ * match is safe and will not touch legitimate coefficients elsewhere.
+ */
+const E_BASE_LOW = '119696244';
+const E_BASE_HIGH = '325368125';
+function negateExp(e: string): string {
+  return e.startsWith('-') ? e.slice(1) : '-' + e;
+}
+/**
+ * Collapse the production e-ratio `BASE_LOW^{E_a} * BASE_HIGH^{E_b}` (in either
+ * order) into `e^{E_b}`, requiring E_a === -E_b. The exponent may be written with
+ * or without surrounding parentheses (`^x`, `^(-x)`, `^(2*x)`, `^(-2*x)`), and the
+ * two factors may carry a leading coefficient or sign outside the pair (e.g.
+ * `2*119696244^(-2*x)*325368125^(2*x)` → `2*e^(2*x)`, `-119696244^x*325368125^(-x)`
+ * → `-e^(-x)`). Those two base integers appear ONLY as this ratio, so the match is
+ * safe and will not touch legitimate coefficients elsewhere.
+ */
+function backSubstituteEPowers(s: string): string {
+  const lowB = E_BASE_LOW;   // 119696244
+  const highB = E_BASE_HIGH; // 325368125
+  const expOf = (base: string) => `${base}\\^\\(?(-?)((?:\\d+\\*)?x)\\)?`;
+  const join = '\\s*\\*\\s*';
+  // Each spec: [regex, isLowFirst]. Order-independent — handle both A*B and B*A.
+  const specs: [RegExp, boolean][] = [
+    [new RegExp(`${expOf(lowB)}${join}${expOf(highB)}`, 'g'), true],
+    [new RegExp(`${expOf(highB)}${join}${expOf(lowB)}`, 'g'), false],
+  ];
+  for (const [re, lowFirst] of specs) {
+    s = s.replace(re, (m, a1: string, a2: string, b1: string, b2: string) => {
+      const firstExp = (a1 ?? '') + (a2 ?? '');
+      const secondExp = (b1 ?? '') + (b2 ?? '');
+      const lowExp = lowFirst ? firstExp : secondExp;
+      const highExp = lowFirst ? secondExp : firstExp;
+      if (negateExp(lowExp) !== highExp) return m;
+      return `e^(${highExp})`;
+    });
+  }
+  return s;
+}
+
+/** Replace LaTeX \frac{6+digits}{6+digits} (optionally wrapping a term) equal to a constant. */
 function backSubstituteLatex(s: string): string {
-  return s.replace(
-    /\\left\(\s*\\frac\{(-?\d{6,})\}\{(-?\d{6,})\}\s*\\right\)|\\frac\{(-?\d{6,})\}\{(-?\d{6,})\}/g,
-    (m, a1, b1, a2, b2) => {
-      const a = a1 ?? a2;
-      const b = b1 ?? b2;
-      const den = Number(b);
-      if (!den) return m;
-      const c = matchBackSubConstant(Number(a) / den);
-      return c ? c.latex : m;
-    },
-  );
+  // \frac{NUM \cdot BASE^{x}}{DEN}  →  BASE^{x} · constant   (observed for 2^x / 10^x)
+  s = s.replace(/\\frac\{(-?\d{6,})\s*\\cdot\s*(\d+)\^\{x\}\}\{(-?\d{6,})\}/g, (m, a, base, b) => {
+    const c = matchBackSubConstant(Number(a) / Number(b));
+    return c ? `${base}^{x}${c.latex}` : m;
+  });
+  // \frac{NUM}{DEN \cdot BASE^{x}}  →  constant / BASE^{x}
+  s = s.replace(/\\frac\{(-?\d{6,})\}\{(-?\d{6,})\s*\\cdot\s*(\d+)\^\{x\}\}/g, (m, a, b, base) => {
+    const c = matchBackSubConstant(Number(a) / Number(b));
+    return c ? `\\frac{${c.latex}}{${base}^{x}}` : m;
+  });
+  // \left(\frac{NUM}{DEN}\right) and bare \frac{NUM}{DEN}
+  s = s.replace(/\\left\(\s*\\frac\{(-?\d{6,})\}\{(-?\d{6,})\}\s*\\right\)/g, (m, a, b) => {
+    const c = matchBackSubConstant(Number(a) / Number(b));
+    return c ? c.latex : m;
+  });
+  s = s.replace(/\\frac\{(-?\d{6,})\}\{(-?\d{6,})\}/g, (m, a, b) => {
+    const c = matchBackSubConstant(Number(a) / Number(b));
+    return c ? c.latex : m;
+  });
+  return s;
+}
+
+/** Restore e written as a ratio of two large powers in LaTeX.
+ *
+ *  nerdamer's toTeX emits this ratio in TWO shapes:
+ *   (1) PRODUCT:  119696244^{-2x} · 325368125^{2x}  (exponents are negatives: Ea = -Eb)
+ *   (2) FRACTION: \frac{325368125^{2·x}}{119696244^{2·x}}  (exponents EQUAL; HIGH in
+ *       the numerator ⇒ e^{E}, LOW in the numerator ⇒ e^{-E} because LOW/HIGH = 1/e)
+ *  Both collapse to e^{…} with no 6+ digit integer leaking.
+ */
+function backSubstituteEPowersLatex(s: string): string {
+  const lowB = E_BASE_LOW;   // 119696244
+  const highB = E_BASE_HIGH; // 325368125
+  const normExp = (t: string) => t.replace(/[\\s~\\cdot*]/g, '');
+  const negExp = (t: string) => (t.startsWith('-') ? t.slice(1) : '-' + t);
+
+  // (1) PRODUCT form:  LOW^{Ea} · HIGH^{Eb}  (or reversed), require Ea = -Eb.
+  const expOfProd = (base: string) => `${base}\\^\\{([^{}]*)\\}`;
+  const joinProd = '\\s*(?:\\\\cdot\\s*)?';
+  const prodSpecs: [RegExp, boolean][] = [
+    [new RegExp(`${expOfProd(lowB)}${joinProd}${expOfProd(highB)}`, 'g'), true],
+    [new RegExp(`${expOfProd(highB)}${joinProd}${expOfProd(lowB)}`, 'g'), false],
+  ];
+  for (const [re, lowFirst] of prodSpecs) {
+    s = s.replace(re, (m, a1: string, b1: string) => {
+      const firstExp = a1 ?? '';
+      const secondExp = b1 ?? '';
+      const lowExp = lowFirst ? firstExp : secondExp;
+      const highExp = lowFirst ? secondExp : firstExp;
+      if (normExp(lowExp) === '' || negateExp(normExp(lowExp)) !== normExp(highExp)) return m;
+      return `e^{${highExp}}`;
+    });
+  }
+
+  // (2) FRACTION form: \frac{BASE1^{E}}{BASE2^{E}}  (EQUAL exponents). HIGH in the
+  //     numerator ⇒ e^{E}; LOW in the numerator ⇒ e^{-E}.
+  const fracExp = (base: string) => `${base}\\^\\{([^{}]*)\\}`;
+  const fracSpecs: [RegExp, boolean][] = [
+    [new RegExp(`\\\\frac\\{${fracExp(highB)}\\}\\{${fracExp(lowB)}\\}`, 'g'), true],
+    [new RegExp(`\\\\frac\\{${fracExp(lowB)}\\}\\{${fracExp(highB)}\\}`, 'g'), false],
+  ];
+  for (const [re, highNum] of fracSpecs) {
+    s = s.replace(re, (m, numExp: string, denExp: string) => {
+      if (normExp(numExp ?? '') === '' || normExp(numExp ?? '') !== normExp(denExp ?? '')) return m;
+      const e = numExp ?? '';
+      return highNum ? `e^{${e}}` : `e^{${negExp(e)}}`;
+    });
+  }
+  return s;
 }
 
 /** Move a leading constant factor after the term: ln(2)*2^x → 2^x*ln(2). */
@@ -145,6 +248,9 @@ function restoreExp(s: string): string {
 export function prettifyRaw(s: string): string {
   let out = restoreExp(s);
   out = backSubstituteRaw(out);
+  out = backSubstituteEPowers(out);
+  // After e-power back-substitution, collapse e^(x) → e^x for the bare-x case.
+  out = out.replace(/e\^\(x\)/g, 'e^x');
   // nerdamer prints its natural log as `log` → display as `ln`. `log10(` is
   // base-10 and has no `(` directly after `log`, so this pattern skips it.
   out = out.replace(/log\(/g, 'ln(');
@@ -153,9 +259,10 @@ export function prettifyRaw(s: string): string {
 }
 
 /** Post-process nerdamer LaTeX output (mirrors prettifyRaw). */
-function prettifyLatex(s: string): string {
+export function prettifyLatex(s: string): string {
   let out = restoreExp(s);
   out = backSubstituteLatex(out);
+  out = backSubstituteEPowersLatex(out);
   out = out.replace(/\\mathrm\{log\}/g, '\\ln').replace(/\\blog(?![_{])/g, '\\ln');
   return out;
 }

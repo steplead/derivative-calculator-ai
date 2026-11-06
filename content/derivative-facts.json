@@ -1413,34 +1413,34 @@
     "cluster": "exp",
     "copy": {
       "en": {
-        "angle": "2^x is not e^x. Write it as e^(x ln 2); the chain rule then multiplies by ln 2. The derivative is 2^x ln 2. The engine prints log for the natural log, so the raw form is 2^x*log(2). The ln 2 is a constant about 0.693, which is why 2^x grows more slowly than e^x.",
-        "algebra": "Apply the exponential rule to 2^x. The form to remember, already simplified, is 2^x*log(2).",
+        "angle": "2^x is not e^x. Write it as e^(x ln 2); the chain rule then multiplies by ln 2. The derivative is 2^x ln 2, written 2^x*ln(2). The ln 2 is a constant about 0.693, which is why 2^x grows more slowly than e^x.",
+        "algebra": "Apply the exponential rule to 2^x. The form to remember, already simplified, is 2^x*ln(2).",
         "mistakeTitle": "Answering 2^x",
         "mistake": "2^x without ln 2 treats every exponential as its own derivative. Only base e has that property.",
         "mistake2Title": "Treating 2^x as if the base were e with inside x",
         "mistake2": "Only e^x is its own derivative with no extra factor. A coefficient in the exponent, or a base other than e, changes the answer.",
         "domain": "The expression is built from polynomials, sine, cosine, or exponentials, so the derivative exists for every real x.",
-        "check": "At x = 0, substitute into the simplified form 2^x*log(2). That number is the slope of 2^x there; a secant over a small step in x lands next to it."
+        "check": "At x = 0, substitute into the simplified form 2^x*ln(2). That number is the slope of 2^x there; a secant over a small step in x lands next to it."
       },
       "es": {
-        "angle": "2^x no es e^x. Escríbela como e^(x ln 2); la regla de la cadena multiplica entonces por ln 2. La derivada es 2^x ln 2. El motor escribe log para el logaritmo natural, así que la forma cruda es 2^x*log(2). ln 2 es una constante cercana a 0.693, y por eso 2^x crece más despacio que e^x.",
-        "algebra": "Aplica la regla exponencial a 2^x. La forma que hay que recordar, ya simplificada, es 2^x*log(2).",
+        "angle": "2^x no es e^x. Escríbela como e^(x ln 2); la regla de la cadena multiplica entonces por ln 2. La derivada es 2^x ln 2, escrita 2^x*ln(2). ln 2 es una constante cercana a 0.693, y por eso 2^x crece más despacio que e^x.",
+        "algebra": "Aplica la regla exponencial a 2^x. La forma que hay que recordar, ya simplificada, es 2^x*ln(2).",
         "mistakeTitle": "Responder 2^x",
         "mistake": "2^x sin ln 2 trata toda exponencial como su propia derivada. Solo la base e tiene esa propiedad.",
         "mistake2Title": "Tratar 2^x como si la base fuera e con interior x",
         "mistake2": "Solo e^x es su propia derivada sin factor extra. Un coeficiente en el exponente, u otra base, cambia la respuesta.",
         "domain": "La expresión está hecha de polinomios, seno, coseno o exponenciales, así que la derivada existe para todo x real.",
-        "check": "En x = 0, sustituye en la forma simplificada 2^x*log(2). Ese número es la pendiente de 2^x en ese punto; una secante con un paso pequeño de x cae al lado."
+        "check": "En x = 0, sustituye en la forma simplificada 2^x*ln(2). Ese número es la pendiente de 2^x en ese punto; una secante con un paso pequeño de x cae al lado."
       },
       "pt": {
-        "angle": "2^x não é e^x. Escreva como e^(x ln 2); a regra da cadeia multiplica então por ln 2. A derivada é 2^x ln 2. O motor escreve log para o logaritmo natural, então a forma crua é 2^x*log(2). ln 2 é uma constante perto de 0,693, e por isso 2^x cresce mais devagar que e^x.",
-        "algebra": "Aplique a regra exponencial a 2^x. A forma para memorizar, já simplificada, é 2^x*log(2).",
+        "angle": "2^x não é e^x. Escreva como e^(x ln 2); a regra da cadeia multiplica então por ln 2. A derivada é 2^x ln 2, escrita 2^x*ln(2). ln 2 é uma constante perto de 0,693, e por isso 2^x cresce mais devagar que e^x.",
+        "algebra": "Aplique a regra exponencial a 2^x. A forma para memorizar, já simplificada, é 2^x*ln(2).",
         "mistakeTitle": "Responder 2^x",
         "mistake": "2^x sem ln 2 trata toda exponencial como a própria derivada. Só a base e tem essa propriedade.",
         "mistake2Title": "Tratar 2^x como se a base fosse e com interior x",
         "mistake2": "Só e^x é a própria derivada sem fator extra. Um coeficiente no expoente, ou outra base, muda a resposta.",
         "domain": "A expressão é feita de polinômios, seno, cosseno ou exponenciais, então a derivada existe para todo x real.",
-        "check": "Em x = 0, substitua na forma simplificada 2^x*log(2). Esse número é a inclinação de 2^x nesse ponto; uma secante com um passo pequeno de x cai ao lado."
+        "check": "Em x = 0, substitua na forma simplificada 2^x*ln(2). Esse número é a inclinação de 2^x nesse ponto; uma secante com um passo pequeno de x cai ao lado."
       }
     }
   },
@@ -1453,34 +1453,34 @@
     "cluster": "exp",
     "copy": {
       "en": {
-        "angle": "10^x works like 2^x with a larger base. The extra factor is ln 10, about 2.302, so 10^x climbs faster than e^x. The derivative is 10^x ln 10, printed by the engine as 10^x*log(10). The same rewrite, 10^x = e^(x ln 10), produces the factor; nothing about base 10 cancels it.",
-        "algebra": "Apply the exponential rule to 10^x. The form to remember, already simplified, is 10^x*log(10).",
+        "angle": "10^x works like 2^x with a larger base. The extra factor is ln 10, about 2.302, so 10^x climbs faster than e^x. The derivative is 10^x ln 10, written 10^x*ln(10). The same rewrite, 10^x = e^(x ln 10), produces the factor; nothing about base 10 cancels it.",
+        "algebra": "Apply the exponential rule to 10^x. The form to remember, already simplified, is 10^x*ln(10).",
         "mistakeTitle": "Answering 10^x",
         "mistake": "10^x alone would be right only for base e. Base 10 contributes ln 10, and that constant is not 1.",
         "mistake2Title": "Treating 10^x as if the base were e with inside x",
         "mistake2": "Only e^x is its own derivative with no extra factor. A coefficient in the exponent, or a base other than e, changes the answer.",
         "domain": "The expression is built from polynomials, sine, cosine, or exponentials, so the derivative exists for every real x.",
-        "check": "At x = 0, substitute into the simplified form 10^x*log(10). That number is the slope of 10^x there; a secant over a small step in x lands next to it."
+        "check": "At x = 0, substitute into the simplified form 10^x*ln(10). That number is the slope of 10^x there; a secant over a small step in x lands next to it."
       },
       "es": {
-        "angle": "10^x funciona como 2^x con una base más grande. El factor extra es ln 10, cerca de 2.302, así que 10^x sube más rápido que e^x. La derivada es 10^x ln 10, y el motor la imprime como 10^x*log(10). La misma reescritura, 10^x = e^(x ln 10), produce el factor; nada de la base 10 lo cancela.",
-        "algebra": "Aplica la regla exponencial a 10^x. La forma que hay que recordar, ya simplificada, es 10^x*log(10).",
+        "angle": "10^x funciona como 2^x con una base más grande. El factor extra es ln 10, cerca de 2.302, así que 10^x sube más rápido que e^x. La derivada es 10^x ln 10, escrita 10^x*ln(10). La misma reescritura, 10^x = e^(x ln 10), produce el factor; nada de la base 10 lo cancela.",
+        "algebra": "Aplica la regla exponencial a 10^x. La forma que hay que recordar, ya simplificada, es 10^x*ln(10).",
         "mistakeTitle": "Responder 10^x",
         "mistake": "10^x sola sería correcta solo con base e. La base 10 aporta ln 10, y esa constante no es 1.",
         "mistake2Title": "Tratar 10^x como si la base fuera e con interior x",
         "mistake2": "Solo e^x es su propia derivada sin factor extra. Un coeficiente en el exponente, u otra base, cambia la respuesta.",
         "domain": "La expresión está hecha de polinomios, seno, coseno o exponenciales, así que la derivada existe para todo x real.",
-        "check": "En x = 0, sustituye en la forma simplificada 10^x*log(10). Ese número es la pendiente de 10^x en ese punto; una secante con un paso pequeño de x cae al lado."
+        "check": "En x = 0, sustituye en la forma simplificada 10^x*ln(10). Ese número es la pendiente de 10^x en ese punto; una secante con un paso pequeño de x cae al lado."
       },
       "pt": {
-        "angle": "10^x funciona como 2^x com uma base maior. O fator extra é ln 10, cerca de 2,302, então 10^x sobe mais rápido que e^x. A derivada é 10^x ln 10, e o motor imprime 10^x*log(10). A mesma reescrita, 10^x = e^(x ln 10), produz o fator; nada da base 10 o cancela.",
-        "algebra": "Aplique a regra exponencial a 10^x. A forma para memorizar, já simplificada, é 10^x*log(10).",
+        "angle": "10^x funciona como 2^x com uma base maior. O fator extra é ln 10, cerca de 2,302, então 10^x sobe mais rápido que e^x. A derivada é 10^x ln 10, escrita 10^x*ln(10). A mesma reescrita, 10^x = e^(x ln 10), produz o fator; nada da base 10 o cancela.",
+        "algebra": "Aplique a regra exponencial a 10^x. A forma para memorizar, já simplificada, é 10^x*ln(10).",
         "mistakeTitle": "Responder 10^x",
         "mistake": "10^x sozinha estaria certa só com base e. A base 10 contribui com ln 10, e essa constante não é 1.",
         "mistake2Title": "Tratar 10^x como se a base fosse e com interior x",
         "mistake2": "Só e^x é a própria derivada sem fator extra. Um coeficiente no expoente, ou outra base, muda a resposta.",
         "domain": "A expressão é feita de polinômios, seno, cosseno ou exponenciais, então a derivada existe para todo x real.",
-        "check": "Em x = 0, substitua na forma simplificada 10^x*log(10). Esse número é a inclinação de 10^x nesse ponto; uma secante com um passo pequeno de x cai ao lado."
+        "check": "Em x = 0, substitua na forma simplificada 10^x*ln(10). Esse número é a inclinação de 10^x nesse ponto; uma secante com um passo pequeno de x cai ao lado."
       }
     }
   },

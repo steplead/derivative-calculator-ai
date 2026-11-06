@@ -491,8 +491,12 @@ export default async function ProblemPage({ params }: { params: { slug: string }
             _ssr: true,
         } : undefined;
 
-        const t = getLocalizedContent(locale, safeProblem.formula, safeProblem.type);
+        // Use the DISPLAY form (exp(2*x) → e^(2x)) for all synthesized copy so the
+        // meta <title>, description, H1 and how-to text never leak the engine token
+        // `exp(`. The Calculator's initialEquation below still uses the raw engine
+        // formula on purpose (it must be derivable).
         const displayFormula = displayExpression(safeProblem.formula);
+        const t = getLocalizedContent(locale, displayFormula, safeProblem.type);
         const answerLead = (safeProblem.type === 'derivative' || !safeProblem.type)
             ? answerFirstLead(safeProblem.slug, locale, {
                 formula: safeProblem.formula,
@@ -659,7 +663,7 @@ export default async function ProblemPage({ params }: { params: { slug: string }
                                         {pT.title}
                                     </div>
                                     <div className="text-sm text-muted mt-1">
-                                        {t.solvePrefix} {pSafeFormula}
+                                        {t.solvePrefix} {displayExpression(pSafeFormula)}
                                     </div>
                                 </a>
                             );

@@ -1,5 +1,6 @@
 import CopyLatexButton from '@/components/CopyLatexButton';
 import { renderLatexHtml, renderStepsHtml } from '@/lib/steps/format-steps';
+import { displayExpression } from '@/lib/math/math-core';
 
 type SolutionCardProps = {
   formula: string;
@@ -12,7 +13,8 @@ type SolutionCardProps = {
 
 /** Crawlable answer block. Placed directly under the page H1. */
 const SolutionCard = ({ formula, type, solutionRaw, solutionLatex, rule, steps }: SolutionCardProps) => {
-  const heading = `${type === 'integral' ? 'Integral' : 'Derivative'} of ${formula}`;
+  // Display form only (exp(2*x) → e^(2x)); never the engine form.
+  const heading = `${type === 'integral' ? 'Integral' : 'Derivative'} of ${displayExpression(formula)}`;
   const answerHtml = renderLatexHtml(solutionLatex || solutionRaw, true);
   const stepsHtml = renderStepsHtml(steps);
 

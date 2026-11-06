@@ -10,6 +10,10 @@ interface FAQProps {
 }
 
 export default function FAQ({ items }: FAQProps) {
+  // Suppress the whole block (including the "Frequently Asked Questions" H2) when
+  // there are no items, so pages with an empty FAQ don't publish a bare heading.
+  if (!items || items.length === 0) return null;
+
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",

@@ -33,6 +33,7 @@
  */
 
 import { getBaseUrl } from '@/utils/robust-url';
+import { displayExpression } from '@/lib/math/math-core';
 
 export type StaticProblem = {
     slug: string;
@@ -151,6 +152,26 @@ export function isMachineSlug(slug: string): boolean {
 }
 
 /**
+ * Practice-window quality gate (2026-11-07 review): a related link is only worth
+ * showing if it has a real, non-trivial derivative. Drop:
+ *   - non-differentiable functions (floor/ceil/round/sign) — the engine returns an
+ *     unevaluated diff echo and validateDerivativeResult flags them invalid, so
+ *     publishing them as "Derivative of floor(x)" teaches nothing and risks a
+ *     wrong-looking answer block;
+ *   - pure constants (no variable x) — d/dx of a constant is 0, trivial filler.
+ * The site is exclusively d/dx of x, so a formula without x is always constant.
+ */
+const NONDIFF_TOKENS = ['floor(', 'ceil(', 'round(', 'sign('];
+
+function isWorthyPractice(p: StaticProblem): boolean {
+    const f = (p.formula || '').toLowerCase();
+    if (!f) return false;
+    if (NONDIFF_TOKENS.some((t) => f.includes(t))) return false;
+    if (!/x/.test(f)) return false; // pure constant → derivative 0, trivial
+    return true;
+}
+
+/**
  * RC-6 FIX: stable, deterministic related-problem selection.
  * - Excludes the current slug.
  * - Excludes machine-generated near-duplicate slugs (2026-11-06 GSC review).
@@ -205,7 +226,7 @@ export function pickStableRelated(
     if (!Array.isArray(problems) || problems.length === 0) return [];
     const type = typeHint || 'derivative';
     let pool = problems.filter(
-        (p) => p && p.slug && p.slug !== currentSlug && !isMachineSlug(p.slug)
+        (p) => p && p.slug && p.slug !== currentSlug && !isMachineSlug(p.slug) && isWorthyPractice(p)
     );
     if (featuredOnly && featuredOnly.size > 0) {
         const before = pool.length;
@@ -213,7 +234,7 @@ export function pickStableRelated(
         // Fail-open: never hide every related link on a data regression.
         if (pool.length === 0 && before > 0) {
             pool = problems.filter(
-                (p) => p && p.slug && p.slug !== currentSlug && !isMachineSlug(p.slug)
+                (p) => p && p.slug && p.slug !== currentSlug && !isMachineSlug(p.slug) && isWorthyPractice(p)
             );
         }
     }
@@ -238,7 +259,26 @@ export function pickStableRelated(
     // featured page surfaces a different slice of the allowlist.
     const offset = slugHash(currentSlug) % ranked.length;
     const rotated = ranked.slice(offset).concat(ranked.slice(0, offset));
-    return rotated.slice(0, limit);
+    const windowed = rotated.slice(0, limit);
+
+    // Dedup by DISPLAYED formula so two slugs that collapse to the same visible
+    // name never appear twice in the same window. We only drop a later entry when
+    // its display matches an earlier one AND its RAW formula differs — i.e. a true
+    // alias collision such as `log(x)` and `ln(x)` both rendering "Derivative of
+    // ln(x)", or `exp(2*x)` vs `e^(2x)`. Two genuinely distinct slugs that happen
+    // to share a display (identical raw formula) are kept, so internal-link
+    // coverage is not silently collapsed.
+    const seenFormula = new Map<string, string>(); // displayKey -> first raw formula (lowercased)
+    const deduped: StaticProblem[] = [];
+    for (const p of windowed) {
+        const key = displayExpression(p.formula || '').toLowerCase();
+        const raw = (p.formula || '').toLowerCase();
+        const first = seenFormula.get(key);
+        if (first !== undefined && first !== raw) continue; // alias collision → drop duplicate
+        seenFormula.set(key, raw);
+        deduped.push(p);
+    }
+    return deduped;
 }
 
 /**

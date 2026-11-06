@@ -10,7 +10,7 @@
  *   - diff(ln(x), x) → "ln" (wrong; should be x^(-1))
  *   - diff(x*ln(x), x) → "2*ln*x" (wrong; should be 1+log(x))
  */
-import { normalizeExpression, calculateDerivative, identifyRule, validateDerivativeResult, prettifyRaw } from '@/lib/math/math-core';
+import { normalizeExpression, calculateDerivative, identifyRule, validateDerivativeResult, prettifyRaw, prettifyLatex } from '@/lib/math/math-core';
 
 describe('normalizeExpression — ln/log contract', () => {
   it('rewrites ln( → log( for natural log', () => {
@@ -112,6 +112,78 @@ describe('prettifyRaw — irrational constant back-substitution (prod-rational �
   it('does not mistake a small rational for a constant', () => {
     // 1/2 is nowhere near ln2/ln10/e/pi/√2 → left as-is.
     expect(prettifyRaw('(1/2)*x^2')).toBe('(1/2)*x^2');
+  });
+});
+
+// ---------------------------------------------------------------------------
+// RC-8 / 2026-11-07 owner forensic: a production nerdamer build emits e NOT as a
+// symbolic `exp` token but as a RATIO of two large integer powers
+// (325368125/119696244 ≈ e), and it writes that ratio as a PRODUCT in the raw
+// output but as a FRACTION in the LaTeX output. These tests lock the exact
+// production strings the owner captured so the back-substitution can never again
+// regress to leaking 9-digit integers or an `exp(` token into the displayed answer.
+// ---------------------------------------------------------------------------
+describe('prettifyRaw — e written as a ratio of integer powers (prod build)', () => {
+  const cases: Array<[string, string]> = [
+    // [production raw string, expected symbolic form]
+    ['2*119696244^(-2*x)*325368125^(2*x)', '2*e^(2*x)'],
+    ['-119696244^x*325368125^(-x)', '-e^(-x)'],
+    ['119696244^(-x)*325368125^x+119696244^(-x)*325368125^x*x', 'e^x+e^x*x'],
+    ['-2*119696244^(2*x)*325368125^(-2*x)', '-2*e^(-2*x)'],
+  ];
+  it.each(cases)('collapses %s -> %s', (input, expected) => {
+    const out = prettifyRaw(input);
+    expect(out).toBe(expected);
+    expect(out).not.toMatch(/\d{6,}/); // no 9-digit integer leaks
+    expect(out).not.toMatch(/exp\(/);   // no internal exp( token
+  });
+
+  it('does not touch already-symbolic e forms (local nerdamer build)', () => {
+    expect(prettifyRaw('2*e^(2*x)')).toBe('2*e^(2*x)');
+    expect(prettifyRaw('-e^(-x)')).toBe('-e^(-x)');
+    expect(prettifyRaw('e^x+e^x*x')).toBe('e^x+e^x*x');
+  });
+});
+
+describe('prettifyLatex — e written as a ratio of integer powers (prod build)', () => {
+  // These LaTeX forms were derived from the REAL nerdamer toTeX output of the
+  // integer-power expressions above (the production LaTeX shape is a FRACTION).
+  const cases: Array<[string, string]> = [
+    ['2\\cdot \\frac{325368125^{2 \\cdot x}}{119696244^{2 \\cdot x}}', '2\\cdot e^{2 \\cdot x}'],
+    ['\\frac{119696244^{x}}{325368125^{x}}', 'e^{-x}'],     // LOW over HIGH = 1/e
+    ['\\frac{325368125^{x}}{119696244^{x}}', 'e^{x}'],       // HIGH over LOW = e
+    ['\\frac{49180508 \\cdot 2^{x}}{70952475}', '2^{x}\\ln(2)'],
+    ['\\frac{250513404 \\cdot 10^{x}}{108796589}', '10^{x}\\ln(10)'],
+  ];
+  it.each(cases)('collapses %s -> %s', (input, expected) => {
+    const out = prettifyLatex(input);
+    expect(out).toBe(expected);
+    expect(out).not.toMatch(/\d{6,}/);
+    expect(out).not.toMatch(/exp\(/);
+  });
+
+  it('also handles the (defensive) product-shaped LaTeX e-ratio', () => {
+    const out = prettifyLatex('119696244^{-2x}\\cdot 325368125^{2x}');
+    expect(out).not.toMatch(/\d{6,}/);
+    expect(out).toContain('e^{');
+  });
+});
+
+describe('calculateDerivative — e-class forms stay exact end-to-end (prod parity)', () => {
+  // Locks the four e-class shapes the owner called out (coeff / power / neg / sum),
+  // proving local symbolic and production-rational paths converge on one form.
+  const cases: Array<[string, string]> = [
+    ['e^(2*x)', '2*e^(2*x)'],
+    ['e^(-x)', '-e^(-x)'],
+    ['x*exp(x)', 'e^x+e^x*x'],
+    ['e^(-2*x)', '-2*e^(-2*x)'],
+  ];
+  it.each(cases)('d/dx %s = %s', (expr, expected) => {
+    const r = calculateDerivative(expr);
+    expect(r.isValid).toBe(true);
+    expect(r.solutionRaw).toBe(expected);
+    expect(r.solutionLatex).not.toMatch(/\d{6,}/);
+    expect(r.solutionLatex).not.toMatch(/exp\(/);
   });
 });
 

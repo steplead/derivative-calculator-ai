@@ -15,6 +15,7 @@ import fs from 'fs';
 import path from 'path';
 import { parseSlugToMath } from '@/lib/slug-math';
 import { pickStableRelated, findStaticProblem, getDerivativeCanonicalMap } from '@/lib/problems-source';
+import { displayExpression } from '@/lib/math/math-core';
 import { NOINDEX_SLUGS } from '@/lib/noindex-slugs';
 
 const ROOT = path.resolve(__dirname, '..');
@@ -200,6 +201,40 @@ describe('2026-11-06 third review: related block restricted to indexable allowli
         const out = pickStableRelated(rows, 'derivative-of-2x', 'derivative', 3, new Set<string>());
         expect(out).toHaveLength(3);
     });
+});
+
+describe('2026-11-07 owner review: related block filters junk + dedups by display name', () => {
+  const rows = [
+    { slug: 'derivative-of-2x', formula: '2*x', type: 'derivative' as const },
+    { slug: 'derivative-of-floor-x', formula: 'floor(x)', type: 'derivative' as const },
+    { slug: 'derivative-of-pi', formula: 'pi', type: 'derivative' as const },
+    { slug: 'derivative-of-ln-x', formula: 'ln(x)', type: 'derivative' as const },
+    { slug: 'derivative-of-log-x', formula: 'log(x)', type: 'derivative' as const },
+    { slug: 'derivative-of-x2', formula: 'x^2', type: 'derivative' as const },
+    { slug: 'derivative-of-e2x', formula: 'e^(2*x)', type: 'derivative' as const },
+  ];
+
+  it('excludes non-differentiable floor(x) from the practice window', () => {
+    const out = pickStableRelated(rows, 'derivative-of-2x', 'derivative', 10);
+    expect(out.some((p) => p.slug === 'derivative-of-floor-x')).toBe(false);
+  });
+
+  it('excludes pure-constant pi (derivative 0) from the practice window', () => {
+    const out = pickStableRelated(rows, 'derivative-of-2x', 'derivative', 10);
+    expect(out.some((p) => p.slug === 'derivative-of-pi')).toBe(false);
+  });
+
+  it('dedups log(x) against ln(x) so only one "Derivative of ln(x)" appears', () => {
+    const out = pickStableRelated(rows, 'derivative-of-2x', 'derivative', 10);
+    // Both ln(x) and log(x) render as "Derivative of ln(x)" (log → ln in display);
+    // the window must contain at most one such link (alias collision is dropped,
+    // but two slugs with the SAME raw formula would both be kept).
+    const lnLike = out.filter((p) => displayExpression(p.formula).toLowerCase() === 'ln(x)');
+    expect(lnLike.length).toBe(1);
+    // Sanity: the junk slugs are still gone.
+    expect(out.some((p) => p.slug === 'derivative-of-floor-x')).toBe(false);
+    expect(out.some((p) => p.slug === 'derivative-of-pi')).toBe(false);
+  });
 });
 
 describe('RC-7: slug heuristic rejects non-math slugs', () => {

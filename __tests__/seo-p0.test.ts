@@ -47,13 +47,12 @@ describe('plus-free problem URLs', () => {
 });
 
 describe('hreflang', () => {
-    it('emits a self-canonical and x-default for each locale', () => {
+    it('emits a self-canonical and x-default without unsubmitted locales', () => {
         const es = localeAlternates('/practice', 'es');
         expect(es.canonical).toBe('https://derivativecalculatorai.com/es/practice');
         expect(es.languages.en).toBe('https://derivativecalculatorai.com/practice');
-        expect(es.languages.es).toBe('https://derivativecalculatorai.com/es/practice');
-        expect(es.languages.pt).toBe('https://derivativecalculatorai.com/pt/practice');
         expect(es.languages['x-default']).toBe('https://derivativecalculatorai.com/practice');
+        expect(Object.keys(es.languages).sort()).toEqual(['en', 'x-default']);
 
         const home = localeAlternates('/', 'es');
         expect(home.canonical).toBe('https://derivativecalculatorai.com/es');
@@ -92,11 +91,11 @@ describe('GA4 shim', () => {
 });
 
 describe('curated sitemap', () => {
-    it('lists only the quality set, with real lastmod and hreflang', () => {
+    it('lists only the quality English set, with real lastmod and self-consistent hreflang', () => {
         execSync('node scripts/generate-sitemap.js', { cwd: path.resolve(__dirname, '..'), stdio: 'pipe' });
         const xml = fs.readFileSync(path.resolve(__dirname, '..', 'public', 'sitemap.xml'), 'utf8');
         const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
-        expect(locs.length).toBe(255);
+        expect(locs.length).toBe(85);
         for (const path of [
             '/partial-derivative-calculator',
             '/implicit-differentiation-calculator',
@@ -105,16 +104,18 @@ describe('curated sitemap', () => {
             '/symbolab-alternative',
             '/derivative-calculator-comparison',
         ]) {
-            expect(locs.filter((url) => url.endsWith(path) || url.includes(`${path}<`) || url.endsWith(path))).toContain(`https://derivativecalculatorai.com${path}`);
-            expect(xml).toContain(`https://derivativecalculatorai.com/es${path}`);
-            expect(xml).toContain(`https://derivativecalculatorai.com/pt${path}`);
+            expect(locs).toContain(`https://derivativecalculatorai.com${path}`);
         }
-        expect(locs.filter((url) => url.endsWith('/derivatives-of-trig-functions')).length).toBe(3);
+        expect(locs.filter((url) => url.endsWith('/derivatives-of-trig-functions')).length).toBe(1);
         for (const hub of ['/directory', '/problems', '/practice', '/practice/beginner', '/practice/intermediate', '/practice/advanced']) {
             expect(locs).toContain(`https://derivativecalculatorai.com${hub}`);
-            expect(locs).toContain(`https://derivativecalculatorai.com/es${hub}`);
-            expect(locs).toContain(`https://derivativecalculatorai.com/pt${hub}`);
         }
+        // Crawl-budget narrowing: no es/pt URL, no dangling alternate tags.
+        expect(locs.some((url) => /^https:\/\/derivativecalculatorai\.com\/(es|pt)(\/|$)/.test(url))).toBe(false);
+        expect(xml).not.toContain('hreflang="es"');
+        expect(xml).not.toContain('hreflang="pt"');
+        expect(xml).not.toContain('https://derivativecalculatorai.com/es');
+        expect(xml).not.toContain('https://derivativecalculatorai.com/pt');
         expect(locs.some((url) => url.includes('/problems/tag/'))).toBe(false);
         expect(locs.some((url) => /\/problems\/(derivative|integral|limit)$/.test(url))).toBe(false);
         expect(xml).not.toContain('/derivative-of-x-e-x<');
@@ -123,7 +124,6 @@ describe('curated sitemap', () => {
         expect(xml).not.toContain('/derivative-of-e-x<');
         expect(xml).toContain('https://derivativecalculatorai.com/derivative-of-sin-2x');
         expect(xml).toContain('https://derivativecalculatorai.com/derivative-of-1-over-x-squared');
-        expect(xml).toContain('https://derivativecalculatorai.com/es');
         expect(xml).toContain('hreflang="x-default"');
         const lastmods = new Set([...xml.matchAll(/<lastmod>([^<]+)<\/lastmod>/g)].map((m) => m[1]));
         expect(lastmods.size).toBeGreaterThan(1);

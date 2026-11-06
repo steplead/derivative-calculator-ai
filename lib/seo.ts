@@ -96,10 +96,11 @@ export function localeAlternates(path: string, locale: string): {
         l === 'en' ? `${SITE_URL}${clean}` : `${SITE_URL}/${l}${clean}`;
     return {
         canonical: forLocale(loc),
+        // Crawl-budget narrowing: declare only the locale we submit. Keeping
+        // es/pt here while they are absent from the sitemap would make every
+        // en URL point at hreflang targets that never return the tag.
         languages: {
             en: forLocale('en'),
-            es: forLocale('es'),
-            pt: forLocale('pt'),
             'x-default': forLocale('en'),
         },
     };

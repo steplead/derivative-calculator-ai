@@ -7,7 +7,9 @@
  *     (every GSC impression URL named in the 2026-10-31 SEO plan, plus the
  *     hand-authored derivative lessons that sit in front of the generated
  *     `minus-to-minus` series)
- *   - en / es / pt for each of those, with hreflang and x-default
+ *   - only the submitted locale (en) for each of those, with a self-consistent
+ *     hreflang set. es/pt stay live for visitors but are deliberately not
+ *     submitted while the site has just one indexed page (2026-11-06 review).
  *
  * Excludes 404 integral slugs (literal "+"), noindex programmatic URLs, and
  * alias slugs whose canonical points somewhere else (derivative-of-e-x →
@@ -24,7 +26,10 @@ const path = require('path');
 const ROOT = path.join(__dirname, '..');
 const SITEMAP_PATH = path.join(ROOT, 'public', 'sitemap.xml');
 const BASE_URL = 'https://derivativecalculatorai.com';
-const LOCALES = ['en', 'es', 'pt'];
+// Crawl-budget narrowing (2026-11-06 GSC review): submit English only.
+// es/pt routes stay live and self-canonical for visitors; they are simply not
+// advertised to crawlers via the sitemap or hreflang while indexing is at 1 page.
+const LOCALES = ['en'];
 
 const STATIC_PATHS = [
   { path: '', file: 'app/(site)/page.tsx', priority: '1.0' },
@@ -110,14 +115,11 @@ function buildCanonicalMap(problems) {
 }
 
 function hreflangLinks(relPath) {
-  const en = absolute(localizedPath('en', relPath));
-  const es = absolute(localizedPath('es', relPath));
-  const pt = absolute(localizedPath('pt', relPath));
+  // Only submitted locales are declared. An en URL must never point at an
+  // alternate that does not return the tag (GSC "no return tag" errors).
   return [
-    ['en', en],
-    ['es', es],
-    ['pt', pt],
-    ['x-default', en],
+    ...LOCALES.map((locale) => [locale, absolute(localizedPath(locale, relPath))]),
+    ['x-default', absolute(localizedPath('en', relPath))],
   ]
     .map(
       ([lang, href]) =>
@@ -198,8 +200,15 @@ function generateSitemap() {
     entries.push(...urlEntry(`/${slug}`, problemLastmod, '0.7'));
   }
 
-  if (entries.length < 100 || entries.length > 300) {
-    throw new Error(`Sitemap size ${entries.length} is outside the 100–300 quality band`);
+  // Exact count is stricter than the old 100-300 band: every curated path must
+  // be emitted exactly once per submitted locale, with no silent drops.
+  // The 3 is the beginner/intermediate/advanced practice indexes above.
+  const expected = (STATIC_PATHS.length + 3 + wiki.length + used.size) * LOCALES.length;
+  if (entries.length !== expected) {
+    throw new Error(`Sitemap size ${entries.length} does not match the curated set ${expected}`);
+  }
+  if (entries.length > 300) {
+    throw new Error(`Sitemap size ${entries.length} exceeds the 300 URL ceiling`);
   }
 
   const body = entries.join('\n');

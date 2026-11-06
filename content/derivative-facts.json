@@ -1239,7 +1239,7 @@
     "slug": "derivative-of-x-ln-x",
     "display": "x ln(x)",
     "engine": "x*ln(x)",
-    "nice": "1+log(x)",
+    "nice": "1+ln(x)",
     "ruleWiki": "product-rule",
     "cluster": "product",
     "copy": {
@@ -1408,7 +1408,7 @@
     "slug": "derivative-of-2-to-the-x",
     "display": "2^x",
     "engine": "2^x",
-    "nice": "2^x*log(2)",
+    "nice": "2^x*ln(2)",
     "ruleWiki": "exponential-derivatives",
     "cluster": "exp",
     "copy": {
@@ -1448,7 +1448,7 @@
     "slug": "derivative-of-10-to-the-x",
     "display": "10^x",
     "engine": "10^x",
-    "nice": "10^x*log(10)",
+    "nice": "10^x*ln(10)",
     "ruleWiki": "exponential-derivatives",
     "cluster": "exp",
     "copy": {

@@ -161,10 +161,40 @@ export function isMachineSlug(slug: string): boolean {
  *   ...) — 2026-11-06 third review. The allowlist does not contain the
  *   `derivative-of-1-x` / `derivative-of-1-over-x` duplicate pair, so the
  *   redundant "Derivative of 1/x" entry is dropped automatically.
- * - Deterministic lexicographic order (never Math.random).
- * - Caps at `limit`. Fail-open: if the allowlist somehow matches nothing, the
- *   unfiltered pool is used so the block never silently empties.
+ * - RULE-FAMILY SAMPLING + PER-PAGE ROTATION (2026-11 review): instead of always
+ *   showing the lexicographic top-`limit` (so the same 10 pages linked from
+ *   every page), we rank the pool by the current page's OWN rule family
+ *   (exponential / trig / log / quotient / ... first), then rotate the window by
+ *   a deterministic hash of `currentSlug`. Every featured page therefore surfaces
+ *   a DIFFERENT set of links, spreading equity across the whole allowlist and
+ *   giving each page real internal links (previously ~40 of 50 got zero).
+ * - Deterministic (no Math.random). Caps at `limit`. Fail-open: if the allowlist
+ *   somehow matches nothing, the unfiltered pool is used so the block never
+ *   silently empties. Never returns duplicates.
  */
+
+/** Deterministic 32-bit FNV-1a hash → non-negative int (no Math.random). */
+function slugHash(s: string): number {
+    let h = 2166136261;
+    for (let i = 0; i < s.length; i++) {
+        h ^= s.charCodeAt(i);
+        h = Math.imul(h, 16777619);
+    }
+    return h >>> 0;
+}
+
+/** Coarse rule-family label derived from a formula, used to group related links. */
+function classifyFamily(formula: string | undefined): string {
+    const f = (formula || '').toLowerCase();
+    if (/\^x\b|\bexp\(|e\^\(|to-the-x|to-the-power|e-to-the|a-to-the/.test(f)) return 'exponential';
+    if (/\b(sin|cos|tan|sec|csc|cot|arcsin|arccos|arctan)/.test(f)) return 'trig';
+    if (/ln\(|log\(/.test(f)) return 'log';
+    if (/\//.test(f)) return 'quotient';
+    if (/\*/.test(f)) return 'product';
+    if (/\^/.test(f)) return 'power';
+    return 'basic';
+}
+
 export function pickStableRelated(
     problems: StaticProblem[],
     currentSlug: string,
@@ -187,15 +217,28 @@ export function pickStableRelated(
             );
         }
     }
-    const sameType = pool
-        .filter((p) => (!p.type || p.type === type))
-        .sort((a, b) => a.slug.localeCompare(b.slug))
-        .slice(0, limit);
-    if (sameType.length >= Math.min(5, limit)) return sameType;
-    const others = pool
-        .sort((a, b) => a.slug.localeCompare(b.slug))
-        .slice(0, Math.max(0, limit - sameType.length));
-    return [...sameType, ...others].slice(0, limit);
+    // Same-type preference: derivative pages link to derivative pages first.
+    const sameType = pool.filter((p) => (!p.type || p.type === type));
+    const finalPool = sameType.length >= limit
+        ? sameType
+        : [...sameType, ...pool.filter((p) => p.type && p.type !== type)];
+    if (finalPool.length === 0) return [];
+
+    // Rank by the current page's own rule family (its family first), then slug.
+    const currentFormula = (problems.find((p) => p.slug === currentSlug)?.formula) || currentSlug;
+    const fam = classifyFamily(currentFormula);
+    const ranked = [...finalPool].sort((a, b) => {
+        const af = classifyFamily(a.formula) === fam ? 0 : 1;
+        const bf = classifyFamily(b.formula) === fam ? 0 : 1;
+        if (af !== bf) return af - bf;
+        return (a.slug || '').localeCompare(b.slug || '');
+    });
+
+    // Rotate the window by a deterministic hash of the current slug so every
+    // featured page surfaces a different slice of the allowlist.
+    const offset = slugHash(currentSlug) % ranked.length;
+    const rotated = ranked.slice(offset).concat(ranked.slice(0, offset));
+    return rotated.slice(0, limit);
 }
 
 /**

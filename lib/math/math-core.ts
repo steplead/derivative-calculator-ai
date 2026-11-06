@@ -60,7 +60,7 @@ export function normalizeExpression(expr: string): string {
   // builds the bare symbol `e` is treated as a numeric constant and d/dx e^x is
   // emitted as a rational approximation (e.g. (325368125/119696244)^x instead of
   // e^x). Routing through the symbolic `exp` function keeps the result exact.
-  // The display form e^(…) is restored by prettyExp() after differentiation.
+  // The display form e^(…) is restored by prettifyRaw()/displayExpression() after differentiation.
   s = s.replace(/e\^\(/gi, 'exp(').replace(/E\^\(/g, 'exp(');
   s = s.replace(/e\^([^()]*)/gi, 'exp($1)').replace(/E\^([^()]*)/g, 'exp($1)');
   // Rewrite `ln(` → `log(` (function token only; lookahead for `(` avoids
@@ -72,14 +72,106 @@ export function normalizeExpression(expr: string): string {
 }
 
 /**
- * Restore the display form `e^(…)` from nerdamer's `exp(…)` output.
- *   "2*exp(2*x)" → "2*e^(2*x)"
- *   "exp(x)"     → "e^x"
- * Belt-and-suspenders: guarantees the natural-base exponential is never shown
- * as a numeric/rational approximation of e, regardless of the nerdamer build.
+ * Back-substitute irrational constants that some nerdamer builds emit as
+ * rationals. A production nerdamer build numericizes ln2 / ln10 / e / pi / √2
+ * into ratios of 6+ digit integers (e.g. d/dx 2^x → (49180508/70952475)*2^x,
+ * where 49180508/70952475 ≈ ln2). We restore the exact constant symbolically so
+ * the displayed answer is exact, not a decimal-fraction approximation.
+ *
+ * Version-independent: symbolic builds already emit `2^x*log(2)` and are left
+ * untouched by the ratio detector, so BOTH builds converge on `2^x*ln(2)`.
  */
-function prettyExp(s: string): string {
+const BACKSUB_CONSTANTS: { value: number; display: string; latex: string }[] = [
+  { value: Math.E,       display: 'e',       latex: 'e' },
+  { value: Math.log(2),  display: 'ln(2)',   latex: '\\ln\\left(2\\right)' },
+  { value: Math.log(10), display: 'ln(10)',  latex: '\\ln\\left(10\\right)' },
+  { value: Math.PI,      display: 'pi',      latex: '\\pi' },
+  { value: Math.SQRT2,   display: 'sqrt(2)', latex: '\\sqrt{2}' },
+];
+
+function matchBackSubConstant(v: number): { display: string; latex: string } | null {
+  if (!isFinite(v) || v === 0) return null;
+  for (const c of BACKSUB_CONSTANTS) {
+    if (Math.abs(v - c.value) / Math.abs(c.value) < 1e-4) return c;
+  }
+  return null;
+}
+
+/** Replace 6+ digit integer ratios (parenthesized or bare) equal to a constant. */
+function backSubstituteRaw(s: string): string {
+  let out = s.replace(/\((-?\d{6,})\s*\/\s*(\d{6,})\)/g, (m, a, b) => {
+    const den = Number(b);
+    if (!den) return m;
+    const c = matchBackSubConstant(Number(a) / den);
+    return c ? c.display : m;
+  });
+  out = out.replace(/(?<![\d/])(-?\d{6,})\s*\/\s*(\d{6,})(?![\d/])/g, (m, a, b) => {
+    const den = Number(b);
+    if (!den) return m;
+    const c = matchBackSubConstant(Number(a) / den);
+    return c ? c.display : m;
+  });
+  return out;
+}
+
+/** Replace LaTeX \frac{6+digits}{6+digits} (optionally wrapped) equal to a constant. */
+function backSubstituteLatex(s: string): string {
+  return s.replace(
+    /\\left\(\s*\\frac\{(-?\d{6,})\}\{(-?\d{6,})\}\s*\\right\)|\\frac\{(-?\d{6,})\}\{(-?\d{6,})\}/g,
+    (m, a1, b1, a2, b2) => {
+      const a = a1 ?? a2;
+      const b = b1 ?? b2;
+      const den = Number(b);
+      if (!den) return m;
+      const c = matchBackSubConstant(Number(a) / den);
+      return c ? c.latex : m;
+    },
+  );
+}
+
+/** Move a leading constant factor after the term: ln(2)*2^x → 2^x*ln(2). */
+function reorderLeadingConstant(s: string): string {
+  const m = s.match(/^ln\((\d+|10)\)\*\s*([\s\S]+)$/);
+  if (m) return `${m[2]}*ln(${m[1]})`;
+  return s;
+}
+
+/** Restore exp(…) → e^(…) only (no constant/log rewriting). Used for step prose. */
+function restoreExp(s: string): string {
   return s.replace(/exp\(/g, 'e^(').replace(/e\^\(x\)/g, 'e^x');
+}
+
+/** Post-process nerdamer RAW output into clean display form. */
+export function prettifyRaw(s: string): string {
+  let out = restoreExp(s);
+  out = backSubstituteRaw(out);
+  // nerdamer prints its natural log as `log` → display as `ln`. `log10(` is
+  // base-10 and has no `(` directly after `log`, so this pattern skips it.
+  out = out.replace(/log\(/g, 'ln(');
+  out = reorderLeadingConstant(out);
+  return out;
+}
+
+/** Post-process nerdamer LaTeX output (mirrors prettifyRaw). */
+function prettifyLatex(s: string): string {
+  let out = restoreExp(s);
+  out = backSubstituteLatex(out);
+  out = out.replace(/\\mathrm\{log\}/g, '\\ln').replace(/\\blog(?![_{])/g, '\\ln');
+  return out;
+}
+
+/**
+ * Convert an ENGINE formula (e.g. exp(2*x)) into its HUMAN display form
+ * (e.g. e^(2x)). For display strings ONLY (titles, H1, subtitles, code chips) —
+ * never for the Calculator's initialEquation, which must stay engine-ready.
+ */
+export function displayExpression(s: string): string {
+  if (!s) return '';
+  let out = restoreExp(s);
+  // Tidy exponent display: 2*x → 2x inside e^(2*x) → e^(2x).
+  out = out.replace(/\b(\d)\*x\b/g, '$1x');
+  out = out.replace(/log\(/g, 'ln(');
+  return out;
 }
 
 const WHOLE_FUNCTION = /^(sin|cos|tan|sec|csc|cot|arcsin|arccos|arctan|asin|acos|atan|sinh|cosh|tanh|log10|log|ln|exp|sqrt|abs)\((.*)\)$/i;
@@ -303,7 +395,7 @@ export function calculateDerivative(expr: string): DerivativeSolution {
     // per-invocation local, so there is no cross-request state or memory growth.
     d = nerdamer(`diff(${engineExpression}, x)`);
     raw = d.toString();
-    raw = prettyExp(raw);
+    raw = prettifyRaw(raw);
   } catch (e: any) {
     throw new Error(`Nerdamer calculation failed: ${e?.message || String(e)}`);
   }
@@ -313,13 +405,13 @@ export function calculateDerivative(expr: string): DerivativeSolution {
 
   try {
     latex = d.toTeX();
-    latex = prettyExp(latex);
+    latex = prettifyLatex(latex);
   } catch {
     latex = raw;
   }
 
   const rule = identifyRule(engineExpression);
-  const steps = generateSteps(engineExpression, raw, rule).map(prettyExp);
+  const steps = generateSteps(engineExpression, raw, rule).map(restoreExp);
 
   // Validation: reject obvious ln-bug outputs (result containing bare `ln` symbol).
   const isValid = validateDerivativeResult(engineExpression, raw);

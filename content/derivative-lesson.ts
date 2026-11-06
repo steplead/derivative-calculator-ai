@@ -195,6 +195,21 @@ function relatedLinks(fact: DerivativeFact, locale: Locale): RelatedLink[] {
   return links;
 }
 
+/**
+ * Build a meta description that is ALWAYS a complete sentence — never cut
+ * mid-word or mid-thought. Takes the longest prefix of `s` that ends on a
+ * sentence boundary (`.`) and fits within `max` characters; only if `s` has no
+ * sentence boundary in range does it fall back to the old word-boundary cut.
+ */
+function completeSentenceDescription(s: string, max = 155): string {
+  const text = (s || '').trim();
+  if (text.length <= max) return text;
+  const head = text.slice(0, max);
+  const lastPeriod = head.lastIndexOf('.');
+  if (lastPeriod > 0) return head.slice(0, lastPeriod + 1).trim();
+  return head.replace(/\s+\S*$/, '').trim() + '.';
+}
+
 export function getDerivativeLesson(slug: string, locale: string): DerivativeLesson | null {
   const fact = BY_SLUG.get(slug);
   if (!fact || fact.linksOnly || !fact.copy) return null;
@@ -233,7 +248,7 @@ export function getDerivativeLesson(slug: string, locale: string): DerivativeLes
         copy.algebra,
         copy.check,
       ];
-  const description = copy.angle.length > 155 ? `${copy.angle.slice(0, 152).replace(/\s+\S*$/, '')}.` : copy.angle;
+  const description = completeSentenceDescription(copy.angle);
   const lesson: DerivativeLesson = {
     slug: fact.slug,
     title: fact.display,

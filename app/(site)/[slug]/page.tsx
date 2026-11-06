@@ -11,7 +11,7 @@ import { Suspense } from 'react';
 import { getBaseUrl } from '@/utils/robust-url';
 import { getRequestContext } from '@cloudflare/next-on-pages';
 import { NOINDEX_SLUGS } from '@/lib/noindex-slugs';
-import { calculateDerivative } from '@/lib/math/math-core';
+import { calculateDerivative, displayExpression } from '@/lib/math/math-core';
 import type { DerivativeSolution } from '@/lib/math/math-core';
 import { fetchRelatedFromD1 } from '@/lib/d1/related-problems';
 import {
@@ -210,7 +210,17 @@ function getLocalizedContent(locale: string, formula: string, type: string = 'de
             solvePrefix: isIntegral ? "Resolver integral" : isLimit ? "Calcular limite" : "Resolver d/dx"
         }
     };
-    return content[locale as keyof typeof content] || content.en;
+    const sel = content[locale as keyof typeof content] || content.en;
+    // Display-form the formula wherever it appears in titles/H1/descriptions so
+    // engine tokens like exp(2*x) render as e^(2x) and natural log as ln(...).
+    // This is pure display — the engine input (problem.formula) is never touched.
+    const f = displayExpression(formula);
+    if (f !== formula) {
+        for (const key of ['title', 'description', 'h1', 'howToTitle', 'howToText'] as const) {
+            (sel as Record<string, string>)[key] = (sel as Record<string, string>)[key].split(formula).join(f);
+        }
+    }
+    return sel;
 }
 
 // Generate metadata for SEO
@@ -482,6 +492,7 @@ export default async function ProblemPage({ params }: { params: { slug: string }
         } : undefined;
 
         const t = getLocalizedContent(locale, safeProblem.formula, safeProblem.type);
+        const displayFormula = displayExpression(safeProblem.formula);
         const answerLead = (safeProblem.type === 'derivative' || !safeProblem.type)
             ? answerFirstLead(safeProblem.slug, locale, {
                 formula: safeProblem.formula,
@@ -498,7 +509,7 @@ export default async function ProblemPage({ params }: { params: { slug: string }
         // Rec 5: deterministic, formula-specific FAQ rendered on every tool page
         // (steps + formula explanation already exist via SolutionCard/howToText).
         const faqItems = buildFaqItems(
-            safeProblem.formula,
+            displayFormula,
             safeProblem.type || 'derivative',
             ssrSolution?.solutionRaw,
             ssrSolution?.rule,
@@ -546,7 +557,7 @@ export default async function ProblemPage({ params }: { params: { slug: string }
                         </p>
                     ) : null}
                     <p className="mt-4 text-xl text-muted">
-                        {t.subtitle} <code className="bg-chip px-2 py-1 rounded text-ink">{safeProblem.formula}</code>
+                        {t.subtitle} <code className="bg-chip px-2 py-1 rounded text-ink">{displayFormula}</code>
                     </p>
 
                     {/* B4: lightweight tags/difficulty badges. Server-rendered,
@@ -592,7 +603,7 @@ export default async function ProblemPage({ params }: { params: { slug: string }
                     Placed right after the answer block so it reads as "share what you
                     just solved". Hidden gracefully when the page has no computed result. */}
                 <ShareResultCard
-                    formula={safeProblem.formula}
+                    formula={displayFormula}
                     result={ssrSolution?.solutionRaw}
                     url={url}
                     type={safeProblem.type}
@@ -658,8 +669,12 @@ export default async function ProblemPage({ params }: { params: { slug: string }
 
                 {/* Rec 5: formula-specific FAQ (steps + formula explanation already
                     present via SolutionCard / howToText). Adds crawlable, unique
-                    per-page content to help thin pages earn indexing. */}
-                <FAQ items={faqItems} />
+                    per-page content to help thin pages earn indexing.
+                    Suppressed when an indexLesson exists: DerivativeLessonView
+                    already renders its own hand-written FAQ + FAQPage JSON-LD, so
+                    showing this template FAQ too would duplicate the first question
+                    and emit a second FAQPage structured-data block. */}
+                {indexLesson ? null : <FAQ items={faqItems} />}
 
                 <div className="mt-16">
                     <AdShell type="donation" />

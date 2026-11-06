@@ -129,6 +129,46 @@ describe('RC-6: related problems are deterministic', () => {
     });
 });
 
+describe('2026-11 review: per-page rotation spreads internal links across the allowlist', () => {
+    // 50 distinct derivative slugs spanning several rule families.
+    const all = Array.from({ length: 50 }, (_, i) => ({
+        slug: `derivative-of-q${String(i).padStart(2, '0')}`,
+        formula: ['2^x', 'e^x', 'sin(x)', 'x^2', 'x*ln(x)', '1/x', 'cos(x)', 'tan(x)', 'log(x)', '10^x'][i % 10],
+        type: 'derivative' as const,
+    }));
+    const featured = new Set(all.map((p) => p.slug));
+
+    it('no page links to itself', () => {
+        for (const src of all) {
+            const out = pickStableRelated(all, src.slug, 'derivative', 10, featured);
+            expect(out.some((p) => p.slug === src.slug)).toBe(false);
+        }
+    });
+
+    it('distinct source pages yield distinct related sets (rotation is active)', () => {
+        const sets = new Set(
+            all.map((s) =>
+                JSON.stringify(pickStableRelated(all, s.slug, 'derivative', 10, featured).map((p) => p.slug)),
+            ),
+        );
+        // Old code returned the lexicographic top-10 on EVERY page; the rotation
+        // must make pages diverge.
+        expect(sets.size).toBeGreaterThan(1);
+    });
+
+    it('rotation lifts coverage far above the old lexicographic top-10 (40 pages used to get zero links)', () => {
+        const linked = new Set<string>();
+        for (const src of all) {
+            for (const rel of pickStableRelated(all, src.slug, 'derivative', 10, featured)) {
+                linked.add(rel.slug);
+            }
+        }
+        // The old behaviour linked only ~10 allowlist slugs from every page; the
+        // new per-page rotation must spread links across the vast majority of 50.
+        expect(linked.size).toBeGreaterThanOrEqual(45);
+    });
+});
+
 describe('2026-11-06 third review: related block restricted to indexable allowlist', () => {
     const rows = [
         ...Array.from({ length: 30 }, (_, i) => ({

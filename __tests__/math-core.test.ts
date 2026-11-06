@@ -10,7 +10,7 @@
  *   - diff(ln(x), x) → "ln" (wrong; should be x^(-1))
  *   - diff(x*ln(x), x) → "2*ln*x" (wrong; should be 1+log(x))
  */
-import { normalizeExpression, calculateDerivative, identifyRule, validateDerivativeResult } from '@/lib/math/math-core';
+import { normalizeExpression, calculateDerivative, identifyRule, validateDerivativeResult, prettifyRaw } from '@/lib/math/math-core';
 
 describe('normalizeExpression — ln/log contract', () => {
   it('rewrites ln( → log( for natural log', () => {
@@ -37,14 +37,16 @@ describe('calculateDerivative — required math cases', () => {
     ['sin(x)', 'cos(x)'],                 // trig
     ['ln(x)', 'x^(-1)'],                  // natural log (was broken)
     ['ln(2*x)', 'x^(-1)'],                // log chain (was broken)
-    ['x*ln(x)', '1+log(x)'],              // product w/ log (was broken)
+    ['x*ln(x)', '1+ln(x)'],              // product w/ log (display rewrites log → ln)
     ['log(x)', 'x^(-1)'],                 // natural log alias
-    ['log10(x)', '(log(10)*x)^(-1)'],     // base-10 log
+    ['log10(x)', '(ln(10)*x)^(-1)'],      // base-10 log (log(10) = ln(10) in display)
     ['exp(2*x)', '2*e^(2*x)'],            // exponential chain
     ['e^x', 'e^x'],                        // natural-base exp (rational approx in some nerdamer builds)
     ['e^(2*x)', '2*e^(2*x)'],             // e^ with explicit parens
-    ['2^x', '2^x*log(2)'],                // other base, still symbolic
-    ['10^x', '10^x*log(10)'],             // other base, still symbolic
+    ['e^(-x)', '-e^(-x)'],                // negative exponent chain
+    ['x*exp(x)', 'e^x+e^x*x'],            // product with exp
+    ['2^x', '2^x*ln(2)'],                // other base, constant back-sub to ln(2)
+    ['10^x', '10^x*ln(10)'],             // other base, constant back-sub to ln(10)
     ['x*sin(x)', 'cos(x)*x+sin(x)'],      // product rule
   ];
 
@@ -76,8 +78,40 @@ describe('calculateDerivative — e^x stays symbolic (no rational approximation)
 
   it('e^(2*x) and non-e bases stay symbolic', () => {
     expect(calculateDerivative('e^(2*x)').solutionRaw).toBe('2*e^(2*x)');
-    expect(calculateDerivative('2^x').solutionRaw).toBe('2^x*log(2)');
-    expect(calculateDerivative('10^x').solutionRaw).toBe('10^x*log(10)');
+    expect(calculateDerivative('2^x').solutionRaw).toBe('2^x*ln(2)');
+    expect(calculateDerivative('10^x').solutionRaw).toBe('10^x*ln(10)');
+  });
+});
+
+describe('prettifyRaw — irrational constant back-substitution (prod-rational → symbol)', () => {
+  // A production nerdamer build numericizes ln2 / ln10 / e / pi / √2 into ratios of
+  // 6+ digit integers (e.g. d/dx 2^x → (49180508/70952475)*2^x, where that ratio
+  // ≈ ln2). prettifyRaw must restore the exact constant so the displayed answer —
+  // and any JSON-LD derived from it — never contains a 6+ digit integer ratio.
+  it('restores ln(2) from the observed production fraction for 2^x', () => {
+    expect(prettifyRaw('(49180508/70952475)*2^x')).toBe('2^x*ln(2)');
+    expect(prettifyRaw('(49180508/70952475)*2^x')).not.toMatch(/\d{6,}/);
+  });
+
+  it('restores ln(10) from the observed production fraction for 10^x', () => {
+    expect(prettifyRaw('(250513404/108796589)*10^x')).toBe('10^x*ln(10)');
+    expect(prettifyRaw('(250513404/108796589)*10^x')).not.toMatch(/\d{6,}/);
+  });
+
+  it('does not touch already-symbolic forms (local nerdamer build)', () => {
+    expect(prettifyRaw('2^x*ln(2)')).toBe('2^x*ln(2)');
+    expect(prettifyRaw('10^x*ln(10)')).toBe('10^x*ln(10)');
+  });
+
+  it('rewrites nerdamer natural-log token log( → ln( (protects log10)', () => {
+    expect(prettifyRaw('(log(10)*x)^(-1)')).toBe('(ln(10)*x)^(-1)');
+    // log10( is left untouched by the log( → ln( rule.
+    expect(prettifyRaw('log10(x)')).toBe('log10(x)');
+  });
+
+  it('does not mistake a small rational for a constant', () => {
+    // 1/2 is nowhere near ln2/ln10/e/pi/√2 → left as-is.
+    expect(prettifyRaw('(1/2)*x^2')).toBe('(1/2)*x^2');
   });
 });
 

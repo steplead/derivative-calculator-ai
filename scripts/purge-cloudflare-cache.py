@@ -60,8 +60,8 @@ def main() -> int:
                 "::warning::CLOUDFLARE_API_TOKEN cannot list the zone "
                 f"(HTTP {status}). Skipping purge. Set the CLOUDFLARE_ZONE_ID "
                 "secret to bypass the lookup, or grant Zone:Read plus "
-                "Zone.Cache Purge. /sitemap.xml has a 300s edge TTL with no "
-                "stale window, so a missed purge is short-lived."
+                "Zone.Cache Purge. /sitemap.xml uses the global 300s edge TTL "
+                "with a 60s stale window, so a missed purge is short-lived."
             )
             errors = zones.get("errors")
             print(json.dumps({"success": zones.get("success"), "errors": errors}))

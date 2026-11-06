@@ -47,16 +47,27 @@ describe('plus-free problem URLs', () => {
 });
 
 describe('hreflang', () => {
-    it('emits a self-canonical and x-default without unsubmitted locales', () => {
-        const es = localeAlternates('/practice', 'es');
-        expect(es.canonical).toBe('https://derivativecalculatorai.com/es/practice');
-        expect(es.languages.en).toBe('https://derivativecalculatorai.com/practice');
-        expect(es.languages['x-default']).toBe('https://derivativecalculatorai.com/practice');
-        expect(Object.keys(es.languages).sort()).toEqual(['en', 'x-default']);
+    it('emits a self-canonical and reciprocal en/es/pt/x-default set on every page', () => {
+        for (const loc of ['en', 'es', 'pt'] as const) {
+            const alt = localeAlternates('/practice', loc);
+            expect(alt.canonical).toBe(
+                loc === 'en'
+                    ? 'https://derivativecalculatorai.com/practice'
+                    : `https://derivativecalculatorai.com/${loc}/practice`
+            );
+            expect(Object.keys(alt.languages).sort()).toEqual(['en', 'es', 'pt', 'x-default']);
+            expect(alt.languages.en).toBe('https://derivativecalculatorai.com/practice');
+            expect(alt.languages.es).toBe('https://derivativecalculatorai.com/es/practice');
+            expect(alt.languages.pt).toBe('https://derivativecalculatorai.com/pt/practice');
+            expect(alt.languages['x-default']).toBe('https://derivativecalculatorai.com/practice');
+            // The canonical must be one of its own alternates: no dangling tag.
+            expect(Object.values(alt.languages)).toContain(alt.canonical);
+        }
 
         const home = localeAlternates('/', 'es');
         expect(home.canonical).toBe('https://derivativecalculatorai.com/es');
         expect(home.languages['x-default']).toBe('https://derivativecalculatorai.com');
+        expect(home.languages.pt).toBe('https://derivativecalculatorai.com/pt');
     });
 });
 
@@ -110,12 +121,20 @@ describe('curated sitemap', () => {
         for (const hub of ['/directory', '/problems', '/practice', '/practice/beginner', '/practice/intermediate', '/practice/advanced']) {
             expect(locs).toContain(`https://derivativecalculatorai.com${hub}`);
         }
-        // Crawl-budget narrowing: no es/pt URL, no dangling alternate tags.
+        // Crawl-budget narrowing: es/pt are declared as alternates but never
+        // submitted as <loc>. Exactly 85 URLs, each with a full reciprocal set.
         expect(locs.some((url) => /^https:\/\/derivativecalculatorai\.com\/(es|pt)(\/|$)/.test(url))).toBe(false);
-        expect(xml).not.toContain('hreflang="es"');
-        expect(xml).not.toContain('hreflang="pt"');
-        expect(xml).not.toContain('https://derivativecalculatorai.com/es');
-        expect(xml).not.toContain('https://derivativecalculatorai.com/pt');
+        expect((xml.match(/hreflang="en"/g) ?? []).length).toBe(85);
+        expect((xml.match(/hreflang="es"/g) ?? []).length).toBe(85);
+        expect((xml.match(/hreflang="pt"/g) ?? []).length).toBe(85);
+        expect((xml.match(/hreflang="x-default"/g) ?? []).length).toBe(85);
+        const blocks = xml.split('<url>').slice(1);
+        expect(blocks).toHaveLength(85);
+        for (const block of blocks) {
+            expect((block.match(/xhtml:link/g) ?? []).length).toBe(4);
+            expect(block).not.toContain('<loc>https://derivativecalculatorai.com/es');
+            expect(block).not.toContain('<loc>https://derivativecalculatorai.com/pt');
+        }
         expect(locs.some((url) => url.includes('/problems/tag/'))).toBe(false);
         expect(locs.some((url) => /\/problems\/(derivative|integral|limit)$/.test(url))).toBe(false);
         expect(xml).not.toContain('/derivative-of-x-e-x<');

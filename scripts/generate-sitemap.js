@@ -8,8 +8,10 @@
  *     hand-authored derivative lessons that sit in front of the generated
  *     `minus-to-minus` series)
  *   - only the submitted locale (en) for each of those, with a self-consistent
- *     hreflang set. es/pt stay live for visitors but are deliberately not
- *     submitted while the site has just one indexed page (2026-11-06 review).
+ *     hreflang set. es/pt stay live for visitors but are not submitted as
+ *     <loc> while the site has just one indexed page (2026-11-06 review).
+ *     Each entry still declares en/es/pt/x-default alternates so translations
+ *     are never mistaken for duplicate content (2026-11-06 second review).
  *
  * Excludes 404 integral slugs (literal "+"), noindex programmatic URLs, and
  * alias slugs whose canonical points somewhere else (derivative-of-e-x →
@@ -26,10 +28,11 @@ const path = require('path');
 const ROOT = path.join(__dirname, '..');
 const SITEMAP_PATH = path.join(ROOT, 'public', 'sitemap.xml');
 const BASE_URL = 'https://derivativecalculatorai.com';
-// Crawl-budget narrowing (2026-11-06 GSC review): submit English only.
-// es/pt routes stay live and self-canonical for visitors; they are simply not
-// advertised to crawlers via the sitemap or hreflang while indexing is at 1 page.
+// Crawl-budget narrowing (2026-11-06 GSC review): submit English <loc> only.
+// es/pt routes stay live and self-canonical for visitors and are declared as
+// hreflang alternates on every entry, but are never submitted as URLs.
 const LOCALES = ['en'];
+const HREFLANG_LOCALES = ['en', 'es', 'pt'];
 
 const STATIC_PATHS = [
   { path: '', file: 'app/(site)/page.tsx', priority: '1.0' },
@@ -115,10 +118,10 @@ function buildCanonicalMap(problems) {
 }
 
 function hreflangLinks(relPath) {
-  // Only submitted locales are declared. An en URL must never point at an
-  // alternate that does not return the tag (GSC "no return tag" errors).
+  // Declare every live locale, not just the submitted one. Each es/pt target
+  // still serves the same reciprocal tag, so no "no return tag" errors.
   return [
-    ...LOCALES.map((locale) => [locale, absolute(localizedPath(locale, relPath))]),
+    ...HREFLANG_LOCALES.map((locale) => [locale, absolute(localizedPath(locale, relPath))]),
     ['x-default', absolute(localizedPath('en', relPath))],
   ]
     .map(

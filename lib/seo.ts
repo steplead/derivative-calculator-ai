@@ -96,11 +96,16 @@ export function localeAlternates(path: string, locale: string): {
         l === 'en' ? `${SITE_URL}${clean}` : `${SITE_URL}/${l}${clean}`;
     return {
         canonical: forLocale(loc),
-        // Crawl-budget narrowing: declare only the locale we submit. Keeping
-        // es/pt here while they are absent from the sitemap would make every
-        // en URL point at hreflang targets that never return the tag.
+        // 2026-11-06 second GSC review: declare all three live locale variants
+        // on every page so crawlers can tell a translation from a duplicate.
+        // The sitemap still submits English URLs only, so this does not
+        // re-advertise 170 extra URLs to crawlers. Every es/pt target stays
+        // live (HTTP 200) and emits the same reciprocal tag, which is what
+        // keeps the alternates from becoming dangling references.
         languages: {
             en: forLocale('en'),
+            es: forLocale('es'),
+            pt: forLocale('pt'),
             'x-default': forLocale('en'),
         },
     };

@@ -302,4 +302,11 @@ describe('RC-6: related problems stay deterministic and library-backed', () => {
         const out = pickStableRelated(library, 'derivative-of-x-squared', 'derivative', 10);
         expect(out.some((p) => p.slug === 'derivative-of-x-squared')).toBe(false);
     });
+
+    it('never links to machine-generated near-duplicate slugs (2026-11-06 GSC review)', () => {
+        const out = pickStableRelated(library, 'derivative-of-2x', 'derivative', 10);
+        expect(out).toHaveLength(10);
+        expect(out.some((p) => p.slug.includes('minus-to-minus-the-minus'))).toBe(false);
+        expect(out.some((p) => p.slug.includes('-minus-over-minus-'))).toBe(false);
+    });
 });

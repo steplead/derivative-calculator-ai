@@ -68,15 +68,46 @@ describe('positions 11-30 pages', () => {
     expect(pi.example?.answer).toBe('2x');
   });
 
-  it('states the simplified form once in the worked steps (no template restatement)', () => {
-    const en = getDerivativeLesson('derivative-of-2x', 'en')!;
-    const text = en.steps.join(' ').toLowerCase();
+  it('states the simplified form once on generated lessons, and never on hand-written ones', () => {
+    // Control page that still uses the generated template.
+    const generated = getDerivativeLesson('derivative-of-5x', 'en')!;
+    const text = generated.steps.join(' ').toLowerCase();
     expect(text.match(/form to remember/g)?.length ?? 0).toBe(1);
     expect(text).not.toContain('the simplified form to remember is');
-    const es = getDerivativeLesson('derivative-of-2x', 'es')!;
-    const pt = getDerivativeLesson('derivative-of-2x', 'pt')!;
+    const es = getDerivativeLesson('derivative-of-5x', 'es')!;
+    const pt = getDerivativeLesson('derivative-of-5x', 'pt')!;
     expect(es.steps.join(' ')).not.toContain('La forma simplificada que hay que recordar es');
     expect(pt.steps.join(' ')).not.toContain('A forma simplificada para memorizar é');
+
+    // 2026-11-06 second review: 2x is now a fully hand-written pilot page.
+    const handwritten = getDerivativeLesson('derivative-of-2x', 'en')!;
+    expect(handwritten.steps.join(' ')).not.toContain('form to remember');
+    expect(handwritten.steps.join(' ')).toContain('2h/h = 2');
+  });
+
+  it('gives the five pilot pages genuinely different explanations, examples, and mistakes', () => {
+    const pilots = [
+      'derivative-of-2x',
+      'derivative-of-sin-x',
+      'derivative-of-ln-x',
+      'derivative-of-e-to-the-x',
+      'derivative-of-sin-2x',
+    ] as const;
+    const examples = pilots.map((slug) => getDerivativeLesson(slug, 'en')!.example!.title);
+    const leads = pilots.map((slug) => getDerivativeLesson(slug, 'en')!.paragraphs[0]);
+    expect(new Set(examples).size).toBe(pilots.length);
+    expect(new Set(leads).size).toBe(pilots.length);
+    for (const slug of pilots) {
+      const lesson = getDerivativeLesson(slug, 'en')!;
+      expect(lesson.steps.length).toBeGreaterThanOrEqual(6);
+      expect(lesson.example!.steps.length).toBeGreaterThanOrEqual(4);
+      expect(lesson.faqs.length).toBeGreaterThanOrEqual(4);
+      expect(lesson.mistakes.length).toBeGreaterThanOrEqual(3);
+      expect(lesson.related.length).toBeGreaterThanOrEqual(3);
+      expect(lesson.steps.join(' ')).not.toContain('The simplified form to remember is');
+      expect(strikingMeta(slug, 'es')).not.toBeNull();
+      expect(strikingMeta(slug, 'pt')).not.toBeNull();
+    }
   });
 });
 

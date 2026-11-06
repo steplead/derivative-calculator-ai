@@ -66,11 +66,15 @@ describe('answer-first derivative leads', () => {
     expect(arcsin).toMatch(/d\/dx arcsin\(x\)/);
     expect(arcsin).toContain('1 / sqrt(1 - x^2)');
     expect(arcsin).toContain('-1 < x < 1');
+    // 2026-11-06 second review: this page now has a hand-written answer-first
+    // lead instead of the generated `d/dx ...` template. The answer must still
+    // be in the first sentence, in both languages.
     const sin2 = answerFirstLead('derivative-of-sin-2x', 'en')!;
-    expect(sin2.startsWith('d/dx ')).toBe(true);
-    expect(sin2).toContain('2*cos(2*x)');
+    expect(sin2.split('.')[0]).toContain('2cos(2x)');
+    expect(sin2.toLowerCase()).toContain('derivative of sin(2x)');
     const es = answerFirstLead('derivative-of-sin-2x', 'es')!;
     expect(es).not.toBe(sin2);
+    expect(es.split('.')[0]).toContain('2cos(2x)');
     const page = fs.readFileSync(path.join(ROOT, 'app/(site)/[slug]/page.tsx'), 'utf8');
     const marker = page.indexOf('const answerLead');
     expect(page.indexOf('{answerLead ?', marker)).toBeGreaterThan(marker);

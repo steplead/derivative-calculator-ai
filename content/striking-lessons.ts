@@ -687,6 +687,426 @@ const STRIKING: Record<string, Record<Locale, StrikingBody | StrikingMeta>> = {
       lead: 'A derivada de arctan(x) é 1/(1 + x^2) para todo x real.',
     },
   },
+  'derivative-of-2x': {
+    en: {
+      title: 'Derivative of 2x = 2',
+      h1: 'Derivative of 2x is 2',
+      description: 'The derivative of 2x is 2. A difference-quotient proof, why the constant factor survives, and the tangent line at x = 3.',
+      lead: 'The derivative of 2x is 2 for every real x.',
+      paragraphs: [
+        'The graph of y = 2x is a straight line through the origin with slope 2. A derivative is a slope, so the answer cannot depend on x: every tangent line to a straight line is the line itself. Any expression that still contains x, such as 2x or x^2, describes a curve whose steepness changes from point to point, and 2x is not a curve.',
+        'The difference quotient makes this exact. f(x+h) - f(x) = 2(x+h) - 2x = 2h, and dividing by h leaves 2 before the limit is even taken. The h cancels completely, so there is nothing left for h -> 0 to change. Replacing the coefficient 2 by any constant k gives k, which is the constant multiple rule in its simplest case.',
+        'Adding a constant does not change the slope either, so the derivative of 2x + 7 is still 2. Multiplying by a function of x is different: the derivative of 2x sin(x) needs the product rule and equals 2 sin(x) + 2x cos(x), which varies with x. The 2 in 2x is a coefficient of x, not a second function composed with it.',
+      ],
+      stepsHeading: 'Difference quotient, checked two other ways',
+      steps: [
+        'Set f(x) = 2x and form the difference quotient (f(x+h) - f(x))/h.',
+        'Expand f(x+h) = 2(x+h) = 2x + 2h.',
+        'Subtract f(x): (2x + 2h) - 2x = 2h.',
+        'Divide by h, with h not zero: 2h/h = 2. The quotient is already constant.',
+        'Take the limit as h approaches 0. The limit of the constant 2 is 2.',
+        'Check with the power rule: 2x = 2x^1, so the derivative is 2·1·x^0 = 2.',
+        'Check with the constant multiple rule: d/dx [2·x] = 2·d/dx[x] = 2·1 = 2.',
+      ],
+      example: {
+        heading: 'Worked example',
+        title: 'Tangent line to y = 2x at x = 3, and to the shifted line y = 2x + 7',
+        steps: [
+          'At x = 3 the point on y = 2x is (3, 6), and the derivative gives a slope of 2.',
+          'The tangent line is y - 6 = 2(x - 3), which simplifies back to y = 2x. A line is its own tangent.',
+          'For y = 2x + 7 the point is (3, 13) and the slope is still 2, giving y - 13 = 2(x - 3), or y = 2x + 7.',
+          'A secant from x = 3 to x = 3.001 rises by 0.002 over 0.001, a slope of exactly 2. The ratio is 2 at every starting point.',
+        ],
+        answer: '2',
+      },
+      mistakes: [
+        {
+          title: 'Answering 2x',
+          text: '2x is the function, not its rate of change. The difference quotient cancels x completely, so a correct answer here has no x in it. If a computed derivative of a linear function still contains the variable, the subtraction step was skipped.',
+        },
+        {
+          title: 'Answering 1 or x',
+          text: 'The derivative of x is 1, and the constant multiple rule then multiplies that 1 by 2. Dropping the coefficient gives 1; keeping x gives a slope that grows with x. Both contradict the straight-line graph.',
+        },
+        {
+          title: 'Inventing a chain-rule factor',
+          text: '2x is a product of a constant and x, not a composition. There is no inner function whose derivative must be brought down. Chain-rule factors appear for expressions like sin(2x), where the inner function 2x genuinely contributes a factor of 2.',
+        },
+      ],
+      faqs: [
+        {
+          question: 'What is the derivative of 2x?',
+          answer: 'The derivative of 2x is 2. The function is a straight line of slope 2, so its rate of change is constant.',
+        },
+        {
+          question: 'Why is the derivative of 2x a constant and not a function of x?',
+          answer: 'The difference quotient is (2(x+h) - 2x)/h = 2h/h = 2. The variable cancels before the limit, so the slope is the same at every x.',
+        },
+        {
+          question: 'Does adding a constant change the derivative of 2x?',
+          answer: 'No. The derivative of 2x + 7 is also 2. Adding a constant shifts the line vertically without changing its slope.',
+        },
+        {
+          question: 'What is the derivative of 2x sin(x)?',
+          answer: 'Use the product rule: 2 sin(x) + 2x cos(x). Unlike 2x alone, this slope varies with x because sin(x) is a function of x.',
+        },
+      ],
+      extraRelated: [
+        { href: '/derivative-of-5x', label: 'Derivative of 5x', note: '5. The same constant multiple rule with a different coefficient.' },
+        { href: '/derivative-of-x-squared', label: 'Derivative of x^2', note: '2x. A slope that really does depend on x, unlike this page.' },
+        { href: '/wiki/power-rule', label: 'Power rule', note: 'Turns 2x^1 into 2x^0 = 2 in one step.' },
+      ],
+      relatedHeading: 'Related derivatives',
+    },
+    es: {
+      title: 'Derivada de 2x = 2',
+      h1: 'La derivada de 2x es 2',
+      description: 'La derivada de 2x es 2. Demostración con el cociente incremental, la regla del factor constante y la recta tangente en x = 3.',
+      lead: 'La derivada de 2x es 2 para todo x real.',
+    },
+    pt: {
+      title: 'Derivada de 2x = 2',
+      h1: 'A derivada de 2x é 2',
+      description: 'A derivada de 2x é 2. Prova pelo quociente das diferenças, regra do fator constante e reta tangente em x = 3.',
+      lead: 'A derivada de 2x é 2 para todo x real.',
+    },
+  },
+  'derivative-of-sin-x': {
+    en: {
+      title: 'Derivative of sin(x) = cos(x)',
+      h1: 'Derivative of sin(x) is cos(x)',
+      description: 'The derivative of sin(x) is cos(x). The addition-formula proof, the two special limits behind it, and the slope at pi/3.',
+      lead: 'The derivative of sin(x) is cos(x), provided x is measured in radians.',
+      paragraphs: [
+        'Radians are not a cosmetic choice here. The special limit sin(h)/h -> 1 holds only when h is a pure number, which is what an angle in radians is. In degrees the same limit picks up a factor of pi/180, and every trigonometric derivative would carry an extra constant. This is the main reason calculus uses radians.',
+        'The proof starts from the addition formula sin(x+h) = sin(x)cos(h) + cos(x)sin(h). Subtracting sin(x) and dividing by h splits the quotient into two pieces: sin(x)·(cos(h)-1)/h and cos(x)·sin(h)/h. The first tends to 0 and the second tends to cos(x), so the whole expression tends to cos(x). No graph reading is required.',
+        'The result matches the shape of the sine wave. Where sin(x) climbs most steeply, near x = 0, cos(x) is close to 1. At the peaks x = pi/2 and x = -pi/2 the slope is 0 and cos(x) vanishes. Where sine falls, cosine is negative. Differentiating once more gives -sin(x), which is why the second derivative of sine is the original function with a minus sign.',
+      ],
+      stepsHeading: 'Proof from the addition formula',
+      steps: [
+        'Write the difference quotient (sin(x+h) - sin(x))/h.',
+        'Expand sin(x+h) = sin(x)cos(h) + cos(x)sin(h).',
+        'Subtract sin(x) and group: sin(x)(cos(h)-1)/h + cos(x)sin(h)/h.',
+        'Use the first special limit: (cos(h)-1)/h -> 0, so the sin(x) term vanishes.',
+        'Use the second special limit: sin(h)/h -> 1, so the cos(x) term becomes cos(x).',
+        'Conclude d/dx sin(x) = cos(x). Both limits require h in radians.',
+        'Check at x = 0: cos(0) = 1, the steepest positive slope of the sine curve.',
+      ],
+      example: {
+        heading: 'Worked example',
+        title: 'Slope of sin(x) at x = pi/3',
+        steps: [
+          'The derivative at any point is cos(x), so evaluate cos(pi/3).',
+          'cos(pi/3) = 1/2. The sine curve is rising at half the steepness it has at the origin.',
+          'The point itself is (pi/3, sin(pi/3)) = (pi/3, √3/2), about (1.047, 0.866).',
+          'The tangent line is y - √3/2 = (1/2)(x - pi/3). A secant to pi/3 + 0.001 has a slope near 0.5, not 0.866.',
+        ],
+        answer: '1/2',
+      },
+      mistakes: [
+        {
+          title: 'Answering -cos(x)',
+          text: 'A minus sign appears when differentiating cos(x), whose derivative is -sin(x), or on the second derivative of sin(x). Sine itself has a positive slope near the origin, so its derivative there must be positive.',
+        },
+        {
+          title: 'Using degrees',
+          text: 'With x in degrees, d/dx sin(x) = (pi/180)cos(x). The extra factor comes from sin(h)/h -> pi/180 for h measured in degrees. Stating the radian convention is part of stating the derivative.',
+        },
+        {
+          title: 'Confusing sin(x)^2 with sin(x^2)',
+          text: 'This page covers sin(x) alone. sin(x)^2 needs the chain rule on the outer square and gives 2 sin(x)cos(x); sin(x^2) needs it on the inner x^2 and gives 2x cos(x^2). Neither is cos(x).',
+        },
+      ],
+      faqs: [
+        {
+          question: 'What is the derivative of sin(x)?',
+          answer: 'The derivative of sin(x) is cos(x), with x measured in radians.',
+        },
+        {
+          question: 'Why does the derivative of sin(x) need radians?',
+          answer: 'The proof uses sin(h)/h -> 1, which is true only for h in radians. In degrees the limit is pi/180 and the derivative gains that factor.',
+        },
+        {
+          question: 'What is the slope of sin(x) at pi/3?',
+          answer: 'cos(pi/3) = 1/2. The tangent line passes through (pi/3, √3/2) with slope 1/2.',
+        },
+        {
+          question: 'What is the second derivative of sin(x)?',
+          answer: 'Differentiating cos(x) gives -sin(x). The second derivative is minus the original function, the equation behind simple harmonic motion.',
+        },
+      ],
+      extraRelated: [
+        { href: '/derivative-of-cos-x', label: 'Derivative of cos(x)', note: '-sin(x). The companion result, with the minus sign this page does not have.' },
+        { href: '/derivative-of-sin-2x', label: 'Derivative of sin(2x)', note: '2cos(2x). Chain rule on the same outer sine function.' },
+        { href: '/wiki/trigonometric-derivatives', label: 'Trigonometric derivatives', note: 'All six trig derivatives and the limits they rest on.' },
+      ],
+      relatedHeading: 'Related derivatives',
+    },
+    es: {
+      title: 'Derivada de sin(x) = cos(x)',
+      h1: 'La derivada de sin(x) es cos(x)',
+      description: 'La derivada de sin(x) es cos(x). Demostración con la fórmula de adición, los dos límites notables y la pendiente en pi/3.',
+      lead: 'La derivada de sin(x) es cos(x), siempre que x se mida en radianes.',
+    },
+    pt: {
+      title: 'Derivada de sin(x) = cos(x)',
+      h1: 'A derivada de sin(x) é cos(x)',
+      description: 'A derivada de sin(x) é cos(x). Prova pela fórmula de adição, os dois limites notáveis e a inclinação em pi/3.',
+      lead: 'A derivada de sin(x) é cos(x), com x medido em radianos.',
+    },
+  },
+  'derivative-of-ln-x': {
+    en: {
+      title: 'Derivative of ln(x) = 1/x',
+      h1: 'Derivative of ln(x) is 1/x',
+      description: 'The derivative of ln(x) is 1/x for x > 0. Inverse-function proof from e^y, the natural-log domain, and the slope at x = e.',
+      lead: 'The derivative of ln(x) is 1/x, defined only for x > 0.',
+      paragraphs: [
+        'The natural logarithm has no values for x <= 0, so neither does its derivative. Writing 1/x without that restriction is shorthand; the full statement is d/dx ln(x) = 1/x on the domain x > 0. The related function ln|x| is defined on both sides of zero and has derivative 1/x for every nonzero x, which is where the two formulas are often mixed up.',
+        'The cleanest proof treats ln(x) as the inverse of e^y. Set y = ln(x), so x = e^y. Differentiating both sides with respect to x gives 1 = e^y·dy/dx, and since e^y = x, solving for dy/dx yields 1/x. The derivative of e^y does all the work, and it is why the natural logarithm, not log base 10, differentiates so simply.',
+        'The graph agrees. Near x = 0 the logarithm dives steeply toward negative infinity and 1/x is large; as x grows the curve flattens and 1/x tends to 0. The slope is always positive, so ln(x) is increasing on its whole domain, but it grows more and more slowly. For log base 10 the extra factor 1/ln(10) appears, roughly 0.434/x.',
+      ],
+      stepsHeading: 'Inverse-function proof from x = e^y',
+      steps: [
+        'Set y = ln(x). By the definition of the natural log, x = e^y.',
+        'Differentiate both sides with respect to x: 1 = e^y·dy/dx.',
+        'Substitute e^y = x back into that equation: 1 = x·dy/dx.',
+        'Solve for dy/dx = 1/x, valid where x > 0.',
+        'State the domain explicitly: ln(x) is undefined for x <= 0, so 1/x is a derivative there only on the positive half-line.',
+        'Contrast with log base 10: d/dx log10(x) = 1/(x ln(10)). The change-of-base factor survives differentiation.',
+        'Contrast with ln|x|: on the negative half-line its derivative is also 1/x, but the function itself is ln(-x) there.',
+      ],
+      example: {
+        heading: 'Worked example',
+        title: 'Slope of ln(x) at x = e and at x = 1',
+        steps: [
+          'At x = e the function value is ln(e) = 1 and the derivative is 1/e, about 0.368.',
+          'The tangent line at that point is y - 1 = (1/e)(x - e), which simplifies to y = x/e.',
+          'At x = 1 the value is 0 and the derivative is 1, so the tangent there is y = x - 1.',
+          'A secant from 1 to 1.001 gives ln(1.001)/0.001, about 0.9995, confirming the slope near 1 is 1.',
+        ],
+        answer: '1/e',
+      },
+      mistakes: [
+        {
+          title: 'Writing 1/|x| for ln(x)',
+          text: 'ln(x) is only defined for positive x, so 1/x is already positive on its whole domain. The absolute value belongs to the derivative of ln|x|, a different function defined for negative x as well.',
+        },
+        {
+          title: 'Forgetting the ln(10) factor for log(x)',
+          text: 'If log means base 10, the derivative is 1/(x ln(10)), not 1/x. Only the natural logarithm, base e, differentiates to 1/x without an extra constant.',
+        },
+        {
+          title: 'Evaluating at x = 0 or a negative x',
+          text: 'ln(0) and ln(-3) are undefined, so there is no slope at those points. The expression 1/x may produce a number, but a derivative cannot exist where the function has no value.',
+        },
+      ],
+      faqs: [
+        {
+          question: 'What is the derivative of ln(x)?',
+          answer: 'The derivative of ln(x) is 1/x, for x > 0 only.',
+        },
+        {
+          question: 'Why is the derivative of ln(x) equal to 1/x?',
+          answer: 'Write x = e^y with y = ln(x). Differentiating gives 1 = e^y·dy/dx = x·dy/dx, so dy/dx = 1/x.',
+        },
+        {
+          question: 'What is the derivative of ln|x|?',
+          answer: 'It is 1/x for every x not equal to 0, including negative x. That is the antiderivative form; ln(x) alone is restricted to x > 0.',
+        },
+        {
+          question: 'What is the slope of ln(x) at x = e?',
+          answer: 'It is 1/e, about 0.368. The tangent line at (e, 1) is y = x/e.',
+        },
+      ],
+      extraRelated: [
+        { href: '/derivative-of-log-x', label: 'Derivative of log(x)', note: '1/(x ln(10)) when the base is 10. The extra constant is the whole difference.' },
+        { href: '/derivative-of-e-to-the-x', label: 'Derivative of e^x', note: 'e^x. The inverse function used in the proof above.' },
+        { href: '/wiki/logarithmic-derivatives', label: 'Logarithmic derivatives', note: 'The chain-rule form d/dx ln(f(x)) = f\'(x)/f(x).' },
+      ],
+      relatedHeading: 'Related derivatives',
+    },
+    es: {
+      title: 'Derivada de ln(x) = 1/x',
+      h1: 'La derivada de ln(x) es 1/x',
+      description: 'La derivada de ln(x) es 1/x para x > 0. Demostración por la función inversa e^y, el dominio y la pendiente en x = e.',
+      lead: 'La derivada de ln(x) es 1/x, definida solo para x > 0.',
+    },
+    pt: {
+      title: 'Derivada de ln(x) = 1/x',
+      h1: 'A derivada de ln(x) é 1/x',
+      description: 'A derivada de ln(x) é 1/x para x > 0. Prova pela função inversa e^y, o domínio e a inclinação em x = e.',
+      lead: 'A derivada de ln(x) é 1/x, definida apenas para x > 0.',
+    },
+  },
+  'derivative-of-e-to-the-x': {
+    en: {
+      title: 'Derivative of e^x = e^x',
+      h1: 'Derivative of e^x is e^x',
+      description: 'The derivative of e^x is e^x. Why e is the base with slope 1 at the origin, the defining limit, and checks at x = 0 and x = ln(2).',
+      lead: 'The derivative of e^x is e^x: the function is its own derivative.',
+      paragraphs: [
+        'For a general base a, the derivative of a^x is a^x ln(a). The number e is the unique base for which ln(a) = 1, so the extra factor disappears. Equivalently, e is chosen so that the slope of a^x at x = 0 is exactly 1. Every other exponential is a constant multiple of that slope, which is why e^x is the natural one to differentiate.',
+        'From the definition, (e^(x+h) - e^x)/h = e^x (e^h - 1)/h. The limit (e^h - 1)/h -> 1 is the defining property of e, so the difference quotient tends to e^x. The limit is not an approximation: it is what the number e was selected to satisfy.',
+        'A function equal to its own derivative grows at a rate proportional to its size. At x = 0 the value and the slope are both 1; at x = ln(2) both are 2; at x = 5 both are about 148.4. This is the reason e^x models unconstrained growth, and why adding a constant multiple C·e^x still solves y\' = y.',
+      ],
+      stepsHeading: 'From the difference quotient to the fixed point',
+      steps: [
+        'Write the difference quotient (e^(x+h) - e^x)/h.',
+        'Factor out e^x using e^(x+h) = e^x·e^h, giving e^x (e^h - 1)/h.',
+        'Use the defining limit of e: (e^h - 1)/h -> 1 as h approaches 0.',
+        'Multiply: e^x·1 = e^x. The derivative equals the original function.',
+        'Contrast with a general base: d/dx a^x = a^x ln(a). Only a = e removes the factor.',
+        'Check at x = 0: e^0 = 1 and the slope is 1, so the tangent line is y = x + 1.',
+        'Check the chain rule on e^(2x): the inner derivative 2 comes down, giving 2e^(2x).',
+      ],
+      example: {
+        heading: 'Worked example',
+        title: 'Value and slope of e^x at x = ln(2), and the tangent at x = 0',
+        steps: [
+          'At x = ln(2), e^x = 2. Because the derivative is the same function, the slope there is also 2.',
+          'The tangent line at that point is y - 2 = 2(x - ln(2)).',
+          'At x = 0 the value is 1 and the slope is 1, so the tangent line is y - 1 = x, or y = x + 1.',
+          'A secant from 0 to 0.001 gives (e^0.001 - 1)/0.001, about 1.0005, confirming the unit slope at the origin.',
+        ],
+        answer: '2',
+      },
+      mistakes: [
+        {
+          title: 'Applying the power rule and answering x·e^(x-1)',
+          text: 'The power rule applies when the exponent is a constant and x is the base. In e^x the base is constant and x is the exponent, so the rule does not apply. x·e^(x-1) is not the derivative of any elementary exponential.',
+        },
+        {
+          title: 'Forgetting ln(a) for other bases',
+          text: 'The derivative of 2^x is 2^x ln(2), about 0.693·2^x. Dropping that factor and writing e^x also changes the base, not just the coefficient.',
+        },
+        {
+          title: 'Dropping the chain-rule factor on e^(kx)',
+          text: 'The derivative of e^(2x) is 2e^(2x) and of e^(-x) is -e^(-x). The exponent is a function of x, so its derivative must come down as a factor.',
+        },
+      ],
+      faqs: [
+        {
+          question: 'What is the derivative of e^x?',
+          answer: 'The derivative of e^x is e^x. It is the only function (up to a constant multiple) equal to its own derivative.',
+        },
+        {
+          question: 'Why does e^x differentiate to itself?',
+          answer: 'The difference quotient is e^x(e^h - 1)/h, and e is defined so that (e^h - 1)/h -> 1. The quotient therefore tends to e^x.',
+        },
+        {
+          question: 'What is the derivative of 2^x?',
+          answer: 'It is 2^x ln(2). For a general base a the derivative of a^x is a^x ln(a); e is the base where ln(a) = 1.',
+        },
+        {
+          question: 'What is the derivative of e^(2x)?',
+          answer: 'Use the chain rule: 2e^(2x). The derivative of the inner 2x comes down as a factor of 2.',
+        },
+      ],
+      extraRelated: [
+        { href: '/derivative-of-2-to-the-x', label: 'Derivative of 2^x', note: '2^x ln(2). The general-base formula with its constant factor visible.' },
+        { href: '/derivative-of-e-to-the-2x', label: 'Derivative of e^(2x)', note: '2e^(2x). Chain rule on the same exponential.' },
+        { href: '/wiki/exponential-derivatives', label: 'Exponential derivatives', note: 'The a^x ln(a) rule and its chain-rule variants.' },
+      ],
+      relatedHeading: 'Related derivatives',
+    },
+    es: {
+      title: 'Derivada de e^x = e^x',
+      h1: 'La derivada de e^x es e^x',
+      description: 'La derivada de e^x es e^x. Por qué e es la base con pendiente 1 en el origen, el límite que la define y comprobaciones en x = 0 y x = ln(2).',
+      lead: 'La derivada de e^x es e^x: la función es su propia derivada.',
+    },
+    pt: {
+      title: 'Derivada de e^x = e^x',
+      h1: 'A derivada de e^x é e^x',
+      description: 'A derivada de e^x é e^x. Por que e é a base com inclinação 1 na origem, o limite que a define e verificações em x = 0 e x = ln(2).',
+      lead: 'A derivada de e^x é e^x: a função é a própria derivada.',
+    },
+  },
+  'derivative-of-sin-2x': {
+    en: {
+      title: 'Derivative of sin(2x) = 2cos(2x)',
+      h1: 'Derivative of sin(2x) is 2cos(2x)',
+      description: 'The derivative of sin(2x) is 2cos(2x). Chain-rule derivation, a product-rule cross-check, and the slope at x = pi/6.',
+      lead: 'The derivative of sin(2x) is 2cos(2x), with x in radians.',
+      paragraphs: [
+        'This is a composition, not a product: the outer function is sin(u) and the inner function is u = 2x. The chain rule says to differentiate the outer function with respect to u, keep u = 2x in the result, and multiply by du/dx. Differentiating sin(u) gives cos(u), and the derivative of 2x is 2, so the answer is 2cos(2x).',
+        'The factor 2 is easy to lose because it looks like the coefficient of a constant multiple. It is not: it comes from the rate at which the inner angle 2x changes. Doubling the angle doubles the frequency of the wave, so its peaks arrive twice as often and every slope along it is twice as steep as the corresponding slope of sin(x).',
+        'An independent check comes from the double-angle identity sin(2x) = 2 sin(x)cos(x). The product rule gives 2[cos(x)cos(x) + sin(x)(-sin(x))] = 2[cos(x)^2 - sin(x)^2] = 2cos(2x). Both routes agree, which is a useful way to catch a missing inner derivative.',
+      ],
+      stepsHeading: 'Chain rule, then a product-rule cross-check',
+      steps: [
+        'Name the layers: outer f(u) = sin(u), inner u = 2x.',
+        'Differentiate the outer function: f\'(u) = cos(u).',
+        'Differentiate the inner function: du/dx = 2.',
+        'Apply the chain rule: d/dx sin(2x) = cos(u)·2 = 2cos(2x).',
+        'Check with sin(2x) = 2 sin(x)cos(x) and the product rule.',
+        'Product rule gives 2[cos(x)^2 - sin(x)^2], which is 2cos(2x) by the double-angle identity.',
+        'Sanity check at x = 0: the slope is 2cos(0) = 2, twice the slope of sin(x) at the origin.',
+      ],
+      example: {
+        heading: 'Worked example',
+        title: 'Slope of sin(2x) at x = pi/6',
+        steps: [
+          'Evaluate the inner angle: 2·(pi/6) = pi/3.',
+          'The function value is sin(pi/3) = √3/2, about 0.866.',
+          'The derivative is 2cos(pi/3) = 2·(1/2) = 1.',
+          'The tangent line is y - √3/2 = 1·(x - pi/6). A secant to pi/6 + 0.001 has a slope near 1, not 0.5 or 2.',
+        ],
+        answer: '1',
+      },
+      mistakes: [
+        {
+          title: 'Answering cos(2x) and losing the 2',
+          text: 'Differentiating only the outer sine gives cos(2x). The inner derivative du/dx = 2 must be multiplied in. At x = 0 the true slope is 2, so omitting the factor halves every slope on the curve.',
+        },
+        {
+          title: 'Answering 2cos(x)',
+          text: 'The angle inside the cosine stays 2x. Replacing cos(2x) with cos(x) changes the frequency of the derivative and gives a slope of 2 at x = pi/2, where sin(2x) actually has a slope of -2.',
+        },
+        {
+          title: 'Treating sin(2x) as 2sin(x)',
+          text: 'sin(2x) is not 2 sin(x); the correct identity is 2 sin(x)cos(x). Using the wrong identity produces 2cos(x) and drops the double-angle behaviour entirely.',
+        },
+      ],
+      faqs: [
+        {
+          question: 'What is the derivative of sin(2x)?',
+          answer: 'The derivative of sin(2x) is 2cos(2x), with x in radians.',
+        },
+        {
+          question: 'Why does the chain rule add a factor of 2?',
+          answer: 'The inner function is 2x, whose derivative is 2. The chain rule multiplies cos(2x) by that inner derivative.',
+        },
+        {
+          question: 'What is the slope of sin(2x) at pi/6?',
+          answer: '2cos(pi/3) = 1. The curve passes through (pi/6, √3/2) with slope 1.',
+        },
+        {
+          question: 'What is the second derivative of sin(2x)?',
+          answer: 'Differentiate 2cos(2x) with the chain rule again: -4sin(2x). Each differentiation brings down another factor of 2.',
+        },
+      ],
+      extraRelated: [
+        { href: '/derivative-of-cos-2x', label: 'Derivative of cos(2x)', note: '-2sin(2x). The same chain rule with a cosine outer function.' },
+        { href: '/derivative-of-sin-x', label: 'Derivative of sin(x)', note: 'cos(x). This page is that result with the angle doubled.' },
+        { href: '/wiki/chain-rule', label: 'Chain rule', note: 'Differentiate the outer layer, keep the inner argument, multiply by the inner derivative.' },
+      ],
+      relatedHeading: 'Related derivatives',
+    },
+    es: {
+      title: 'Derivada de sin(2x) = 2cos(2x)',
+      h1: 'La derivada de sin(2x) es 2cos(2x)',
+      description: 'La derivada de sin(2x) es 2cos(2x). Demostración con la regla de la cadena, comprobación con el producto y la pendiente en x = pi/6.',
+      lead: 'La derivada de sin(2x) es 2cos(2x), con x en radianes.',
+    },
+    pt: {
+      title: 'Derivada de sin(2x) = 2cos(2x)',
+      h1: 'A derivada de sin(2x) é 2cos(2x)',
+      description: 'A derivada de sin(2x) é 2cos(2x). Prova pela regra da cadeia, verificação pelo produto e a inclinação em x = pi/6.',
+      lead: 'A derivada de sin(2x) é 2cos(2x), com x em radianos.',
+    },
+  },
 };
 
 function isBody(value: StrikingBody | StrikingMeta): value is StrikingBody {

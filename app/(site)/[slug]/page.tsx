@@ -388,7 +388,11 @@ export default async function ProblemPage({ params }: { params: { slug: string }
             || (slug.startsWith('integral') ? 'integral' : slug.startsWith('limit') ? 'limit' : 'derivative');
 
         if (problem && library.length > 0) {
-            relatedProblems = pickStableRelated(library, slug, problemTypeHint);
+            // 2026-11-06 third review: restrict the related-problem pool to the
+            // sitemap allowlist so "Practice More Problems" only links indexable,
+            // high-value pages and never sends crawlers/equity to noindex'd
+            // machine slugs (e.g. derivative-of-10cosx, derivative-of-1-x).
+            relatedProblems = pickStableRelated(library, slug, problemTypeHint, 10, INDEXABLE_PROBLEM_SLUGS);
         }
 
         // Only slugs OUTSIDE the library pay for D1 / API lookups.
@@ -427,7 +431,7 @@ export default async function ProblemPage({ params }: { params: { slug: string }
                 }
             }
             if (relatedProblems.length === 0 && d1Related.status === 'fulfilled' && Array.isArray(d1Related.value)) {
-                relatedProblems = pickStableRelated(d1Related.value as any[], slug, problemTypeHint);
+                relatedProblems = pickStableRelated(d1Related.value as any[], slug, problemTypeHint, 10, INDEXABLE_PROBLEM_SLUGS);
             }
         }
 

@@ -129,6 +129,39 @@ describe('RC-6: related problems are deterministic', () => {
     });
 });
 
+describe('2026-11-06 third review: related block restricted to indexable allowlist', () => {
+    const rows = [
+        ...Array.from({ length: 30 }, (_, i) => ({
+            slug: `derivative-of-1${i}cosx`,
+            formula: `cos(x)`,
+            type: 'derivative' as const,
+        })),
+        { slug: 'derivative-of-2x', formula: '2x', type: 'derivative' as const },
+        { slug: 'derivative-of-1-over-x', formula: '1/x', type: 'derivative' as const },
+        { slug: 'derivative-of-1-x', formula: '1/x', type: 'derivative' as const },
+    ];
+    const featured = new Set<string>(['derivative-of-2x', 'derivative-of-1-over-x']);
+
+    it('only links slugs present in the allowlist', () => {
+        const out = pickStableRelated(rows, 'derivative-of-2x', 'derivative', 10, featured);
+        expect(out.length).toBeGreaterThan(0);
+        expect(out.every((p) => featured.has(p.slug))).toBe(true);
+        expect(out.some((p) => p.slug === 'derivative-of-1-x')).toBe(false);
+        expect(out.some((p) => p.slug.includes('cosx'))).toBe(false);
+    });
+
+    it('falls back to the unfiltered pool when the allowlist matches nothing (fail-open)', () => {
+        const deadSet = new Set<string>(['slug-not-in-library']);
+        const out = pickStableRelated(rows, 'derivative-of-2x', 'derivative', 10, deadSet);
+        expect(out).toHaveLength(10);
+    });
+
+    it('empty allowlist set means "no restriction"', () => {
+        const out = pickStableRelated(rows, 'derivative-of-2x', 'derivative', 3, new Set<string>());
+        expect(out).toHaveLength(3);
+    });
+});
+
 describe('RC-7: slug heuristic rejects non-math slugs', () => {
     it('rejects arbitrary short alphanumeric strings (soft-404 generators)', () => {
         // These all returned HTTP 200 before the fix.

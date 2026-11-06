@@ -155,24 +155,44 @@ export function isMachineSlug(slug: string): boolean {
  * - Excludes the current slug.
  * - Excludes machine-generated near-duplicate slugs (2026-11-06 GSC review).
  * - Prefers problems of the same type (derivative/integral/limit).
+ * - When `featuredOnly` (the sitemap allowlist) is supplied, the candidate pool
+ *   is restricted to those indexable slugs so high-value pages never spend link
+ *   equity on noindex'd machine pages (derivative-of-10cosx, derivative-of-1-x,
+ *   ...) — 2026-11-06 third review. The allowlist does not contain the
+ *   `derivative-of-1-x` / `derivative-of-1-over-x` duplicate pair, so the
+ *   redundant "Derivative of 1/x" entry is dropped automatically.
  * - Deterministic lexicographic order (never Math.random).
- * - Caps at `limit`.
+ * - Caps at `limit`. Fail-open: if the allowlist somehow matches nothing, the
+ *   unfiltered pool is used so the block never silently empties.
  */
 export function pickStableRelated(
     problems: StaticProblem[],
     currentSlug: string,
     typeHint?: string,
-    limit: number = 10
+    limit: number = 10,
+    featuredOnly?: Set<string> | null
 ): StaticProblem[] {
     if (!Array.isArray(problems) || problems.length === 0) return [];
     const type = typeHint || 'derivative';
-    const sameType = problems
-        .filter((p) => p && p.slug && p.slug !== currentSlug && !isMachineSlug(p.slug) && (!p.type || p.type === type))
+    let pool = problems.filter(
+        (p) => p && p.slug && p.slug !== currentSlug && !isMachineSlug(p.slug)
+    );
+    if (featuredOnly && featuredOnly.size > 0) {
+        const before = pool.length;
+        pool = pool.filter((p) => featuredOnly.has(p.slug));
+        // Fail-open: never hide every related link on a data regression.
+        if (pool.length === 0 && before > 0) {
+            pool = problems.filter(
+                (p) => p && p.slug && p.slug !== currentSlug && !isMachineSlug(p.slug)
+            );
+        }
+    }
+    const sameType = pool
+        .filter((p) => (!p.type || p.type === type))
         .sort((a, b) => a.slug.localeCompare(b.slug))
         .slice(0, limit);
     if (sameType.length >= Math.min(5, limit)) return sameType;
-    const others = problems
-        .filter((p) => p && p.slug && p.slug !== currentSlug && !isMachineSlug(p.slug))
+    const others = pool
         .sort((a, b) => a.slug.localeCompare(b.slug))
         .slice(0, Math.max(0, limit - sameType.length));
     return [...sameType, ...others].slice(0, limit);

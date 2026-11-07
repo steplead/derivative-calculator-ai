@@ -855,6 +855,26 @@ const STRIKING: Record<string, Record<Locale, StrikingBody | StrikingMeta>> = {
       lead: 'A derivada de sin(x) é cos(x), com x medido em radianos.',
     },
   },
+  'derivative-of-log-x': {
+    en: {
+      title: 'Derivative of log(x) = 1/x (Natural Log)',
+      h1: 'Derivative of log(x)',
+      description: 'The derivative of log(x), read as the natural logarithm, is 1/x for x > 0. Why the base matters, the slope at x = e, and the ln(10) factor that appears for base 10.',
+      lead: 'The derivative of log(x), taken as the natural logarithm, is 1/x, defined only for x > 0.',
+    },
+    es: {
+      title: 'Derivada de log(x) = 1/x (logaritmo natural)',
+      h1: 'La derivada de log(x)',
+      description: 'La derivada de log(x), entendida como logaritmo natural, es 1/x para x > 0. Por qué importa la base, la pendiente en x = e y el factor ln(10) que aparece en base 10.',
+      lead: 'La derivada de log(x), como logaritmo natural, es 1/x, definida solo para x > 0.',
+    },
+    pt: {
+      title: 'Derivada de log(x) = 1/x (logaritmo natural)',
+      h1: 'A derivada de log(x)',
+      description: 'A derivada de log(x), tomada como logaritmo natural, é 1/x para x > 0. Por que a base importa, a inclinação em x = e e o fator ln(10) que aparece na base 10.',
+      lead: 'A derivada de log(x), como logaritmo natural, é 1/x, definida apenas para x > 0.',
+    },
+  },
   'derivative-of-ln-x': {
     en: {
       title: 'Derivative of ln(x) = 1/x',

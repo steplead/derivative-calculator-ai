@@ -11,7 +11,7 @@ import { Suspense } from 'react';
 import { getBaseUrl } from '@/utils/robust-url';
 import { getRequestContext } from '@cloudflare/next-on-pages';
 import { NOINDEX_SLUGS } from '@/lib/noindex-slugs';
-import { calculateDerivative, displayExpression, normalizeLogXSolution } from '@/lib/math/math-core';
+import { calculateDerivative, displayExpression } from '@/lib/math/math-core';
 import type { DerivativeSolution } from '@/lib/math/math-core';
 import { fetchRelatedFromD1 } from '@/lib/d1/related-problems';
 import {
@@ -477,22 +477,9 @@ export default async function ProblemPage({ params }: { params: { slug: string }
         // RC-1 FIX: deterministically compute the answer server-side so the
         // initial HTML contains real math content (answer, rule, steps) —
         // not just a template sentence. Same shared module as /api/derivative.
-        const ssrSolutionRaw = (safeProblem.type === 'derivative' || !safeProblem.type)
+        const ssrSolution = (safeProblem.type === 'derivative' || !safeProblem.type)
             ? memoizedDerivative(safeProblem.formula)
             : null;
-        // /derivative-of-log-x: the engine returns x^(-1) for log(x); this page
-        // presents the natural log as log(x), so its answer reads 1/x (not the
-        // engine token). Scoped — ln(x) and 1/x keep their own forms. All visible
-        // render paths (answer block, steps, share copy, calculator seed) below
-        // consume this normalized object.
-        const ssrSolution = (slug === 'derivative-of-log-x' && ssrSolutionRaw)
-            ? {
-                ...ssrSolutionRaw,
-                solutionRaw: normalizeLogXSolution(ssrSolutionRaw.solutionRaw),
-                solutionLatex: normalizeLogXSolution(ssrSolutionRaw.solutionLatex),
-                steps: ssrSolutionRaw.steps.map((s) => normalizeLogXSolution(s)),
-              }
-            : ssrSolutionRaw;
 
         // initialResult passed to the client Calculator (avoids duplicate first fetch).
         const initialResult = ssrSolution ? {
@@ -508,12 +495,7 @@ export default async function ProblemPage({ params }: { params: { slug: string }
         // meta <title>, description, H1 and how-to text never leak the engine token
         // `exp(`. The Calculator's initialEquation below still uses the raw engine
         // formula on purpose (it must be derivable).
-        // For /derivative-of-log-x the canonical formula is "log(x)"; keep it as
-        // log(x) for all synthesized copy (subtitle, share text, answer-card
-        // heading) instead of letting displayExpression normalize it to "ln(x)".
-        const displayFormula = slug === 'derivative-of-log-x'
-            ? safeProblem.formula
-            : displayExpression(safeProblem.formula);
+        const displayFormula = displayExpression(safeProblem.formula);
         const t = getLocalizedContent(locale, displayFormula, safeProblem.type);
         const answerLead = (safeProblem.type === 'derivative' || !safeProblem.type)
             ? answerFirstLead(safeProblem.slug, locale, {
@@ -565,7 +547,7 @@ export default async function ProblemPage({ params }: { params: { slug: string }
                     </h1>
                     {ssrSolution ? (
                         <SolutionCard
-                            formula={displayFormula}
+                            formula={safeProblem.formula}
                             type={safeProblem.type}
                             solutionRaw={ssrSolution.solutionRaw}
                             solutionLatex={ssrSolution.solutionLatex}

@@ -6,7 +6,7 @@
 
 import factsJson from '@/content/derivative-facts.json';
 import { applyStrikingLesson } from '@/content/striking-lessons';
-import { calculateDerivative, normalizeLogXSolution } from '@/lib/math/math-core';
+import { calculateDerivative } from '@/lib/math/math-core';
 import type { Locale } from '@/lib/seo';
 import { TRIG_CLUSTER_SLUGS, TRIG_HUB_PATH } from '@/lib/trig-cluster';
 
@@ -221,11 +221,6 @@ export function getDerivativeLesson(slug: string, locale: string): DerivativeLes
     try {
       const solved = calculateDerivative(fact.engine);
       derivativeRaw = solved.isValid ? solved.solutionRaw : null;
-      // /derivative-of-log-x presents the natural log as log(x), so its answer
-      // reads 1/x instead of the engine's x^(-1). Scoped to this slug only.
-      if (slug === 'derivative-of-log-x' && derivativeRaw) {
-        derivativeRaw = normalizeLogXSolution(derivativeRaw);
-      }
     } catch {
       derivativeRaw = null;
     }

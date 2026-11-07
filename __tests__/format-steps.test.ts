@@ -37,6 +37,29 @@ describe('step markdown and KaTeX', () => {
     expect(html).toContain('katex');
     expect(html).toContain('sec');
   });
+
+  it('balances LaTeX braces for nested-paren step templates (exp / chain rule)', () => {
+    // Exponential rule: "a^x = e^(x·ln(a))" must become e^{x\cdot\ln(a)} (closed).
+    const expHtml = renderStepsHtml(
+      '**Step 1:** For a^x the factor ln(a) appears, because a^x = e^(x·ln(a)).',
+    );
+    expect(expHtml).toContain('e^{x\\cdot \\ln(a)}');
+    expect(expHtml).not.toContain('e^{x\\cdot \\ln(a}'); // unclosed brace
+
+    // Chain rule: "d/dx f(g(x))" must become \frac{d}{dx} f(g(x)) (closed).
+    const chainHtml = renderStepsHtml(
+      "**Step 1:** use the chain rule d/dx f(g(x)) = f'(g(x))·g'(x).",
+    );
+    expect(chainHtml).toContain('\\frac{d}{dx} f(g(x))');
+    expect(chainHtml).not.toContain('\\frac{d}{dx} f(g(x}'); // unclosed paren
+
+    // Function call with one level of nested parens (chain-rule LHS like ln(g(x))).
+    const fnHtml = renderStepsHtml(
+      '**Step 1:** d/dx ln(g(x)) uses the chain rule.',
+    );
+    expect(fnHtml).toContain('\\frac{d}{dx} \\ln(g(x))');
+    expect(fnHtml).not.toContain('\\ln(g(x}');
+  });
 });
 
 describe('quiet scratchpad brand and tokens', () => {

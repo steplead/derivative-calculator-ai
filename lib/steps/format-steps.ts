@@ -17,7 +17,7 @@ const STEP_HEADING = /^\*\*((?:Step\s+\d+(?:\s*:[^*]*)?)|Final Answer)\s*\*\*:?\
 const PLAIN_STEP_HEADING = /^(Step\s+\d+)\s*:\s*/i;
 
 const MATH_PATTERN =
-  /\$\$[\s\S]+?\$\$|\\\[[\s\S]+?\\\]|\\\([\s\S]+?\\\)|\$[^$\n]+?\$|(?:d\/dx)(?:\s*[A-Za-z]+(?:\([^)]*\))?)?|(?:arcsin|arccos|arctan|asin|acos|atan|sinh|cosh|tanh|log10|sqrt|sin|cos|tan|sec|csc|cot|ln|log)\([^)]*\)(?:\^(?:\(\s*[^)]*\)|\d+))?|[A-Za-z]\^(?:\(\s*[^)]*\)|\d+)|\d+\s*[·*]\s*[A-Za-z](?:\^(?:\(\s*[^)]*\)|\d+))?/g;
+  /\$\$[\s\S]+?\$\$|\\\[[\s\S]+?\\\]|\\\([\s\S]+?\\\)|\$[^$\n]+?\$|(?:d\/dx)(?:\s*[A-Za-z]+(?:\((?:[^()]|\([^()]*\))*\))?)?|(?:arcsin|arccos|arctan|asin|acos|atan|sinh|cosh|tanh|log10|sqrt|sin|cos|tan|sec|csc|cot|ln|log)\((?:[^()]|\([^()]*\))*\)(?:\^(?:\(\s*(?:[^()]|\([^()]*\))*\)|\d+))?|[A-Za-z]\^(?:\(\s*(?:[^()]|\([^()]*\))*\)|\d+)|\d+\s*[·*]\s*[A-Za-z](?:\^(?:\(\s*(?:[^()]|\([^()]*\))*\)|\d+))?/g;
 
 const FN_LATEX: Record<string, string> = {
   arcsin: '\\arcsin',
@@ -123,7 +123,7 @@ function plainToLatex(token: string): string {
     (name) => FN_LATEX[name] || name,
   );
   source = source.replace(/\\sqrt\(([^()]*)\)/g, '\\sqrt{$1}');
-  source = source.replace(/\^\(([^)]*)\)/g, '^{$1}');
+  source = source.replace(/\^\(((?:[^()]|\([^()]*\))*)\)/g, '^{$1}');
   source = source.replace(/\*/g, ' \\cdot ');
   source = source.replace(/\bpi\b/g, '\\pi');
   return source;

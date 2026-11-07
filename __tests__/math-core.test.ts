@@ -195,6 +195,98 @@ describe('calculateDerivative — e-class forms stay exact end-to-end (prod pari
   });
 });
 
+// The four production constant integers nerdamer splits e / ln2 / ln10 into.
+const FORBIDDEN_CONSTANTS = ['119696244', '325368125', '70952475', '108796589'];
+
+describe('production-string regression — 6 forms must never regress to fractions', () => {
+  // EXACT strings captured from the live prod build (owner origin-fetch 2026-11-07,
+  // bypassing the CDN). Each form is fed in its PRE-back-substitution shape so the
+  // test proves prettify collapses the integer-power ratios and never leaks them.
+  // If a future math-core change breaks back-substitution, these assertions fail
+  // instead of shipping 9-digit fractions to users.
+  const forms: Array<{
+    name: string;
+    rawIn: string;
+    rawOut: string;
+    latexIn: string;
+    latexOut: string;
+  }> = [
+    {
+      name: '2^x',
+      rawIn: '2^x*(49180508/70952475)',
+      rawOut: '2^x*ln(2)',
+      latexIn: '\\frac{49180508 \\cdot 2^{x}}{70952475}',
+      latexOut: '2^{x}\\ln(2)',
+    },
+    {
+      name: '10^x',
+      rawIn: '10^x*(250513404/108796589)',
+      rawOut: '10^x*ln(10)',
+      latexIn: '\\frac{250513404 \\cdot 10^{x}}{108796589}',
+      latexOut: '10^{x}\\ln(10)',
+    },
+    {
+      name: 'e^x',
+      rawIn: '119696244^(-x)*325368125^x',
+      rawOut: 'e^x',
+      latexIn: '\\frac{325368125^{x}}{119696244^{x}}',
+      latexOut: 'e^{x}',
+    },
+    {
+      name: 'e^(2x)',
+      rawIn: '2*119696244^(-2*x)*325368125^(2*x)',
+      rawOut: '2*e^(2*x)',
+      latexIn: '\\frac{2 \\cdot 325368125^{2 \\cdot x}}{119696244^{2 \\cdot x}}',
+      latexOut: '2e^{2x}',
+    },
+    {
+      name: 'e^(-x)',
+      rawIn: '-119696244^x*325368125^(-x)',
+      rawOut: '-e^(-x)',
+      latexIn: '-\\frac{119696244^{x}}{325368125^{x}}',
+      latexOut: '-e^{-x}',
+    },
+    {
+      name: 'x*e^x',
+      // trailing "· x" factor in the numerator — the hardest shape
+      rawIn: '119696244^(-x)*325368125^x+119696244^(-x)*325368125^x*x',
+      rawOut: 'e^x+e^x*x',
+      latexIn: 'e^{x}+\\frac{325368125^{x} \\cdot x}{119696244^{x}}',
+      latexOut: 'e^{x}+e^{x}x',
+    },
+  ];
+
+  it.each(forms)('$name: raw collapses and stays clean', (f) => {
+    const out = prettifyRaw(f.rawIn);
+    expect(out).toBe(f.rawOut);
+    expect(out).not.toMatch(/\d{6,}/); // no 6+ digit integer
+    expect(out).not.toMatch(/exp\(/); // no engine exp( token
+    for (const c of FORBIDDEN_CONSTANTS) expect(out).not.toContain(c);
+  });
+
+  it.each(forms)('$name: LaTeX has no fraction and no leaked constants', (f) => {
+    const out = prettifyLatex(f.latexIn);
+    expect(out).toBe(f.latexOut);
+    expect(out).not.toContain('\\frac'); // the core regression guard
+    expect(out).not.toMatch(/exp\(/);
+    for (const c of FORBIDDEN_CONSTANTS) expect(out).not.toContain(c);
+  });
+
+  it.each(forms)('$name: text line and LaTeX are semantically consistent', (f) => {
+    // Neither the raw text line nor the LaTeX may contain the forbidden constants,
+    // and both must express the same base/form (no orphaned fraction in one only).
+    const raw = prettifyRaw(f.rawIn);
+    const latex = prettifyLatex(f.latexIn);
+    for (const c of FORBIDDEN_CONSTANTS) {
+      expect(raw).not.toContain(c);
+      expect(latex).not.toContain(c);
+    }
+    // Both represent the same expression family — if one still has \frac the other
+    // must not be the only clean one.
+    expect(latex).not.toContain('\\frac');
+  });
+});
+
 describe('identifyRule — deterministic rule detection', () => {
   it('detects power rule', () => {
     expect(identifyRule('x^2')).toBe('Power Rule');

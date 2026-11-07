@@ -450,7 +450,7 @@
       "en": {
         "angle": "Square root is the power x^(1/2). The power rule multiplies by 1/2 and subtracts 1 from the exponent, leaving (1/2) x^(−1/2), which is 1/(2 sqrt(x)). The 2 in the denominator is the old exponent turned upside down; it is not an extra chain-rule factor.",
         "algebra": "Apply the power rule to sqrt(x). The form to remember, already simplified, is (1/2)*x^(-1/2).",
-        "mistakeTitle": "Answering 1/(2*x)",
+        "mistakeTitle": "Answering 1/(2x) instead of 1/(2√x)",
         "mistake": "1/(2x) puts the 2 next to x instead of next to the square root. At x = 4 that wrong answer is 1/8, while the true slope is 1/4.",
         "mistake2Title": "Ignoring the domain of sqrt(x)",
         "mistake2": "A fractional power can blow up at 0 or refuse negative inputs. The algebraic formula is not a license to evaluate it where the original root is not real.",
@@ -570,7 +570,7 @@
       "en": {
         "angle": "1/x is the power x^(−1). Multiplying by the exponent −1 and subtracting 1 produces −x^(−2), which is −1/x^2. The quotient rule on 1/x gives the same fraction: numerator 0·x − 1·1, over x^2. The minus sign is the whole story of this derivative; without it the reciprocal would be described as increasing.",
         "algebra": "Apply the quotient rule to 1/x. The form to remember, already simplified, is -x^(-2).",
-        "mistakeTitle": "Answering 1/x^2",
+        "mistakeTitle": "Answering 1/x^2 instead of −1/x^2",
         "mistake": "1/x^2 has the right denominator and the wrong sign. For positive x the reciprocal falls as x grows, so the slope is negative.",
         "mistake2Title": "Dropping the minus on 1/x",
         "mistake2": "Rewriting as a negative power makes the minus sign come from the exponent. A positive answer describes a reciprocal that grows, and these reciprocals do not.",
@@ -696,7 +696,7 @@
       "en": {
         "angle": "Cosine is sine shifted, and the shift puts a descending slope at the origin. The derivative is −sin(x). The minus is not optional decoration: cos(x) is already decreasing at x = 0, where sin(0) = 0 but the slope of cosine is 0 only at the peaks, and just to the right of zero cosine is falling.",
         "algebra": "Apply the trigonometric derivative to cos(x). The form to remember, already simplified, is -sin(x).",
-        "mistakeTitle": "Answering sin(x)",
+        "mistakeTitle": "Answering sin(x) instead of −sin(x)",
         "mistake": "sin(x) without the minus is the derivative of sine, read in the wrong direction. The cofunction is the one that carries the minus.",
         "mistake2Title": "Swapping cos(x) with its cofunction",
         "mistake2": "Sine and cosine, tangent and cotangent, secant and cosecant are not interchangeable. The minus sign lives on the cofunction side.",
@@ -1329,9 +1329,9 @@
       "en": {
         "angle": "e^(−x) is a decaying exponential. The outer derivative of e^u is e^u, and u = −x has derivative −1, so the chain rule multiplies by −1. The function and its derivative are opposites: the slope is negative wherever the function is positive, which is everywhere. Forgetting the minus describes growth instead of decay.",
         "algebra": "Apply the chain rule to e^(-x). The form to remember, already simplified, is -e^(-x).",
-        "mistakeTitle": "Answering e^(-x)",
+        "mistakeTitle": "Answering e^(-x) instead of -e^(-x)",
         "mistake": "e^(−x) without the minus copies the function. Decay means the slope has the opposite sign of the height.",
-        "mistake2Title": "Treating e^(-x) as if the base were e with inside x",
+        "mistake2Title": "Treating e^(-x) as if only the base mattered",
         "mistake2": "Only e^x is its own derivative with no extra factor. A coefficient in the exponent, or a base other than e, changes the answer.",
         "domain": "The expression is built from polynomials, sine, cosine, or exponentials, so the derivative exists for every real x.",
         "check": "At x = 0, substitute into the simplified form -e^(-x). That number is the slope of e^(-x) there; a secant over a small step in x lands next to it."
@@ -1372,9 +1372,9 @@
       "en": {
         "angle": "e^(2x) grows twice as fast in the exponent as e^x. The chain rule multiplies e^(2x) by the derivative of 2x, which is 2. The 2 stays in front and does not move into the exponent. At x = 0 the function equals 1 and the slope equals 2, which is the numerical check that the factor survived.",
         "algebra": "Apply the chain rule to e^(2x). The form to remember, already simplified, is 2*e^(2*x).",
-        "mistakeTitle": "Answering e^(2*x)",
-        "mistake": "e^(2x) forgets the inner derivative. The exponent is not x, so the factor 2 has to appear in the slope.",
-        "mistake2Title": "Treating e^(2x) as if the base were e with inside x",
+        "mistakeTitle": "Answering e^(2x) instead of 2e^(2x)",
+        "mistake": "The answer e^(2x) is missing the inner derivative 2. The exponent is not x, so the factor 2 has to appear in the slope.",
+        "mistake2Title": "Treating e^(2x) as if only the base mattered",
         "mistake2": "Only e^x is its own derivative with no extra factor. A coefficient in the exponent, or a base other than e, changes the answer.",
         "domain": "The expression is built from polynomials, sine, cosine, or exponentials, so the derivative exists for every real x.",
         "check": "At x = 0, substitute into the simplified form 2*e^(2*x). That number is the slope of e^(2x) there; a secant over a small step in x lands next to it."
@@ -1415,9 +1415,9 @@
       "en": {
         "angle": "2^x is not e^x. Write it as e^(x ln 2); the chain rule then multiplies by ln 2. The derivative is 2^x ln 2, written 2^x*ln(2). The ln 2 is a constant about 0.693, which is why 2^x grows more slowly than e^x.",
         "algebra": "Apply the exponential rule to 2^x. The form to remember, already simplified, is 2^x*ln(2).",
-        "mistakeTitle": "Answering 2^x",
+        "mistakeTitle": "Answering 2^x instead of 2^x ln(2)",
         "mistake": "2^x without ln 2 treats every exponential as its own derivative. Only base e has that property.",
-        "mistake2Title": "Treating 2^x as if the base were e with inside x",
+        "mistake2Title": "Treating 2^x as if only the base mattered",
         "mistake2": "Only e^x is its own derivative with no extra factor. A coefficient in the exponent, or a base other than e, changes the answer.",
         "domain": "The expression is built from polynomials, sine, cosine, or exponentials, so the derivative exists for every real x.",
         "check": "At x = 0, substitute into the simplified form 2^x*ln(2). That number is the slope of 2^x there; a secant over a small step in x lands next to it."
@@ -1455,9 +1455,9 @@
       "en": {
         "angle": "10^x works like 2^x with a larger base. The extra factor is ln 10, about 2.302, so 10^x climbs faster than e^x. The derivative is 10^x ln 10, written 10^x*ln(10). The same rewrite, 10^x = e^(x ln 10), produces the factor; nothing about base 10 cancels it.",
         "algebra": "Apply the exponential rule to 10^x. The form to remember, already simplified, is 10^x*ln(10).",
-        "mistakeTitle": "Answering 10^x",
+        "mistakeTitle": "Answering 10^x instead of 10^x ln(10)",
         "mistake": "10^x alone would be right only for base e. Base 10 contributes ln 10, and that constant is not 1.",
-        "mistake2Title": "Treating 10^x as if the base were e with inside x",
+        "mistake2Title": "Treating 10^x as if only the base mattered",
         "mistake2": "Only e^x is its own derivative with no extra factor. A coefficient in the exponent, or a base other than e, changes the answer.",
         "domain": "The expression is built from polynomials, sine, cosine, or exponentials, so the derivative exists for every real x.",
         "check": "At x = 0, substitute into the simplified form 10^x*ln(10). That number is the slope of 10^x there; a secant over a small step in x lands next to it."
@@ -1573,42 +1573,42 @@
   {
     "slug": "derivative-of-log-x",
     "display": "log(x)",
-    "engine": "log(x)",
-    "nice": "x^(-1)",
-    "ruleWiki": "logarithmic-derivatives",
-    "cluster": "log",
-    "copy": {
-      "en": {
-        "angle": "On this calculator log(x) means the natural logarithm, the same function as ln(x). The derivative is 1/x. Base-10 log is written log10(x), and that one does carry a factor 1/ln(10). Mixing the two notations is the point of this page: the symbol log is not automatically base 10 here, because the math engine treats log as ln.",
-        "algebra": "Apply the logarithm rule to log(x). The form to remember, already simplified, is x^(-1).",
-        "mistakeTitle": "Answering 1/(x*ln(10))",
-        "mistake": "1/(x ln 10) is the derivative of log10(x), not of the natural log that this page computes. If you wanted base 10, the input has to be log10(x).",
-        "mistake2Title": "Confusing the base of log(x)",
-        "mistake2": "Natural log differentiates to 1/x. A constant inside the log often cancels. Base 10 is a different function and needs log10.",
-        "domain": "The expression needs x > 0. At 0 and on the negatives it is undefined as a real function, so the derivative is too.",
-        "check": "At x = 1, substitute into the simplified form x^(-1). That number is the slope of log(x) there; a secant over a small step in x lands next to it."
-      },
-      "es": {
-        "angle": "En esta calculadora log(x) significa el logaritmo natural, la misma función que ln(x). La derivada es 1/x. El logaritmo en base 10 se escribe log10(x), y ese sí lleva un factor 1/ln(10). Mezclar las dos notaciones es el tema de esta página: aquí el símbolo log no es automáticamente base 10, porque el motor trata log como ln.",
-        "algebra": "Aplica la regla del logaritmo a log(x). La forma que hay que recordar, ya simplificada, es x^(-1).",
-        "mistakeTitle": "Responder 1/(x*ln(10))",
-        "mistake": "1/(x ln 10) es la derivada de log10(x), no del logaritmo natural que calcula esta página. Si querías base 10, la entrada tiene que ser log10(x).",
-        "mistake2Title": "Confundir la base de log(x)",
-        "mistake2": "El logaritmo natural deriva a 1/x. Una constante dentro del logaritmo a menudo se cancela. La base 10 es otra función y exige log10.",
-        "domain": "La expresión exige x > 0. En 0 y en los negativos no está definida como función real, y la derivada tampoco.",
-        "check": "En x = 1, sustituye en la forma simplificada x^(-1). Ese número es la pendiente de log(x) en ese punto; una secante con un paso pequeño de x cae al lado."
-      },
-      "pt": {
-        "angle": "Nesta calculadora log(x) significa o logaritmo natural, a mesma função que ln(x). A derivada é 1/x. O logaritmo na base 10 se escreve log10(x), e esse sim carrega um fator 1/ln(10). Misturar as duas notações é o ponto desta página: aqui o símbolo log não é automaticamente base 10, porque o motor trata log como ln.",
-        "algebra": "Aplique a regra do logaritmo a log(x). A forma para memorizar, já simplificada, é x^(-1).",
-        "mistakeTitle": "Responder 1/(x*ln(10))",
-        "mistake": "1/(x ln 10) é a derivada de log10(x), não do logaritmo natural que esta página calcula. Se você queria base 10, a entrada tem que ser log10(x).",
-        "mistake2Title": "Confundir a base de log(x)",
-        "mistake2": "O logaritmo natural deriva para 1/x. Uma constante dentro do log muitas vezes se cancela. A base 10 é outra função e exige log10.",
-        "domain": "A expressão exige x > 0. Em 0 e nos negativos ela não está definida como função real, e a derivada também não.",
-        "check": "Em x = 1, substitua na forma simplificada x^(-1). Esse número é a inclinação de log(x) nesse ponto; uma secante com um passo pequeno de x cai ao lado."
+      "engine": "log(x)",
+      "nice": "1/x",
+      "ruleWiki": "logarithmic-derivatives",
+      "cluster": "log",
+      "copy": {
+        "en": {
+          "angle": "On this calculator log(x) means the natural logarithm, the same function as ln(x). The derivative is 1/x. Base-10 log is written log10(x), and that one does carry a factor 1/ln(10). Mixing the two notations is the point of this page: the symbol log is not automatically base 10 here, because the math engine treats log as ln.",
+          "algebra": "Apply the logarithm rule to log(x). The form to remember, already simplified, is 1/x.",
+          "mistakeTitle": "Answering 1/(x·ln 10) instead of 1/x",
+          "mistake": "1/(x ln 10) is the derivative of log10(x), not of the natural log that this page computes. If you wanted base 10, the input has to be log10(x).",
+          "mistake2Title": "Confusing the base of log(x)",
+          "mistake2": "Natural log differentiates to 1/x. A constant inside the log often cancels. Base 10 is a different function and needs log10.",
+          "domain": "The expression needs x > 0. At 0 and on the negatives it is undefined as a real function, so the derivative is too.",
+          "check": "At x = 1, substitute into the simplified form 1/x. That number is the slope of log(x) there; a secant over a small step in x lands next to it."
+        },
+        "es": {
+          "angle": "En esta calculadora log(x) significa el logaritmo natural, la misma función que ln(x). La derivada es 1/x. El logaritmo en base 10 se escribe log10(x), y ese sí lleva un factor 1/ln(10). Mezclar las dos notaciones es el tema de esta página: aquí el símbolo log no es automáticamente base 10, porque el motor trata log como ln.",
+          "algebra": "Aplica la regla del logaritmo a log(x). La forma que hay que recordar, ya simplificada, es 1/x.",
+          "mistakeTitle": "Responder 1/(x*ln(10))",
+          "mistake": "1/(x ln 10) es la derivada de log10(x), no del logaritmo natural que calcula esta página. Si querías base 10, la entrada tiene que ser log10(x).",
+          "mistake2Title": "Confundir la base de log(x)",
+          "mistake2": "El logaritmo natural deriva a 1/x. Una constante dentro del logaritmo a menudo se cancela. La base 10 es otra función y exige log10.",
+          "domain": "La expresión exige x > 0. En 0 y en los negativos no está definida como función real, y la derivada tampoco.",
+          "check": "En x = 1, sustituye en la forma simplificada 1/x. Ese número es la pendiente de log(x) en ese punto; una secante con un paso pequeño de x cae al lado."
+        },
+        "pt": {
+          "angle": "Nesta calculadora log(x) significa o logaritmo natural, a mesma função que ln(x). A derivada é 1/x. O logaritmo na base 10 se escreve log10(x), e esse sim carrega um fator 1/ln(10). Misturar as duas notações é o ponto desta página: aqui o símbolo log não é automaticamente base 10, porque o motor trata log como ln.",
+          "algebra": "Aplique a regra do logaritmo a log(x). A forma para memorizar, já simplificada, é 1/x.",
+          "mistakeTitle": "Responder 1/(x*ln(10))",
+          "mistake": "1/(x ln 10) é a derivada de log10(x), não do logaritmo natural que esta página calcula. Se você queria base 10, a entrada tem que ser log10(x).",
+          "mistake2Title": "Confundir a base de log(x)",
+          "mistake2": "O logaritmo natural deriva para 1/x. Uma constante dentro do log muitas vezes se cancela. A base 10 é outra função e exige log10.",
+          "domain": "A expressão exige x > 0. Em 0 e nos negativos ela não está definida como função real, e a derivada também não.",
+          "check": "Em x = 1, substitua na forma simplificada 1/x. Esse número é a inclinação de log(x) nesse ponto; uma secante com um passo pequeno de x cai ao lado."
+        }
       }
-    }
   },
   {
     "slug": "derivative-of-sinh-x",

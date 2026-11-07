@@ -102,60 +102,25 @@ describe('GA4 shim', () => {
 });
 
 describe('curated sitemap', () => {
-    it('lists only the quality English set, with real lastmod and self-consistent hreflang', () => {
+    it('lists exactly the 18 curated English URLs with no hreflang alternates (2026-11-07)', () => {
         execSync('node scripts/generate-sitemap.js', { cwd: path.resolve(__dirname, '..'), stdio: 'pipe' });
         const xml = fs.readFileSync(path.resolve(__dirname, '..', 'public', 'sitemap.xml'), 'utf8');
         const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
-        expect(locs.length).toBe(85);
-        for (const path of [
-            '/partial-derivative-calculator',
-            '/implicit-differentiation-calculator',
-            '/chain-rule-calculator',
-            '/wiki/logarithmic-derivatives',
-            '/symbolab-alternative',
-            '/derivative-calculator-comparison',
-        ]) {
-            expect(locs).toContain(`https://derivativecalculatorai.com${path}`);
-        }
-        expect(locs.filter((url) => url.endsWith('/derivatives-of-trig-functions')).length).toBe(1);
-        for (const hub of ['/directory', '/problems', '/practice', '/practice/beginner', '/practice/intermediate', '/practice/advanced']) {
-            expect(locs).toContain(`https://derivativecalculatorai.com${hub}`);
-        }
-        // Crawl-budget narrowing: es/pt are declared as alternates but never
-        // submitted as <loc>. Exactly 85 URLs, each with a full reciprocal set.
+        const { SITEMAP_URLS } = require('../scripts/generate-sitemap.js') as { SITEMAP_URLS: { path: string }[] };
+        expect(SITEMAP_URLS).toHaveLength(18);
+        expect(locs).toHaveLength(18);
+        expect(new Set(locs).size).toBe(18);
+        expect(xml).not.toContain('xhtml:link');
+        expect(xml).not.toContain('hreflang');
         expect(locs.some((url) => /^https:\/\/derivativecalculatorai\.com\/(es|pt)(\/|$)/.test(url))).toBe(false);
-        expect((xml.match(/hreflang="en"/g) ?? []).length).toBe(85);
-        expect((xml.match(/hreflang="es"/g) ?? []).length).toBe(85);
-        expect((xml.match(/hreflang="pt"/g) ?? []).length).toBe(85);
-        expect((xml.match(/hreflang="x-default"/g) ?? []).length).toBe(85);
-        const blocks = xml.split('<url>').slice(1);
-        expect(blocks).toHaveLength(85);
-        for (const block of blocks) {
-            expect((block.match(/xhtml:link/g) ?? []).length).toBe(4);
-            expect(block).not.toContain('<loc>https://derivativecalculatorai.com/es');
-            expect(block).not.toContain('<loc>https://derivativecalculatorai.com/pt');
+        for (const p of ['/integral', '/limit', '/derivative-of-sin-x', '/derivatives-of-trig-functions', '/wiki/chain-rule']) {
+            expect(locs).toContain(`https://derivativecalculatorai.com${p}`);
         }
-        expect(locs.some((url) => url.includes('/problems/tag/'))).toBe(false);
-        expect(locs.some((url) => /\/problems\/(derivative|integral|limit)$/.test(url))).toBe(false);
-        expect(xml).not.toContain('/derivative-of-x-e-x<');
-        expect(xml).not.toContain('+');
-        expect(xml).not.toContain('integral-of-');
-        expect(xml).not.toContain('/derivative-of-e-x<');
-        expect(xml).toContain('https://derivativecalculatorai.com/derivative-of-sin-2x');
-        expect(xml).toContain('https://derivativecalculatorai.com/derivative-of-1-over-x-squared');
-        expect(xml).toContain('hreflang="x-default"');
-        const lastmods = new Set([...xml.matchAll(/<lastmod>([^<]+)<\/lastmod>/g)].map((m) => m[1]));
-        expect(lastmods.size).toBeGreaterThan(1);
-        for (const stamp of lastmods) {
-            expect(Number.isNaN(Date.parse(stamp))).toBe(false);
-            expect(stamp).not.toBe(new Date().toISOString());
+        for (const p of ['/calculators', '/ode', '/directory', '/symbolab-alternative']) {
+            expect(locs).not.toContain(`https://derivativecalculatorai.com${p}`);
         }
-        const allow = JSON.parse(
-            fs.readFileSync(path.resolve(__dirname, '..', 'data', 'sitemap-problem-slugs.json'), 'utf8')
-        ) as string[];
-        for (const slug of ['derivative-of-sin-x', 'derivative-of-tan-x', 'derivative-of-cot-x', 'derivative-of-pi', 'derivative-of-sec-x', 'derivative-of-arcsin-x']) {
-            expect(allow).toContain(slug);
-            expect(locs).toContain(`https://derivativecalculatorai.com/${slug}`);
-        }
+        const lastmods = [...xml.matchAll(/<lastmod>([^<]+)<\/lastmod>/g)].map((m) => m[1]);
+        expect(lastmods).toHaveLength(18);
+        for (const stamp of lastmods) expect(Number.isNaN(Date.parse(stamp))).toBe(false);
     });
 });

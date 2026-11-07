@@ -1,24 +1,14 @@
 /**
- * Curated sitemap generator. This is the script `npm run generate-sitemap` runs.
+ * Curated sitemap generator (`npm run generate-sitemap`; output is committed as
+ * public/sitemap.xml).
  *
- * Includes only URLs that are live, indexable, and self-canonical:
- *   - homepage, tool pages, practice index, wiki index + articles
- *   - the textbook derivative pages in data/sitemap-problem-slugs.json
- *     (every GSC impression URL named in the 2026-10-31 SEO plan, plus the
- *     hand-authored derivative lessons that sit in front of the generated
- *     `minus-to-minus` series)
- *   - only the submitted locale (en) for each of those, with a self-consistent
- *     hreflang set. es/pt stay live for visitors but are not submitted as
- *     <loc> while the site has just one indexed page (2026-11-06 review).
- *     Each entry still declares en/es/pt/x-default alternates so translations
- *     are never mistaken for duplicate content (2026-11-06 second review).
+ * 2026-11-07 (owner-approved): only the homepage is indexed and Google had
+ * discovered ~255 URLs (85 locs + es/pt hreflang alternates). The sitemap is
+ * now exactly the English URLs in SITEMAP_URLS below, with NO hreflang
+ * alternates and no es/pt URLs. Every other page stays live, linked, and
+ * self-canonical; it is just not submitted. Edit SITEMAP_URLS to add/remove.
  *
- * Excludes 404 integral slugs (literal "+"), noindex programmatic URLs, and
- * alias slugs whose canonical points somewhere else (derivative-of-e-x →
- * derivative-of-e-to-the-x).
- *
- * lastmod is the git commit time of the file that owns the URL, not a single
- * stamped date and not "now" on every run.
+ * lastmod is the git commit time of the file(s) that own the URL.
  */
 
 const fs = require('fs');
@@ -28,63 +18,56 @@ const path = require('path');
 const ROOT = path.join(__dirname, '..');
 const SITEMAP_PATH = path.join(ROOT, 'public', 'sitemap.xml');
 const BASE_URL = 'https://derivativecalculatorai.com';
-// Crawl-budget narrowing (2026-11-06 GSC review): submit English <loc> only.
-// es/pt routes stay live and self-canonical for visitors and are declared as
-// hreflang alternates on every entry, but are never submitted as URLs.
-const LOCALES = ['en'];
-const HREFLANG_LOCALES = ['en', 'es', 'pt'];
 
-const STATIC_PATHS = [
-  { path: '', file: 'app/(site)/page.tsx', priority: '1.0' },
+// The one list to edit. `file` drives lastmod; `problem: true` entries must
+// exist in data/problems.json and use the problem-lesson lastmod.
+const SITEMAP_URLS = [
+  { path: '/', file: 'app/(site)/page.tsx', priority: '1.0' },
   { path: '/integral', file: 'app/(site)/integral/page.tsx', priority: '0.9' },
   { path: '/limit', file: 'app/(site)/limit/page.tsx', priority: '0.9' },
-  { path: '/matrix', file: 'app/(site)/matrix/page.tsx', priority: '0.8' },
-  { path: '/ode', file: 'app/(site)/ode/page.tsx', priority: '0.8' },
-  { path: '/calculators', file: 'app/(site)/calculators/page.tsx', priority: '0.8' },
-  { path: '/wiki', file: 'app/(site)/wiki/page.tsx', priority: '0.7' },
-  { path: '/practice', file: 'app/(site)/practice/page.tsx', priority: '0.7' },
-  { path: '/directory', file: 'app/(site)/directory/page.tsx', priority: '0.8' },
-  { path: '/problems', file: 'app/(site)/problems/page.tsx', priority: '0.8' },
-  { path: '/derivatives-of-trig-functions', file: 'app/(site)/derivatives-of-trig-functions/page.tsx', priority: '0.8' },
   { path: '/partial-derivative-calculator', file: 'app/(site)/partial-derivative-calculator/page.tsx', priority: '0.9' },
   { path: '/implicit-differentiation-calculator', file: 'app/(site)/implicit-differentiation-calculator/page.tsx', priority: '0.9' },
   { path: '/chain-rule-calculator', file: 'app/(site)/chain-rule-calculator/page.tsx', priority: '0.9' },
-  { path: '/symbolab-alternative', file: 'content/comparisons.ts', priority: '0.6' },
-  { path: '/derivative-calculator-comparison', file: 'content/comparisons.ts', priority: '0.6' },
+  { path: '/derivative-of-sin-x', problem: true, priority: '0.8' },
+  { path: '/derivative-of-cos-x', problem: true, priority: '0.8' },
+  { path: '/derivative-of-tan-x', problem: true, priority: '0.8' },
+  { path: '/derivative-of-ln-x', problem: true, priority: '0.8' },
+  { path: '/derivative-of-e-to-the-x', problem: true, priority: '0.8' },
+  { path: '/derivative-of-1-over-x', problem: true, priority: '0.8' },
+  { path: '/derivative-of-sqrt-x', problem: true, priority: '0.8' },
+  { path: '/derivative-of-x-squared', problem: true, priority: '0.8' },
+  { path: '/derivative-of-arctan-x', problem: true, priority: '0.8' },
+  { path: '/derivative-of-sec-x', problem: true, priority: '0.8' },
+  { path: '/derivatives-of-trig-functions', file: 'app/(site)/derivatives-of-trig-functions/page.tsx', priority: '0.8' },
+  { path: '/wiki/chain-rule', file: 'data/wiki.json', priority: '0.7' },
 ];
 
-function latestLastmod(relFiles) {
-  return relFiles.map(gitLastmod).sort().at(-1);
-}
+const PROBLEM_FILES = [
+  'data/problems.json',
+  'content/derivative-facts.json',
+  'content/striking-lessons.ts',
+  'content/inverse-trig-lessons.ts',
+  'content/derivative-lesson.ts',
+  'app/(site)/[slug]/page.tsx',
+];
 
 function gitLastmod(relFile) {
   let iso = '';
   try {
-    // execFileSync avoids the shell. Paths like app/(site)/page.tsx would
-    // otherwise be parsed as a subshell and fall back to "now".
     iso = execFileSync('git', ['log', '-1', '--format=%cI', '--', relFile], {
       cwd: ROOT,
       encoding: 'utf8',
     }).trim();
   } catch (e) {
-    // Fall through to filesystem mtime when git has no history for the file.
+    // fall back to mtime
   }
-  if (!iso) {
-    iso = fs.statSync(path.join(ROOT, relFile)).mtime.toISOString();
-  }
+  if (!iso) iso = fs.statSync(path.join(ROOT, relFile)).mtime.toISOString();
   const parsed = new Date(iso);
   return Number.isNaN(parsed.getTime()) ? iso : parsed.toISOString();
 }
 
-function localizedPath(locale, relPath) {
-  const clean = !relPath || relPath === '/' ? '' : relPath;
-  if (locale === 'en') return clean;
-  return clean ? `/${locale}${clean}` : `/${locale}`;
-}
-
 function absolute(relPath) {
-  if (!relPath || relPath === '/') return BASE_URL;
-  return `${BASE_URL}${relPath.startsWith('/') ? relPath : `/${relPath}`}`;
+  return relPath === '/' ? BASE_URL : `${BASE_URL}${relPath}`;
 }
 
 function escapeXml(value) {
@@ -95,133 +78,36 @@ function escapeXml(value) {
     .replace(/"/g, '&quot;');
 }
 
-function buildCanonicalMap(problems) {
-  const byFormula = new Map();
-  for (const problem of problems) {
-    if (!problem || (problem.type || 'derivative') !== 'derivative' || !problem.formula) continue;
-    if (!byFormula.has(problem.formula)) byFormula.set(problem.formula, []);
-    byFormula.get(problem.formula).push(problem.slug);
-  }
-  const canon = new Map();
-  for (const slugs of byFormula.values()) {
-    if (slugs.length < 2) continue;
-    const clean = slugs.filter(
-      (slug) => slug.startsWith('derivative-of-') && !slug.includes('minus-to-minus-the-minus')
-    );
-    const pool = clean.length ? clean : slugs;
-    const primary = [...pool].sort()[0];
-    for (const slug of slugs) {
-      if (slug !== primary) canon.set(slug, primary);
-    }
-  }
-  return canon;
-}
-
-function hreflangLinks(relPath) {
-  // Declare every live locale, not just the submitted one. Each es/pt target
-  // still serves the same reciprocal tag, so no "no return tag" errors.
-  return [
-    ...HREFLANG_LOCALES.map((locale) => [locale, absolute(localizedPath(locale, relPath))]),
-    ['x-default', absolute(localizedPath('en', relPath))],
-  ]
-    .map(
-      ([lang, href]) =>
-        `    <xhtml:link rel="alternate" hreflang="${lang}" href="${escapeXml(href)}" />`
-    )
-    .join('\n');
-}
-
-function urlEntry(relPath, lastmod, priority) {
-  const blocks = [];
-  for (const locale of LOCALES) {
-    const loc = absolute(localizedPath(locale, relPath));
-    blocks.push(`  <url>
-    <loc>${escapeXml(loc)}</loc>
-    <lastmod>${escapeXml(lastmod)}</lastmod>
-${hreflangLinks(relPath)}
-    <changefreq>weekly</changefreq>
-    <priority>${priority}</priority>
-  </url>`);
-  }
-  return blocks;
-}
-
 function generateSitemap() {
   const problems = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'problems.json'), 'utf8'));
   const wiki = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'wiki.json'), 'utf8'));
-  const allow = JSON.parse(
-    fs.readFileSync(path.join(ROOT, 'data', 'sitemap-problem-slugs.json'), 'utf8')
-  );
-  const bySlug = new Map(problems.map((problem) => [problem.slug, problem]));
-  const canon = buildCanonicalMap(problems);
+  const problemSlugs = new Set(problems.map((p) => p && p.slug));
+  const wikiSlugs = new Set(wiki.map((t) => t && t.slug));
+  const problemLastmod = PROBLEM_FILES.map(gitLastmod).sort().at(-1);
 
-  const entries = [];
-
-  for (const page of STATIC_PATHS) {
-    entries.push(...urlEntry(page.path, gitLastmod(page.file), page.priority));
-  }
-
-  // Difficulty indexes are mutually distinct sets (not a copy of /practice).
-  // /problems/[type] and /problems/tag/* repeat rows already on /problems, so
-  // they stay noindex and out of this file.
-  const levelLastmod = latestLastmod([
-    'app/(site)/practice/[level]/page.tsx',
-    'data/problems.json',
-  ]);
-  for (const level of ['beginner', 'intermediate', 'advanced']) {
-    entries.push(...urlEntry(`/practice/${level}`, levelLastmod, '0.6'));
-  }
-
-  const wikiLastmod = gitLastmod('data/wiki.json');
-  for (const topic of wiki) {
-    if (!topic || !topic.slug) continue;
-    entries.push(...urlEntry(`/wiki/${topic.slug}`, wikiLastmod, '0.6'));
-  }
-
-  // Content edits on a lesson must move lastmod, or IndexNow skips the URL.
-  const problemLastmod = latestLastmod([
-    'data/problems.json',
-    'content/derivative-facts.json',
-    'content/striking-lessons.ts',
-    'content/inverse-trig-lessons.ts',
-    'content/derivative-lesson.ts',
-    'app/(site)/[slug]/page.tsx',
-  ]);
-  const used = new Set();
-  for (const slug of allow) {
-    if (typeof slug !== 'string' || !slug || slug.includes('+') || slug.includes(' ')) {
-      throw new Error(`Allowlist slug is not a public URL: ${slug}`);
+  const seen = new Set();
+  const entries = SITEMAP_URLS.map((entry) => {
+    if (seen.has(entry.path)) throw new Error(`Duplicate sitemap path: ${entry.path}`);
+    seen.add(entry.path);
+    if (/^\/(es|pt)(\/|$)/.test(entry.path)) throw new Error(`Locale URL not allowed: ${entry.path}`);
+    if (entry.problem && !problemSlugs.has(entry.path.slice(1))) {
+      throw new Error(`Not in the problem library: ${entry.path}`);
     }
-    if (canon.has(slug)) {
-      throw new Error(`Allowlist slug is an alias and must not be submitted: ${slug} → ${canon.get(slug)}`);
+    if (entry.path.startsWith('/wiki/') && !wikiSlugs.has(entry.path.slice(6))) {
+      throw new Error(`Not in wiki.json: ${entry.path}`);
     }
-    if (!bySlug.has(slug)) {
-      throw new Error(`Allowlist slug is not in the problem library: ${slug}`);
-    }
-    if (used.has(slug)) continue;
-    used.add(slug);
-    entries.push(...urlEntry(`/${slug}`, problemLastmod, '0.7'));
-  }
-
-  // Exact count is stricter than the old 100-300 band: every curated path must
-  // be emitted exactly once per submitted locale, with no silent drops.
-  // The 3 is the beginner/intermediate/advanced practice indexes above.
-  const expected = (STATIC_PATHS.length + 3 + wiki.length + used.size) * LOCALES.length;
-  if (entries.length !== expected) {
-    throw new Error(`Sitemap size ${entries.length} does not match the curated set ${expected}`);
-  }
-  if (entries.length > 300) {
-    throw new Error(`Sitemap size ${entries.length} exceeds the 300 URL ceiling`);
-  }
-
-  const body = entries.join('\n');
-  if (body.includes('/integral-of-') && body.includes('+')) {
-    throw new Error('Sitemap still contains a literal + integral URL');
-  }
+    const lastmod = entry.problem ? problemLastmod : gitLastmod(entry.file);
+    return `  <url>
+    <loc>${escapeXml(absolute(entry.path))}</loc>
+    <lastmod>${escapeXml(lastmod)}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>${entry.priority}</priority>
+  </url>`;
+  });
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
-${body}
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${entries.join('\n')}
 </urlset>
 `;
   fs.writeFileSync(SITEMAP_PATH, xml);
@@ -233,4 +119,4 @@ if (require.main === module) {
   generateSitemap();
 }
 
-module.exports = { generateSitemap };
+module.exports = { generateSitemap, SITEMAP_URLS };

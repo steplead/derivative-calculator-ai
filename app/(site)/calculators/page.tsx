@@ -16,6 +16,10 @@ export async function generateMetadata(): Promise<Metadata> {
     title: { absolute: title },
     description,
     alternates,
+    // 2026-11-07 (owner-approved): directory page, noindex,follow. Only the
+    // English /calculators; /es|pt/calculators reuse this metadata via
+    // readLocale() and stay indexable.
+    ...(locale === 'en' ? { robots: { index: false, follow: true } } : {}),
     openGraph: {
       title,
       description,

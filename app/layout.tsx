@@ -1,8 +1,6 @@
 import type { Metadata } from 'next';
-import Script from 'next/script';
 import 'katex/dist/katex.min.css';
 import './globals.css';
-import { GA_MEASUREMENT_ID } from '@/lib/analytics';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://derivativecalculatorai.com'),
@@ -44,16 +42,12 @@ export const metadata: Metadata = {
   },
 };
 
-const themeBoot = `(function(){try{var t=localStorage.getItem('theme');var d=t==='dark'||(t!=='light'&&window.matchMedia('(prefers-color-scheme: dark)').matches);var r=document.documentElement;if(d){r.classList.add('dark');r.classList.remove('light');}else{r.classList.add('light');r.classList.remove('dark');}}catch(e){}})();`;
-
-// afterInteractive: present in the HTML of every page, runs after hydration.
-// Custom events still go through trackEvent(), which sets send_to.
-const gaBoot = `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GA_MEASUREMENT_ID}');`;
-
 /**
  * Root layout stays free of headers() and the edge runtime so child routes
- * can prerender. Locale shells render <html lang>; these scripts are injected
- * from the root so they ship with every document.
+ * can prerender. Locale shells render <html lang>; scripts live in
+ * DocumentShell's <body> — a <Script> rendered here would become a direct
+ * child of #document (no <html> in this fragment), which React rejects with
+ * "In HTML, <script> cannot be a child of <#document>" and breaks hydration.
  */
 export default function RootLayout({
   children,
@@ -62,13 +56,6 @@ export default function RootLayout({
 }) {
   return (
     <>
-      <Script id="theme-boot" strategy="beforeInteractive">{themeBoot}</Script>
-      <Script id="ga4-config" strategy="afterInteractive">{gaBoot}</Script>
-      <Script
-        id="ga4-src"
-        src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
-        strategy="afterInteractive"
-      />
       {children}
     </>
   );

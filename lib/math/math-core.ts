@@ -293,6 +293,23 @@ export function displayExpression(s: string): string {
   return out;
 }
 
+/**
+ * Display-layer normalization scoped to /derivative-of-log-x ONLY.
+ *
+ * The engine returns `x^(-1)` (and LaTeX `x^{-1}`) for log(x); this page
+ * deliberately presents the natural log as `log(x)`, so its answer must read
+ * `1/x`, not the engine token. Only an exponent that is EXACTLY -1 is
+ * converted — a derivative such as d/dx(1/x) = -x^(-2) keeps its -2 exponent,
+ * and the separate /derivative-of-ln-x page keeps its own `x^(-1)` residual by
+ * design. Never call this outside the log-x page.
+ */
+export function normalizeLogXSolution(s: string): string {
+  if (!s) return s;
+  return s
+    .replace(/x\^\(-1\)(?![0-9])/g, '1/x')
+    .replace(/x\^\{-1\}/g, '\\frac{1}{x}');
+}
+
 const WHOLE_FUNCTION = /^(sin|cos|tan|sec|csc|cot|arcsin|arccos|arctan|asin|acos|atan|sinh|cosh|tanh|log10|log|ln|exp|sqrt|abs)\((.*)\)$/i;
 
 function hasVariableX(expr: string): boolean {

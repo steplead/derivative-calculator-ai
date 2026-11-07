@@ -10,7 +10,7 @@
  *   - diff(ln(x), x) → "ln" (wrong; should be x^(-1))
  *   - diff(x*ln(x), x) → "2*ln*x" (wrong; should be 1+log(x))
  */
-import { normalizeExpression, calculateDerivative, identifyRule, validateDerivativeResult, prettifyRaw, prettifyLatex } from '@/lib/math/math-core';
+import { normalizeExpression, calculateDerivative, identifyRule, validateDerivativeResult, prettifyRaw, prettifyLatex, normalizeLogXSolution } from '@/lib/math/math-core';
 
 describe('normalizeExpression — ln/log contract', () => {
   it('rewrites ln( → log( for natural log', () => {
@@ -80,6 +80,23 @@ describe('calculateDerivative — e^x stays symbolic (no rational approximation)
     expect(calculateDerivative('e^(2*x)').solutionRaw).toBe('2*e^(2*x)');
     expect(calculateDerivative('2^x').solutionRaw).toBe('2^x*ln(2)');
     expect(calculateDerivative('10^x').solutionRaw).toBe('10^x*ln(10)');
+  });
+});
+
+describe('normalizeLogXSolution — scoped to derivative-of-log-x', () => {
+  it('converts engine x^(-1) / x^{-1} into 1/x / \\frac{1}{x}', () => {
+    expect(normalizeLogXSolution('x^(-1)')).toBe('1/x');
+    expect(normalizeLogXSolution('x^{-1}')).toBe('\\frac{1}{x}');
+  });
+
+  it('leaves ln(x) page result untouched (separate normal residual)', () => {
+    expect(calculateDerivative('ln(x)').solutionRaw).toBe('x^(-1)');
+  });
+
+  it('leaves d/dx(1/x) = -x^(-2) untouched (exponent -2, not -1)', () => {
+    const r = calculateDerivative('1/x');
+    expect(r.solutionRaw).toContain('x^(-2)');
+    expect(r.solutionRaw).not.toBe('1/x');
   });
 });
 

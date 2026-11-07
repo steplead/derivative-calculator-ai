@@ -16,6 +16,9 @@ export async function generateMetadata(): Promise<Metadata> {
     title: { absolute: title },
     description,
     alternates,
+    // 2026-11-07 (owner-approved): tool directory, noindex,follow in every
+    // locale (/calculators, /es/calculators, /pt/calculators share this).
+    robots: { index: false, follow: true },
     openGraph: {
       title,
       description,

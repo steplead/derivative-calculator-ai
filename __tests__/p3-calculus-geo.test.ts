@@ -129,9 +129,7 @@ describe('comparison pages and llms.txt', () => {
     }
     expect(COMPARISONS.es.comparison.paragraphs[0]).not.toBe(COMPARISONS.en.comparison.paragraphs[0]);
     expect(COMPARISONS.pt.symbolab.paragraphs[0]).not.toBe(COMPARISONS.en.symbolab.paragraphs[0]);
-    const page = fs.readFileSync(path.join(ROOT, 'scripts/generate-sitemap.js'), 'utf8');
-    expect(page).toContain('/symbolab-alternative');
-    expect(page).toContain('/derivative-calculator-comparison');
+    // Comparison pages left the sitemap on 2026-11-07 (18-URL set); they stay live.
     const { generateLlms } = require('../scripts/generate-llms.js') as { generateLlms: () => string };
     const llms = generateLlms();
     expect(llms).toContain('https://derivativecalculatorai.com/derivative-of-sin-2x');

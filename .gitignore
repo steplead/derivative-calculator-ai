@@ -40,3 +40,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# wrangler build artifacts (Tailwind v4 auto-detection scans these and
+# regenerates bg-[url(...)] utilities from old build output, breaking cold builds)
+/.wrangler/

@@ -61,6 +61,13 @@ export default function DocumentShell({
                     src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
                     strategy="afterInteractive"
                 />
+                <Script
+                    id="pvuv-analytics"
+                    src="https://www.pvuv.ai/f.js"
+                    data-site="GuhMK4uL"
+                    data-api="https://in.pvuv.ai"
+                    strategy="afterInteractive"
+                />
                 <TurnstileProvider>
                     <Navbar dict={dict} />
                     <main className="flex-grow w-full max-w-[760px] mx-auto px-4">

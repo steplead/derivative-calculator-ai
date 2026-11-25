@@ -1,4 +1,9 @@
-@import "tailwindcss";
+/* source(none): automatic content detection is disabled, so Tailwind scans only
+   the two @source globs below. Without it, any non-source file in the repo
+   (build output, agent memory notes, docs) that happens to contain a
+   class-like string is turned into a background-image url() the css-loader
+   cannot resolve, which fails cold builds with "Cannot find module './&'". */
+@import "tailwindcss" source(none);
 @custom-variant dark (&:where(.dark, .dark *));
 
 @source "../components/**/*.{js,ts,jsx,tsx}";

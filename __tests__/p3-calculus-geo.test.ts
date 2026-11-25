@@ -100,9 +100,11 @@ describe('homepage positioning and 404 robots', () => {
     // gtag snippet, not an idle-only client effect.
     expect(shell).toMatch(/next\/font\/google/);
     expect(shell).toMatch(/display:\s*'swap'/);
-    expect(layout).toMatch(/strategy="afterInteractive"/);
-    expect(layout).toContain('https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}');
-    expect(layout).toContain("gtag('config','${GA_MEASUREMENT_ID}')");
+    // a41419a moved the GA tags from the root layout into DocumentShell's
+    // <body>: a <Script> under the root layout becomes a child of #document.
+    expect(shell).toMatch(/strategy="afterInteractive"/);
+    expect(shell).toContain('https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}');
+    expect(shell).toContain("gtag('config','${GA_MEASUREMENT_ID}')");
     expect(fs.readFileSync(path.join(ROOT, 'lib/analytics.ts'), 'utf8')).toContain('G-3WHC12TKH4');
     expect(shell).not.toMatch(/GoogleAnalytics/);
     expect(shell).not.toContain('DeferredAnalytics');

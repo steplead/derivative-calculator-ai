@@ -61,6 +61,9 @@ describe('public/_headers', () => {
         expect(csp).toContain('https://www.google-analytics.com');
         expect(csp).toContain('https://*.analytics.google.com');
         expect(csp).toContain('https://challenges.cloudflare.com');
+        // pvuv.ai visit counter: f.js from www, beacons to in.
+        expect(csp).toContain('https://www.pvuv.ai');
+        expect(csp).toContain('https://in.pvuv.ai');
         expect(csp).toContain("connect-src 'self'");
         expect(csp).toContain("'unsafe-inline'");
         expect(csp).toContain("'unsafe-eval'");

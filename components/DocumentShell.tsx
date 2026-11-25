@@ -61,12 +61,16 @@ export default function DocumentShell({
                     src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
                     strategy="afterInteractive"
                 />
-                <Script
-                    id="pvuv-analytics"
+                {/* pvuv.ai visit counter: the vendor snippet verbatim (defer +
+                    data-site/data-api), as a raw <script> like themeBoot. A
+                    deferred tag in the SSR HTML needs no hydration, so visits
+                    are still counted if the client bundle fails; next/script
+                    afterInteractive would report nothing in that case. */}
+                <script
+                    defer
                     src="https://www.pvuv.ai/f.js"
                     data-site="GuhMK4uL"
                     data-api="https://in.pvuv.ai"
-                    strategy="afterInteractive"
                 />
                 <TurnstileProvider>
                     <Navbar dict={dict} />

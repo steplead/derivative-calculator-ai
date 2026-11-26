@@ -32,7 +32,7 @@
  *   3. Never throw into the caller's critical path unless the caller opts in.
  */
 
-import { getBaseUrl } from '@/utils/robust-url';
+import problemsLibrary from '@/data/problems.json';
 import { displayExpression } from '@/lib/math/math-core';
 
 export type StaticProblem = {
@@ -52,38 +52,28 @@ export type StaticProblem = {
 
 /** Parsed library, memoised per isolate. */
 let memoryCache: StaticProblem[] | null = null;
-/** Deduplicates concurrent first-hits in the same isolate. */
-let inflight: Promise<StaticProblem[]> | null = null;
 
 /**
  * Load the full problem library.
- * Returns [] (never throws) when the source is unreachable so callers can
- * degrade to their own fallbacks instead of rendering a 500.
+ *
+ * The array ships inside the server bundle: app/(site)/[slug]/page.tsx already
+ * imports data/problems.json for generateStaticParams, so the 1.2 MB payload
+ * was in the worker anyway. Reading it directly removes the last network hop.
+ *
+ * It used to be `fetch(`${base}/problems.json`)`. At runtime that was one
+ * HTTPS round trip + 1.2 MB per isolate. During `next build` it was far worse:
+ * every prerendered page (9,564 of them, three locales) fetched the library
+ * from the live site, and any page whose slug was not in the library then also
+ * fetched /api/problem/<slug>. That is ~11 GB of self-traffic per build; once
+ * production started throttling the build runner the renders stalled, static
+ * workers were SIGTERMed at the 180 s ceiling, and the deploy failed with
+ * "Static page generation for /integral-of-x-plus-x3-plus-1-over-2tanx is
+ * still timing out after 3 attempts" (2026-11-27). No build should depend on
+ * the site it is building.
  */
 export async function loadStaticProblems(): Promise<StaticProblem[]> {
-    if (memoryCache) return memoryCache;
-    if (inflight) return inflight;
-
-    const base = getBaseUrl();
-
-    inflight = (async (): Promise<StaticProblem[]> => {
-        const res = await fetch(`${base}/problems.json`);
-        if (!res.ok) {
-            throw new Error(`/problems.json responded HTTP ${res.status}`);
-        }
-        const data: unknown = await res.json();
-        if (!Array.isArray(data)) {
-            throw new Error('/problems.json did not return an array');
-        }
-        memoryCache = data as StaticProblem[];
-        return memoryCache;
-    })();
-
-    try {
-        return await inflight;
-    } finally {
-        inflight = null;
-    }
+    if (!memoryCache) memoryCache = problemsLibrary as StaticProblem[];
+    return memoryCache;
 }
 
 /**
@@ -109,7 +99,6 @@ export function findStaticProblem(
 /** Test-only: drop the memoised library. */
 export function resetStaticProblemsCache(): void {
     memoryCache = null;
-    inflight = null;
 }
 
 /**

@@ -45,6 +45,19 @@ import { TRIG_CLUSTER_SLUGS } from '@/lib/trig-cluster';
 // slug that contains "+".
 const INDEXABLE_PROBLEM_SLUGS = new Set<string>(indexableProblemSlugs);
 const INDEXABLE_PUBLIC_SLUGS = new Set<string>(indexableProblemSlugs.map(plusFreeSlug));
+
+/**
+ * A self-request must never hold a render open. During `next build` a slug the
+ * library does not know triggers a call to our own /api/problem; when the live
+ * site throttles the build runner that call hangs, Next kills the static worker
+ * at 180 s and the deploy fails. Five seconds is enough for a same-origin JSON
+ * route, and a timeout only costs the D1 fallback that follows it.
+ */
+function fetchWithTimeout(url: string, ms = 5000): Promise<Response> {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), ms);
+    return fetch(url, { signal: controller.signal }).finally(() => clearTimeout(timer));
+}
 import { parseSlugToMath } from '@/lib/slug-math';
 import Link from 'next/link';
 import SolutionCard from '@/components/SolutionCard';
@@ -332,7 +345,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     // Only slugs outside the library pay for a D1-backed HTTP round trip.
     if (!problem && baseUrl) {
         try {
-            const res = await fetch(`${baseUrl}/api/problem/${slug}`);
+            const res = await fetchWithTimeout(`${baseUrl}/api/problem/${slug}`);
             const contentType = res.headers.get("content-type");
             if (res.ok && contentType && contentType.includes("application/json")) {
                 problem = await res.json();
@@ -501,7 +514,7 @@ export default async function ProblemPage({ params }: { params: { slug: string }
                         return null;
                     }
                 })(),
-                baseUrl ? fetch(`${baseUrl}/api/problem/${slug}`) : Promise.reject('No baseUrl'),
+                baseUrl ? fetchWithTimeout(`${baseUrl}/api/problem/${slug}`) : Promise.reject('No baseUrl'),
                 (async () => {
                     try {
                         if (db) {

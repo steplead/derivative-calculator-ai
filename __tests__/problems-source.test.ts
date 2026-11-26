@@ -58,11 +58,16 @@ describe('RC-8: no force-cache/revalidate fetch of /problems.json', () => {
         expect(jsonCalls).toBeLessThanOrEqual(2);
     });
 
-    it('lib/problems-source.ts uses a plain fetch (no cache/next options)', () => {
+    it('lib/problems-source.ts reads the bundled library, never its own URL', () => {
         const code = stripComments(read('lib/problems-source.ts'));
         expect(code).not.toMatch(/cache:\s*['"]force-cache['"]/);
         expect(code).not.toMatch(/next:\s*\{\s*revalidate/);
-        expect(code).toMatch(/await fetch\(`\$\{base\}\/problems\.json`\)/);
+        // 2026-11-27: the loader used to fetch /problems.json from the live
+        // site. Every prerendered page paid for that (9,564 pages x 1.2 MB),
+        // and once production throttled the build runner the build hung. The
+        // library ships in the bundle already, so no fetch belongs here.
+        expect(code).not.toMatch(/fetch\(/);
+        expect(code).toMatch(/import problemsLibrary from '@\/data\/problems\.json'/);
     });
 
     it('problem pages import the shared loader', () => {

@@ -77,9 +77,12 @@ describe('RC-8 task 1: no force-cache / next.revalidate on production data fetch
         expect(offenders).toEqual([]);
     });
 
-    it('the shared loader is the only problems.json reader, and it uses plain fetch', () => {
+    it('the shared loader is the only problems.json reader, and it never fetches', () => {
         const loader = stripComments(fs.readFileSync(path.join(ROOT, 'lib/problems-source.ts'), 'utf-8'));
-        expect(loader).toMatch(/await fetch\(`\$\{base\}\/problems\.json`\)/);
+        expect(loader).toMatch(/import problemsLibrary from '@\/data\/problems\.json'/);
+        // A build must not depend on the site it is building: the loader used
+        // to fetch its own /problems.json on every prerendered page.
+        expect(loader).not.toMatch(/fetch\(/);
         expect(loader).not.toMatch(/cache:/);
     });
 });

@@ -102,14 +102,18 @@ describe('GA4 shim', () => {
 });
 
 describe('curated sitemap', () => {
-    it('lists exactly the 18 curated English URLs with no hreflang alternates (2026-11-07)', () => {
+    it('lists exactly the curated English URLs with no hreflang alternates (2026-11-27)', () => {
         execSync('node scripts/generate-sitemap.js', { cwd: path.resolve(__dirname, '..'), stdio: 'pipe' });
         const xml = fs.readFileSync(path.resolve(__dirname, '..', 'public', 'sitemap.xml'), 'utf8');
         const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
-        const { SITEMAP_URLS } = require('../scripts/generate-sitemap.js') as { SITEMAP_URLS: { path: string }[] };
-        expect(SITEMAP_URLS).toHaveLength(18);
-        expect(locs).toHaveLength(18);
-        expect(new Set(locs).size).toBe(18);
+        const { SITEMAP_URLS } = require('../scripts/generate-sitemap.js') as {
+            SITEMAP_URLS: { path: string; problem?: boolean }[];
+        };
+        // 18 hub/lesson pages + 100 integrals + 100 limits (owner-approved
+        // 2026-11-27). The library itself is 3,137 rows; this stays curated.
+        expect(SITEMAP_URLS).toHaveLength(218);
+        expect(locs).toHaveLength(218);
+        expect(new Set(locs).size).toBe(218);
         expect(xml).not.toContain('xhtml:link');
         expect(xml).not.toContain('hreflang');
         expect(locs.some((url) => /^https:\/\/derivativecalculatorai\.com\/(es|pt)(\/|$)/.test(url))).toBe(false);
@@ -120,7 +124,38 @@ describe('curated sitemap', () => {
             expect(locs).not.toContain(`https://derivativecalculatorai.com${p}`);
         }
         const lastmods = [...xml.matchAll(/<lastmod>([^<]+)<\/lastmod>/g)].map((m) => m[1]);
-        expect(lastmods).toHaveLength(18);
+        expect(lastmods).toHaveLength(218);
         for (const stamp of lastmods) expect(Number.isNaN(Date.parse(stamp))).toBe(false);
+    });
+
+    it('keeps every curated URL reachable and indexable', () => {
+        const { SITEMAP_URLS } = require('../scripts/generate-sitemap.js') as {
+            SITEMAP_URLS: { path: string; problem?: boolean }[];
+        };
+        const problems = JSON.parse(
+            fs.readFileSync(path.resolve(__dirname, '..', 'data', 'problems.json'), 'utf8')
+        ) as { slug: string }[];
+        const allow = new Set(
+            JSON.parse(
+                fs.readFileSync(path.resolve(__dirname, '..', 'data', 'sitemap-problem-slugs.json'), 'utf8')
+            ) as string[]
+        );
+        const plusFree = (slug: string) => slug.replace(/\+/g, 'plus').replace(/ /g, 'plus');
+        const library = new Set(problems.map((row) => plusFree(row.slug)));
+
+        const problemEntries = SITEMAP_URLS.filter((entry) => entry.problem);
+        expect(problemEntries).toHaveLength(210); // 10 derivative lessons + 200 long-tail
+        for (const entry of problemEntries) {
+            // A literal "+" 404s on the live site, so the sitemap must use the
+            // "plus" spelling and that spelling must exist in the library.
+            expect(entry.path).not.toContain('+');
+            const slug = entry.path.slice(1);
+            expect(library.has(slug)).toBe(true);
+            // data/sitemap-problem-slugs.json is what lifts their noindex; a
+            // sitemap entry without it would submit a noindex URL.
+            expect(allow.has(slug.replace(/plus/g, '+')) || allow.has(slug)).toBe(true);
+        }
+        expect(problemEntries.map((entry) => entry.path)).toContain('/integral-of-x');
+        expect(problemEntries.map((entry) => entry.path)).toContain('/limit-of-sinx-over-x-as-x-to-0');
     });
 });

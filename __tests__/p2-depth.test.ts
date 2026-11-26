@@ -30,7 +30,11 @@ describe('indexable derivative lessons', () => {
   it('covers every sitemap derivative and keeps the math honest', () => {
     const slugs = allDerivativeFacts().map((fact) => fact.slug);
     expect(new Set(slugs).size).toBe(slugs.length);
-    for (const slug of allow) {
+    // The allowlist also carries integral/limit problem pages (2026-11-27), so
+    // only the derivative entries belong to this check.
+    const derivativeAllow = allow.filter((slug) => slug.startsWith('derivative-of-'));
+    expect(derivativeAllow.length).toBeGreaterThanOrEqual(50);
+    for (const slug of derivativeAllow) {
       expect(slugs).toContain(slug);
       const fact = allDerivativeFacts().find((item) => item.slug === slug)!;
       if (fact.nondiff || fact.linksOnly) continue;

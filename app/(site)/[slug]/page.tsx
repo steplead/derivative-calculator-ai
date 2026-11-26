@@ -39,7 +39,12 @@ import { answerFirstLead } from '@/content/answer-lead';
 import { strikingMeta } from '@/content/striking-lessons';
 import { TRIG_CLUSTER_SLUGS } from '@/lib/trig-cluster';
 
+// Two views of the same allowlist: related-link matching compares library slugs
+// ("integral-of-x3-+-x2"), the forceIndex gate compares the public spelling
+// ("...-plus-..."). Comparing one against the other silently never matched a
+// slug that contains "+".
 const INDEXABLE_PROBLEM_SLUGS = new Set<string>(indexableProblemSlugs);
+const INDEXABLE_PUBLIC_SLUGS = new Set<string>(indexableProblemSlugs.map(plusFreeSlug));
 import { parseSlugToMath } from '@/lib/slug-math';
 import Link from 'next/link';
 import SolutionCard from '@/components/SolutionCard';
@@ -390,7 +395,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     // when an older noindex list still names them.
     const derivDupSlugs = new Set<string>([...canonMap.keys(), ...canonMap.values()]);
     const selfCanonical = plusFreeSlug(librarySlug) === canonicalSlug;
-    const forceIndex = Boolean(libraryProblem) && selfCanonical && INDEXABLE_PROBLEM_SLUGS.has(canonicalSlug);
+    const forceIndex = Boolean(libraryProblem) && selfCanonical && INDEXABLE_PUBLIC_SLUGS.has(canonicalSlug);
     // Quality gate: a library page whose expression the solver cannot handle
     // renders a calculator shell with no answer, rule or steps. Those are the
     // thin pages that drag the whole site down, so they stay out of the index

@@ -55,6 +55,11 @@ function generateLlms() {
   for (const slug of allow) {
     const fact = byFact.get(slug);
     const problem = bySlug.get(slug);
+    // The allowlist also carries integral/limit long-tail pages (2026-11-27).
+    // llms.txt stays a short map of the derivative lessons: 200 extra lines
+    // would bury the calculators and the wiki for an answer engine.
+    const isDerivative = Boolean(fact) || problem?.type === 'derivative';
+    if (!isDerivative) continue;
     const title = fact ? `Derivative of ${fact.display}` : (problem && problem.title) || slug;
     const inverseLead = {
       'derivative-of-arcsin-x': 'd/dx arcsin(x) = 1/sqrt(1-x^2), for -1 < x < 1.',

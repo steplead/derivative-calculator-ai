@@ -25,8 +25,8 @@
 - [Derivative of 1-x](https://derivativecalculatorai.com/derivative-of-1-minus-x): d/dx 1-x = -1.
 - [Derivative of 1/x](https://derivativecalculatorai.com/derivative-of-1-over-x): d/dx 1/x = -x^(-2).
 - [Derivative of 1/x^2](https://derivativecalculatorai.com/derivative-of-1-over-x-squared): d/dx 1/x^2 = -2*x^(-3).
-- [Derivative of 10^x](https://derivativecalculatorai.com/derivative-of-10-to-the-x): d/dx 10^x = 10^x*log(10).
-- [Derivative of 2^x](https://derivativecalculatorai.com/derivative-of-2-to-the-x): d/dx 2^x = 2^x*log(2).
+- [Derivative of 10^x](https://derivativecalculatorai.com/derivative-of-10-to-the-x): d/dx 10^x = 10^x*ln(10).
+- [Derivative of 2^x](https://derivativecalculatorai.com/derivative-of-2-to-the-x): d/dx 2^x = 2^x*ln(2).
 - [Derivative of 2x](https://derivativecalculatorai.com/derivative-of-2x): d/dx 2x = 2.
 - [Derivative of 3x^2](https://derivativecalculatorai.com/derivative-of-3x-squared): d/dx 3x^2 = 6*x.
 - [Derivative of 5x](https://derivativecalculatorai.com/derivative-of-5x): d/dx 5x = 5.
@@ -48,7 +48,7 @@
 - [Derivative of floor(x)](https://derivativecalculatorai.com/derivative-of-floor-x): The derivative of floor(x) is not defined for every real number: undefined at integers.
 - [Derivative of ln(2x)](https://derivativecalculatorai.com/derivative-of-ln-2x): d/dx ln(2x) = x^(-1).
 - [Derivative of ln(x)](https://derivativecalculatorai.com/derivative-of-ln-x): d/dx ln(x) = x^(-1).
-- [Derivative of log(x)](https://derivativecalculatorai.com/derivative-of-log-x): d/dx log(x) = x^(-1).
+- [Derivative of log(x)](https://derivativecalculatorai.com/derivative-of-log-x): d/dx log(x) = 1/x.
 - [Derivative of -x](https://derivativecalculatorai.com/derivative-of-minus-x): d/dx -x = -1.
 - [Derivative of pi](https://derivativecalculatorai.com/derivative-of-pi): d/dx pi = 0.
 - [Derivative of x^(1/2)](https://derivativecalculatorai.com/derivative-of-root-x): d/dx x^(1/2) = (1/2)*x^(-1/2).
@@ -65,7 +65,7 @@
 - [Derivative of x cos(x)](https://derivativecalculatorai.com/derivative-of-x-cos-x): d/dx x cos(x) = -sin(x)*x+cos(x).
 - [Derivative of x^3](https://derivativecalculatorai.com/derivative-of-x-cubed): d/dx x^3 = 3*x^2.
 - [Derivative of x e^x](https://derivativecalculatorai.com/derivative-of-x-e-to-the-x): d/dx x e^x = e^x+e^x*x.
-- [Derivative of x ln(x)](https://derivativecalculatorai.com/derivative-of-x-ln-x): d/dx x ln(x) = 1+log(x).
+- [Derivative of x ln(x)](https://derivativecalculatorai.com/derivative-of-x-ln-x): d/dx x ln(x) = 1+ln(x).
 - [Derivative of x+1](https://derivativecalculatorai.com/derivative-of-x-plus-1): d/dx x+1 = 1.
 - [Derivative of x sin(x)](https://derivativecalculatorai.com/derivative-of-x-sin-x): d/dx x sin(x) = cos(x)*x+sin(x).
 - [Derivative of x^2](https://derivativecalculatorai.com/derivative-of-x-squared): d/dx x^2 = 2*x.

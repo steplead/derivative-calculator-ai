@@ -8,7 +8,7 @@
 import nerdamer from 'nerdamer';
 // @ts-ignore
 import 'nerdamer/Calculus';
-import { identifyRule, normalizeExpression } from '@/lib/math/math-core';
+import { identifyRule, normalizeExpression, prettifyRaw, prettifyLatex } from '@/lib/math/math-core';
 
 export interface IntegralSolution {
   original: string;
@@ -146,12 +146,18 @@ export function calculateIntegral(expr: string): IntegralSolution {
   }
   if (!raw || /integrate\s*\(/i.test(raw)) return invalidIntegral(original, engineExpression);
   const rule = identifyIntegralRule(engineExpression);
-  const steps = generateIntegralSteps(engineExpression, raw, rule);
-  const withConstant = latex ? `${latex} + C` : `${raw} + C`;
+  // Display pipeline first: the production nerdamer writes e, ln2 and friends as
+  // 6+ digit ratios, so an un-prettified antiderivative can show
+  // `325368125^x / 119696244^x` where the answer is simply e^x. Steps quote the
+  // answer, so they must use the same cleaned form.
+  const prettyRaw = prettifyRaw(raw);
+  const prettyLatex = prettifyLatex(latex || raw);
+  const steps = generateIntegralSteps(prettifyRaw(engineExpression), prettyRaw, rule);
+  const withConstant = prettyLatex ? `${prettyLatex} + C` : `${prettyRaw} + C`;
   return {
     original,
     engineExpression,
-    solutionRaw: raw,
+    solutionRaw: prettyRaw,
     solutionLatex: withConstant,
     rule,
     steps,
@@ -180,14 +186,16 @@ export function calculateLimit(expr: string, targetInput: string): LimitSolution
   }
   const isValid = Boolean(raw) && !/limit\s*\(/i.test(raw);
   const rule = isValid ? identifyLimitRule(engineExpression, target, raw) : 'Algebraic Simplification';
+  const prettyRaw = isValid ? prettifyRaw(raw) : raw;
+  const prettyLatex = isValid ? prettifyLatex(latex || raw) : (latex || raw);
   return {
     original,
     engineExpression,
     target,
-    solutionRaw: raw,
-    solutionLatex: latex || raw,
+    solutionRaw: prettyRaw,
+    solutionLatex: prettyLatex,
     rule,
-    steps: isValid ? generateLimitSteps(engineExpression, target, raw, rule) : [],
+    steps: isValid ? generateLimitSteps(prettifyRaw(engineExpression), target, prettyRaw, rule) : [],
     isValid,
   };
 }

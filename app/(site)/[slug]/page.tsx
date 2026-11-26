@@ -13,6 +13,8 @@ import { getRequestContext } from '@cloudflare/next-on-pages';
 import { NOINDEX_SLUGS } from '@/lib/noindex-slugs';
 import { calculateDerivative, displayExpression } from '@/lib/math/math-core';
 import type { DerivativeSolution } from '@/lib/math/math-core';
+import { calculateIntegral, calculateLimit } from '@/lib/math/integral-limit';
+import type { IntegralSolution, LimitSolution } from '@/lib/math/integral-limit';
 import { fetchRelatedFromD1 } from '@/lib/d1/related-problems';
 import {
     loadStaticProblemsSafe,
@@ -59,6 +61,71 @@ function memoizedDerivative(formula: string): DerivativeSolution | null {
     }
     derivativeMemo.set(formula, solved);
     return solved;
+}
+
+/**
+ * The three solvers return structurally identical payloads (answer, LaTeX,
+ * rule, steps) — SolutionCard only needs this shape, so the page can stay
+ * type-agnostic once the solution is computed.
+ */
+type SsrSolution = {
+    solutionRaw: string;
+    solutionLatex: string;
+    rule: string;
+    steps: string[];
+};
+
+const integralMemo = new Map<string, IntegralSolution | null>();
+
+function memoizedIntegral(formula: string): IntegralSolution | null {
+    const cached = integralMemo.get(formula);
+    if (cached !== undefined) return cached;
+    let solved: IntegralSolution | null = null;
+    try {
+        const result = calculateIntegral(formula);
+        solved = result.isValid ? result : null;
+    } catch (e) {
+        console.error('SSR integral calculation failed:', e);
+        solved = null;
+    }
+    integralMemo.set(formula, solved);
+    return solved;
+}
+
+const limitMemo = new Map<string, LimitSolution | null>();
+
+function memoizedLimit(formula: string, target: string): LimitSolution | null {
+    const key = `${formula}|${target}`;
+    const cached = limitMemo.get(key);
+    if (cached !== undefined) return cached;
+    let solved: LimitSolution | null = null;
+    try {
+        const result = calculateLimit(formula, target);
+        solved = result.isValid ? result : null;
+    } catch (e) {
+        console.error('SSR limit calculation failed:', e);
+        solved = null;
+    }
+    limitMemo.set(key, solved);
+    return solved;
+}
+
+/** Answer block for the page type; null when the solver could not produce one. */
+function solveForType(formula: string, type: string | undefined, limitTo?: string): SsrSolution | null {
+    let solved: SsrSolution | null = null;
+    if (type === 'integral') solved = memoizedIntegral(formula);
+    else if (type === 'limit') solved = memoizedLimit(formula, limitTo || '0');
+    else solved = memoizedDerivative(formula);
+    if (!solved) return null;
+    // Hard display invariant: a 6+ digit integer means a numericized constant
+    // (325368125/119696244 ≈ e) survived the display pipeline. Publishing that
+    // is worse than publishing nothing, so the page falls back to the
+    // calculator-only state (and the noindex gate below keeps it out).
+    if (/\d{6,}/.test(solved.solutionRaw) || /\d{6,}/.test(solved.solutionLatex)) return null;
+    // Steps are quoted from the same engine output but go through a different
+    // formatting path; when only they leak, drop the steps and keep the answer.
+    const stepsClean = solved.steps.every((step) => !/\d{6,}/.test(step));
+    return stepsClean ? solved : { ...solved, steps: [] };
 }
 
 export const dynamic = 'force-static';
@@ -324,7 +391,17 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     const derivDupSlugs = new Set<string>([...canonMap.keys(), ...canonMap.values()]);
     const selfCanonical = plusFreeSlug(librarySlug) === canonicalSlug;
     const forceIndex = Boolean(libraryProblem) && selfCanonical && INDEXABLE_PROBLEM_SLUGS.has(canonicalSlug);
-    const lockedNoindex = !forceIndex && ((NOINDEX_SLUGS.has(librarySlug) && !derivDupSlugs.has(librarySlug)) || isOutOfLibrary);
+    // Quality gate: a library page whose expression the solver cannot handle
+    // renders a calculator shell with no answer, rule or steps. Those are the
+    // thin pages that drag the whole site down, so they stay out of the index
+    // until the solver can produce a real solution. Curated allowlist slugs
+    // (forceIndex) bypass this — they are hand-checked and always solvable.
+    const hasAnswer = Boolean(solveForType(problem.formula, problem.type, problem.limitTo));
+    const lockedNoindex = !forceIndex && (
+        !hasAnswer ||
+        (NOINDEX_SLUGS.has(librarySlug) && !derivDupSlugs.has(librarySlug)) ||
+        isOutOfLibrary
+    );
     const alternates = localeAlternates(`/${canonicalSlug}`, locale);
     const title = keywordTitle(striking?.title ?? lesson?.title ?? t.title);
     const description = striking?.description ?? lesson?.description ?? indexLesson?.description ?? t.description;
@@ -476,10 +553,18 @@ export default async function ProblemPage({ params }: { params: { slug: string }
 
         // RC-1 FIX: deterministically compute the answer server-side so the
         // initial HTML contains real math content (answer, rule, steps) —
-        // not just a template sentence. Same shared module as /api/derivative.
-        const ssrSolution = (safeProblem.type === 'derivative' || !safeProblem.type)
-            ? memoizedDerivative(safeProblem.formula)
-            : null;
+        // not just a template sentence. Same shared modules as the API routes.
+        //
+        // Integrals and limits used to stop at the derivative check, so those
+        // pages shipped a calculator with no answer in the HTML: 2,049 of the
+        // 3,137 library pages were effectively empty for a crawler. Both
+        // solvers are cheap (measured ~1ms and ~5ms per expression), so the
+        // whole library still renders inside the static build.
+        const ssrSolution = solveForType(
+            safeProblem.formula,
+            safeProblem.type,
+            safeProblem.limitTo,
+        );
 
         // initialResult passed to the client Calculator (avoids duplicate first fetch).
         const initialResult = ssrSolution ? {
@@ -549,6 +634,7 @@ export default async function ProblemPage({ params }: { params: { slug: string }
                         <SolutionCard
                             formula={safeProblem.formula}
                             type={safeProblem.type}
+                            limitTo={safeProblem.limitTo}
                             solutionRaw={ssrSolution.solutionRaw}
                             solutionLatex={ssrSolution.solutionLatex}
                             rule={ssrSolution.rule}

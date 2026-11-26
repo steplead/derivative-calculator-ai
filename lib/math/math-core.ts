@@ -61,8 +61,19 @@ export function normalizeExpression(expr: string): string {
   // emitted as a rational approximation (e.g. (325368125/119696244)^x instead of
   // e^x). Routing through the symbolic `exp` function keeps the result exact.
   // The display form e^(…) is restored by prettifyRaw()/displayExpression() after differentiation.
+  //
+  // The bare form must capture ONE atom — an identifier or number, optionally
+  // chained with further powers (e^x, e^2, e^x^2) — and stop at the first
+  // operator. The previous `[^()]*` captured everything up to the next bracket,
+  // so `e^x - 1/x` became `exp(x - 1/x)`: a different function, silently
+  // returning a wrong answer (and making the integral impossible). Guard the
+  // left edge against a preceding letter so identifiers such as `are^2` are
+  // left alone, while `2e^x` still normalizes.
   s = s.replace(/e\^\(/gi, 'exp(').replace(/E\^\(/g, 'exp(');
-  s = s.replace(/e\^([^()]*)/gi, 'exp($1)').replace(/E\^([^()]*)/g, 'exp($1)');
+  s = s.replace(
+    /(^|[^A-Za-z_])[eE]\^([A-Za-z0-9_.]+(?:\^[A-Za-z0-9_.]+)*)/g,
+    '$1exp($2)'
+  );
   // Rewrite `ln(` → `log(` (function token only; lookahead for `(` avoids
   // corrupting identifiers like "lnx" if ever present).
   s = s.replace(/ln(?=\s*\()/g, 'log');
@@ -99,7 +110,37 @@ function matchBackSubConstant(v: number): { display: string; latex: string } | n
 
 /** Replace 6+ digit integer ratios (parenthesized or bare) equal to a constant. */
 function backSubstituteRaw(s: string): string {
-  let out = s.replace(/\((-?\d{6,})\s*\/\s*(\d{6,})\)/g, (m, a, b) => {
+  // ln(ratio) first: once the ratio inside the log is replaced by its symbol the
+  // log would read `ln(e)`, and the later log→ln pass turns that into the
+  // nonsense token `lne`. Folding the value here keeps the factor exact —
+  // ln(e) = 1, ln(√2) = 1/2 — which is what the antiderivative of a^x needs.
+  let out = s.replace(/log\s*\(\s*(-?\d{6,})\s*\/\s*(\d{6,})\s*\)/g, (m, a, b) => {
+    const den = Number(b);
+    if (!den) return m;
+    const c = matchBackSubConstant(Number(a) / den);
+    if (!c) return m;
+    if (c.display === 'e') return '1';
+    if (c.display === 'sqrt(2)') return '1/2';
+    return `log(${c.display})`;
+  });
+  // ln(1/B) + ln(A) is nerdamer's spelling of ln(A/B) — the ln(e) = 1 factor it
+  // attaches to the antiderivative of a^x. Fold the pair (with or without its
+  // wrapping parentheses) so what is left is a clean e^x ratio.
+  out = out.replace(/\(\s*log\(\s*1\/(\d{6,})\s*\)\s*\+\s*log\(\s*(\d{6,})\s*\)\s*\)/g, (m, b, a) => {
+    const c = matchBackSubConstant(Number(a) / Number(b));
+    return c && c.display === 'e' ? '1' : m;
+  });
+  out = out.replace(/log\(\s*1\/(\d{6,})\s*\)\s*\+\s*log\(\s*(\d{6,})\s*\)/g, (m, b, a) => {
+    const c = matchBackSubConstant(Number(a) / Number(b));
+    return c && c.display === 'e' ? '1' : m;
+  });
+  // `...*1` / `1*...` left behind by that fold would block the e-power match
+  // below. Only a standalone factor is removed (`x^(-1)*y` must survive).
+  out = out
+    .replace(/\*\s*1(?=\s*(?:[)\]]|[*+\-/]|$))/g, '')
+    .replace(/(?<![\w).])1\s*\*(?=\s*[\w(])/g, '');
+  s = out;
+  out = s.replace(/\((-?\d{6,})\s*\/\s*(\d{6,})\)/g, (m, a, b) => {
     const den = Number(b);
     if (!den) return m;
     const c = matchBackSubConstant(Number(a) / den);
@@ -156,12 +197,46 @@ function backSubstituteEPowers(s: string): string {
       return `e^(${highExp})`;
     });
   }
+  // FRACTION form: HIGH^x / LOW^x (equal exponents) ⇒ e^x, and the reverse ⇒ e^(-x).
+  // Antiderivatives of a^x come out this way (∫e^x dx = e^x, written as the ratio).
+  const fracExp = (base: string) => `${base}\\^(?:\\(([^()]*)\\)|([^()/*]+))`;
+  const rawFracs: [RegExp, boolean][] = [
+    [new RegExp(`${fracExp(highB)}\\s*/\\s*\\(?${fracExp(lowB)}\\)?`, 'g'), true],
+    [new RegExp(`${fracExp(lowB)}\\s*/\\s*\\(?${fracExp(highB)}\\)?`, 'g'), false],
+  ];
+  for (const [re, highNum] of rawFracs) {
+    s = s.replace(re, (m, n1, n2, d1, d2) => {
+      const ne = (n1 ?? n2 ?? '').trim();
+      const de = (d1 ?? d2 ?? '').trim();
+      if (!ne || !de || ne !== de) return m;
+      return highNum ? `e^(${ne})` : `e^(-${ne})`;
+    });
+  }
   return s;
 }
-
-/** Replace LaTeX \frac{6+digits}{6+digits} (optionally wrapping a term) equal to a constant. */
 function backSubstituteLatex(s: string): string {
   // \frac{NUM \cdot BASE^{x}}{DEN}  →  BASE^{x} · constant   (observed for 2^x / 10^x)
+  // \ln(\frac{NUM}{DEN}) — fold BEFORE the generic ratio rules, otherwise the
+  // ratio becomes the symbol `e` and the log reads `\ln e` (then `\lne`).
+  s = s.replace(/\\(?:mathrm\{log\}|log|ln)\s*\\left\(\s*\\frac\{(-?\d{6,})\}\{(-?\d{6,})\}\s*\\right\)/g, (m, a, b) => {
+    const c = matchBackSubConstant(Number(a) / Number(b));
+    if (!c) return m;
+    if (c.display === 'e') return '1';
+    if (c.display === 'sqrt(2)') return '\\frac{1}{2}';
+    return `\\ln\\left(${c.latex}\\right)`;
+  });
+  // ln(1/B) + ln(A) — nerdamer's ln(A/B) factor on the antiderivative of a^x,
+  // i.e. ln(e) = 1. Fold it (and its wrapping parentheses) before the ratio rules.
+  s = s.replace(
+    /\\left\(\s*\\(?:mathrm\{log\}|ln|log)\s*\\left\(\s*\\frac\{1\}\{(\d{6,})\}\s*\\right\)\s*\+\s*\\(?:mathrm\{log\}|ln|log)\s*\\left\(\s*(\d{6,})\s*\\right\)\s*\\right\)/g,
+    (m, b, a) => {
+      const c = matchBackSubConstant(Number(a) / Number(b));
+      return c && c.display === 'e' ? '1' : m;
+    }
+  );
+  // A now-useless factor left by that fold ("\cdot 1" or "\cdot \left(1\right)")
+  // blocks the e-power match, and is not part of the answer.
+  s = s.replace(/\\cdot\s*(?:1|\\left\(\s*1\s*\\right\))(?=\s*[})]|\s*$)/g, '');
   s = s.replace(/\\frac\{(-?\d{6,})\s*\\cdot\s*(\d+)\^\{x\}\}\{(-?\d{6,})\}/g, (m, a, base, b) => {
     const c = matchBackSubConstant(Number(a) / Number(b));
     return c ? `${base}^{x}${c.latex}` : m;
@@ -223,8 +298,8 @@ function backSubstituteEPowersLatex(s: string): string {
   const fracSide = (base: string) =>
     `(?:(\\d+)\\s*\\\\cdot\\s*)?${base}\\^\\{([^{}]*)\\}(?:\\s*\\\\cdot\\s*([^{}/]+))?`;
   const fracSpecs: [RegExp, boolean][] = [
-    [new RegExp(`\\\\frac\\{${fracSide(highB)}\\}\\{${fracSide(lowB)}\\}`, 'g'), true],
-    [new RegExp(`\\\\frac\\{${fracSide(lowB)}\\}\\{${fracSide(highB)}\\}`, 'g'), false],
+    [new RegExp(`\\\\frac\\{${fracSide(highB)}\\s*\\}\\{${fracSide(lowB)}\\s*\\}`, 'g'), true],
+    [new RegExp(`\\\\frac\\{${fracSide(lowB)}\\s*\\}\\{${fracSide(highB)}\\s*\\}`, 'g'), false],
   ];
   for (const [re, highNum] of fracSpecs) {
     s = s.replace(re, (m, nc: string, ne: string, nx: string, dc: string, de: string, dx: string) => {

@@ -9,12 +9,19 @@ type SolutionCardProps = {
   solutionLatex: string;
   rule: string;
   steps: string[];
+  /** Limit target (only meaningful when type === 'limit'). */
+  limitTo?: string;
 };
 
 /** Crawlable answer block. Placed directly under the page H1. */
-const SolutionCard = ({ formula, type, solutionRaw, solutionLatex, rule, steps }: SolutionCardProps) => {
+const SolutionCard = ({ formula, type, solutionRaw, solutionLatex, rule, steps, limitTo }: SolutionCardProps) => {
   // Display form only (exp(2*x) → e^(2x)); never the engine form.
-  const heading = `${type === 'integral' ? 'Integral' : 'Derivative'} of ${displayExpression(formula)}`;
+  const shown = displayExpression(formula);
+  const heading = type === 'integral'
+    ? `Integral of ${shown}`
+    : type === 'limit'
+      ? `Limit of ${shown} as x approaches ${displayExpression(limitTo || '0')}`
+      : `Derivative of ${shown}`;
   const answerHtml = renderLatexHtml(solutionLatex || solutionRaw, true);
   const stepsHtml = renderStepsHtml(steps);
 
@@ -34,10 +41,14 @@ const SolutionCard = ({ formula, type, solutionRaw, solutionLatex, rule, steps }
           <dt className="text-sm font-semibold text-primary">Rule Used</dt>
           <dd className="mt-2 text-ink">{rule}</dd>
         </div>
-        <div>
-          <dt className="text-sm font-semibold text-primary">Steps</dt>
-          <dd className="mt-4" dangerouslySetInnerHTML={{ __html: stepsHtml }} />
-        </div>
+        {/* A page may ship the answer without steps when the engine's step text
+            still carries a numericized constant (see solveForType). */}
+        {steps.length > 0 ? (
+          <div>
+            <dt className="text-sm font-semibold text-primary">Steps</dt>
+            <dd className="mt-4" dangerouslySetInnerHTML={{ __html: stepsHtml }} />
+          </div>
+        ) : null}
       </dl>
     </section>
   );
